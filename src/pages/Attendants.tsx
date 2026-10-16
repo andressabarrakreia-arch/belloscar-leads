@@ -24,7 +24,7 @@ export function Attendants() {
 
       <div className="card">
         <h2>Desempenho por Atendente</h2>
-        <div style={{ overflowX: "auto" }}>
+        <div className="table-scroll">
           <table>
             <thead>
               <tr>
@@ -58,7 +58,7 @@ export function Attendants() {
 
       <div className="card">
         <h2>Atendente × Origem (leads / sucessos)</h2>
-        <div style={{ overflowX: "auto" }}>
+        <div className="table-scroll">
           <table>
             <thead>
               <tr>

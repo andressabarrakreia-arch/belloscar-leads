@@ -128,10 +128,14 @@ export function Admin() {
   }
 
   if (!authed) {
+    const logo = `${import.meta.env.BASE_URL}brand/bc-icon.png`;
     return (
       <div className="login-page" style={{ minHeight: "60vh" }}>
         <div className="login-card">
-          <h1>Gestão Belloscar</h1>
+          <img className="login-logo" src={logo} alt="BellosCar" width={64} height={64} />
+          <h1>
+            Gestão Bellos<span style={{ color: "var(--brand-red)" }}>Car</span>
+          </h1>
           <p>Área restrita para importar planilhas e atualizar o dataset publicado.</p>
           <form onSubmit={login}>
             <input

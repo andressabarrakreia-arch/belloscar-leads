@@ -18,7 +18,7 @@ import { OriginTable } from "../components/OriginTable";
 import { useDataset, useFilteredAnalytics } from "../hooks/useDataset";
 import type { AnalyticsFilters } from "../lib/types";
 
-const COLORS = ["#e74c3c", "#2ecc71", "#f1c40f", "#9b59b6", "#34495e", "#3498db", "#e67e22"];
+const COLORS = ["#c02026", "#2563eb", "#16a34a", "#404041", "#e21e26", "#929497", "#1e3a8a"];
 
 export function Dashboard() {
   const { dataset, loading, error } = useDataset();
@@ -53,7 +53,7 @@ export function Dashboard() {
               <XAxis dataKey="canal" hide />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="leads" fill="#3498db" radius={4} name="Leads" />
+              <Bar dataKey="leads" fill="#c02026" radius={4} name="Leads" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -108,7 +108,7 @@ export function Dashboard() {
               <XAxis dataKey="month" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="leads" fill="#95a5a6" radius={4} name="Leads" />
+              <Bar dataKey="leads" fill="#404041" radius={4} name="Leads" />
             </BarChart>
           </ResponsiveContainer>
         </div>

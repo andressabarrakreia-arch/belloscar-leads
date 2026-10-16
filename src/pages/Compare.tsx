@@ -106,7 +106,7 @@ export function Compare() {
 
           <div className="card">
             <h2>Origem — A vs B</h2>
-            <div style={{ overflowX: "auto" }}>
+            <div className="table-scroll">
               <table>
                 <thead>
                   <tr>

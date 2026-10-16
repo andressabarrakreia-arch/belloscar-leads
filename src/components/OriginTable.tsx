@@ -6,7 +6,7 @@ export function OriginTable({ rows }: { rows: Row[] }) {
   return (
     <div className="card">
       <h2>Desempenho por Canal / Origem</h2>
-      <div style={{ overflowX: "auto" }}>
+      <div className="table-scroll">
         <table>
           <thead>
             <tr>

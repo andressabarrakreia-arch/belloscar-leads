@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0] - 2026-10-16
+
+### Changed
+- UX/UI alinhada à marca BellosCar (vermelho, charcoal, azul de apoio)
+- Header com logo BC, tipografia Montserrat/DM Sans, cards com profundidade
+- Layout responsivo aprimorado (mobile/smartphone)
+- Cores dos gráficos e favicon da marca
+
 ## [1.3.0] - 2026-10-16
 
 ### Changed

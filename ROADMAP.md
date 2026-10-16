@@ -30,5 +30,6 @@
 - [x] Correção 404 de rotas no GitHub Pages (`HashRouter`)
 - [x] Regra de documentação obrigatória (`.cursor/rules/update-documentation.mdc`)
 - [x] Token Admin em `localStorage` + regra anti-segredos no Git
+- [x] Redesign UX/UI BellosCar (identidade visual + responsivo)
 
 Detalhes em [`DEPLOY.md`](DEPLOY.md).
