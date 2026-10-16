@@ -669,6 +669,39 @@ tr:hover td {
   font-weight: 700;
 }
 
+.delta-neg {
+  color: var(--brand-red);
+  font-weight: 700;
+}
+
+.insight-kpis {
+  margin-top: -4px;
+}
+
+.insight-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 10px;
+  color: var(--text);
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+
+.insight-list strong {
+  color: var(--brand-charcoal);
+}
+
+.highlight-row {
+  margin-bottom: 20px;
+}
+
+.kpi-card small.muted {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+}
+
 .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

@@ -1,6 +1,6 @@
 import type { Kpis } from "../lib/types";
 
-type Row = Kpis & { canal: string };
+type Row = Kpis & { canal: string; shareLeads?: number };
 
 export function OriginTable({ rows }: { rows: Row[] }) {
   return (
@@ -12,10 +12,12 @@ export function OriginTable({ rows }: { rows: Row[] }) {
             <tr>
               <th>Canal Origem</th>
               <th>Leads</th>
+              <th>% do total</th>
               <th>Visitas</th>
               <th>Taxa Visita</th>
               <th>Sucessos</th>
               <th>Taxa Sucesso</th>
+              <th>Visita → Sucesso</th>
             </tr>
           </thead>
           <tbody>
@@ -25,15 +27,21 @@ export function OriginTable({ rows }: { rows: Row[] }) {
                   <strong>{row.canal}</strong>
                 </td>
                 <td>{row.leads}</td>
+                <td className={row.shareLeads ? "" : "zero"}>
+                  {row.shareLeads != null ? `${row.shareLeads}%` : "—"}
+                </td>
                 <td className={row.visitas ? "positive" : "zero"}>{row.visitas}</td>
                 <td className={row.taxaVisita ? "positive" : "zero"}>{row.taxaVisita}%</td>
                 <td className={row.sucessos ? "positive" : "zero"}>{row.sucessos}</td>
                 <td className={row.taxaSucesso ? "positive" : "zero"}>{row.taxaSucesso}%</td>
+                <td className={row.taxaVisitaParaSucesso ? "positive" : "zero"}>
+                  {row.taxaVisitaParaSucesso}%
+                </td>
               </tr>
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={6} className="muted">
+                <td colSpan={8} className="muted">
                   Nenhum dado para os filtros selecionados.
                 </td>
               </tr>

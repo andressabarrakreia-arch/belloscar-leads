@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadDataset } from "../lib/dataset";
 import {
   buildAttendantStats,
+  buildDashboardInsights,
   buildSummary,
   filterLeads,
   getFilterOptions,
@@ -32,6 +33,7 @@ export function useFilteredAnalytics(dataset: Dataset | null, filters: Analytics
       options: getFilterOptions(dataset.leads),
       summary: buildSummary(filtered),
       attendants: buildAttendantStats(filtered),
+      insights: buildDashboardInsights(filtered),
     };
   }, [dataset, filters]);
 }

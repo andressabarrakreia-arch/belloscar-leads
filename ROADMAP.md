@@ -33,6 +33,7 @@
 - [x] Redesign UX/UI BellosCar (identidade visual + responsivo)
 - [x] Faixa ticker de KPIs no topo do app
 - [x] Arquitetura multi-módulo (Campanhas + regras alwaysApply)
+- [x] Dashboard Campanhas enriquecido (funil, quinzena vs anterior, tempo até visita, tops)
 - [ ] Próximos módulos com públicos/links próprios
 
 ## Backlog — próximos módulos e integrações (não esquecer)

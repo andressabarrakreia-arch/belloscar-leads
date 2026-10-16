@@ -136,6 +136,131 @@ export function buildAttendantStats(leads: Lead[]) {
   return { attendants, origens, matrix };
 }
 
+const DAY_MS = 86400000;
+
+const FUNNEL_ORDER = [
+  "Pendente",
+  "Em atendimento",
+  "Recontato",
+  "Agendado",
+  "Visita",
+  "Sucesso",
+  "Insucesso",
+  "Descartado",
+];
+
+function median(nums: number[]): number {
+  if (nums.length === 0) return 0;
+  const sorted = [...nums].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? round2((sorted[mid - 1]! + sorted[mid]!) / 2)
+    : round2(sorted[mid]!);
+}
+
+/** Insights extras para o Dashboard de Campanhas */
+export function buildDashboardInsights(leads: Lead[]) {
+  const summary = buildSummary(leads);
+  const attendants = buildAttendantStats(leads);
+
+  const statusMap = new Map(summary.statusDistribution.map((s) => [s.label, s.value]));
+  const funnel = FUNNEL_ORDER.map((label) => ({
+    label,
+    value: statusMap.get(label) || 0,
+  })).filter((s) => s.value > 0);
+
+  // status fora da ordem padrão
+  for (const s of summary.statusDistribution) {
+    if (!FUNNEL_ORDER.includes(s.label)) funnel.push(s);
+  }
+
+  const periods = summary.byPeriod;
+  const prev = periods.length >= 2 ? periods[periods.length - 2]! : null;
+  const curr = periods.length >= 1 ? periods[periods.length - 1]! : null;
+  const periodDelta =
+    prev && curr
+      ? {
+          prevLabel: prev.label,
+          currLabel: curr.label,
+          leads: curr.leads - prev.leads,
+          visitas: curr.visitas - prev.visitas,
+          sucessos: curr.sucessos - prev.sucessos,
+          taxaVisita: round2(curr.taxaVisita - prev.taxaVisita),
+          taxaSucesso: round2(curr.taxaSucesso - prev.taxaSucesso),
+          prev,
+          curr,
+        }
+      : null;
+
+  const withVisitTiming = leads
+    .filter((l) => l.hasVisit && l.dataVisita)
+    .map((l) => {
+      const days =
+        (new Date(l.dataVisita!).getTime() - new Date(l.createdAtLead).getTime()) / DAY_MS;
+      return days;
+    })
+    .filter((d) => Number.isFinite(d) && d >= 0 && d < 365);
+
+  const visitTiming = {
+    count: withVisitTiming.length,
+    avgDays: withVisitTiming.length
+      ? round2(withVisitTiming.reduce((a, b) => a + b, 0) / withVisitTiming.length)
+      : 0,
+    medianDays: median(withVisitTiming),
+  };
+
+  const minLeadsForRate = 10;
+  const eligibleOrigins = summary.byOrigin.filter((o) => o.leads >= minLeadsForRate);
+  const bestVisitRate = [...eligibleOrigins].sort((a, b) => b.taxaVisita - a.taxaVisita)[0] || null;
+  const bestSuccessRate =
+    [...eligibleOrigins].sort((a, b) => b.taxaSucesso - a.taxaSucesso)[0] || null;
+  const bestVisitToSuccess =
+    [...eligibleOrigins]
+      .filter((o) => o.visitas >= 3)
+      .sort((a, b) => b.taxaVisitaParaSucesso - a.taxaVisitaParaSucesso)[0] || null;
+
+  const propostaAll = distribution(leads, "tipoProposta");
+
+  const agendadosAbertos = leads.filter(
+    (l) =>
+      (l.status || "").trim().toLowerCase() === "agendado" && !l.hasVisit && !l.isSuccess
+  ).length;
+
+  const emAtendimento = leads.filter((l) => {
+    const s = (l.status || "").trim().toLowerCase();
+    return s === "em atendimento" || s === "pendente" || s === "recontato";
+  }).length;
+
+  const topAttendantsByLeads = attendants.attendants.slice(0, 5);
+  const topAttendantsBySuccess = [...attendants.attendants]
+    .filter((a) => a.leads >= 5)
+    .sort((a, b) => b.taxaSucesso - a.taxaSucesso || b.sucessos - a.sucessos)
+    .slice(0, 5);
+
+  const byOriginShare = summary.byOrigin.map((o) => ({
+    ...o,
+    shareLeads: summary.kpis.leads
+      ? round2((o.leads / summary.kpis.leads) * 100)
+      : 0,
+  }));
+
+  return {
+    funnel,
+    periodDelta,
+    visitTiming,
+    bestVisitRate,
+    bestSuccessRate,
+    bestVisitToSuccess,
+    propostaAll,
+    agendadosAbertos,
+    emAtendimento,
+    topAttendantsByLeads,
+    topAttendantsBySuccess,
+    byOriginShare,
+    byPeriod: periods,
+  };
+}
+
 export function comparePeriods(leads: Lead[], periodA: string, periodB: string) {
   const aRows = leads.filter((l) => l.periodKey === periodA);
   const bRows = leads.filter((l) => l.periodKey === periodB);

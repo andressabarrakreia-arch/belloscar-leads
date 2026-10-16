@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0] - 2026-10-16
+
+### Added
+- Dashboard de Campanhas enriquecido: funil por status, comparação quinzena atual vs anterior, dias até visita (média/mediana), destaques de conversão por canal, mix de propostas, agendados em aberto, top atendentes (volume e taxa)
+- Tabela de origem com % do total e coluna Visita → Sucesso
+- `buildDashboardInsights` em `metrics.ts`
+
 ## [1.5.1] - 2026-10-16
 
 ### Added
