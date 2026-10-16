@@ -24,4 +24,8 @@
 - Site (equipe): https://andressabarrakreia-arch.github.io/belloscar-leads/
 - Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/admin
 
-Detalhes de atualização de dados em [`DEPLOY.md`](DEPLOY.md).
+## Pós-lançamento
+
+- [x] Publicação automática no Admin (agregar + dedupe + commit GitHub)
+
+Detalhes em [`DEPLOY.md`](DEPLOY.md).

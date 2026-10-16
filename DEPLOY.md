@@ -1,40 +1,26 @@
 # Deploy no GitHub Pages
 
-## 1. Login no GitHub CLI (uma vez)
+## Site publicado
 
-```powershell
-gh auth login
-```
+- https://andressabarrakreia-arch.github.io/belloscar-leads/
+- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/admin
 
-Escolha: GitHub.com → HTTPS → Login with browser.
+## Atualizar dados (automático)
 
-## 2. Criar repo público e enviar o código
+1. Abra o **Admin** e entre com o PIN (`belloscar`)
+2. Crie um token em https://github.com/settings/tokens?type=beta  
+   - Resource owner: sua conta  
+   - Repository access: só `belloscar-leads`  
+   - Permissions → **Contents: Read and write**
+3. Cole o token no Admin → **Salvar token na sessão**
+4. Envie a planilha `.xlsx`  
+   - O app **agrega** (não substitui)  
+   - Faz dedupe no mês (visita/agendamento → mais recente; Sucesso permanece)  
+   - Faz **commit automático** no GitHub  
+5. Em 1–2 minutos o site da equipe atualiza
 
-Na pasta `belloscar-leads`:
+O token fica só no `sessionStorage` do navegador. Não é commitado.
 
-```powershell
-gh repo create belloscar-leads --public --source=. --remote=origin --push
-```
+## Deploy técnico (já feito)
 
-Se o repo já existir:
-
-```powershell
-git remote add origin https://github.com/SEU_USUARIO/belloscar-leads.git
-git push -u origin main
-```
-
-## 3. Ativar Pages
-
-1. Abra o repositório no GitHub  
-2. **Settings → Pages**  
-3. **Source:** GitHub Actions  
-4. Aguarde o workflow **Deploy GitHub Pages** ficar verde  
-
-URL: `https://SEU_USUARIO.github.io/belloscar-leads/`
-
-## 4. Atualizar dados depois
-
-1. `npm run dev` → `/admin` → PIN (`belloscar` por padrão, ou o do `.env`)  
-2. Envie a planilha → baixe `dataset.json`  
-3. Substitua `public/data/dataset.json`  
-4. `git add public/data/dataset.json && git commit -m "Update leads dataset" && git push`  
+Repo público + GitHub Actions (`Deploy GitHub Pages`) na branch `main`.

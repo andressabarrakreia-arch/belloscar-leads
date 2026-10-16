@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0] - 2026-10-16
+
+### Added
+- Publicação automática no Admin via GitHub API (PAT na sessão)
+- Upload agrega período novo + dedupe; commit direto em `public/data/dataset.json`
+
 ## [1.0.0] - 2026-10-16
 
 ### Added

@@ -23,13 +23,13 @@ Dashboard **estático** para análise de leads da Belloscar (Curitiba).
 
 ## Como você atualiza os dados (a cada 15 dias ou quando quiser)
 
-1. Rode local: `npm install` → `npm run dev`  
-2. Abra `/admin` e entre com o PIN (`VITE_ADMIN_PIN` no `.env`)  
+1. Abra `/admin` (no site ou local) e entre com o PIN  
+2. Cole um **Personal Access Token** do GitHub (Contents: Read and write) e salve na sessão  
 3. Envie a planilha `.xlsx`  
-4. Baixe o `dataset.json` gerado  
-5. Substitua `public/data/dataset.json`  
-6. Commit + push na branch `main`  
-7. O GitHub Actions publica no Pages automaticamente  
+4. O app **agrega** o período novo, faz a limpeza de duplicados e **publica sozinho** no repositório  
+5. Em 1–2 minutos o GitHub Pages atualiza o link da equipe  
+
+O token não fica no código — só na sessão do seu navegador.
 
 ### Colunas esperadas na planilha
 

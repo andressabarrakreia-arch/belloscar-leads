@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 import { applyImport, downloadDataset, loadDataset } from "../lib/dataset";
+import {
+  GITHUB_DEFAULTS,
+  getStoredToken,
+  publishDatasetToGitHub,
+  setStoredToken,
+} from "../lib/githubPublish";
 import { parseExcelArrayBuffer } from "../lib/parseExcel";
 import type { Dataset, ImportMeta } from "../lib/types";
 
@@ -9,15 +15,20 @@ const AUTH_KEY = "belloscar_admin_ok";
 export function Admin() {
   const [authed, setAuthed] = useState(false);
   const [pin, setPin] = useState("");
+  const [token, setToken] = useState("");
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [preview, setPreview] = useState<Dataset | null>(null);
   const [meta, setMeta] = useState<ImportMeta | null>(null);
   const [label, setLabel] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [commitUrl, setCommitUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [autoPublish, setAutoPublish] = useState(true);
 
   useEffect(() => {
     if (sessionStorage.getItem(AUTH_KEY) === "1") setAuthed(true);
+    setToken(getStoredToken());
     loadDataset().then(setDataset);
   }, []);
 
@@ -32,20 +43,59 @@ export function Admin() {
     }
   }
 
+  async function publish(next: Dataset, importLabel: string) {
+    const pat = token.trim() || getStoredToken();
+    if (!pat) {
+      throw new Error(
+        "Salve um Personal Access Token do GitHub abaixo para publicar automaticamente."
+      );
+    }
+    setStoredToken(pat);
+    const result = await publishDatasetToGitHub(
+      next,
+      pat,
+      `Agrega leads: ${importLabel} (${next.leads.length} total)`
+    );
+    setCommitUrl(result.commitUrl);
+    setDataset(next);
+    setSuccess(
+      "Publicado no GitHub. O site da equipe atualiza em 1–2 minutos (GitHub Actions)."
+    );
+  }
+
   async function onFile(file: File | null) {
     if (!file || !dataset) return;
     setBusy(true);
     setError(null);
+    setSuccess(null);
+    setCommitUrl(null);
     try {
       const buffer = await file.arrayBuffer();
       const parsed = parseExcelArrayBuffer(buffer);
       const result = applyImport(dataset, parsed, file.name, label || file.name);
       setPreview(result.dataset);
       setMeta(result.meta);
+
+      if (autoPublish) {
+        await publish(result.dataset, result.meta.label);
+        setPreview(result.dataset);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Falha ao processar planilha");
-      setPreview(null);
-      setMeta(null);
+      setError(err instanceof Error ? err.message : "Falha ao processar/publicar");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function onPublishClick() {
+    if (!preview) return;
+    setBusy(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      await publish(preview, meta?.label || "import");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Falha ao publicar");
     } finally {
       setBusy(false);
     }
@@ -77,11 +127,58 @@ export function Admin() {
   return (
     <div className="stack">
       <div className="card">
+        <h2>Token GitHub (publicação automática)</h2>
+        <p className="muted">
+          O token fica só nesta sessão do navegador (não vai para o site público). Crie em{" "}
+          <a
+            href="https://github.com/settings/tokens?type=beta"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub → Fine-grained token
+          </a>{" "}
+          com acesso ao repo <code>{GITHUB_DEFAULTS.owner}/{GITHUB_DEFAULTS.repo}</code> e
+          permissão <strong>Contents: Read and write</strong>.
+        </p>
+        <label>
+          Personal Access Token
+          <input
+            type="password"
+            value={token}
+            onChange={(e) => setToken(e.target.value)}
+            placeholder="github_pat_… ou ghp_…"
+            style={{ width: "100%", marginTop: 6 }}
+            autoComplete="off"
+          />
+        </label>
+        <div className="row" style={{ marginTop: 10 }}>
+          <button
+            className="btn secondary"
+            type="button"
+            onClick={() => {
+              setStoredToken(token);
+              setSuccess("Token salvo nesta sessão.");
+            }}
+          >
+            Salvar token na sessão
+          </button>
+          <label className="row" style={{ gap: 8 }}>
+            <input
+              type="checkbox"
+              checked={autoPublish}
+              onChange={(e) => setAutoPublish(e.target.checked)}
+            />
+            Publicar automaticamente ao enviar a planilha
+          </label>
+        </div>
+      </div>
+
+      <div className="card">
         <h2>Importar planilha (.xlsx)</h2>
         <p className="muted">
-          O processamento acontece no seu navegador — sem servidor. Depois baixe o{" "}
-          <code>dataset.json</code>, substitua em <code>public/data/dataset.json</code>, faça
-          commit e push. O GitHub Pages atualiza sozinho.
+          O arquivo <strong>agrega</strong> ao histórico (não substitui). A limpeza de
+          duplicados roda no mesmo mês: prioriza visita/agendamento; senão o mais recente;
+          Sucesso sempre permanece. Com o token salvo, o commit no GitHub é feito na hora.
         </p>
         <div className="stack">
           <label>
@@ -100,10 +197,25 @@ export function Admin() {
               disabled={busy}
               onChange={(e) => onFile(e.target.files?.[0] || null)}
             />
-            <p className="muted">Selecione a planilha de leads da campanha</p>
+            <p className="muted">
+              {busy ? "Processando e publicando…" : "Selecione a planilha de leads da campanha"}
+            </p>
           </div>
         </div>
         {error && <div className="error">{error}</div>}
+        {success && (
+          <div className="success-box">
+            {success}
+            {commitUrl && (
+              <>
+                <br />
+                <a href={commitUrl} target="_blank" rel="noreferrer">
+                  Ver commit no GitHub
+                </a>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {meta && preview && (
@@ -138,27 +250,17 @@ export function Admin() {
             </div>
           )}
           <div className="row">
-            <button className="btn" type="button" onClick={() => downloadDataset(preview)}>
-              Baixar dataset.json
-            </button>
             <button
-              className="btn secondary"
+              className="btn"
               type="button"
-              onClick={() => {
-                setDataset(preview);
-                setPreview(null);
-                setMeta(null);
-              }}
+              disabled={busy}
+              onClick={onPublishClick}
             >
-              Usar como base nesta sessão
+              Publicar no GitHub agora
             </button>
-          </div>
-          <div className="success-box" style={{ marginTop: 12 }}>
-            1) Salve o arquivo em <code>public/data/dataset.json</code>
-            <br />
-            2) Commit + push no GitHub
-            <br />
-            3) Aguarde o Actions publicar no GitHub Pages
+            <button className="btn secondary" type="button" onClick={() => downloadDataset(preview)}>
+              Baixar backup dataset.json
+            </button>
           </div>
         </div>
       )}
