@@ -21,11 +21,13 @@
 ## Links
 
 - Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
-- Site (equipe): https://andressabarrakreia-arch.github.io/belloscar-leads/
-- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/admin
+- Site (equipe): https://andressabarrakreia-arch.github.io/belloscar-leads/#/
+- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/#/admin
 
 ## Pós-lançamento
 
 - [x] Publicação automática no Admin (agregar + dedupe + commit GitHub)
+- [x] Correção 404 de rotas no GitHub Pages (`HashRouter`)
+- [x] Regra de documentação obrigatória (`.cursor/rules/update-documentation.mdc`)
 
 Detalhes em [`DEPLOY.md`](DEPLOY.md).

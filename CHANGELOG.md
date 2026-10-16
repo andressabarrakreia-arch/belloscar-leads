@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0] - 2026-10-16
+
+### Fixed
+- 404 ao abrir `/admin` (e demais rotas) direto no GitHub Pages — migração para `HashRouter` (`#/admin`)
+
+### Changed
+- PIN do Admin atualizado via `VITE_ADMIN_PIN` / fallback no código
+
+### Added
+- Regra Cursor `.cursor/rules/update-documentation.mdc` (documentação obrigatória ao fim de cada alteração)
+- `AGENTS.md` com a mesma obrigação para agentes
+
 ## [1.1.0] - 2026-10-16
 
 ### Added

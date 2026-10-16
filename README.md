@@ -5,13 +5,15 @@ Dashboard **estático** para análise de leads da Belloscar (Curitiba).
 - React + Vite + TypeScript + Recharts  
 - **Sem servidor** em produção (nada rodando na sua máquina)  
 - Dados em [`public/data/dataset.json`](public/data/dataset.json)  
-- Publicação via **GitHub Pages** (repositório público)
+- Publicação via **GitHub Pages** (repositório público)  
+- Rotas com **HashRouter** (links diretos não dão 404 no Pages)
 
 ## URL
 
 - Site: https://andressabarrakreia-arch.github.io/belloscar-leads/
 - Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
-- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/admin
+- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/#/admin  
+  PIN: definido em `VITE_ADMIN_PIN` (ver `.env` / `.env.example`)
 
 ## O que a equipe vê
 
@@ -19,11 +21,17 @@ Dashboard **estático** para análise de leads da Belloscar (Curitiba).
 - Atendentes (ranking + matriz origem × atendente)  
 - Comparar períodos (quinzenas)  
 - Filtros: período, mês, origem, atendente, datas  
-- **Somente leitura** — sem editar dados
+- **Somente leitura** — sem editar dados  
+
+Links da equipe (sem 404):
+
+- https://andressabarrakreia-arch.github.io/belloscar-leads/#/
+- https://andressabarrakreia-arch.github.io/belloscar-leads/#/atendentes
+- https://andressabarrakreia-arch.github.io/belloscar-leads/#/comparar
 
 ## Como você atualiza os dados (a cada 15 dias ou quando quiser)
 
-1. Abra `/admin` (no site ou local) e entre com o PIN  
+1. Abra `/#/admin` (no site ou local) e entre com o PIN  
 2. Cole um **Personal Access Token** do GitHub (Contents: Read and write) e salve na sessão  
 3. Envie a planilha `.xlsx`  
 4. O app **agrega** o período novo, faz a limpeza de duplicados e **publica sozinho** no repositório  
@@ -57,18 +65,16 @@ npm run build
 npm run preview
 ```
 
-## Ativar GitHub Pages
+## Documentação do projeto
 
-1. Crie o repo público `belloscar-leads` e faça push  
-2. Settings → Pages → Source: **GitHub Actions**  
-3. Após o workflow `Deploy GitHub Pages` concluir, use a URL do Pages  
+Ao final de qualquer alteração, atualizar:
+
+- `CHANGELOG.md`, `ROADMAP.md`, `README.md`, `DEPLOY.md` conforme necessário  
+- Regra Cursor: `.cursor/rules/update-documentation.mdc`  
+- Ver também `AGENTS.md`
 
 ## Segurança
 
 - Não commite `.env` nem planilhas `.xlsx` brutas  
 - O JSON publicado fica público (necessário para Pages)  
-- O PIN do admin é proteção leve (repo público)
-
-## Roadmap / Changelog
-
-Veja [`ROADMAP.md`](ROADMAP.md) e [`CHANGELOG.md`](CHANGELOG.md).
+- O PIN do admin entra no bundle do frontend (limitação do app estático)

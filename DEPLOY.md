@@ -2,12 +2,15 @@
 
 ## Site publicado
 
-- https://andressabarrakreia-arch.github.io/belloscar-leads/
-- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/admin
+- Home: https://andressabarrakreia-arch.github.io/belloscar-leads/
+- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/#/admin  
+  PIN: valor de `VITE_ADMIN_PIN` (ver `.env.example`)
+
+Rotas usam **hash** (`#/…`) para não gerar 404 no GitHub Pages.
 
 ## Atualizar dados (automático)
 
-1. Abra o **Admin** e entre com o PIN (`belloscar`)
+1. Abra o **Admin** (`#/admin`) e entre com o PIN  
 2. Crie um token em https://github.com/settings/tokens?type=beta  
    - Resource owner: sua conta  
    - Repository access: só `belloscar-leads`  
@@ -21,6 +24,7 @@
 
 O token fica só no `sessionStorage` do navegador. Não é commitado.
 
-## Deploy técnico (já feito)
+## Deploy técnico
 
-Repo público + GitHub Actions (`Deploy GitHub Pages`) na branch `main`.
+Repo público + GitHub Actions (`Deploy GitHub Pages`) na branch `main`.  
+O PIN de produção vem do fallback no código / variáveis `VITE_*` no build do Actions.

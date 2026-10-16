@@ -1,0 +1,26 @@
+---
+description: Obriga atualizar a documentação do projeto ao final de toda alteração, task ou criação.
+alwaysApply: true
+---
+
+# Atualizar documentação ao final de toda alteração
+
+Ao concluir **qualquer** alteração, task, feature, correção, criação de arquivo ou mudança de fluxo neste projeto, **antes de encerrar o turno** atualize toda a documentação relevante. Não pule este passo.
+
+## O que atualizar (quando aplicável)
+
+1. **[CHANGELOG.md](CHANGELOG.md)** — sempre: registre o que mudou (Added / Changed / Fixed / Removed) com data.
+2. **[ROADMAP.md](ROADMAP.md)** — marque fases `[x]` / `[ ]`, links e itens pós-lançamento.
+3. **[README.md](README.md)** — se mudou uso, URLs, setup, PIN, fluxo de upload/publicação ou arquitetura.
+4. **[DEPLOY.md](DEPLOY.md)** — se mudou deploy, Pages, token GitHub, Admin ou URLs.
+5. **Comentários / textos na UI** — se o fluxo do usuário mudou (ex.: Admin, filtros).
+6. **`.env.example`** — se novas variáveis de ambiente forem necessárias (nunca commitar segredos reais além do que o projeto já expõe no frontend).
+7. **Regras em `.cursor/rules/`** — se novas convenções do projeto forem definidas.
+
+## Critério
+
+Se a mudança afeta como alguém **usa**, **publica**, **configura** ou **entende** o sistema, a documentação correspondente deve refletir isso no mesmo ciclo de trabalho (mesmo commit ou commit imediatamente seguinte).
+
+## Idioma
+
+Documentação e textos de UI para a gestora: português (Brasil).
