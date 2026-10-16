@@ -1,0 +1,46 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/
+_backend_deprecated/
+frontend/
+
+# Builds
+dist/
+build/
+
+# Raw spreadsheets (never commit)
+*.xlsx
+*.xls
+*.csv
+!public/data/
+
+# Databases / old backend
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs & caches
+logs/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.cache/
+.vite/
+coverage/
+
+# IDE
+.idea/
+.vscode/*
+
+# Misc
+*.pem
+*.key
+credentials.json
+package.frontend.json
