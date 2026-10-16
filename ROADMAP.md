@@ -35,4 +35,28 @@
 - [x] Arquitetura multi-módulo (Campanhas + regras alwaysApply)
 - [ ] Próximos módulos com públicos/links próprios
 
+## Backlog — próximos módulos e integrações (não esquecer)
+
+Cada item abaixo deve ser um **módulo/página com link próprio** (`#/<modulo>`), público distinto quando necessário.
+
+### Páginas / módulos
+
+- [ ] **Análise de Portais** — módulo `#/portais` (link de acesso separado da equipe de portais)
+- [ ] **Fechamento mensal de Web** — módulo `#/fechamento-web` (link próprio)
+- [ ] **Fechamento mensal de Vendas** — módulo `#/fechamento-vendas` (link próprio)
+
+### Comunicação Telegram
+
+- [ ] **Bot / chat Telegram BellosCar** — envio de:
+  - [ ] Lembretes
+  - [ ] Insights (automáticos ou manuais a partir dos módulos)
+  - [ ] Pautas e atas de reunião
+- [ ] Canal/grupo Telegram definido + token só em segredo local (nunca no Git público)
+- [ ] Documentar no README/DEPLOY o fluxo de configuração do bot (sem expor o token)
+
+### Notas de arquitetura
+
+- Seguir `src/modules/registry.ts` + regras `multi-module-pages.mdc` / `belloscar-product-prefs.mdc`
+- Telegram exigirá componente fora do Pages puro (ex.: GitHub Actions schedule, Cloudflare Worker ou bot hospedado) — detalhar na implementação
+
 Detalhes em [`DEPLOY.md`](DEPLOY.md).

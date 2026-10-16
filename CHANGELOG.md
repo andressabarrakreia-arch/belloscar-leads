@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.1] - 2026-10-16
+
+### Added
+- Backlog no `ROADMAP.md`: Análise de Portais, Fechamento mensal Web, Fechamento mensal Vendas, integração Telegram (lembretes, insights, pautas/atas)
+
 ## [1.5.0] - 2026-10-16
 
 ### Changed
