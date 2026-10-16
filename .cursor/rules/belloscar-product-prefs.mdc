@@ -1,0 +1,24 @@
+---
+description: Preferências permanentes do produto BellosCar Analytics (nomeação, marca, módulos).
+alwaysApply: true
+---
+
+# Preferências de produto BellosCar Analytics
+
+## Nomeação
+
+- Hub/repo: BellosCar Analytics / `belloscar-leads`
+- Módulo publicado hoje: **Análise de Campanhas**
+- Não tratar o app inteiro como uma única “página de leads” sem nome de módulo
+
+## Marca e UI
+
+- Paleta e assets em `public/brand/` (vermelho BellosCar, charcoal, azul de apoio)
+- Manter redesign atual (profundidade, ticker, responsivo) ao evoluir módulos
+- Idioma da UI e docs: português (Brasil)
+
+## Acesso
+
+- Cada módulo = link Hash próprio (`#/<modulo>`)
+- Equipe recebe só o link do módulo autorizado
+- Segredos/tokens: ver `no-secrets-in-repo.mdc`; documentação: `update-documentation.mdc`; arquitetura de módulos: `multi-module-pages.mdc`

@@ -1,0 +1,47 @@
+import { NavLink, Outlet } from "react-router-dom";
+import type { AppModule } from "../modules/registry";
+import { KeyTicker } from "./KeyTicker";
+
+const brandIcon = `${import.meta.env.BASE_URL}brand/bc-icon.png`;
+
+type Props = {
+  module: AppModule;
+  /** Se false, oculta itens adminOnly do menu (link da equipe) */
+  showAdminNav?: boolean;
+};
+
+export function ModuleLayout({ module, showAdminNav = true }: Props) {
+  const navItems = module.nav.filter((item) => showAdminNav || !item.adminOnly);
+
+  return (
+    <div className="app-shell">
+      <header className="topbar">
+        <div className="brand">
+          <img className="brand-mark" src={brandIcon} alt="BellosCar" width={52} height={52} />
+          <div className="brand-text">
+            <h1>
+              Bellos<span className="car">Car</span>
+            </h1>
+            <span>{module.name}</span>
+          </div>
+        </div>
+        <nav className="nav" aria-label={`Navegação · ${module.name}`}>
+          {navItems.map((item) => (
+            <NavLink key={item.to} to={item.to} end={item.end}>
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+      </header>
+      <p className="module-tagline">{module.tagline}</p>
+      <KeyTicker />
+      <Outlet />
+      <footer className="page-footer">
+        <span>
+          BellosCar · {module.name} · Curitiba
+        </span>
+        <span className="checkered" aria-hidden="true" />
+      </footer>
+    </div>
+  );
+}

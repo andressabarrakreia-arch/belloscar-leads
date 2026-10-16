@@ -1,19 +1,22 @@
-# Instruções para agentes (Belloscar Leads)
+# Instruções para agentes (BellosCar Analytics)
 
 ## Documentação obrigatória
 
-Ao final de **toda** alteração, task ou criação, atualizar a documentação do projeto:
+Ao final de **toda** alteração, task ou criação, atualizar:
 
-- `CHANGELOG.md`
-- `ROADMAP.md`
-- `README.md` / `DEPLOY.md` quando o uso ou o deploy mudar
-- `.env.example` se houver novas variáveis (sem valores secretos reais)
-- Regra Cursor: `.cursor/rules/update-documentation.mdc` (alwaysApply)
+- `CHANGELOG.md`, `ROADMAP.md`
+- `README.md` / `DEPLOY.md` quando URLs, módulos ou deploy mudarem
+- `.env.example` só com placeholders (sem segredos reais)
+- Regras em `.cursor/rules/` quando novas convenções forem definidas
 
-Não encerrar o trabalho sem esse passo.
+## Segurança
 
-## Segurança (obrigatório)
+- Nunca commit tokens/senhas/`.env` real — `.cursor/rules/no-secrets-in-repo.mdc`
+- Token GitHub só em `localStorage` no Admin
 
-- Nunca commit tokens, senhas, `.env` real, chaves — ver `.cursor/rules/no-secrets-in-repo.mdc`
-- Token de publicação: só `localStorage` no Admin, nunca `VITE_` / código / GitHub
-- Se um segredo vazar no repo público: remover + revogar + registrar no CHANGELOG
+## Módulos e links distintos
+
+- Registro: `src/modules/registry.ts`
+- Módulo atual: **Análise de Campanhas** → `#/campanhas`
+- Novos módulos: rota `#/<modulo>/...`, layout próprio, link de equipe separado
+- Regras: `multi-module-pages.mdc`, `belloscar-product-prefs.mdc` (alwaysApply)

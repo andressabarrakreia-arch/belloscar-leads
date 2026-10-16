@@ -1,0 +1,29 @@
+---
+description: Mantém módulos distintos (ex. Análise de Campanhas) com rotas e links de acesso separados.
+alwaysApply: true
+---
+
+# Módulos distintos e links separados
+
+Este projeto é um hub BellosCar com **vários módulos**. Pessoas diferentes podem ter acesso a páginas diferentes — cada módulo precisa ser **separado** na URL, no menu e na documentação.
+
+## Convenções obrigatórias
+
+1. **Registro central:** todo módulo novo entra em [`src/modules/registry.ts`](src/modules/registry.ts) (`id`, `name`, `basePath`, `tagline`, `publicPath`, `nav`).
+2. **Rota base própria:** `#/<modulo>/...` — nunca misturar páginas de módulos diferentes no mesmo prefixo.
+3. **Layout por módulo:** usar `ModuleLayout` (ou equivalente) com o `AppModule` correspondente; não reutilizar menu de outro módulo.
+4. **Link da equipe:** o link compartilhado aponta só para o `publicPath` daquele módulo (ex.: `#/campanhas`). Não enviar o hub inteiro se a pessoa só deve ver um módulo.
+5. **Gestão/Admin:** rotas `.../admin` ficam sob o módulo (`#/campanhas/admin`) e marcadas `adminOnly` no nav quando aplicável.
+6. **Módulo atual:** **Análise de Campanhas** = `#/campanhas` (dashboard, atendentes, comparar, admin).
+7. **Ao criar novo módulo:**
+   - adicionar em `MODULES`
+   - criar rotas em `App.tsx` sob o `basePath`
+   - páginas/components isolados (pasta `src/pages/<modulo>/` ou prefixo claro)
+   - atualizar README/DEPLOY com o **link público** do novo módulo
+   - não quebrar redirects de compatibilidade sem atualizar a documentação
+
+## Preferências de produto (sempre ativas)
+
+- Nome do módulo atual no header: **Análise de Campanhas** (não “BellosCar Leads” genérico como único título).
+- Identidade visual BellosCar compartilhada; conteúdo e dados por módulo.
+- Páginas e links distintos; expansível para outros públicos sem fundir tudo num dashboard único.

@@ -172,6 +172,13 @@ select {
   box-shadow: 0 8px 18px rgba(192, 32, 38, 0.28);
 }
 
+.module-tagline {
+  margin: -6px 0 14px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
 /* Faixa de indicadores (ticker) */
 .key-ticker {
   position: relative;

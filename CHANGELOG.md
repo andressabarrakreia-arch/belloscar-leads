@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0] - 2026-10-16
+
+### Changed
+- App organizado em módulos; módulo atual renomeado para **Análise de Campanhas**
+- Rotas sob `#/campanhas` (dashboard, atendentes, comparar, admin)
+- Header e docs com nome do módulo e links distintos
+
+### Added
+- `src/modules/registry.ts` — registro de módulos
+- `ModuleLayout` por módulo
+- Regras Cursor alwaysApply: `multi-module-pages.mdc`, `belloscar-product-prefs.mdc`
+- Redirects de compatibilidade para links antigos (`#/admin`, etc.)
+
 ## [1.4.1] - 2026-10-16
 
 ### Added

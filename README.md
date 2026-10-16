@@ -1,54 +1,56 @@
-# Belloscar Leads Analytics
+# BellosCar Analytics
 
-Dashboard **estático** para análise de leads da Belloscar (Curitiba).
+Hub **estático** de análises da BellosCar (Curitiba), organizado em **módulos** com links distintos.
 
 - React + Vite + TypeScript + Recharts  
-- **Sem servidor** em produção (nada rodando na sua máquina)  
-- Dados em [`public/data/dataset.json`](public/data/dataset.json)  
-- Publicação via **GitHub Pages** (repositório público)  
-- Rotas com **HashRouter** (links diretos não dão 404 no Pages)
+- Sem servidor em produção  
+- Dados de campanhas em [`public/data/dataset.json`](public/data/dataset.json)  
+- GitHub Pages + HashRouter  
 
-## URL
+## Módulo atual: Análise de Campanhas
 
-- Site: https://andressabarrakreia-arch.github.io/belloscar-leads/
-- Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
-- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/#/admin  
-  PIN: definido localmente (`.env` / fallback no app — não documentar PAT no repo)
+**Link da equipe (compartilhar este):**  
+https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
 
-## O que a equipe vê
+| Página | Link |
+|--------|------|
+| Dashboard | `#/campanhas` |
+| Atendentes | `#/campanhas/atendentes` |
+| Comparar períodos | `#/campanhas/comparar` |
+| Gestão (importar planilha) | `#/campanhas/admin` |
 
-- Dashboard com KPIs, tabela por origem e gráficos  
-- Atendentes (ranking + matriz origem × atendente)  
-- Comparar períodos (quinzenas)  
-- Filtros: período, mês, origem, atendente, datas  
-- **Somente leitura** — sem editar dados  
+A home `#/` redireciona para `#/campanhas`. Links antigos (`#/admin`, etc.) também redirecionam.
 
-Links da equipe (sem 404):
+### O que a equipe vê neste módulo
 
-- https://andressabarrakreia-arch.github.io/belloscar-leads/#/
-- https://andressabarrakreia-arch.github.io/belloscar-leads/#/atendentes
-- https://andressabarrakreia-arch.github.io/belloscar-leads/#/comparar
+- KPIs, tabela por origem, gráficos  
+- Atendentes e comparação de períodos  
+- Filtros · **somente leitura**  
 
-## Como você atualiza os dados (a cada 15 dias ou quando quiser)
+## Novos módulos (futuro)
 
-1. Abra `/#/admin` e entre com o PIN  
-2. Na primeira vez, cole o **Personal Access Token** (Contents: Read and write) e clique **Salvar neste computador** (fica no `localStorage`)  
-3. Envie a planilha `.xlsx`  
-4. O app **agrega**, faz dedupe e **publica sozinho** no GitHub  
-5. Em 1–2 minutos o Pages atualiza  
+Cada módulo novo terá:
 
-O token **nunca** vai para o repositório público — só no seu navegador.
+- entrada em `src/modules/registry.ts`  
+- rotas `#/<modulo>/...`  
+- link de acesso próprio para o público autorizado  
 
-### Colunas esperadas na planilha
+Regras Cursor (sempre ativas): `multi-module-pages.mdc`, `belloscar-product-prefs.mdc`.
+
+## Como atualizar dados de campanhas
+
+1. Abra `#/campanhas/admin` e entre com o PIN  
+2. Na primeira vez, salve o PAT GitHub neste computador (`localStorage`)  
+3. Envie a planilha `.xlsx` (agrega + dedupe + publica)  
+4. Em 1–2 minutos o Pages atualiza  
+
+### Colunas da planilha
 
 `ID`, `Criado em`, `Responsável`, `Status`, `Visita`, `Data Visita`, `Origem`, `Tipo Proposta`, `Cliente`, `Celular`
 
 ### Deduplicação
 
-- Só dentro do **mesmo mês**  
-- Prioriza visita (`Visita=Sim` ou `Status=Visita`) ou `Status=Agendado`  
-- Senão mantém o mais recente  
-- `Status=Sucesso` nunca é removido  
+- Só no mesmo mês · visita/agendamento primeiro · senão mais recente · Sucesso sempre permanece  
 
 ## Setup local
 
@@ -58,23 +60,8 @@ npm install
 npm run dev
 ```
 
-Build de produção:
+## Documentação e segurança
 
-```bash
-npm run build
-npm run preview
-```
-
-## Documentação do projeto
-
-Ao final de qualquer alteração, atualizar:
-
-- `CHANGELOG.md`, `ROADMAP.md`, `README.md`, `DEPLOY.md` conforme necessário  
-- Regra Cursor: `.cursor/rules/update-documentation.mdc`  
-- Ver também `AGENTS.md`
-
-## Segurança
-
-- Não commite `.env` nem planilhas `.xlsx` brutas  
-- O JSON publicado fica público (necessário para Pages)  
-- O PIN do admin entra no bundle do frontend (limitação do app estático)
+- Ao final de cada alteração: `CHANGELOG.md`, `ROADMAP.md`, README/DEPLOY se URLs mudarem  
+- Segredos nunca no Git — `.cursor/rules/no-secrets-in-repo.mdc`  
+- Ver `AGENTS.md`  

@@ -21,8 +21,8 @@
 ## Links
 
 - Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
-- Site (equipe): https://andressabarrakreia-arch.github.io/belloscar-leads/#/
-- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/#/admin
+- **Análise de Campanhas (equipe):** https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
+- Gestão: https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/admin
 
 ## Pós-lançamento
 
@@ -32,5 +32,7 @@
 - [x] Token Admin em `localStorage` + regra anti-segredos no Git
 - [x] Redesign UX/UI BellosCar (identidade visual + responsivo)
 - [x] Faixa ticker de KPIs no topo do app
+- [x] Arquitetura multi-módulo (Campanhas + regras alwaysApply)
+- [ ] Próximos módulos com públicos/links próprios
 
 Detalhes em [`DEPLOY.md`](DEPLOY.md).
