@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Repo público: https://<user>.github.io/belloscar-leads/
-export default defineConfig({
+// Em produção (GitHub Pages do repo): /belloscar-leads/
+// Em desenvolvimento local: /
+export default defineConfig(({ command }) => ({
   plugins: [react()],
-  base: "/belloscar-leads/",
+  base: command === "build" ? "/belloscar-leads/" : "/",
   server: {
     port: 5173,
   },
-});
+}));
