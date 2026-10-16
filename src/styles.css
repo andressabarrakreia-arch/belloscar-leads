@@ -172,6 +172,115 @@ select {
   box-shadow: 0 8px 18px rgba(192, 32, 38, 0.28);
 }
 
+/* Faixa de indicadores (ticker) */
+.key-ticker {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 18px;
+  padding: 10px 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--brand-charcoal) 0%, #2a2a2b 55%, var(--brand-red-deep) 100%);
+  box-shadow: 0 8px 20px rgba(64, 64, 65, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.key-ticker::before,
+.key-ticker::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.key-ticker::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(42, 42, 43, 0.95), transparent);
+  border-radius: 999px 0 0 999px;
+}
+
+.key-ticker::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(158, 24, 29, 0.95), transparent);
+  border-radius: 0 999px 999px 0;
+}
+
+.key-ticker-track {
+  display: flex;
+  width: max-content;
+  gap: 0;
+  animation: ticker-scroll 40s linear infinite;
+  will-change: transform;
+}
+
+.key-ticker:hover .key-ticker-track {
+  animation-play-state: paused;
+}
+
+.key-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 28px;
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.key-ticker-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(226, 30, 38, 0.45);
+  flex-shrink: 0;
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .key-ticker-track {
+    animation: none;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .key-ticker-item {
+    padding: 0 12px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .key-ticker {
+    border-radius: 12px;
+    margin-bottom: 14px;
+    padding: 9px 0;
+  }
+
+  .key-ticker-item {
+    font-size: 0.8rem;
+    padding: 0 20px;
+  }
+
+  .key-ticker-track {
+    animation-duration: 36s;
+  }
+}
+
 .filters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

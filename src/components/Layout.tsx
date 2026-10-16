@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { KeyTicker } from "./KeyTicker";
 
 const brandIcon = `${import.meta.env.BASE_URL}brand/bc-icon.png`;
 
@@ -24,6 +25,7 @@ export function Layout({ readOnly = false }: { readOnly?: boolean }) {
           {!readOnly && <NavLink to="/admin">Gestão</NavLink>}
         </nav>
       </header>
+      <KeyTicker />
       <Outlet />
       <footer className="page-footer">
         <span>BellosCar · Espaço Bello&apos;s · Curitiba</span>

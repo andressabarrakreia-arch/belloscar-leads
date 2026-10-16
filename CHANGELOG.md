@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.1] - 2026-10-16
+
+### Added
+- Faixa ticker com indicadores-chave (leads, visitas, sucessos, top origem) abaixo do header
+
 ## [1.4.0] - 2026-10-16
 
 ### Changed

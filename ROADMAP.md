@@ -31,5 +31,6 @@
 - [x] Regra de documentação obrigatória (`.cursor/rules/update-documentation.mdc`)
 - [x] Token Admin em `localStorage` + regra anti-segredos no Git
 - [x] Redesign UX/UI BellosCar (identidade visual + responsivo)
+- [x] Faixa ticker de KPIs no topo do app
 
 Detalhes em [`DEPLOY.md`](DEPLOY.md).
