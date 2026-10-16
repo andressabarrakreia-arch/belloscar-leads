@@ -3,6 +3,7 @@
 ## [1.0.0] - 2026-10-16
 
 ### Added
+- Publicação em GitHub Pages: https://andressabarrakreia-arch.github.io/belloscar-leads/
 - App estático React + Vite (sem Node/servidor em produção)
 - Motor client-side: parse XLSX, dedupe mensal, métricas
 - Dashboard, Atendentes, Comparar períodos

@@ -7,9 +7,11 @@ Dashboard **estático** para análise de leads da Belloscar (Curitiba).
 - Dados em [`public/data/dataset.json`](public/data/dataset.json)  
 - Publicação via **GitHub Pages** (repositório público)
 
-## URL (após publish)
+## URL
 
-`https://<seu-usuario>.github.io/belloscar-leads/`
+- Site: https://andressabarrakreia-arch.github.io/belloscar-leads/
+- Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
+- Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/admin
 
 ## O que a equipe vê
 
