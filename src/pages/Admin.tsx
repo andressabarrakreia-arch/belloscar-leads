@@ -9,7 +9,7 @@ import {
 import { parseExcelArrayBuffer } from "../lib/parseExcel";
 import type { Dataset, ImportMeta } from "../lib/types";
 
-const PIN = import.meta.env.VITE_ADMIN_PIN || "BELLOSCAR864275@";
+const PIN = import.meta.env.VITE_ADMIN_PIN || "belloscar864275@";
 const AUTH_KEY = "belloscar_admin_ok";
 
 export function Admin() {

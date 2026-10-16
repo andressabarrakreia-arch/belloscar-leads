@@ -13,7 +13,7 @@ Dashboard **estático** para análise de leads da Belloscar (Curitiba).
 - Site: https://andressabarrakreia-arch.github.io/belloscar-leads/
 - Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
 - Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/#/admin  
-  PIN: definido em `VITE_ADMIN_PIN` (ver `.env` / `.env.example`)
+  PIN: `belloscar864275@`
 
 ## O que a equipe vê
 

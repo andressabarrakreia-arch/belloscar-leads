@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.1] - 2026-10-16
+
+### Changed
+- PIN do Admin definido como `belloscar864275@` (build Pages usa `.env.example`)
+
 ## [1.2.0] - 2026-10-16
 
 ### Fixed

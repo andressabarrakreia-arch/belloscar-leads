@@ -4,7 +4,7 @@
 
 - Home: https://andressabarrakreia-arch.github.io/belloscar-leads/
 - Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/#/admin  
-  PIN: valor de `VITE_ADMIN_PIN` (ver `.env.example`)
+  PIN: `belloscar864275@`
 
 Rotas usam **hash** (`#/…`) para não gerar 404 no GitHub Pages.
 
