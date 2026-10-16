@@ -13,7 +13,7 @@ Dashboard **estático** para análise de leads da Belloscar (Curitiba).
 - Site: https://andressabarrakreia-arch.github.io/belloscar-leads/
 - Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
 - Admin: https://andressabarrakreia-arch.github.io/belloscar-leads/#/admin  
-  PIN: `belloscar864275@`
+  PIN: definido localmente (`.env` / fallback no app — não documentar PAT no repo)
 
 ## O que a equipe vê
 
@@ -31,13 +31,13 @@ Links da equipe (sem 404):
 
 ## Como você atualiza os dados (a cada 15 dias ou quando quiser)
 
-1. Abra `/#/admin` (no site ou local) e entre com o PIN  
-2. Cole um **Personal Access Token** do GitHub (Contents: Read and write) e salve na sessão  
+1. Abra `/#/admin` e entre com o PIN  
+2. Na primeira vez, cole o **Personal Access Token** (Contents: Read and write) e clique **Salvar neste computador** (fica no `localStorage`)  
 3. Envie a planilha `.xlsx`  
-4. O app **agrega** o período novo, faz a limpeza de duplicados e **publica sozinho** no repositório  
-5. Em 1–2 minutos o GitHub Pages atualiza o link da equipe  
+4. O app **agrega**, faz dedupe e **publica sozinho** no GitHub  
+5. Em 1–2 minutos o Pages atualiza  
 
-O token não fica no código — só na sessão do seu navegador.
+O token **nunca** vai para o repositório público — só no seu navegador.
 
 ### Colunas esperadas na planilha
 

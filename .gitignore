@@ -1,7 +1,24 @@
-# Secrets
+# === SEGREDOS — nunca versionar ===
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+# Pasta local de segredos (exceto o README explicativo)
+.secrets/**
+!.secrets/README.md
+*.secret
+*credentials*
+*credential*
+secrets.json
+.secrets.local*
+local.secrets*
+
+# Tokens / chaves
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+*.keystore
 
 # Dependencies
 node_modules/
@@ -14,13 +31,13 @@ frontend/
 dist/
 build/
 
-# Raw spreadsheets (never commit)
+# Planilhas brutas (nunca commit)
 *.xlsx
 *.xls
 *.csv
 !public/data/
 
-# Databases / old backend
+# Databases
 *.db
 *.sqlite
 *.sqlite3
@@ -40,7 +57,4 @@ coverage/
 .vscode/*
 
 # Misc
-*.pem
-*.key
-credentials.json
 package.frontend.json

@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { applyImport, downloadDataset, loadDataset } from "../lib/dataset";
 import {
   GITHUB_DEFAULTS,
+  clearStoredToken,
   getStoredToken,
+  hasStoredToken,
+  maskToken,
   publishDatasetToGitHub,
   setStoredToken,
 } from "../lib/githubPublish";
@@ -15,7 +18,9 @@ const AUTH_KEY = "belloscar_admin_ok";
 export function Admin() {
   const [authed, setAuthed] = useState(false);
   const [pin, setPin] = useState("");
-  const [token, setToken] = useState("");
+  const [tokenInput, setTokenInput] = useState("");
+  const [tokenSaved, setTokenSaved] = useState(false);
+  const [masked, setMasked] = useState("");
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [preview, setPreview] = useState<Dataset | null>(null);
   const [meta, setMeta] = useState<ImportMeta | null>(null);
@@ -25,16 +30,27 @@ export function Admin() {
   const [commitUrl, setCommitUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [autoPublish, setAutoPublish] = useState(true);
+  const [showReplaceToken, setShowReplaceToken] = useState(false);
+
+  function refreshTokenState() {
+    const stored = getStoredToken();
+    setTokenSaved(Boolean(stored));
+    setMasked(stored ? maskToken(stored) : "");
+  }
 
   useEffect(() => {
-    if (sessionStorage.getItem(AUTH_KEY) === "1") setAuthed(true);
-    setToken(getStoredToken());
+    if (localStorage.getItem(AUTH_KEY) === "1" || sessionStorage.getItem(AUTH_KEY) === "1") {
+      setAuthed(true);
+      localStorage.setItem(AUTH_KEY, "1");
+    }
+    refreshTokenState();
     loadDataset().then(setDataset);
   }, []);
 
   function login(e: React.FormEvent) {
     e.preventDefault();
     if (pin === PIN) {
+      localStorage.setItem(AUTH_KEY, "1");
       sessionStorage.setItem(AUTH_KEY, "1");
       setAuthed(true);
       setError(null);
@@ -43,14 +59,24 @@ export function Admin() {
     }
   }
 
-  async function publish(next: Dataset, importLabel: string) {
-    const pat = token.trim() || getStoredToken();
-    if (!pat) {
-      throw new Error(
-        "Salve um Personal Access Token do GitHub abaixo para publicar automaticamente."
-      );
+  function saveTokenFromInput() {
+    if (!tokenInput.trim()) {
+      setError("Cole o token antes de salvar.");
+      return;
     }
-    setStoredToken(pat);
+    setStoredToken(tokenInput);
+    setTokenInput("");
+    setShowReplaceToken(false);
+    refreshTokenState();
+    setSuccess("Token salvo neste computador (localStorage). Não será pedido de novo neste navegador.");
+    setError(null);
+  }
+
+  async function publish(next: Dataset, importLabel: string) {
+    const pat = getStoredToken();
+    if (!pat) {
+      throw new Error("Salve o token GitHub uma vez neste computador (abaixo) para publicar.");
+    }
     const result = await publishDatasetToGitHub(
       next,
       pat,
@@ -127,58 +153,96 @@ export function Admin() {
   return (
     <div className="stack">
       <div className="card">
-        <h2>Token GitHub (publicação automática)</h2>
+        <h2>Token GitHub (salvo neste computador)</h2>
         <p className="muted">
-          O token fica só nesta sessão do navegador (não vai para o site público). Crie em{" "}
-          <a
-            href="https://github.com/settings/tokens?type=beta"
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub → Fine-grained token
-          </a>{" "}
-          com acesso ao repo <code>{GITHUB_DEFAULTS.owner}/{GITHUB_DEFAULTS.repo}</code> e
-          permissão <strong>Contents: Read and write</strong>.
+          O token fica no <strong>localStorage</strong> deste navegador — não vai para o repositório
+          público. Repo:{" "}
+          <code>
+            {GITHUB_DEFAULTS.owner}/{GITHUB_DEFAULTS.repo}
+          </code>
+          . Permissão necessária: <strong>Contents: Read and write</strong>.
         </p>
-        <label>
-          Personal Access Token
+
+        {tokenSaved && !showReplaceToken ? (
+          <div className="stack">
+            <div className="success-box">
+              Token configurado: <code>{masked}</code>
+              <br />
+              Próximos uploads publicam automaticamente neste navegador.
+            </div>
+            <div className="row">
+              <button
+                className="btn secondary"
+                type="button"
+                onClick={() => setShowReplaceToken(true)}
+              >
+                Substituir token
+              </button>
+              <button
+                className="btn secondary"
+                type="button"
+                onClick={() => {
+                  clearStoredToken();
+                  refreshTokenState();
+                  setSuccess("Token removido deste navegador.");
+                }}
+              >
+                Remover token
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="stack">
+            {!hasStoredToken() && (
+              <p className="muted">
+                Cole o token <strong>uma única vez</strong>. Depois não será necessário informar de
+                novo neste computador.
+              </p>
+            )}
+            <label>
+              Personal Access Token
+              <input
+                type="password"
+                value={tokenInput}
+                onChange={(e) => setTokenInput(e.target.value)}
+                placeholder="github_pat_… ou ghp_…"
+                style={{ width: "100%", marginTop: 6 }}
+                autoComplete="off"
+              />
+            </label>
+            <div className="row">
+              <button className="btn" type="button" onClick={saveTokenFromInput}>
+                Salvar neste computador
+              </button>
+              {showReplaceToken && (
+                <button
+                  className="btn secondary"
+                  type="button"
+                  onClick={() => setShowReplaceToken(false)}
+                >
+                  Cancelar
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        <label className="row" style={{ gap: 8, marginTop: 12 }}>
           <input
-            type="password"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-            placeholder="github_pat_… ou ghp_…"
-            style={{ width: "100%", marginTop: 6 }}
-            autoComplete="off"
+            type="checkbox"
+            checked={autoPublish}
+            onChange={(e) => setAutoPublish(e.target.checked)}
           />
+          Publicar automaticamente ao enviar a planilha
         </label>
-        <div className="row" style={{ marginTop: 10 }}>
-          <button
-            className="btn secondary"
-            type="button"
-            onClick={() => {
-              setStoredToken(token);
-              setSuccess("Token salvo nesta sessão.");
-            }}
-          >
-            Salvar token na sessão
-          </button>
-          <label className="row" style={{ gap: 8 }}>
-            <input
-              type="checkbox"
-              checked={autoPublish}
-              onChange={(e) => setAutoPublish(e.target.checked)}
-            />
-            Publicar automaticamente ao enviar a planilha
-          </label>
-        </div>
       </div>
 
       <div className="card">
         <h2>Importar planilha (.xlsx)</h2>
         <p className="muted">
-          O arquivo <strong>agrega</strong> ao histórico (não substitui). A limpeza de
-          duplicados roda no mesmo mês: prioriza visita/agendamento; senão o mais recente;
-          Sucesso sempre permanece. Com o token salvo, o commit no GitHub é feito na hora.
+          O arquivo <strong>agrega</strong> ao histórico (não substitui). A limpeza de duplicados
+          roda no mesmo mês: prioriza visita/agendamento; senão o mais recente; Sucesso sempre
+          permanece.
         </p>
         <div className="stack">
           <label>
@@ -194,11 +258,15 @@ export function Admin() {
             <input
               type="file"
               accept=".xlsx,.xls"
-              disabled={busy}
+              disabled={busy || (autoPublish && !tokenSaved)}
               onChange={(e) => onFile(e.target.files?.[0] || null)}
             />
             <p className="muted">
-              {busy ? "Processando e publicando…" : "Selecione a planilha de leads da campanha"}
+              {busy
+                ? "Processando e publicando…"
+                : autoPublish && !tokenSaved
+                  ? "Salve o token acima antes de enviar a planilha"
+                  : "Selecione a planilha de leads da campanha"}
             </p>
           </div>
         </div>
@@ -250,12 +318,7 @@ export function Admin() {
             </div>
           )}
           <div className="row">
-            <button
-              className="btn"
-              type="button"
-              disabled={busy}
-              onClick={onPublishClick}
-            >
+            <button className="btn" type="button" disabled={busy || !tokenSaved} onClick={onPublishClick}>
               Publicar no GitHub agora
             </button>
             <button className="btn secondary" type="button" onClick={() => downloadDataset(preview)}>

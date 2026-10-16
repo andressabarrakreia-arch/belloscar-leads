@@ -9,13 +9,49 @@ export const GITHUB_DEFAULTS = {
   branch: import.meta.env.VITE_GITHUB_BRANCH || "main",
 };
 
+/** Lê token do localStorage (persiste neste navegador). Migra de sessionStorage se existir. */
 export function getStoredToken(): string {
-  return sessionStorage.getItem(TOKEN_KEY) || "";
+  try {
+    const fromLocal = localStorage.getItem(TOKEN_KEY);
+    if (fromLocal) return fromLocal;
+    const fromSession = sessionStorage.getItem(TOKEN_KEY);
+    if (fromSession) {
+      localStorage.setItem(TOKEN_KEY, fromSession);
+      sessionStorage.removeItem(TOKEN_KEY);
+      return fromSession;
+    }
+  } catch {
+    /* storage indisponível */
+  }
+  return "";
 }
 
 export function setStoredToken(token: string) {
-  if (token.trim()) sessionStorage.setItem(TOKEN_KEY, token.trim());
-  else sessionStorage.removeItem(TOKEN_KEY);
+  try {
+    if (token.trim()) {
+      localStorage.setItem(TOKEN_KEY, token.trim());
+      sessionStorage.removeItem(TOKEN_KEY);
+    } else {
+      localStorage.removeItem(TOKEN_KEY);
+      sessionStorage.removeItem(TOKEN_KEY);
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
+export function clearStoredToken() {
+  setStoredToken("");
+}
+
+export function hasStoredToken(): boolean {
+  return Boolean(getStoredToken());
+}
+
+export function maskToken(token: string): string {
+  const t = token.trim();
+  if (t.length < 12) return "••••••••";
+  return `${t.slice(0, 10)}…${t.slice(-4)}`;
 }
 
 function toBase64Utf8(text: string): string {
@@ -46,7 +82,6 @@ export type PublishResult = {
 
 /**
  * Atualiza public/data/dataset.json no repositório (agrega via conteúdo já mergeado).
- * Não substitui o histórico: o caller deve passar o dataset já mergeado+deduplicado.
  */
 export async function publishDatasetToGitHub(
   dataset: Dataset,
@@ -54,7 +89,7 @@ export async function publishDatasetToGitHub(
   message?: string
 ): Promise<PublishResult> {
   const { owner, repo, path, branch } = GITHUB_DEFAULTS;
-  if (!token.trim()) throw new Error("Informe o token do GitHub (PAT) para publicar.");
+  if (!token.trim()) throw new Error("Token GitHub não encontrado neste navegador.");
 
   const getRes = await githubFetch(
     `/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,
@@ -94,7 +129,7 @@ export async function publishDatasetToGitHub(
     const msg = (err as { message?: string }).message || `Falha ao publicar (${putRes.status})`;
     if (putRes.status === 401 || putRes.status === 403) {
       throw new Error(
-        `${msg}. Verifique o token: precisa de permissão Contents (leitura e escrita) no repo ${owner}/${repo}.`
+        `${msg}. Token inválido ou sem Contents: Read and write em ${owner}/${repo}.`
       );
     }
     throw new Error(msg);
