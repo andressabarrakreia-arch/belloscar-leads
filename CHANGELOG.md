@@ -9,6 +9,7 @@
 - Admin com PIN: upload, preview de dedupe, download de `dataset.json`
 - Dataset inicial gerado a partir da planilha exemplo (2388 leads)
 - Workflow GitHub Actions → GitHub Pages
+- Guia [`DEPLOY.md`](DEPLOY.md)
 - `.gitignore`, `.env.example`, README, ROADMAP
 
 ### Removed
