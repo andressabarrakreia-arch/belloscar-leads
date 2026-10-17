@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  buildCanalKpis,
   buildComparisonRows,
-  buildGlobalKpis,
   buildPeriodSeries,
   buildProposalDistribution,
   buildSdrMetrics,
-  buildTimeSeries,
   buildVendedorMetrics,
   filterAgendamentos,
   getSchedulingFilterOptions,
+  splitByCanal,
 } from "../lib/scheduling/metrics";
 import { loadSchedulingDataset } from "../lib/scheduling/storage";
 import type { SchedulingDataset, SchedulingFilters } from "../lib/scheduling/types";
@@ -35,18 +35,28 @@ export function useSchedulingAnalytics(
   return useMemo(() => {
     if (!dataset) return null;
     const filtered = filterAgendamentos(dataset.items, filters);
-    const sdrMetrics = buildSdrMetrics(filtered);
+    const { preVenda, recepcao } = splitByCanal(filtered);
+
+    const sdrPreVenda = buildSdrMetrics(preVenda);
+    const sdrRecepcao = buildSdrMetrics(recepcao);
     const vendedorMetrics = buildVendedorMetrics(filtered);
+
     return {
       filtered,
+      preVenda,
+      recepcao,
       options: getSchedulingFilterOptions(dataset.items),
-      kpis: buildGlobalKpis(filtered),
-      sdrMetrics,
+      kpisPreVenda: buildCanalKpis(preVenda, "Pré-Venda"),
+      kpisRecepcao: buildCanalKpis(recepcao, "Recepção"),
+      sdrPreVenda,
+      sdrRecepcao,
       vendedorMetrics,
-      comparison: buildComparisonRows(sdrMetrics, vendedorMetrics),
-      proposals: buildProposalDistribution(filtered),
-      timeSeries: buildTimeSeries(filtered),
-      periodSeries: buildPeriodSeries(filtered),
+      comparisonPreVenda: buildComparisonRows(sdrPreVenda, vendedorMetrics, "Pré-Venda"),
+      comparisonRecepcao: buildComparisonRows(sdrRecepcao, vendedorMetrics, "Recepção"),
+      proposalsPreVenda: buildProposalDistribution(preVenda),
+      proposalsRecepcao: buildProposalDistribution(recepcao),
+      periodSeriesPreVenda: buildPeriodSeries(preVenda),
+      periodSeriesRecepcao: buildPeriodSeries(recepcao),
     };
   }, [dataset, filters]);
 }

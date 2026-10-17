@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.2] - 2026-10-17
+
+### Changed
+- Análise de Agendamentos: **Pré-Venda e Recepção com totais separados** — Recepção (loja / Gabriela) não entra mais no geral da pré-venda
+- KPIs, tabelas SDR, comparação, gráficos e detalhe do vendedor duplicados por canal, cada um com índices e % próprios
+
 ## [1.7.1] - 2026-10-16
 
 ### Added

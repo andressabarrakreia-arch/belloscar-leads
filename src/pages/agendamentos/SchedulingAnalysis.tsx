@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CanalKpiGrid } from "../../components/scheduling/CanalKpiGrid";
 import { PerformanceComparisonTable } from "../../components/scheduling/PerformanceComparisonTable";
 import { ProposalDistributionChart } from "../../components/scheduling/ProposalDistributionChart";
 import { SchedulingFiltersBar } from "../../components/scheduling/SchedulingFiltersBar";
@@ -17,8 +18,20 @@ export function SchedulingAnalysis() {
   if (error) return <p className="error">{error}</p>;
   if (!analytics || !dataset) return null;
 
-  const { kpis, options, sdrMetrics, vendedorMetrics, comparison, proposals, periodSeries } =
-    analytics;
+  const {
+    options,
+    kpisPreVenda,
+    kpisRecepcao,
+    sdrPreVenda,
+    sdrRecepcao,
+    vendedorMetrics,
+    comparisonPreVenda,
+    comparisonRecepcao,
+    proposalsPreVenda,
+    proposalsRecepcao,
+    periodSeriesPreVenda,
+    periodSeriesRecepcao,
+  } = analytics;
 
   return (
     <>
@@ -27,47 +40,26 @@ export function SchedulingAnalysis() {
           <strong>Setor:</strong> Vendas Web · <strong>Gestão:</strong> Andressa Barra
         </p>
         <p className="muted">
-          Painel de Análise de Agendamentos · {dataset.items.length} registros · atualizado{" "}
+          Painel de Análise de Agendamentos · {dataset.items.length} registros no filtro base ·
+          Pré-Venda e Recepção com totais separados · atualizado{" "}
           {new Date(dataset.updatedAt).toLocaleString("pt-BR")}
         </p>
       </div>
 
       <SchedulingFiltersBar options={options} filters={filters} onChange={setFilters} />
 
-      <div className="kpi-grid">
-        <div className="kpi-card">
-          <h3>Agendamentos</h3>
-          <p>{kpis.total}</p>
-        </div>
-        <div className="kpi-card">
-          <h3>Visitas</h3>
-          <p>{kpis.visitas}</p>
-        </div>
-        <div className="kpi-card">
-          <h3>Taxa visita</h3>
-          <p>{kpis.taxaVisita}%</p>
-        </div>
-        <div className="kpi-card accent">
-          <h3>Sucessos</h3>
-          <p>{kpis.sucessos}</p>
-        </div>
-        <div className="kpi-card success">
-          <h3>Taxa sucesso</h3>
-          <p>{kpis.taxaSucesso}%</p>
-        </div>
-        <div className="kpi-card">
-          <h3>Insucessos</h3>
-          <p>{kpis.insucessos}</p>
-        </div>
-        <div className="kpi-card">
-          <h3>Pré-Venda</h3>
-          <p>{kpis.preVenda}</p>
-        </div>
-        <div className="kpi-card">
-          <h3>Recepção</h3>
-          <p>{kpis.recepcao}</p>
-        </div>
-      </div>
+      <CanalKpiGrid
+        kpis={kpisPreVenda}
+        title="Pré-Venda · total e geral"
+        subtitle="Clientes que passaram pelo pré-atendimento da equipe web. Recepção não entra nestes números."
+      />
+
+      <CanalKpiGrid
+        kpis={kpisRecepcao}
+        title="Recepção · total e geral (à parte)"
+        subtitle="Braço do setor Web: clientes que chegaram direto na loja (Recepção e Gabriela), sem pré-atendimento da equipe."
+        accent
+      />
 
       {dataset.items.length === 0 && (
         <div className="card">
@@ -79,21 +71,66 @@ export function SchedulingAnalysis() {
         </div>
       )}
 
-      <SDRPerformanceTable rows={sdrMetrics} />
+      <SDRPerformanceTable
+        rows={sdrPreVenda}
+        title="Desempenho Pré-Venda (SDR)"
+        subtitle="Agendamentos gerados pela equipe de pré-venda — índices e % só deste canal."
+      />
+
+      <SDRPerformanceTable
+        rows={sdrRecepcao}
+        title="Desempenho Recepção"
+        subtitle="Atendimentos Recepção e Gabriela — totais e taxas próprios, fora do geral da pré-venda."
+      />
+
       <VendedorConversionCards rows={vendedorMetrics} />
-      <PerformanceComparisonTable rows={comparison} />
+
+      <PerformanceComparisonTable
+        rows={comparisonPreVenda}
+        title="Comparação direta · Pré-Venda"
+        subtitle="Visão analítica da pré-venda (sem misturar Recepção)."
+      />
+
+      <PerformanceComparisonTable
+        rows={comparisonRecepcao}
+        title="Comparação direta · Recepção"
+        subtitle="Visão analítica só da Recepção / loja."
+      />
 
       <div className="charts">
-        <ProposalDistributionChart data={proposals} />
+        <ProposalDistributionChart
+          data={proposalsPreVenda}
+          title="Propostas · Pré-Venda"
+          subtitle="Mix só do canal Pré-Venda (sem Recepção)."
+        />
         <TimeSeriesChart
-          data={periodSeries.map((p) => ({
+          data={periodSeriesPreVenda.map((p) => ({
             label: p.label,
             total: p.total,
             visitas: p.visitas,
             sucessos: p.sucessos,
             insucessos: p.insucessos,
           }))}
-          title="Série por quinzena"
+          title="Série por quinzena · Pré-Venda"
+          xKey="label"
+        />
+      </div>
+
+      <div className="charts">
+        <ProposalDistributionChart
+          data={proposalsRecepcao}
+          title="Propostas · Recepção"
+          subtitle="Mix só da Recepção / loja."
+        />
+        <TimeSeriesChart
+          data={periodSeriesRecepcao.map((p) => ({
+            label: p.label,
+            total: p.total,
+            visitas: p.visitas,
+            sucessos: p.sucessos,
+            insucessos: p.insucessos,
+          }))}
+          title="Série por quinzena · Recepção"
           xKey="label"
         />
       </div>

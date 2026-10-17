@@ -2,6 +2,7 @@ import { formatPeriodLabel } from "../dates";
 import { emptyPropostasBreakdown } from "./normalize";
 import type {
   AgendamentoItem,
+  CanalAtendimento,
   MotivoStats,
   OrigemStats,
   PropostasBreakdown,
@@ -13,6 +14,20 @@ import type {
 
 export function round2(n: number): number {
   return Math.round(n * 100) / 100;
+}
+
+/** Clientes da loja (Recepção/Gabriela) ficam fora do geral da pré-venda. */
+export function splitByCanal(items: AgendamentoItem[]): {
+  preVenda: AgendamentoItem[];
+  recepcao: AgendamentoItem[];
+} {
+  const preVenda: AgendamentoItem[] = [];
+  const recepcao: AgendamentoItem[] = [];
+  for (const item of items) {
+    if (item.canal === "Recepção") recepcao.push(item);
+    else preVenda.push(item);
+  }
+  return { preVenda, recepcao };
 }
 
 export function filterAgendamentos(
@@ -127,14 +142,17 @@ export function buildVendedorMetrics(items: AgendamentoItem[]): VendedorMetrics[
 
   return [...groups.entries()]
     .map(([vendedor, list]) => {
-      const totalRecebidos = list.length;
-      const totalVisitas = list.filter((i) => i.teveVisita).length;
-      const totalSucesso = list.filter((i) => i.status === "Sucesso").length;
-      const totalInsucesso = list.filter((i) => i.status === "Insucesso").length;
       const pre = list.filter((i) => i.canal === "Pré-Venda");
       const rec = list.filter((i) => i.canal === "Recepção");
-      const sucessoPreVenda = pre.filter((i) => i.status === "Sucesso").length;
+      // "Geral" do vendedor = só Pré-Venda (Recepção é braço à parte)
+      const totalRecebidos = pre.length;
+      const totalVisitas = pre.filter((i) => i.teveVisita).length;
+      const totalSucesso = pre.filter((i) => i.status === "Sucesso").length;
+      const totalInsucesso = pre.filter((i) => i.status === "Insucesso").length;
+      const sucessoPreVenda = totalSucesso;
       const sucessoRecepcao = rec.filter((i) => i.status === "Sucesso").length;
+      const visitasRecepcao = rec.filter((i) => i.teveVisita).length;
+      const insucessosRecepcao = rec.filter((i) => i.status === "Insucesso").length;
       return {
         vendedor,
         totalRecebidos,
@@ -147,10 +165,16 @@ export function buildVendedorMetrics(items: AgendamentoItem[]): VendedorMetrics[
         conversaoPreVenda: round2(pre.length ? (sucessoPreVenda / pre.length) * 100 : 0),
         totalRecepcao: rec.length,
         sucessoRecepcao,
+        visitasRecepcao,
+        insucessosRecepcao,
         conversaoRecepcao: round2(rec.length ? (sucessoRecepcao / rec.length) * 100 : 0),
-        motivosInsucesso: motivosFrom(list),
-        origens: origensFrom(list),
-        propostasBreakdown: breakdownPropostas(list),
+        taxaVisitaRecepcao: round2(rec.length ? (visitasRecepcao / rec.length) * 100 : 0),
+        motivosInsucesso: motivosFrom(pre),
+        motivosInsucessoRecepcao: motivosFrom(rec),
+        origens: origensFrom(pre),
+        origensRecepcao: origensFrom(rec),
+        propostasBreakdown: breakdownPropostas(pre),
+        propostasBreakdownRecepcao: breakdownPropostas(rec),
       };
     })
     .sort((a, b) => b.totalRecebidos - a.totalRecebidos);
@@ -178,9 +202,13 @@ export type ComparisonRow = {
 
 export function buildComparisonRows(
   sdrs: SdrMetrics[],
-  vendedores: VendedorMetrics[]
+  vendedores: VendedorMetrics[],
+  canal: CanalAtendimento | "todos" = "todos"
 ): ComparisonRow[] {
-  const sdrRows: ComparisonRow[] = sdrs.map((s) => ({
+  const sdrFiltered =
+    canal === "todos" ? sdrs : sdrs.filter((s) => s.canal === canal);
+
+  const sdrRows: ComparisonRow[] = sdrFiltered.map((s) => ({
     nome: s.sdr,
     papel: "SDR",
     canal: s.canal,
@@ -198,25 +226,53 @@ export function buildComparisonRows(
     naoInformado: s.propostasBreakdown["não informado(celulas em branco)"],
   }));
 
-  const vendRows: ComparisonRow[] = vendedores.map((v) => ({
-    nome: v.vendedor,
-    papel: "Vendedor",
-    canal: "—",
-    total: v.totalRecebidos,
-    visitas: v.totalVisitas,
-    sucessos: v.totalSucesso,
-    insucessos: v.totalInsucesso,
-    taxaVisita: round2(v.totalRecebidos ? (v.totalVisitas / v.totalRecebidos) * 100 : 0),
-    taxaSucesso: v.conversaoGeral,
-    convPreVenda: v.conversaoPreVenda,
-    convRecepcao: v.conversaoRecepcao,
-    compra: v.propostasBreakdown.Compra,
-    venda: v.propostasBreakdown.Venda,
-    troca: v.propostasBreakdown.Troca,
-    consignacao: v.propostasBreakdown.Consignação,
-    financiamento: v.propostasBreakdown.Financiamento,
-    naoInformado: v.propostasBreakdown["não informado(celulas em branco)"],
-  }));
+  const vendRows: ComparisonRow[] = [];
+  for (const v of vendedores) {
+    if (canal === "Recepção") {
+      if (!v.totalRecepcao) continue;
+      const b = v.propostasBreakdownRecepcao;
+      vendRows.push({
+        nome: v.vendedor,
+        papel: "Vendedor",
+        canal: "Recepção",
+        total: v.totalRecepcao,
+        visitas: v.visitasRecepcao,
+        sucessos: v.sucessoRecepcao,
+        insucessos: v.insucessosRecepcao,
+        taxaVisita: v.taxaVisitaRecepcao,
+        taxaSucesso: v.conversaoRecepcao,
+        convRecepcao: v.conversaoRecepcao,
+        compra: b.Compra,
+        venda: b.Venda,
+        troca: b.Troca,
+        consignacao: b.Consignação,
+        financiamento: b.Financiamento,
+        naoInformado: b["não informado(celulas em branco)"],
+      });
+      continue;
+    }
+    // Pré-Venda (ou padrão): totais sem misturar Recepção
+    if (canal === "Pré-Venda" && !v.totalPreVenda) continue;
+    const b = v.propostasBreakdown;
+    vendRows.push({
+      nome: v.vendedor,
+      papel: "Vendedor",
+      canal: "Pré-Venda",
+      total: v.totalRecebidos,
+      visitas: v.totalVisitas,
+      sucessos: v.totalSucesso,
+      insucessos: v.totalInsucesso,
+      taxaVisita: round2(v.totalRecebidos ? (v.totalVisitas / v.totalRecebidos) * 100 : 0),
+      taxaSucesso: v.conversaoGeral,
+      convPreVenda: v.conversaoPreVenda,
+      compra: b.Compra,
+      venda: b.Venda,
+      troca: b.Troca,
+      consignacao: b.Consignação,
+      financiamento: b.Financiamento,
+      naoInformado: b["não informado(celulas em branco)"],
+    });
+  }
 
   return [...sdrRows, ...vendRows];
 }
@@ -266,22 +322,52 @@ export function buildPeriodSeries(items: AgendamentoItem[]) {
     }));
 }
 
-export function buildGlobalKpis(items: AgendamentoItem[]) {
+export type CanalKpis = {
+  canal: CanalAtendimento;
+  total: number;
+  visitas: number;
+  sucessos: number;
+  insucessos: number;
+  taxaVisita: number;
+  taxaSucesso: number;
+};
+
+/** KPIs de um único canal (Pré-Venda ou Recepção) — sem misturar. */
+export function buildCanalKpis(
+  items: AgendamentoItem[],
+  canal: CanalAtendimento
+): CanalKpis {
   const total = items.length;
   const visitas = items.filter((i) => i.teveVisita).length;
   const sucessos = items.filter((i) => i.status === "Sucesso").length;
   const insucessos = items.filter((i) => i.status === "Insucesso").length;
-  const preVenda = items.filter((i) => i.canal === "Pré-Venda").length;
-  const recepcao = items.filter((i) => i.canal === "Recepção").length;
   return {
+    canal,
     total,
     visitas,
     sucessos,
     insucessos,
-    preVenda,
-    recepcao,
     taxaVisita: round2(total ? (visitas / total) * 100 : 0),
     taxaSucesso: round2(total ? (sucessos / total) * 100 : 0),
+  };
+}
+
+/** @deprecated Preferir buildCanalKpis + splitByCanal */
+export function buildGlobalKpis(items: AgendamentoItem[]) {
+  const { preVenda, recepcao } = splitByCanal(items);
+  const pre = buildCanalKpis(preVenda, "Pré-Venda");
+  const rec = buildCanalKpis(recepcao, "Recepção");
+  return {
+    total: pre.total,
+    visitas: pre.visitas,
+    sucessos: pre.sucessos,
+    insucessos: pre.insucessos,
+    preVenda: pre.total,
+    recepcao: rec.total,
+    taxaVisita: pre.taxaVisita,
+    taxaSucesso: pre.taxaSucesso,
+    kpisPreVenda: pre,
+    kpisRecepcao: rec,
   };
 }
 

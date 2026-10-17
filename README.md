@@ -46,10 +46,11 @@ Storage local: `agendamentos_dataset`, `agendamentos_admin_config`
 
 ### O que o painel mostra
 
-- Desempenho de Pré-Venda / Recepção (SDR)  
-- Conversão por vendedor (geral, Pré-Venda, Recepção)  
-- Motivos de insucesso e origem/canal por vendedor  
-- Comparação direta de performance  
+- **Pré-Venda e Recepção separados** — totais, %, visitas e sucessos não se misturam  
+- Recepção = clientes que chegaram direto na loja (Recepção / Gabriela), braço do Web sem pré-atendimento  
+- Desempenho SDR e comparação por canal  
+- Conversão por vendedor: geral = Pré-Venda; Recepção com índices próprios  
+- Motivos de insucesso e origem por canal  
 - Filtros por data, SDR e tipo de proposta (inclui **Financiamento**)  
 
 ### Base inicial (já publicada)

@@ -2,21 +2,20 @@ import type { SdrMetrics } from "../../lib/scheduling/types";
 
 type Props = {
   rows: SdrMetrics[];
+  title: string;
+  subtitle: string;
 };
 
-export function SDRPerformanceTable({ rows }: Props) {
+export function SDRPerformanceTable({ rows, title, subtitle }: Props) {
   return (
     <div className="card">
-      <h2>Desempenho de Pré-Venda / Recepção (SDR)</h2>
-      <p className="muted">
-        Totais por quem atendeu o lead. Recepção inclui os nomes Recepção e Gabriela.
-      </p>
+      <h2>{title}</h2>
+      <p className="muted">{subtitle}</p>
       <div className="table-scroll">
         <table>
           <thead>
             <tr>
-              <th>SDR</th>
-              <th>Canal</th>
+              <th>Atendido por</th>
               <th>Agendamentos</th>
               <th>Compra</th>
               <th>Venda</th>
@@ -34,7 +33,6 @@ export function SDRPerformanceTable({ rows }: Props) {
             {rows.map((r) => (
               <tr key={r.sdr}>
                 <td>{r.sdr}</td>
-                <td>{r.canal}</td>
                 <td>{r.totalAgendamentos}</td>
                 <td>{r.propostasBreakdown.Compra}</td>
                 <td>{r.propostasBreakdown.Venda}</td>
@@ -50,8 +48,8 @@ export function SDRPerformanceTable({ rows }: Props) {
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={13} className="muted">
-                  Nenhum registro no filtro atual.
+                <td colSpan={12} className="muted">
+                  Nenhum registro neste canal no filtro atual.
                 </td>
               </tr>
             )}

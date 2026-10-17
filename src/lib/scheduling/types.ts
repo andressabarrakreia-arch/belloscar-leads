@@ -84,6 +84,7 @@ export type OrigemStats = {
 };
 
 export type VendedorMetrics = {
+  /** Totais "gerais" = apenas Pré-Venda (Recepção fica à parte). */
   vendedor: string;
   totalRecebidos: number;
   totalVisitas: number;
@@ -95,10 +96,16 @@ export type VendedorMetrics = {
   conversaoPreVenda: number;
   totalRecepcao: number;
   sucessoRecepcao: number;
+  visitasRecepcao: number;
+  insucessosRecepcao: number;
   conversaoRecepcao: number;
+  taxaVisitaRecepcao: number;
   motivosInsucesso: MotivoStats[];
+  motivosInsucessoRecepcao: MotivoStats[];
   origens: OrigemStats[];
+  origensRecepcao: OrigemStats[];
   propostasBreakdown: PropostasBreakdown;
+  propostasBreakdownRecepcao: PropostasBreakdown;
 };
 
 export type SchedulingAdminConfig = {

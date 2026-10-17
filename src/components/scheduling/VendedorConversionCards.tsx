@@ -1,9 +1,77 @@
 import { useState } from "react";
-import type { VendedorMetrics } from "../../lib/scheduling/types";
+import type { MotivoStats, OrigemStats, VendedorMetrics } from "../../lib/scheduling/types";
 
 type Props = {
   rows: VendedorMetrics[];
 };
+
+function MotivosTable({ rows, emptyHint }: { rows: MotivoStats[]; emptyHint: string }) {
+  return (
+    <div className="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Motivo</th>
+            <th>Qtd</th>
+            <th>% dos insucessos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.slice(0, 20).map((m) => (
+            <tr key={m.motivo}>
+              <td>{m.motivo}</td>
+              <td>{m.quantidade}</td>
+              <td>{m.percentual}%</td>
+            </tr>
+          ))}
+          {rows.length === 0 && (
+            <tr>
+              <td colSpan={3} className="muted">
+                {emptyHint}
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function OrigensTable({ rows }: { rows: OrigemStats[] }) {
+  return (
+    <div className="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Origem</th>
+            <th>Qtd</th>
+            <th>%</th>
+            <th>Sucessos</th>
+            <th>Insucessos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.slice(0, 20).map((o) => (
+            <tr key={o.origem}>
+              <td>{o.origem}</td>
+              <td>{o.quantidade}</td>
+              <td>{o.percentual}%</td>
+              <td>{o.sucessos}</td>
+              <td>{o.insucessos}</td>
+            </tr>
+          ))}
+          {rows.length === 0 && (
+            <tr>
+              <td colSpan={5} className="muted">
+                Sem origens neste canal.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 export function VendedorConversionCards({ rows }: Props) {
   const [openId, setOpenId] = useState<string | null>(rows[0]?.vendedor ?? null);
@@ -12,8 +80,8 @@ export function VendedorConversionCards({ rows }: Props) {
     <div className="card">
       <h2>Desempenho por vendedor</h2>
       <p className="muted">
-        Conversão geral e por canal (Pré-Venda vs Recepção), motivos de insucesso e origem dos
-        atendimentos.
+        Totais e conversão geral = apenas Pré-Venda. Recepção (clientes que chegaram direto na
+        loja) fica com índices próprios, sem entrar no geral.
       </p>
       <div className="kpi-grid" style={{ marginBottom: 16 }}>
         {rows.slice(0, 8).map((v) => (
@@ -27,8 +95,8 @@ export function VendedorConversionCards({ rows }: Props) {
             <h3>{v.vendedor}</h3>
             <p>{v.conversaoGeral}%</p>
             <small className="muted">
-              {v.totalSucesso}/{v.totalRecebidos} sucessos · Pré-Venda {v.conversaoPreVenda}% ·
-              Recepção {v.conversaoRecepcao}%
+              Pré-Venda {v.sucessoPreVenda}/{v.totalPreVenda} · Recepção {v.sucessoRecepcao}/
+              {v.totalRecepcao} ({v.conversaoRecepcao}%)
             </small>
           </button>
         ))}
@@ -44,7 +112,7 @@ export function VendedorConversionCards({ rows }: Props) {
           >
             {rows.map((v) => (
               <option key={v.vendedor} value={v.vendedor}>
-                {v.vendedor} ({v.totalRecebidos})
+                {v.vendedor} (PV {v.totalPreVenda} · Rec {v.totalRecepcao})
               </option>
             ))}
           </select>
@@ -54,6 +122,7 @@ export function VendedorConversionCards({ rows }: Props) {
       {rows.map((v) =>
         v.vendedor === openId ? (
           <div key={v.vendedor} className="stack">
+            <h3>Pré-Venda (geral do vendedor)</h3>
             <div className="kpi-grid">
               <div className="kpi-card">
                 <h3>Recebidos</h3>
@@ -71,80 +140,58 @@ export function VendedorConversionCards({ rows }: Props) {
                 <h3>Insucessos</h3>
                 <p>{v.totalInsucesso}</p>
               </div>
-              <div className="kpi-card">
-                <h3>Conv. geral</h3>
-                <p>{v.conversaoGeral}%</p>
-              </div>
-              <div className="kpi-card">
+              <div className="kpi-card success">
                 <h3>Conv. Pré-Venda</h3>
                 <p>{v.conversaoPreVenda}%</p>
-                <small className="muted">
-                  {v.sucessoPreVenda}/{v.totalPreVenda}
-                </small>
+              </div>
+            </div>
+
+            <h3>Motivos de insucesso — Pré-Venda</h3>
+            <MotivosTable
+              rows={v.motivosInsucesso}
+              emptyHint="Sem motivos de Pré-Venda neste filtro."
+            />
+            <h3>Origem — Pré-Venda</h3>
+            <OrigensTable rows={v.origens} />
+
+            <h3>Recepção (à parte — loja / Gabriela)</h3>
+            <p className="muted">
+              Atendimentos que não passaram pelo pré-atendimento da equipe web.
+            </p>
+            <div className="kpi-grid">
+              <div className="kpi-card accent">
+                <h3>Recebidos</h3>
+                <p>{v.totalRecepcao}</p>
               </div>
               <div className="kpi-card">
-                <h3>Conv. Recepção</h3>
+                <h3>Visitas</h3>
+                <p>{v.visitasRecepcao}</p>
+              </div>
+              <div className="kpi-card success">
+                <h3>Sucessos</h3>
+                <p>{v.sucessoRecepcao}</p>
+              </div>
+              <div className="kpi-card">
+                <h3>Insucessos</h3>
+                <p>{v.insucessosRecepcao}</p>
+              </div>
+              <div className="kpi-card">
+                <h3>% Visita</h3>
+                <p>{v.taxaVisitaRecepcao}%</p>
+              </div>
+              <div className="kpi-card success">
+                <h3>% Sucesso</h3>
                 <p>{v.conversaoRecepcao}%</p>
-                <small className="muted">
-                  {v.sucessoRecepcao}/{v.totalRecepcao}
-                </small>
               </div>
             </div>
 
-            <h3>Motivos de insucesso</h3>
-            <div className="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Motivo</th>
-                    <th>Qtd</th>
-                    <th>% dos insucessos</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {v.motivosInsucesso.slice(0, 20).map((m) => (
-                    <tr key={m.motivo}>
-                      <td>{m.motivo}</td>
-                      <td>{m.quantidade}</td>
-                      <td>{m.percentual}%</td>
-                    </tr>
-                  ))}
-                  {v.motivosInsucesso.length === 0 && (
-                    <tr>
-                      <td colSpan={3} className="muted">
-                        Sem motivos (importe a planilha de insucessos para cruzar por ID).
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            <h3>Canais / origem</h3>
-            <div className="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Origem</th>
-                    <th>Qtd</th>
-                    <th>% do vendedor</th>
-                    <th>Sucessos</th>
-                    <th>Insucessos</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {v.origens.slice(0, 20).map((o) => (
-                    <tr key={o.origem}>
-                      <td>{o.origem}</td>
-                      <td>{o.quantidade}</td>
-                      <td>{o.percentual}%</td>
-                      <td>{o.sucessos}</td>
-                      <td>{o.insucessos}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <h3>Motivos de insucesso — Recepção</h3>
+            <MotivosTable
+              rows={v.motivosInsucessoRecepcao}
+              emptyHint="Sem motivos de Recepção neste filtro."
+            />
+            <h3>Origem — Recepção</h3>
+            <OrigensTable rows={v.origensRecepcao} />
           </div>
         ) : null
       )}

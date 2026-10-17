@@ -4,13 +4,19 @@ const COLORS = ["#c02026", "#2563eb", "#16a34a", "#404041", "#e21e26", "#929497"
 
 type Props = {
   data: { label: string; value: number }[];
+  title?: string;
+  subtitle?: string;
 };
 
-export function ProposalDistributionChart({ data }: Props) {
+export function ProposalDistributionChart({
+  data,
+  title = "Distribuição de propostas",
+  subtitle = "Compra, Venda, Troca, Consignação, Financiamento e não informado.",
+}: Props) {
   return (
     <div className="card">
-      <h2>Distribuição de propostas</h2>
-      <p className="muted">Compra, Venda, Troca, Consignação, Financiamento e não informado.</p>
+      <h2>{title}</h2>
+      <p className="muted">{subtitle}</p>
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer>
           <PieChart>
