@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.7.5] - 2026-10-17
+
+### Changed
+- Comparação direta: agendamentos × proposta ordena por **SDR (pré-venda) em sequência**, não por volume
+
 ## [1.7.4] - 2026-10-17
 
 ### Added

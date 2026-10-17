@@ -294,7 +294,7 @@ export type SdrVendedorPairRow = {
 
 /**
  * Uma linha por par SDR × Vendedor (Pré-Venda).
- * Omite pares com 0 agendamentos; ordena por volume.
+ * Omite pares com 0 agendamentos; ordena por SDR (pré-venda) em sequência, depois vendedor.
  */
 export function buildSdrVendedorProposalRows(items: AgendamentoItem[]): SdrVendedorPairRow[] {
   const groups = new Map<string, AgendamentoItem[]>();
@@ -334,7 +334,10 @@ export function buildSdrVendedorProposalRows(items: AgendamentoItem[]): SdrVende
     });
   }
 
-  return rows.sort((a, b) => b.total - a.total || a.sdr.localeCompare(b.sdr, "pt-BR"));
+  return rows.sort(
+    (a, b) =>
+      a.sdr.localeCompare(b.sdr, "pt-BR") || a.vendedor.localeCompare(b.vendedor, "pt-BR")
+  );
 }
 
 /** @deprecated Preferir buildSdrComparisonRows / buildVendedorComparisonRows */

@@ -10,7 +10,8 @@ export function SdrVendedorProposalTable({ rows }: Props) {
       <h2>Comparação direta: agendamentos × proposta</h2>
       <p className="muted">
         Pré-Venda — cada linha é um par SDR × Vendedor: quantos agendamentos o SDR fez para aquele
-        vendedor, por tipo de proposta, visitas, sucessos e insucessos (com %).
+        vendedor, por tipo de proposta, visitas, sucessos e insucessos (com %). Ordenado por pré-venda
+        (SDR) em sequência.
       </p>
       <div className="table-scroll">
         <table>
