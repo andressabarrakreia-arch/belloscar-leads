@@ -36,19 +36,8 @@ export function SchedulingAnalysis() {
     periodSeriesRecepcao,
   } = analytics;
 
-  const heroSrc = `${import.meta.env.BASE_URL}brand/agendamentos-hero.png`;
-
   return (
     <>
-      <div className="agendamentos-hero">
-        <img
-          src={heroSrc}
-          alt="BellosCar — Análise de Agendamentos"
-          width={640}
-          height={220}
-        />
-      </div>
-
       <div className="card report-signature">
         <p>
           <strong>Setor:</strong> Vendas Web · <strong>Gestão:</strong> Andressa Barra
