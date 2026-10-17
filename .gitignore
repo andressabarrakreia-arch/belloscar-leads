@@ -58,3 +58,4 @@ coverage/
 
 # Misc
 package.frontend.json
+scripts/.tmp-*.mjs

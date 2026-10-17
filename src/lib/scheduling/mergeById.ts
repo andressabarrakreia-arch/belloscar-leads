@@ -79,7 +79,16 @@ export type MergeByIdResult = {
   kept: number;
   removed: number;
   enriched: number;
+  skipped: number;
   notes: string[];
+};
+
+export type MergeByIdOptions = {
+  /**
+   * Se true, só enriquece IDs já existentes (não cria órfãos).
+   * Usado para INSUCESSOS e LEADS GERAL.
+   */
+  enrichOnly?: boolean;
 };
 
 /**
@@ -88,8 +97,10 @@ export type MergeByIdResult = {
  */
 export function mergeById(
   existing: AgendamentoItem[],
-  incoming: ParsedSchedulingRow[]
+  incoming: ParsedSchedulingRow[],
+  options: MergeByIdOptions = {}
 ): MergeByIdResult {
+  const enrichOnly = Boolean(options.enrichOnly);
   const map = new Map<string, AgendamentoItem>();
   for (const item of existing) {
     map.set(item.id, item);
@@ -98,6 +109,7 @@ export function mergeById(
   let kept = 0;
   let enriched = 0;
   let removed = 0;
+  let skipped = 0;
   const notes: string[] = [];
   const seenInBatch = new Map<string, ParsedSchedulingRow>();
 
@@ -121,6 +133,11 @@ export function mergeById(
     if (prev) {
       enriched += 1;
       map.set(row.id, mergeItem(prev, row));
+    } else if (enrichOnly) {
+      skipped += 1;
+      if (notes.length < 25) {
+        notes.push(`ID ${row.id} ignorado (enrich-only: não existe na base de agendamentos)`);
+      }
     } else {
       kept += 1;
       map.set(row.id, mergeItem(undefined, row));
@@ -132,6 +149,7 @@ export function mergeById(
     kept,
     removed,
     enriched,
+    skipped,
     notes,
   };
 }
@@ -151,7 +169,13 @@ export function applySchedulingImport(
   fileName: string,
   label?: string
 ): { dataset: SchedulingDataset; meta: SchedulingImportMeta } {
-  const { items, kept, removed, enriched, notes } = mergeById(current.items, incoming);
+  // Insucessos/leads só enriquecem a base de agendamentos — não criam órfãos.
+  const enrichOnly = kind === "insucessos" || kind === "leads";
+  const { items, kept, removed, enriched, skipped, notes } = mergeById(
+    current.items,
+    incoming,
+    { enrichOnly }
+  );
   const meta: SchedulingImportMeta = {
     fileName,
     label: label || fileName,
@@ -159,9 +183,12 @@ export function applySchedulingImport(
     at: new Date().toISOString(),
     received: incoming.length,
     kept,
-    removed,
+    removed: removed + skipped,
     enriched,
-    notes,
+    notes:
+      skipped > 0
+        ? [`${skipped} IDs ignorados (enrich-only)`, ...notes]
+        : notes,
   };
   return {
     dataset: {

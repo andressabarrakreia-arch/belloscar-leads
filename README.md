@@ -52,11 +52,25 @@ Storage local: `agendamentos_dataset`, `agendamentos_admin_config`
 - Comparação direta de performance  
 - Filtros por data, SDR e tipo de proposta (inclui **Financiamento**)  
 
-### Atualizar dados de agendamentos
+### Base inicial (já publicada)
+
+Dataset gerado a partir das planilhas de 01/01/2026 a 15/10/2026:
+
+- **4.450** agendamentos (universo)  
+- **2.992** com motivo de insucesso (cruzamento por ID)  
+- **4.425** com origem via LEADS GERAL  
+
+Regenerar localmente (pasta `EXEMPLO ARQUIVO DE DADOS` ao lado do repo):
+
+```bash
+npm run generate:agendamentos
+```
+
+### Atualizar dados daqui pra frente (admin)
 
 1. Abra `#/agendamentos/admin` (mesmo PIN unificado)  
-2. Importe na ordem sugerida: **AGENDAMENTOS** → **INSUCESSOS** → **LEADS GERAL**  
-3. Dedupe **somente por ID** (vários atendimentos no mesmo dia são mantidos)  
+2. Envie novas planilhas de **AGENDAMENTOS** (agrega por ID)  
+3. Opcional: INSUCESSOS / LEADS GERAL só **enriquecem** IDs existentes  
 4. Opcional: exportar CSV de clientes (nome, email, telefone)  
 
 ## Setup local

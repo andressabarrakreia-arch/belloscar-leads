@@ -274,8 +274,10 @@ export function SchedulingAdmin() {
       <div className="card">
         <h2>Importar planilha (.xlsx / .csv)</h2>
         <p className="muted">
-          Agrega ao histórico. Dedupe <strong>somente por ID</strong> (vários agendamentos no mesmo
-          dia são mantidos). Ordem sugerida: AGENDAMENTOS → INSUCESSOS → LEADS GERAL (origem/email).
+          A base inicial do ano (01/01–15/10/2026) já está publicada. Use este painel para{" "}
+          <strong>próximas</strong> planilhas. Dedupe <strong>somente por ID</strong>. Novos
+          AGENDAMENTOS agregam; INSUCESSOS/LEADS GERAL só <strong>enriquecem</strong> IDs já
+          existentes (não criam órfãos).
         </p>
         <div className="stack">
           <label>

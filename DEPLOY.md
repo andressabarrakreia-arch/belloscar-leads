@@ -21,10 +21,16 @@ Rotas em hash (`#/…`) para não gerar 404 no Pages.
 
 ## Atualizar dados — Agendamentos
 
+A **base inicial** (ano até 15/10/2026) já está em `public/data/agendamentos-dataset.json` no Pages.
+
+Para **próximas** cargas:
+
 1. Abra `#/agendamentos/admin` (mesmo PIN)  
 2. Token GitHub já salvo no navegador é reutilizado  
-3. Envie AGENDAMENTOS / INSUCESSOS / LEADS GERAL  
+3. Envie novas planilhas de AGENDAMENTOS (agrega); INSUCESSOS/LEADS só enriquecem IDs existentes  
 4. Publica em `public/data/agendamentos-dataset.json` (isolado do dataset de campanhas)  
+
+Regenerar a base completa a partir das planilhas locais: `npm run generate:agendamentos` + commit.
 
 **Nunca** commit o PAT. Ver `.cursor/rules/no-secrets-in-repo.mdc`.
 

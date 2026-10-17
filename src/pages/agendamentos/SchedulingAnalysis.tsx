@@ -73,8 +73,8 @@ export function SchedulingAnalysis() {
         <div className="card">
           <h2>Sem dados ainda</h2>
           <p className="muted">
-            Acesse <strong>Gestão</strong> e importe a planilha de agendamentos (e, em seguida,
-            insucessos / leads geral para cruzar origem e motivos).
+            A base publicada ainda não carregou. Atualize a página ou verifique o deploy do
+            GitHub Pages. Novas planilhas entram pela <strong>Gestão</strong>.
           </p>
         </div>
       )}

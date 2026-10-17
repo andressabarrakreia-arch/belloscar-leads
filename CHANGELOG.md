@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.7.1] - 2026-10-16
+
+### Added
+- Base inicial publicada: **4.450** agendamentos (01/01–15/10/2026) cruzados com INSUCESSOS (2.992 motivos) e LEADS GERAL (4.425 origens)
+- Script `npm run generate:agendamentos` para regenerar o dataset a partir das planilhas base
+
+### Changed
+- INSUCESSOS e LEADS GERAL passam a ser **enrich-only** (não criam IDs órfãos na base de agendamentos)
+- Admin de agendamentos documenta que a 1ª carga já está no Pages; uso manual só para atualizações
+
 ## [1.7.0] - 2026-10-16
 
 ### Added

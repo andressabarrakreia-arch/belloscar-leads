@@ -38,6 +38,7 @@
 - [x] Arquitetura multi-módulo (Campanhas + regras alwaysApply)
 - [x] Dashboard Campanhas enriquecido (funil, quinzena vs anterior, tempo até visita, tops)
 - [x] Módulo **Análise de Agendamentos** (`#/agendamentos`) + catálogo + regras de reuso/isolamento/dedupe
+- [x] Base inicial de agendamentos publicada (cruzamento AGENDAMENTOS + INSUCESSOS + LEADS GERAL)
 - [ ] Próximos módulos com públicos/links próprios
 
 ## Backlog — próximos módulos e integrações (não esquecer)

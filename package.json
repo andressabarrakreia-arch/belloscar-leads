@@ -8,7 +8,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "generate:dataset": "node scripts/generate-dataset.mjs"
+    "generate:dataset": "node scripts/generate-dataset.mjs",
+    "generate:agendamentos": "node scripts/generate-agendamentos-dataset.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",
@@ -22,6 +23,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^4.3.4",
+    "esbuild": "^0.28.2",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   },
