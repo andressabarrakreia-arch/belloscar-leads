@@ -48,10 +48,11 @@ Storage local: `agendamentos_dataset`, `agendamentos_admin_config`
 
 - **Pré-Venda e Recepção separados** — totais, %, visitas e sucessos não se misturam  
 - Recepção = clientes que chegaram direto na loja (Recepção / Gabriela), braço do Web sem pré-atendimento  
-- Desempenho SDR e comparação por canal  
+- **Agendamentos × proposta**: cruzamento SDR → Vendedor (propostas, visitas, sucessos, %)  
+- Comparação direta entre vendedores (Pré-Venda e Recepção) e comparação só de quem atendeu  
 - Conversão por vendedor: geral = Pré-Venda; Recepção com índices próprios  
 - Motivos de insucesso e origem por canal  
-- Filtros por data, SDR e tipo de proposta (inclui **Financiamento**)  
+- Filtros por data, SDR e tipo de proposta (inclui **Financiamento**) · barra sticky  
 
 ### Base inicial (já publicada)
 

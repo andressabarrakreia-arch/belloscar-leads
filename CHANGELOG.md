@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.7.4] - 2026-10-17
+
+### Added
+- Comparação direta entre vendedores (tabela só Pré-Venda e só Recepção), com % e taxas
+- **Comparação direta: agendamentos × proposta** — uma linha por par SDR × Vendedor (propostas, visitas, sucessos, insucessos, %)
+
+### Changed
+- Comparação direta · Pré-Venda / Recepção passa a listar **apenas quem atendeu** (sem linhas de vendedor)
+- Removida a tabela “Desempenho Pré-Venda (SDR)” em favor do cruzamento SDR × Vendedor
+
 ## [1.7.3] - 2026-10-17
 
 ### Changed

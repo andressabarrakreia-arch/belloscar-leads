@@ -200,38 +200,40 @@ export type ComparisonRow = {
   naoInformado: number;
 };
 
-export function buildComparisonRows(
-  sdrs: SdrMetrics[],
+/** Comparação direta só de quem atendeu (SDR / Recepção) — sem vendedores. */
+export function buildSdrComparisonRows(sdrs: SdrMetrics[]): ComparisonRow[] {
+  return sdrs
+    .map((s) => ({
+      nome: s.sdr,
+      papel: "SDR" as const,
+      canal: s.canal,
+      total: s.totalAgendamentos,
+      visitas: s.totalVisitas,
+      sucessos: s.totalSucesso,
+      insucessos: s.totalInsucesso,
+      taxaVisita: s.taxaConversaoVisita,
+      taxaSucesso: s.taxaConversaoSucesso,
+      compra: s.propostasBreakdown.Compra,
+      venda: s.propostasBreakdown.Venda,
+      troca: s.propostasBreakdown.Troca,
+      consignacao: s.propostasBreakdown.Consignação,
+      financiamento: s.propostasBreakdown.Financiamento,
+      naoInformado: s.propostasBreakdown["não informado(celulas em branco)"],
+    }))
+    .sort((a, b) => b.total - a.total);
+}
+
+/** Comparação direta só entre vendedores (um canal por tabela). */
+export function buildVendedorComparisonRows(
   vendedores: VendedorMetrics[],
-  canal: CanalAtendimento | "todos" = "todos"
+  canal: CanalAtendimento
 ): ComparisonRow[] {
-  const sdrFiltered =
-    canal === "todos" ? sdrs : sdrs.filter((s) => s.canal === canal);
-
-  const sdrRows: ComparisonRow[] = sdrFiltered.map((s) => ({
-    nome: s.sdr,
-    papel: "SDR",
-    canal: s.canal,
-    total: s.totalAgendamentos,
-    visitas: s.totalVisitas,
-    sucessos: s.totalSucesso,
-    insucessos: s.totalInsucesso,
-    taxaVisita: s.taxaConversaoVisita,
-    taxaSucesso: s.taxaConversaoSucesso,
-    compra: s.propostasBreakdown.Compra,
-    venda: s.propostasBreakdown.Venda,
-    troca: s.propostasBreakdown.Troca,
-    consignacao: s.propostasBreakdown.Consignação,
-    financiamento: s.propostasBreakdown.Financiamento,
-    naoInformado: s.propostasBreakdown["não informado(celulas em branco)"],
-  }));
-
-  const vendRows: ComparisonRow[] = [];
+  const rows: ComparisonRow[] = [];
   for (const v of vendedores) {
     if (canal === "Recepção") {
       if (!v.totalRecepcao) continue;
       const b = v.propostasBreakdownRecepcao;
-      vendRows.push({
+      rows.push({
         nome: v.vendedor,
         papel: "Vendedor",
         canal: "Recepção",
@@ -241,7 +243,6 @@ export function buildComparisonRows(
         insucessos: v.insucessosRecepcao,
         taxaVisita: v.taxaVisitaRecepcao,
         taxaSucesso: v.conversaoRecepcao,
-        convRecepcao: v.conversaoRecepcao,
         compra: b.Compra,
         venda: b.Venda,
         troca: b.Troca,
@@ -251,10 +252,9 @@ export function buildComparisonRows(
       });
       continue;
     }
-    // Pré-Venda (ou padrão): totais sem misturar Recepção
-    if (canal === "Pré-Venda" && !v.totalPreVenda) continue;
+    if (!v.totalPreVenda) continue;
     const b = v.propostasBreakdown;
-    vendRows.push({
+    rows.push({
       nome: v.vendedor,
       papel: "Vendedor",
       canal: "Pré-Venda",
@@ -264,7 +264,67 @@ export function buildComparisonRows(
       insucessos: v.totalInsucesso,
       taxaVisita: round2(v.totalRecebidos ? (v.totalVisitas / v.totalRecebidos) * 100 : 0),
       taxaSucesso: v.conversaoGeral,
-      convPreVenda: v.conversaoPreVenda,
+      compra: b.Compra,
+      venda: b.Venda,
+      troca: b.Troca,
+      consignacao: b.Consignação,
+      financiamento: b.Financiamento,
+      naoInformado: b["não informado(celulas em branco)"],
+    });
+  }
+  return rows.sort((a, b) => b.total - a.total);
+}
+
+export type SdrVendedorPairRow = {
+  sdr: string;
+  vendedor: string;
+  total: number;
+  visitas: number;
+  sucessos: number;
+  insucessos: number;
+  taxaVisita: number;
+  taxaSucesso: number;
+  compra: number;
+  venda: number;
+  troca: number;
+  consignacao: number;
+  financiamento: number;
+  naoInformado: number;
+};
+
+/**
+ * Uma linha por par SDR × Vendedor (Pré-Venda).
+ * Omite pares com 0 agendamentos; ordena por volume.
+ */
+export function buildSdrVendedorProposalRows(items: AgendamentoItem[]): SdrVendedorPairRow[] {
+  const groups = new Map<string, AgendamentoItem[]>();
+  for (const item of items) {
+    if (!item.vendedor || item.vendedor === "(sem vendedor)") continue;
+    if (!item.sdr || item.sdr === "(sem SDR)") continue;
+    const key = `${item.sdr}::${item.vendedor}`;
+    const list = groups.get(key) || [];
+    list.push(item);
+    groups.set(key, list);
+  }
+
+  const rows: SdrVendedorPairRow[] = [];
+  for (const [key, list] of groups) {
+    if (list.length === 0) continue;
+    const [sdr, vendedor] = key.split("::");
+    const total = list.length;
+    const visitas = list.filter((i) => i.teveVisita).length;
+    const sucessos = list.filter((i) => i.status === "Sucesso").length;
+    const insucessos = list.filter((i) => i.status === "Insucesso").length;
+    const b = breakdownPropostas(list);
+    rows.push({
+      sdr: sdr || "",
+      vendedor: vendedor || "",
+      total,
+      visitas,
+      sucessos,
+      insucessos,
+      taxaVisita: round2(total ? (visitas / total) * 100 : 0),
+      taxaSucesso: round2(total ? (sucessos / total) * 100 : 0),
       compra: b.Compra,
       venda: b.Venda,
       troca: b.Troca,
@@ -274,7 +334,28 @@ export function buildComparisonRows(
     });
   }
 
-  return [...sdrRows, ...vendRows];
+  return rows.sort((a, b) => b.total - a.total || a.sdr.localeCompare(b.sdr, "pt-BR"));
+}
+
+/** @deprecated Preferir buildSdrComparisonRows / buildVendedorComparisonRows */
+export function buildComparisonRows(
+  sdrs: SdrMetrics[],
+  vendedores: VendedorMetrics[],
+  canal: CanalAtendimento | "todos" = "todos"
+): ComparisonRow[] {
+  const sdrFiltered =
+    canal === "todos" ? sdrs : sdrs.filter((s) => s.canal === canal);
+  if (canal === "todos") {
+    return [
+      ...buildSdrComparisonRows(sdrFiltered),
+      ...buildVendedorComparisonRows(vendedores, "Pré-Venda"),
+      ...buildVendedorComparisonRows(vendedores, "Recepção"),
+    ];
+  }
+  return [
+    ...buildSdrComparisonRows(sdrFiltered),
+    ...buildVendedorComparisonRows(vendedores, canal),
+  ];
 }
 
 export function buildProposalDistribution(items: AgendamentoItem[]) {

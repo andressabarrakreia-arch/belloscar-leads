@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   buildCanalKpis,
-  buildComparisonRows,
   buildPeriodSeries,
   buildProposalDistribution,
+  buildSdrComparisonRows,
   buildSdrMetrics,
+  buildSdrVendedorProposalRows,
+  buildVendedorComparisonRows,
   buildVendedorMetrics,
   filterAgendamentos,
   getSchedulingFilterOptions,
@@ -51,8 +53,14 @@ export function useSchedulingAnalytics(
       sdrPreVenda,
       sdrRecepcao,
       vendedorMetrics,
-      comparisonPreVenda: buildComparisonRows(sdrPreVenda, vendedorMetrics, "Pré-Venda"),
-      comparisonRecepcao: buildComparisonRows(sdrRecepcao, vendedorMetrics, "Recepção"),
+      /** Só quem atendeu (SDR) — sem vendedores */
+      comparisonSdrPreVenda: buildSdrComparisonRows(sdrPreVenda),
+      comparisonSdrRecepcao: buildSdrComparisonRows(sdrRecepcao),
+      /** Só vendedores, por canal */
+      comparisonVendedoresPreVenda: buildVendedorComparisonRows(vendedorMetrics, "Pré-Venda"),
+      comparisonVendedoresRecepcao: buildVendedorComparisonRows(vendedorMetrics, "Recepção"),
+      /** Pares SDR × Vendedor (Pré-Venda) */
+      sdrVendedorPairs: buildSdrVendedorProposalRows(preVenda),
       proposalsPreVenda: buildProposalDistribution(preVenda),
       proposalsRecepcao: buildProposalDistribution(recepcao),
       periodSeriesPreVenda: buildPeriodSeries(preVenda),

@@ -4,6 +4,7 @@ import { PerformanceComparisonTable } from "../../components/scheduling/Performa
 import { ProposalDistributionChart } from "../../components/scheduling/ProposalDistributionChart";
 import { SchedulingFiltersBar } from "../../components/scheduling/SchedulingFiltersBar";
 import { SDRPerformanceTable } from "../../components/scheduling/SDRPerformanceTable";
+import { SdrVendedorProposalTable } from "../../components/scheduling/SdrVendedorProposalTable";
 import { TimeSeriesChart } from "../../components/scheduling/TimeSeriesChart";
 import { VendedorConversionCards } from "../../components/scheduling/VendedorConversionCards";
 import { useSchedulingAnalytics, useSchedulingStore } from "../../hooks/useSchedulingStore";
@@ -22,11 +23,13 @@ export function SchedulingAnalysis() {
     options,
     kpisPreVenda,
     kpisRecepcao,
-    sdrPreVenda,
     sdrRecepcao,
     vendedorMetrics,
-    comparisonPreVenda,
-    comparisonRecepcao,
+    comparisonSdrPreVenda,
+    comparisonSdrRecepcao,
+    comparisonVendedoresPreVenda,
+    comparisonVendedoresRecepcao,
+    sdrVendedorPairs,
     proposalsPreVenda,
     proposalsRecepcao,
     periodSeriesPreVenda,
@@ -71,11 +74,7 @@ export function SchedulingAnalysis() {
         </div>
       )}
 
-      <SDRPerformanceTable
-        rows={sdrPreVenda}
-        title="Desempenho Pré-Venda (SDR)"
-        subtitle="Agendamentos gerados pela equipe de pré-venda — índices e % só deste canal."
-      />
+      <SdrVendedorProposalTable rows={sdrVendedorPairs} />
 
       <SDRPerformanceTable
         rows={sdrRecepcao}
@@ -86,15 +85,27 @@ export function SchedulingAnalysis() {
       <VendedorConversionCards rows={vendedorMetrics} />
 
       <PerformanceComparisonTable
-        rows={comparisonPreVenda}
-        title="Comparação direta · Pré-Venda"
-        subtitle="Visão analítica da pré-venda (sem misturar Recepção)."
+        rows={comparisonVendedoresPreVenda}
+        title="Comparação direta entre vendedores · Pré-Venda"
+        subtitle="Somente vendedores no canal Pré-Venda — totais, propostas, visitas, sucessos e taxas."
       />
 
       <PerformanceComparisonTable
-        rows={comparisonRecepcao}
+        rows={comparisonVendedoresRecepcao}
+        title="Comparação direta entre vendedores · Recepção"
+        subtitle="Somente vendedores no canal Recepção (loja) — totais, propostas, visitas, sucessos e taxas."
+      />
+
+      <PerformanceComparisonTable
+        rows={comparisonSdrPreVenda}
+        title="Comparação direta · Pré-Venda"
+        subtitle="Somente quem atendeu na Pré-Venda (SDR). Resultados dos vendedores estão nas tabelas acima."
+      />
+
+      <PerformanceComparisonTable
+        rows={comparisonSdrRecepcao}
         title="Comparação direta · Recepção"
-        subtitle="Visão analítica só da Recepção / loja."
+        subtitle="Somente Recepção / Gabriela. Resultados dos vendedores estão na comparação de vendedores · Recepção."
       />
 
       <div className="charts">
