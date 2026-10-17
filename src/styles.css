@@ -302,6 +302,27 @@ select {
   overflow: hidden;
 }
 
+/** Barra de filtros que acompanha o scroll (Análise de Agendamentos). */
+.filters.filters--sticky {
+  position: sticky;
+  top: 10px;
+  z-index: 40;
+  overflow: visible;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 28px rgba(64, 64, 65, 0.12);
+}
+
+.filters.filters--sticky .filters__vendedor {
+  color: var(--brand-charcoal);
+}
+
+.filters.filters--sticky .filters__vendedor select {
+  border-color: rgba(192, 32, 38, 0.35);
+  font-weight: 600;
+}
+
 .filters::before {
   content: "";
   position: absolute;

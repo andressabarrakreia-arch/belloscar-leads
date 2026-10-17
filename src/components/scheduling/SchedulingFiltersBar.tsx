@@ -14,7 +14,7 @@ type Props = {
 
 export function SchedulingFiltersBar({ options, filters, onChange }: Props) {
   return (
-    <div className="filters">
+    <div className="filters filters--sticky" role="search" aria-label="Filtros de agendamentos">
       <label>
         De
         <input
@@ -64,7 +64,7 @@ export function SchedulingFiltersBar({ options, filters, onChange }: Props) {
           ))}
         </select>
       </label>
-      <label>
+      <label className="filters__vendedor">
         Vendedor
         <select
           value={filters.vendedor || ""}

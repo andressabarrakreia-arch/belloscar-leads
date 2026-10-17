@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.7.3] - 2026-10-17
+
+### Changed
+- Análise de Agendamentos: barra de filtros (inclui Vendedor) fica **sticky** ao rolar a página
+
 ## [1.7.2] - 2026-10-17
 
 ### Changed
