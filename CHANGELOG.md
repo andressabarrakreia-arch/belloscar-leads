@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.8] - 2026-10-17
+
+### Changed
+- Base de agendamentos regenerada com INSUCESSOS atualizado (20.687 linhas)
+- Removidos **22** registros Insucesso sem motivo cruzado — dataset com **4.428** itens; **3.602** insucessos, todos com motivo
+
 ## [1.7.7] - 2026-10-17
 
 ### Removed
