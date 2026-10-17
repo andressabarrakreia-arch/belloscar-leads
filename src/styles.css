@@ -127,6 +127,7 @@ select {
 
 .brand-text h1 .car {
   color: var(--brand-red);
+  font-weight: 800;
 }
 
 .brand-text span {
@@ -735,6 +736,33 @@ tr:hover td {
 
 .report-signature p {
   margin: 0 0 6px;
+}
+
+/** Hero só da Análise de Agendamentos — foto do homem (sem texto do banner). */
+.agendamentos-hero {
+  margin: 0 0 18px;
+  border-radius: calc(var(--radius) + 4px);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(228, 229, 232, 0.9);
+  background: #f5c518;
+  max-height: 220px;
+}
+
+.agendamentos-hero img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: left center;
+}
+
+@media (max-width: 640px) {
+  .agendamentos-hero,
+  .agendamentos-hero img {
+    max-height: 160px;
+    height: 160px;
+  }
 }
 
 .page-footer {

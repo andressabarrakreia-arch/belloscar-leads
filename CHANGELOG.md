@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.6] - 2026-10-17
+
+### Changed
+- Marca: “Car” com o mesmo negrito de “Bellos” (`font-weight: 800`)
+
+### Added
+- Análise de Agendamentos: foto do homem no topo da página (sem texto do banner)
+
 ## [1.7.5] - 2026-10-17
 
 ### Changed

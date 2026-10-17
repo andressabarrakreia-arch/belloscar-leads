@@ -131,7 +131,7 @@ export function Admin() {
         <div className="login-card">
           <img className="login-logo" src={logo} alt="BellosCar" width={64} height={64} />
           <h1>
-            Gestão Bellos<span style={{ color: "var(--brand-red)" }}>Car</span>
+            Gestão Bellos<span className="car" style={{ color: "var(--brand-red)", fontWeight: 800 }}>Car</span>
           </h1>
           <p>Área restrita para importar planilhas e atualizar o dataset publicado.</p>
           <form onSubmit={login}>
