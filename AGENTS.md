@@ -6,8 +6,16 @@ Ao final de **toda** alteração, task ou criação, atualizar:
 
 - `CHANGELOG.md`, `ROADMAP.md`
 - `README.md` / `DEPLOY.md` quando URLs, módulos ou deploy mudarem
+- `CATALOGO_DE_PAGINAS.md` no formato `nome=link` quando páginas/módulos mudarem
 - `.env.example` só com placeholders (sem segredos reais)
 - Regras em `.cursor/rules/` quando novas convenções forem definidas
+
+## Antes de criar
+
+- Analisar o existente e reutilizar padrões — `reuse-before-create.mdc` / skill `reuse-before-create`
+- Stack tipada — `typescript-stack.mdc`
+- Isolamento de storage por módulo — `module-storage-isolation.mdc`
+- Agendamentos: dedupe só por `id` — `scheduling-dedupe.mdc`
 
 ## Segurança
 
@@ -17,6 +25,7 @@ Ao final de **toda** alteração, task ou criação, atualizar:
 ## Módulos e links distintos
 
 - Registro: `src/modules/registry.ts`
-- Módulo atual: **Análise de Campanhas** → `#/campanhas`
+- **Análise de Campanhas** → `#/campanhas`
+- **Análise de Agendamentos** → `#/agendamentos` (Vendas Web · Andressa Barra)
 - Novos módulos: rota `#/<modulo>/...`, layout próprio, link de equipe separado
 - Regras: `multi-module-pages.mdc`, `belloscar-product-prefs.mdc` (alwaysApply)

@@ -21,8 +21,11 @@
 ## Links
 
 - Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
+- Catálogo: [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md)
 - **Análise de Campanhas (equipe):** https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
-- Gestão: https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/admin
+- Gestão Campanhas: https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/admin
+- **Análise de Agendamentos (equipe):** https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
+- Gestão Agendamentos: https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
 
 ## Pós-lançamento
 
@@ -34,6 +37,7 @@
 - [x] Faixa ticker de KPIs no topo do app
 - [x] Arquitetura multi-módulo (Campanhas + regras alwaysApply)
 - [x] Dashboard Campanhas enriquecido (funil, quinzena vs anterior, tempo até visita, tops)
+- [x] Módulo **Análise de Agendamentos** (`#/agendamentos`) + catálogo + regras de reuso/isolamento/dedupe
 - [ ] Próximos módulos com públicos/links próprios
 
 ## Backlog — próximos módulos e integrações (não esquecer)

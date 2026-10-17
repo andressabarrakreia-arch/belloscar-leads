@@ -38,6 +38,17 @@ export const MODULES: AppModule[] = [
       { to: "/campanhas/admin", label: "Gestão", adminOnly: true },
     ],
   },
+  {
+    id: "agendamentos",
+    name: "Análise de Agendamentos",
+    basePath: "/agendamentos",
+    tagline: "Pré-venda, recepção, vendedores e motivos de insucesso · Vendas Web",
+    publicPath: "/agendamentos",
+    nav: [
+      { to: "/agendamentos", label: "Dashboard", end: true },
+      { to: "/agendamentos/admin", label: "Gestão", adminOnly: true },
+    ],
+  },
 ];
 
 export function getModuleById(id: string): AppModule | undefined {
@@ -45,3 +56,4 @@ export function getModuleById(id: string): AppModule | undefined {
 }
 
 export const CAMPANHAS = getModuleById("campanhas")!;
+export const AGENDAMENTOS = getModuleById("agendamentos")!;

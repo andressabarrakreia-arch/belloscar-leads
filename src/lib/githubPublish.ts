@@ -81,14 +81,17 @@ export type PublishResult = {
 };
 
 /**
- * Atualiza public/data/dataset.json no repositório (agrega via conteúdo já mergeado).
+ * Publica JSON arbitrário em um path do repositório (por módulo).
  */
-export async function publishDatasetToGitHub(
-  dataset: Dataset,
+export async function publishJsonToGitHub(
+  data: unknown,
   token: string,
-  message?: string
+  options?: { path?: string; message?: string }
 ): Promise<PublishResult> {
-  const { owner, repo, path, branch } = GITHUB_DEFAULTS;
+  const owner = GITHUB_DEFAULTS.owner;
+  const repo = GITHUB_DEFAULTS.repo;
+  const branch = GITHUB_DEFAULTS.branch;
+  const path = options?.path || GITHUB_DEFAULTS.path;
   if (!token.trim()) throw new Error("Token GitHub não encontrado neste navegador.");
 
   const getRes = await githubFetch(
@@ -108,11 +111,9 @@ export async function publishDatasetToGitHub(
     );
   }
 
-  const content = toBase64Utf8(JSON.stringify(dataset, null, 2));
+  const content = toBase64Utf8(JSON.stringify(data, null, 2));
   const body = {
-    message:
-      message ||
-      `Atualiza dataset de leads (${dataset.leads.length} leads) — ${new Date().toISOString()}`,
+    message: options?.message || `Atualiza ${path} — ${new Date().toISOString()}`,
     content,
     branch,
     ...(sha ? { sha } : {}),
@@ -135,14 +136,30 @@ export async function publishDatasetToGitHub(
     throw new Error(msg);
   }
 
-  const data = (await putRes.json()) as {
+  const result = (await putRes.json()) as {
     commit: { sha: string; html_url: string };
     content: { html_url: string };
   };
 
   return {
-    commitSha: data.commit.sha,
-    commitUrl: data.commit.html_url,
-    htmlUrl: data.content.html_url,
+    commitSha: result.commit.sha,
+    commitUrl: result.commit.html_url,
+    htmlUrl: result.content.html_url,
   };
+}
+
+/**
+ * Atualiza public/data/dataset.json no repositório (módulo Campanhas).
+ */
+export async function publishDatasetToGitHub(
+  dataset: Dataset,
+  token: string,
+  message?: string
+): Promise<PublishResult> {
+  return publishJsonToGitHub(dataset, token, {
+    path: GITHUB_DEFAULTS.path,
+    message:
+      message ||
+      `Atualiza dataset de leads (${dataset.leads.length} leads) — ${new Date().toISOString()}`,
+  });
 }

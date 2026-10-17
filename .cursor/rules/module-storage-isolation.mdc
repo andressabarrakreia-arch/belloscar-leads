@@ -1,0 +1,17 @@
+---
+description: Isolamento de storage/contexto por módulo — sem vazamento entre páginas.
+alwaysApply: true
+---
+
+# Isolamento de configurações por módulo
+
+Cada módulo tem namespace próprio de storage e dataset.
+
+| Módulo | Dataset publicado | Storage local (exemplos) |
+|--------|-------------------|---------------------------|
+| Campanhas | `public/data/dataset.json` | (fluxo campanhas existente) |
+| Agendamentos | `public/data/agendamentos-dataset.json` | `agendamentos_dataset`, `agendamentos_admin_config` |
+
+- Alterações em um módulo **não** podem sobrescrever chaves ou estado de outro.
+- Login/PIN admin unificado (`belloscar_admin_ok`) pode ser compartilhado; **dados e configs** não.
+- Token GitHub (`belloscar_gh_token`) é compartilhado do navegador; o **path** publicado no GitHub é por módulo.

@@ -1,0 +1,11 @@
+---
+description: Deduplicação de agendamentos por id — nunca por data de agendamento.
+alwaysApply: true
+---
+
+# Deduplicação de agendamentos
+
+- Deduplicar **somente por `id`** do atendimento (`#ID` / `ID`).
+- **Não** deduplicar por `dataAgendamento`: a equipe agenda vários clientes no mesmo dia; todos devem permanecer.
+- Importação é **acumulativa**: novos registros anexam ao histórico; mesmo `id` atualiza/enriquece o existente.
+- Preservar datas em ISO `YYYY-MM-DD` para filtros e séries temporais.

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ADMIN_PIN, isAdminAuthed, setAdminAuthed } from "../lib/adminAuth";
 import { applyImport, downloadDataset, loadDataset } from "../lib/dataset";
 import {
   GITHUB_DEFAULTS,
@@ -11,9 +12,6 @@ import {
 } from "../lib/githubPublish";
 import { parseExcelArrayBuffer } from "../lib/parseExcel";
 import type { Dataset, ImportMeta } from "../lib/types";
-
-const PIN = import.meta.env.VITE_ADMIN_PIN || "belloscar864275@";
-const AUTH_KEY = "belloscar_admin_ok";
 
 export function Admin() {
   const [authed, setAuthed] = useState(false);
@@ -39,9 +37,9 @@ export function Admin() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem(AUTH_KEY) === "1" || sessionStorage.getItem(AUTH_KEY) === "1") {
+    if (isAdminAuthed()) {
       setAuthed(true);
-      localStorage.setItem(AUTH_KEY, "1");
+      setAdminAuthed(true);
     }
     refreshTokenState();
     loadDataset().then(setDataset);
@@ -49,9 +47,8 @@ export function Admin() {
 
   function login(e: React.FormEvent) {
     e.preventDefault();
-    if (pin === PIN) {
-      localStorage.setItem(AUTH_KEY, "1");
-      sessionStorage.setItem(AUTH_KEY, "1");
+    if (pin === ADMIN_PIN) {
+      setAdminAuthed(true);
       setAuthed(true);
       setError(null);
     } else {

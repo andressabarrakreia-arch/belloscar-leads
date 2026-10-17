@@ -1,0 +1,15 @@
+---
+description: Antes de criar código novo, analisar o existente e reutilizar padrões do projeto.
+alwaysApply: true
+---
+
+# Analisar antes de criar
+
+Antes de qualquer alteração ou página nova neste projeto:
+
+1. **Explorar o que já existe** — módulos em `src/modules/registry.ts`, parse (`parseExcel.ts`), datas (`dates.ts`), dedupe, admin, layout, CSS e docs.
+2. **Reutilizar** — preferir estender padrões (ModuleLayout, aliases de cabeçalho, HashRouter, PIN unificado, classes CSS) em vez de reinventar.
+3. **Só criar do zero** o que for específico do domínio novo (tipos, métricas, chaves de storage, dataset).
+4. **Consultar regras** `multi-module-pages.mdc`, `belloscar-product-prefs.mdc`, `module-storage-isolation.mdc`, `scheduling-dedupe.mdc` e o catálogo de páginas.
+
+Esta regra vale para agentes e implementações futuras.

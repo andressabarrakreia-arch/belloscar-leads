@@ -4,12 +4,14 @@ Hub **estático** de análises da BellosCar (Curitiba), organizado em **módulos
 
 - React + Vite + TypeScript + Recharts  
 - Sem servidor em produção  
-- Dados de campanhas em [`public/data/dataset.json`](public/data/dataset.json)  
+- Dados por módulo em `public/data/`  
 - GitHub Pages + HashRouter  
 
-## Módulo atual: Análise de Campanhas
+Catálogo completo: [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md) (`nome=link`).
 
-**Link da equipe (compartilhar este):**  
+## Análise de Campanhas
+
+**Link da equipe:**  
 https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
 
 | Página | Link |
@@ -17,40 +19,45 @@ https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
 | Dashboard | `#/campanhas` |
 | Atendentes | `#/campanhas/atendentes` |
 | Comparar períodos | `#/campanhas/comparar` |
-| Gestão (importar planilha) | `#/campanhas/admin` |
+| Gestão | `#/campanhas/admin` |
 
-A home `#/` redireciona para `#/campanhas`. Links antigos (`#/admin`, etc.) também redirecionam.
+Dataset: [`public/data/dataset.json`](public/data/dataset.json)
 
-### O que a equipe vê neste módulo
-
-- KPIs, tabela por origem, gráficos  
-- Atendentes e comparação de períodos  
-- Filtros · **somente leitura**  
-
-## Novos módulos (futuro)
-
-Cada módulo novo terá:
-
-- entrada em `src/modules/registry.ts`  
-- rotas `#/<modulo>/...`  
-- link de acesso próprio para o público autorizado  
-
-Regras Cursor (sempre ativas): `multi-module-pages.mdc`, `belloscar-product-prefs.mdc`.
-
-## Como atualizar dados de campanhas
+### Atualizar dados de campanhas
 
 1. Abra `#/campanhas/admin` e entre com o PIN  
-2. Na primeira vez, salve o PAT GitHub neste computador (`localStorage`)  
+2. Salve o PAT GitHub neste computador (`localStorage`)  
 3. Envie a planilha `.xlsx` (agrega + dedupe + publica)  
-4. Em 1–2 minutos o Pages atualiza  
 
-### Colunas da planilha
+## Análise de Agendamentos
 
-`ID`, `Criado em`, `Responsável`, `Status`, `Visita`, `Data Visita`, `Origem`, `Tipo Proposta`, `Cliente`, `Celular`
+**Setor:** Vendas Web · **Gestão:** Andressa Barra  
 
-### Deduplicação
+**Link da equipe:**  
+https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
 
-- Só no mesmo mês · visita/agendamento primeiro · senão mais recente · Sucesso sempre permanece  
+| Página | Link |
+|--------|------|
+| Dashboard | `#/agendamentos` |
+| Gestão | `#/agendamentos/admin` |
+
+Dataset isolado: [`public/data/agendamentos-dataset.json`](public/data/agendamentos-dataset.json)  
+Storage local: `agendamentos_dataset`, `agendamentos_admin_config`
+
+### O que o painel mostra
+
+- Desempenho de Pré-Venda / Recepção (SDR)  
+- Conversão por vendedor (geral, Pré-Venda, Recepção)  
+- Motivos de insucesso e origem/canal por vendedor  
+- Comparação direta de performance  
+- Filtros por data, SDR e tipo de proposta (inclui **Financiamento**)  
+
+### Atualizar dados de agendamentos
+
+1. Abra `#/agendamentos/admin` (mesmo PIN unificado)  
+2. Importe na ordem sugerida: **AGENDAMENTOS** → **INSUCESSOS** → **LEADS GERAL**  
+3. Dedupe **somente por ID** (vários atendimentos no mesmo dia são mantidos)  
+4. Opcional: exportar CSV de clientes (nome, email, telefone)  
 
 ## Setup local
 
@@ -62,6 +69,6 @@ npm run dev
 
 ## Documentação e segurança
 
-- Ao final de cada alteração: `CHANGELOG.md`, `ROADMAP.md`, README/DEPLOY se URLs mudarem  
+- Ao final de cada alteração: `CHANGELOG.md`, `ROADMAP.md`, README/DEPLOY/CATALOGO se URLs mudarem  
 - Segredos nunca no Git — `.cursor/rules/no-secrets-in-repo.mdc`  
-- Ver `AGENTS.md`  
+- Ver `AGENTS.md` e regras alwaysApply em `.cursor/rules/`  

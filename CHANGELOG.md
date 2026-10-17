@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0] - 2026-10-16
+
+### Added
+- Módulo **Análise de Agendamentos** (`#/agendamentos` / `#/agendamentos/admin`) — Vendas Web · Andressa Barra
+- Parse/merge acumulativo por ID (AGENDAMENTOS, INSUCESSOS, LEADS GERAL), datas ISO, Financiamento como tipo de proposta
+- Métricas SDR/Recepção, conversão por vendedor (Pré-Venda vs Recepção), motivos de insucesso, origem, comparação direta, gráficos
+- Dataset isolado `public/data/agendamentos-dataset.json` + storage `agendamentos_*`
+- Export CSV de clientes (nome, email, telefone) no admin de agendamentos
+- `CATALOGO_DE_PAGINAS.md` no formato `nome=link`
+- Regras/skills: `reuse-before-create`, `typescript-stack`, `module-storage-isolation`, `scheduling-dedupe`
+- Login admin unificado via `adminAuth.ts`; `publishJsonToGitHub` com path por módulo
+
 ## [1.6.0] - 2026-10-16
 
 ### Added

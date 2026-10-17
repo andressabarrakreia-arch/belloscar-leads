@@ -1,15 +1,17 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ModuleLayout } from "./components/ModuleLayout";
-import { CAMPANHAS } from "./modules/registry";
+import { AGENDAMENTOS, CAMPANHAS } from "./modules/registry";
 import { Admin } from "./pages/Admin";
 import { Attendants } from "./pages/Attendants";
 import { Compare } from "./pages/Compare";
 import { Dashboard } from "./pages/Dashboard";
+import { SchedulingAdmin } from "./pages/agendamentos/SchedulingAdmin";
+import { SchedulingAnalysis } from "./pages/agendamentos/SchedulingAnalysis";
 
 /**
  * Módulos com rotas e links distintos.
  * Análise de Campanhas: #/campanhas
- * (Novos módulos: #/<modulo>)
+ * Análise de Agendamentos: #/agendamentos
  */
 export default function App() {
   return (
@@ -22,6 +24,11 @@ export default function App() {
           <Route path="atendentes" element={<Attendants />} />
           <Route path="comparar" element={<Compare />} />
           <Route path="admin" element={<Admin />} />
+        </Route>
+
+        <Route path="agendamentos" element={<ModuleLayout module={AGENDAMENTOS} />}>
+          <Route index element={<SchedulingAnalysis />} />
+          <Route path="admin" element={<SchedulingAdmin />} />
         </Route>
 
         {/* Compatibilidade com links antigos */}

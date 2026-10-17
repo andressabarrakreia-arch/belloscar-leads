@@ -1,0 +1,13 @@
+---
+description: Stack e tipagem obrigatórias (React, TypeScript, HTML/CSS, GitHub Pages).
+alwaysApply: true
+---
+
+# Stack e tipagem
+
+- **Framework:** React
+- **Linguagem:** TypeScript sempre que possível e viável (interfaces e tipos estritos em `.ts` / `.tsx`)
+- **Marcação e estilo:** HTML semântico + CSS alinhados às classes e tokens existentes em `styles.css`
+- **Hospedagem:** GitHub Pages (SPA / `HashRouter`)
+- Processamento de planilhas **100% no cliente** (browser-only)
+- Consultar padrões já usados no repo antes de adicionar dependências

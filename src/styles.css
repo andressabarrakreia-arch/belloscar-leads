@@ -708,6 +708,14 @@ tr:hover td {
   border-radius: var(--radius-sm);
 }
 
+.report-signature {
+  margin-bottom: 16px;
+}
+
+.report-signature p {
+  margin: 0 0 6px;
+}
+
 .page-footer {
   margin-top: 8px;
   padding-top: 8px;
