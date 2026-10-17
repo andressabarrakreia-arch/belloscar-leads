@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import type { AppModule } from "../modules/registry";
 import { KeyTicker } from "./KeyTicker";
 
 const brandIcon = `${import.meta.env.BASE_URL}brand/bc-icon.png`;
+const HUB_TITLE = "Análise de Resultados";
 
 type Props = {
   module: AppModule;
@@ -12,6 +14,13 @@ type Props = {
 
 export function ModuleLayout({ module, showAdminNav = true }: Props) {
   const navItems = module.nav.filter((item) => showAdminNav || !item.adminOnly);
+
+  useEffect(() => {
+    document.title = `BellosCar · ${module.name}`;
+    return () => {
+      document.title = `BellosCar · ${HUB_TITLE}`;
+    };
+  }, [module.name]);
 
   return (
     <div className="app-shell">

@@ -24,6 +24,7 @@ Ao final de **toda** alteração, task ou criação, atualizar:
 
 ## Módulos e links distintos
 
+- Hub / título principal: **Análise de Resultados** (`index.html` + `document.title` por módulo)
 - Registro: `src/modules/registry.ts`
 - **Análise de Campanhas** → `#/campanhas`
 - **Análise de Agendamentos** → `#/agendamentos` (Vendas Web · Andressa Barra)

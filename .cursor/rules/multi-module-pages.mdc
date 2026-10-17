@@ -14,11 +14,12 @@ Este projeto é um hub BellosCar com **vários módulos**. Pessoas diferentes po
 3. **Layout por módulo:** usar `ModuleLayout` (ou equivalente) com o `AppModule` correspondente; não reutilizar menu de outro módulo.
 4. **Link da equipe:** o link compartilhado aponta só para o `publicPath` daquele módulo (ex.: `#/campanhas`). Não enviar o hub inteiro se a pessoa só deve ver um módulo.
 5. **Gestão/Admin:** rotas `.../admin` ficam sob o módulo (`#/campanhas/admin`) e marcadas `adminOnly` no nav quando aplicável.
-6. **Módulos publicados:**
+6. **Hub:** **Análise de Resultados** (título principal do produto).
+7. **Módulos publicados:**
    - **Análise de Campanhas** = `#/campanhas` (dashboard, atendentes, comparar, admin)
    - **Análise de Agendamentos** = `#/agendamentos` (dashboard, admin)
-7. **Catálogo:** manter [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md) no formato `nome=link`.
-8. **Ao criar novo módulo:**
+8. **Catálogo:** manter [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md) no formato `nome=link`.
+9. **Ao criar novo módulo:**
    - adicionar em `MODULES`
    - criar rotas em `App.tsx` sob o `basePath`
    - páginas/components isolados (pasta `src/pages/<modulo>/` ou prefixo claro)
@@ -28,6 +29,6 @@ Este projeto é um hub BellosCar com **vários módulos**. Pessoas diferentes po
 
 ## Preferências de produto (sempre ativas)
 
-- Nome do módulo atual no header: **Análise de Campanhas** (não “BellosCar Leads” genérico como único título).
+- Hub: **Análise de Resultados**; no header de cada página, o nome do módulo ativo (Campanhas / Agendamentos).
 - Identidade visual BellosCar compartilhada; conteúdo e dados por módulo.
 - Páginas e links distintos; expansível para outros públicos sem fundir tudo num dashboard único.

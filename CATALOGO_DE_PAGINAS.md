@@ -1,8 +1,8 @@
-# Catálogo de páginas — BellosCar Analytics
+# Catálogo de páginas — BellosCar · Análise de Resultados
 
 Formato: `(nome da pagina)=(link da pagina)`
 
-Páginas com links distintos para envio a pessoas diferentes da equipe.
+Hub: **Análise de Resultados**. Páginas com links distintos para envio a pessoas diferentes da equipe.
 
 ## Links da equipe (somente leitura)
 

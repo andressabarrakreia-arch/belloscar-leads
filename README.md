@@ -1,6 +1,6 @@
-# BellosCar Analytics
+# BellosCar · Análise de Resultados
 
-Hub **estático** de análises da BellosCar (Curitiba), organizado em **módulos** com links distintos.
+Hub **estático** de análises da BellosCar (Curitiba), organizado em **páginas/módulos** com links distintos (**Análise de Campanhas**, **Análise de Agendamentos**, …).
 
 - React + Vite + TypeScript + Recharts  
 - Sem servidor em produção  

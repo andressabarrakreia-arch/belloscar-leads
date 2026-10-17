@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.9] - 2026-10-17
+
+### Changed
+- Título principal do hub: **Análise de Resultados** (aba do navegador / `index.html`)
+- `document.title` passa a refletir a página atual (Campanhas ou Agendamentos)
+- Docs e regras alinhadas: hub = Resultados; páginas permanecem separadas
+
 ## [1.7.8] - 2026-10-17
 
 ### Changed

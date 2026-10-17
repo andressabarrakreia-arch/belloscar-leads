@@ -8,7 +8,8 @@ alwaysApply: true
 ## Nomeação
 
 - Hub/repo: BellosCar Analytics / `belloscar-leads`
-- Módulos publicados: **Análise de Campanhas**, **Análise de Agendamentos**
+- Título principal do produto: **Análise de Resultados**
+- Páginas/módulos separados: **Análise de Campanhas**, **Análise de Agendamentos**
 - Não tratar o app inteiro como uma única “página de leads” sem nome de módulo
 - Catálogo de links: `CATALOGO_DE_PAGINAS.md`
 
