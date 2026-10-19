@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { PerformanceComparisonTable } from "../../components/scheduling/PerformanceComparisonTable";
 import { VendedorConversionCards } from "../../components/scheduling/VendedorConversionCards";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
@@ -5,28 +6,49 @@ import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalytics
 /** Aba Performance Vendedores. */
 export function SchedulingVendedores() {
   const { analytics } = useSchedulingAnalyticsContext();
+  const [selectedVendedor, setSelectedVendedor] = useState<string | null>(null);
+
+  const filteredComparisons = useMemo(() => {
+    if (!analytics) {
+      return { preVenda: [], recepcao: [] };
+    }
+    const { comparisonVendedoresPreVenda, comparisonVendedoresRecepcao } = analytics;
+    if (!selectedVendedor) {
+      return {
+        preVenda: comparisonVendedoresPreVenda,
+        recepcao: comparisonVendedoresRecepcao,
+      };
+    }
+    return {
+      preVenda: comparisonVendedoresPreVenda.filter((r) => r.nome === selectedVendedor),
+      recepcao: comparisonVendedoresRecepcao.filter((r) => r.nome === selectedVendedor),
+    };
+  }, [analytics, selectedVendedor]);
+
   if (!analytics) return null;
 
-  const {
-    vendedorMetrics,
-    comparisonVendedoresPreVenda,
-    comparisonVendedoresRecepcao,
-  } = analytics;
+  const scopeHint = selectedVendedor
+    ? `Filtrado: ${selectedVendedor}.`
+    : "Resultado geral de todos os vendedores.";
 
   return (
     <>
-      <VendedorConversionCards rows={vendedorMetrics} />
-
-      <PerformanceComparisonTable
-        rows={comparisonVendedoresPreVenda}
-        title="Comparação direta entre vendedores · Pré-Venda"
-        subtitle="Somente canal Pré-Venda — totais, propostas, visitas, sucessos e taxas (Su/Ag e Vi/Ag)."
+      <VendedorConversionCards
+        rows={analytics.vendedorMetrics}
+        selectedVendedor={selectedVendedor}
+        onSelectVendedor={setSelectedVendedor}
       />
 
       <PerformanceComparisonTable
-        rows={comparisonVendedoresRecepcao}
+        rows={filteredComparisons.preVenda}
+        title="Comparação direta entre vendedores · Pré-Venda"
+        subtitle={`${scopeHint} Somente canal Pré-Venda — totais, propostas, visitas, sucessos e taxas (Su/Ag e Vi/Ag).`}
+      />
+
+      <PerformanceComparisonTable
+        rows={filteredComparisons.recepcao}
         title="Comparação direta entre vendedores · Recepção"
-        subtitle="Somente canal Recepção (loja) — totais e taxas próprios."
+        subtitle={`${scopeHint} Somente canal Recepção (loja) — totais e taxas próprios.`}
       />
     </>
   );

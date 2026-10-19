@@ -264,6 +264,94 @@ export function buildVendedorMetrics(items: AgendamentoItem[]): VendedorMetrics[
     .sort((a, b) => b.totalRecebidos - a.totalRecebidos);
 }
 
+function mergeMotivoStats(lists: MotivoStats[][]): MotivoStats[] {
+  const map = new Map<string, number>();
+  for (const list of lists) {
+    for (const m of list) {
+      map.set(m.motivo, (map.get(m.motivo) || 0) + m.quantidade);
+    }
+  }
+  const total = [...map.values()].reduce((a, b) => a + b, 0) || 1;
+  return [...map.entries()]
+    .map(([motivo, quantidade]) => ({
+      motivo,
+      quantidade,
+      percentual: round2((quantidade / total) * 100),
+    }))
+    .sort((a, b) => b.quantidade - a.quantidade);
+}
+
+function mergeOrigemStats(lists: OrigemStats[][]): OrigemStats[] {
+  const map = new Map<string, { quantidade: number; sucessos: number; insucessos: number }>();
+  for (const list of lists) {
+    for (const o of list) {
+      const cur = map.get(o.origem) || { quantidade: 0, sucessos: 0, insucessos: 0 };
+      cur.quantidade += o.quantidade;
+      cur.sucessos += o.sucessos;
+      cur.insucessos += o.insucessos;
+      map.set(o.origem, cur);
+    }
+  }
+  const total = [...map.values()].reduce((a, b) => a + b.quantidade, 0) || 1;
+  return [...map.entries()]
+    .map(([origem, v]) => ({
+      origem,
+      quantidade: v.quantidade,
+      percentual: round2((v.quantidade / total) * 100),
+      sucessos: v.sucessos,
+      insucessos: v.insucessos,
+    }))
+    .sort((a, b) => b.quantidade - a.quantidade);
+}
+
+function sumPropostas(lists: PropostasBreakdown[]): PropostasBreakdown {
+  const b = emptyPropostasBreakdown();
+  for (const list of lists) {
+    for (const key of Object.keys(b) as (keyof PropostasBreakdown)[]) {
+      b[key] += list[key] || 0;
+    }
+  }
+  return b;
+}
+
+/** Soma métricas de todos os vendedores (visão geral da aba). */
+export function aggregateVendedorMetrics(rows: VendedorMetrics[]): VendedorMetrics {
+  const totalRecebidos = rows.reduce((s, r) => s + r.totalRecebidos, 0);
+  const totalVisitas = rows.reduce((s, r) => s + r.totalVisitas, 0);
+  const totalSucesso = rows.reduce((s, r) => s + r.totalSucesso, 0);
+  const totalInsucesso = rows.reduce((s, r) => s + r.totalInsucesso, 0);
+  const totalPreVenda = rows.reduce((s, r) => s + r.totalPreVenda, 0);
+  const sucessoPreVenda = rows.reduce((s, r) => s + r.sucessoPreVenda, 0);
+  const totalRecepcao = rows.reduce((s, r) => s + r.totalRecepcao, 0);
+  const sucessoRecepcao = rows.reduce((s, r) => s + r.sucessoRecepcao, 0);
+  const visitasRecepcao = rows.reduce((s, r) => s + r.visitasRecepcao, 0);
+  const insucessosRecepcao = rows.reduce((s, r) => s + r.insucessosRecepcao, 0);
+
+  return {
+    vendedor: "Todos",
+    totalRecebidos,
+    totalVisitas,
+    totalSucesso,
+    totalInsucesso,
+    conversaoGeral: round2(totalRecebidos ? (totalSucesso / totalRecebidos) * 100 : 0),
+    totalPreVenda,
+    sucessoPreVenda,
+    conversaoPreVenda: round2(totalPreVenda ? (sucessoPreVenda / totalPreVenda) * 100 : 0),
+    totalRecepcao,
+    sucessoRecepcao,
+    visitasRecepcao,
+    insucessosRecepcao,
+    conversaoRecepcao: round2(totalRecepcao ? (sucessoRecepcao / totalRecepcao) * 100 : 0),
+    taxaVisitaRecepcao: round2(totalRecepcao ? (visitasRecepcao / totalRecepcao) * 100 : 0),
+    motivosInsucesso: mergeMotivoStats(rows.map((r) => r.motivosInsucesso)),
+    motivosInsucessoRecepcao: mergeMotivoStats(rows.map((r) => r.motivosInsucessoRecepcao)),
+    origens: mergeOrigemStats(rows.map((r) => r.origens)),
+    origensRecepcao: mergeOrigemStats(rows.map((r) => r.origensRecepcao)),
+    propostasBreakdown: sumPropostas(rows.map((r) => r.propostasBreakdown)),
+    propostasBreakdownRecepcao: sumPropostas(rows.map((r) => r.propostasBreakdownRecepcao)),
+  };
+}
+
 export type ComparisonRow = {
   nome: string;
   papel: "SDR" | "Vendedor";

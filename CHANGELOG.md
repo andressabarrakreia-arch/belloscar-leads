@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1] - 2026-10-19
+
+### Changed
+- Aba Vendedores: detalhe e comparações começam no **geral de todos**; “Ver vendedor” (ou clique no card) filtra as seções abaixo
+- Nomenclatura: **Fechamento em loja** (antes “fechamento salão”)
+- Cards de desempenho listam todos os vendedores
+
 ## [1.8.0] - 2026-10-19
 
 ### Added
@@ -9,7 +16,7 @@
 
 ### Changed
 - Nav do módulo Agendamentos passa a listar as abas + Gestão
-- Labels de % com denominador (show-up Vi/Ag, conv. Su/Ag, fechamento de salão Su/Vi)
+- Labels de % com denominador (show-up Vi/Ag, conv. Su/Ag, fechamento em loja Su/Vi)
 
 ## [1.7.10] - 2026-10-19
 
