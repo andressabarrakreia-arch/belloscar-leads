@@ -19,13 +19,13 @@ export function SchedulingPreVendas() {
       <SDRPerformanceTable
         rows={sdrPreVenda}
         title="Desempenho Pré-Vendas"
-        subtitle="Por SDR — ordenado por volume. Show-up = Visitas/Agendamentos · Conv. = Sucessos/Agendamentos. Recepção não entra neste bloco."
+        subtitle="Por SDR — ordem Allan → Thayna → Lais → Matheus → demais. Show-up = Visitas/Agendamentos · Conv. = Sucessos/Agendamentos. Recepção não entra neste bloco."
       />
 
       <PerformanceComparisonTable
         rows={comparisonSdrPreVenda}
         title="Comparação direta · Pré-Venda"
-        subtitle="Somente quem atendeu na Pré-Venda (SDR). % Visita = show-up (Vi/Ag) · % Sucesso = conv. ag→sucesso (Su/Ag)."
+        subtitle="Somente quem atendeu na Pré-Venda (SDR). Ordem: Allan → Thayna → Lais → Matheus → demais. Show-up (Vi/Ag) · Conv. ag→sucesso (Su/Ag)."
       />
 
       <SDRPerformanceTable

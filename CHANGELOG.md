@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.3] - 2026-10-19
+
+### Changed
+- Comparações / desempenho Pré-Venda: ordem fixa **Allan → Thayna → Lais → Matheus**, depois os demais
+
 ## [1.8.2] - 2026-10-19
 
 ### Changed

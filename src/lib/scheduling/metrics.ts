@@ -16,6 +16,37 @@ export function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
+/** Ordem preferencial dos SDRs de Pré-Venda nas tabelas/comparações. */
+const PRE_VENDA_SDR_PRIORITY = ["allan", "thayna", "lais", "matheus"] as const;
+
+function normalizePersonKey(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .trim();
+}
+
+/** Índice de prioridade (0…n-1); quem não está na lista vai para o fim. */
+export function preVendaSdrPriority(name: string): number {
+  const key = normalizePersonKey(name);
+  const idx = PRE_VENDA_SDR_PRIORITY.findIndex(
+    (prefix) => key === prefix || key.startsWith(`${prefix} `) || key.startsWith(prefix)
+  );
+  return idx === -1 ? PRE_VENDA_SDR_PRIORITY.length : idx;
+}
+
+/** Ordena SDRs: Allan → Thayna → Lais → Matheus → demais (critério secundário). */
+export function comparePreVendaSdrNames(
+  a: string,
+  b: string,
+  secondary: (a: string, b: string) => number = (x, y) => x.localeCompare(y, "pt-BR")
+): number {
+  const byPriority = preVendaSdrPriority(a) - preVendaSdrPriority(b);
+  if (byPriority !== 0) return byPriority;
+  return secondary(a, b);
+}
+
 /** Clientes da loja (Recepção/Gabriela) ficam fora do geral da pré-venda. */
 export function splitByCanal(items: AgendamentoItem[]): {
   preVenda: AgendamentoItem[];
@@ -212,7 +243,9 @@ export function buildSdrMetrics(items: AgendamentoItem[]): SdrMetrics[] {
         ),
       };
     })
-    .sort((a, b) => b.totalAgendamentos - a.totalAgendamentos);
+    .sort((a, b) =>
+      comparePreVendaSdrNames(a.sdr, b.sdr, () => b.totalAgendamentos - a.totalAgendamentos)
+    );
 }
 
 export function buildVendedorMetrics(items: AgendamentoItem[]): VendedorMetrics[] {
@@ -392,7 +425,7 @@ export function buildSdrComparisonRows(sdrs: SdrMetrics[]): ComparisonRow[] {
       financiamento: s.propostasBreakdown.Financiamento,
       naoInformado: s.propostasBreakdown["não informado(celulas em branco)"],
     }))
-    .sort((a, b) => b.total - a.total);
+    .sort((a, b) => comparePreVendaSdrNames(a.nome, b.nome, () => b.total - a.total));
 }
 
 /** Comparação direta só entre vendedores (um canal por tabela). */
@@ -508,7 +541,8 @@ export function buildSdrVendedorProposalRows(items: AgendamentoItem[]): SdrVende
 
   return rows.sort(
     (a, b) =>
-      a.sdr.localeCompare(b.sdr, "pt-BR") || a.vendedor.localeCompare(b.vendedor, "pt-BR")
+      comparePreVendaSdrNames(a.sdr, b.sdr) ||
+      a.vendedor.localeCompare(b.vendedor, "pt-BR")
   );
 }
 
