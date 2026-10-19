@@ -7,6 +7,7 @@ import {
   buildMotivosStats,
   buildPeriodSeries,
   buildProposalDistribution,
+  buildRecepcaoConsolidatedMetrics,
   buildSdrComparisonRows,
   buildSdrMetrics,
   buildSdrVendedorProposalRows,
@@ -44,7 +45,7 @@ export function useSchedulingAnalytics(
     const { preVenda, recepcao } = splitByCanal(filtered);
 
     const sdrPreVenda = buildSdrMetrics(preVenda);
-    const sdrRecepcao = buildSdrMetrics(recepcao);
+    const sdrRecepcao = buildRecepcaoConsolidatedMetrics(recepcao);
     const vendedorMetrics = buildVendedorMetrics(filtered);
 
     return {

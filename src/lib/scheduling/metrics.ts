@@ -1,5 +1,5 @@
 import { formatPeriodLabel } from "../dates";
-import { emptyPropostasBreakdown } from "./normalize";
+import { emptyPropostasBreakdown, isRecepcaoName } from "./normalize";
 import type {
   AgendamentoItem,
   CanalAtendimento,
@@ -16,27 +16,40 @@ export function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
-/** Ordem preferencial dos SDRs de Pré-Venda nas tabelas/comparações. */
-const PRE_VENDA_SDR_PRIORITY = ["allan", "thayna", "lais", "matheus"] as const;
+/**
+ * Ordem exata dos SDRs de Pré-Venda nas comparações/desempenho.
+ * Chaves normalizadas (sem acento, pontuação → espaço).
+ */
+const PRE_VENDA_SDR_PRIORITY_KEYS = [
+  "allan junior dos santos ramos",
+  "thayna pre vendas",
+  "lais narima ferreira vieira",
+  "matheus imbroinise",
+] as const;
 
 function normalizePersonKey(name: string): string {
   return name
     .normalize("NFD")
     .replace(/\p{M}/gu, "")
     .toLowerCase()
-    .trim();
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+/** Nome exibido: Gabriela (e similares) → Recepção. */
+export function displaySdrName(sdr: string): string {
+  return isRecepcaoName(sdr) ? "Recepção" : sdr;
 }
 
 /** Índice de prioridade (0…n-1); quem não está na lista vai para o fim. */
 export function preVendaSdrPriority(name: string): number {
   const key = normalizePersonKey(name);
-  const idx = PRE_VENDA_SDR_PRIORITY.findIndex(
-    (prefix) => key === prefix || key.startsWith(`${prefix} `) || key.startsWith(prefix)
-  );
-  return idx === -1 ? PRE_VENDA_SDR_PRIORITY.length : idx;
+  const idx = PRE_VENDA_SDR_PRIORITY_KEYS.findIndex((k) => k === key);
+  return idx === -1 ? PRE_VENDA_SDR_PRIORITY_KEYS.length : idx;
 }
 
-/** Ordena SDRs: Allan → Thayna → Lais → Matheus → demais (critério secundário). */
+/** Ordena SDRs pela lista fixa de Pré-Venda, depois critério secundário. */
 export function comparePreVendaSdrNames(
   a: string,
   b: string,
@@ -73,7 +86,13 @@ export function filterAgendamentos(
   const qDigits = q ? digitsOnly(q) : "";
 
   return items.filter((item) => {
-    if (filters.sdr && item.sdr !== filters.sdr) return false;
+    if (filters.sdr) {
+      if (filters.sdr === "Recepção") {
+        if (!isRecepcaoName(item.sdr)) return false;
+      } else if (item.sdr !== filters.sdr) {
+        return false;
+      }
+    }
     if (filters.tipoProposta && item.tipoProposta !== filters.tipoProposta) return false;
     if (filters.vendedor && item.vendedor !== filters.vendedor) return false;
     if (filters.origem && item.origem !== filters.origem) return false;
@@ -90,7 +109,9 @@ export function filterAgendamentos(
 }
 
 export function getSchedulingFilterOptions(items: AgendamentoItem[]) {
-  const sdrs = [...new Set(items.map((i) => i.sdr))].sort();
+  const sdrs = [
+    ...new Set(items.map((i) => displaySdrName(i.sdr))),
+  ].sort((a, b) => comparePreVendaSdrNames(a, b));
   const vendedores = [...new Set(items.map((i) => i.vendedor))].sort();
   const tipos = [...new Set(items.map((i) => i.tipoProposta))].sort() as TipoProposta[];
   const origens = [...new Set(items.map((i) => i.origem).filter(Boolean))].sort((a, b) =>
@@ -135,14 +156,15 @@ export type MotivoByPersonRow = {
   motivos: MotivoStats[];
 };
 
-/** Insucessos agrupados por SDR (Atendido por). */
+/** Insucessos agrupados por SDR (Atendido por). Recepção+Gabriela → "Recepção". */
 export function buildMotivosBySdr(items: AgendamentoItem[]): MotivoByPersonRow[] {
   const closed = items.filter((i) => i.status === "Insucesso");
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of closed) {
-    const list = groups.get(item.sdr) || [];
+    const nome = displaySdrName(item.sdr);
+    const list = groups.get(nome) || [];
     list.push(item);
-    groups.set(item.sdr, list);
+    groups.set(nome, list);
   }
   return [...groups.entries()]
     .map(([nome, list]) => ({
@@ -150,7 +172,9 @@ export function buildMotivosBySdr(items: AgendamentoItem[]): MotivoByPersonRow[]
       totalInsucessos: list.length,
       motivos: buildMotivosStats(list),
     }))
-    .sort((a, b) => b.totalInsucessos - a.totalInsucessos);
+    .sort((a, b) =>
+      comparePreVendaSdrNames(a.nome, b.nome, () => b.totalInsucessos - a.totalInsucessos)
+    );
 }
 
 /** Insucessos agrupados por vendedor. */
@@ -213,6 +237,33 @@ function origensFrom(list: AgendamentoItem[]): OrigemStats[] {
     .sort((a, b) => b.quantidade - a.quantidade);
 }
 
+function metricsFromSdrGroup(
+  sdr: string,
+  list: AgendamentoItem[],
+  canal: CanalAtendimento
+): SdrMetrics {
+  const totalAgendamentos = list.length;
+  const totalVisitas = list.filter((i) => i.teveVisita).length;
+  const totalSucesso = list.filter((i) => i.status === "Sucesso").length;
+  const totalInsucesso = list.filter((i) => i.status === "Insucesso").length;
+  return {
+    sdr,
+    canal,
+    totalAgendamentos,
+    propostasBreakdown: breakdownPropostas(list),
+    totalVisitas,
+    totalSucesso,
+    totalInsucesso,
+    taxaConversaoVisita: round2(
+      totalAgendamentos ? (totalVisitas / totalAgendamentos) * 100 : 0
+    ),
+    taxaConversaoSucesso: round2(
+      totalAgendamentos ? (totalSucesso / totalAgendamentos) * 100 : 0
+    ),
+  };
+}
+
+/** Métricas por SDR (Pré-Venda): uma linha por atendente, ordem fixa da equipe. */
 export function buildSdrMetrics(items: AgendamentoItem[]): SdrMetrics[] {
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of items) {
@@ -222,30 +273,21 @@ export function buildSdrMetrics(items: AgendamentoItem[]): SdrMetrics[] {
   }
 
   return [...groups.entries()]
-    .map(([sdr, list]) => {
-      const totalAgendamentos = list.length;
-      const totalVisitas = list.filter((i) => i.teveVisita).length;
-      const totalSucesso = list.filter((i) => i.status === "Sucesso").length;
-      const totalInsucesso = list.filter((i) => i.status === "Insucesso").length;
-      return {
-        sdr,
-        canal: list[0]?.canal || "Pré-Venda",
-        totalAgendamentos,
-        propostasBreakdown: breakdownPropostas(list),
-        totalVisitas,
-        totalSucesso,
-        totalInsucesso,
-        taxaConversaoVisita: round2(
-          totalAgendamentos ? (totalVisitas / totalAgendamentos) * 100 : 0
-        ),
-        taxaConversaoSucesso: round2(
-          totalAgendamentos ? (totalSucesso / totalAgendamentos) * 100 : 0
-        ),
-      };
-    })
+    .map(([sdr, list]) =>
+      metricsFromSdrGroup(sdr, list, list[0]?.canal || "Pré-Venda")
+    )
     .sort((a, b) =>
       comparePreVendaSdrNames(a.sdr, b.sdr, () => b.totalAgendamentos - a.totalAgendamentos)
     );
+}
+
+/**
+ * Desempenho/comparação Recepção: soma Recepção + Gabriela (e equivalentes)
+ * e apresenta uma única linha "Recepção".
+ */
+export function buildRecepcaoConsolidatedMetrics(items: AgendamentoItem[]): SdrMetrics[] {
+  if (items.length === 0) return [];
+  return [metricsFromSdrGroup("Recepção", items, "Recepção")];
 }
 
 export function buildVendedorMetrics(items: AgendamentoItem[]): VendedorMetrics[] {

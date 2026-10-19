@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.4] - 2026-10-19
+
+### Changed
+- Pré-Venda: ordem exata **Allan Junior Dos Santos Ramos → Thayna PRE-VENDAS → Lais Narimã Ferreira Vieira → Matheus Imbroinise → demais**
+- Recepção: desempenho e comparação somam o canal em **uma linha “Recepção”** (Gabriela entra no total, sem rótulo próprio)
+
 ## [1.8.3] - 2026-10-19
 
 ### Changed

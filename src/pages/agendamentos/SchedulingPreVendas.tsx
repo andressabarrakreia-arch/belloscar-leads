@@ -19,25 +19,25 @@ export function SchedulingPreVendas() {
       <SDRPerformanceTable
         rows={sdrPreVenda}
         title="Desempenho Pré-Vendas"
-        subtitle="Por SDR — ordem Allan → Thayna → Lais → Matheus → demais. Show-up = Visitas/Agendamentos · Conv. = Sucessos/Agendamentos. Recepção não entra neste bloco."
+        subtitle="Ordem: Allan Junior Dos Santos Ramos → Thayna PRE-VENDAS → Lais Narimã Ferreira Vieira → Matheus Imbroinise → demais. Show-up = Visitas/Agendamentos · Conv. = Sucessos/Agendamentos. Recepção não entra neste bloco."
       />
 
       <PerformanceComparisonTable
         rows={comparisonSdrPreVenda}
         title="Comparação direta · Pré-Venda"
-        subtitle="Somente quem atendeu na Pré-Venda (SDR). Ordem: Allan → Thayna → Lais → Matheus → demais. Show-up (Vi/Ag) · Conv. ag→sucesso (Su/Ag)."
+        subtitle="Somente quem atendeu na Pré-Venda (SDR). Ordem fixa da equipe web, depois os demais. Show-up (Vi/Ag) · Conv. ag→sucesso (Su/Ag)."
       />
 
       <SDRPerformanceTable
         rows={sdrRecepcao}
         title="Desempenho Recepção (à parte)"
-        subtitle="Atendimentos da Recepção — totais e taxas próprios, fora do geral da pré-venda."
+        subtitle="Canal Recepção consolidado (inclui todos os atendimentos desse canal em uma única linha)."
       />
 
       <PerformanceComparisonTable
         rows={comparisonSdrRecepcao}
         title="Comparação direta · Recepção"
-        subtitle="Somente canal Recepção. Resultados dos vendedores estão na aba Vendedores."
+        subtitle="Uma linha consolidada do canal Recepção. Resultados dos vendedores estão na aba Vendedores."
       />
     </>
   );
