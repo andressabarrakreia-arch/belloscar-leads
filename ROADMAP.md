@@ -41,7 +41,8 @@
 - [x] Base inicial de agendamentos publicada (cruzamento AGENDAMENTOS + INSUCESSOS + LEADS GERAL)
 - [x] Spec de reestruturação em abas (`docs/REESTRUTURACAO_ABAS.md`) — arquitetura, métricas, prompt mestre
 - [x] **Fase 1 UI:** abas em `#/agendamentos` (Visão Geral, Pré-Vendas, Vendedores, Detalhe, Insucessos)
-- [ ] **Fase 2:** Portais / UTMs no módulo `#/campanhas`
+- [x] Aba **Portais** em `#/agendamentos/portais` (origem/canal + grupos; sem UTM/custo)
+- [ ] **Fase 2:** UTMs / tráfego pago no módulo `#/campanhas`
 - [ ] Próximos módulos com públicos/links próprios
 
 ## Backlog — próximos módulos e integrações (não esquecer)

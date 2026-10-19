@@ -43,6 +43,7 @@ https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
 | Pré-Vendas | `#/agendamentos/pre-vendas` |
 | Vendedores | `#/agendamentos/vendedores` |
 | Agendamentos (detalhe) | `#/agendamentos/detalhe` |
+| Portais | `#/agendamentos/portais` |
 | Insucessos | `#/agendamentos/insucessos` |
 | Gestão | `#/agendamentos/admin` |
 

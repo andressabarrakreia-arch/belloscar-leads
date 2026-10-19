@@ -16,6 +16,7 @@ import {
   getSchedulingFilterOptions,
   splitByCanal,
 } from "../lib/scheduling/metrics";
+import { buildPortalDashboard } from "../lib/scheduling/portalMetrics";
 import { loadSchedulingDataset } from "../lib/scheduling/storage";
 import type { SchedulingDataset, SchedulingFilters } from "../lib/scheduling/types";
 
@@ -70,6 +71,7 @@ export function useSchedulingAnalytics(
       motivosInsucesso: buildMotivosStats(filtered),
       motivosBySdr: buildMotivosBySdr(filtered),
       motivosByVendedor: buildMotivosByVendedor(filtered),
+      portais: buildPortalDashboard(filtered),
     };
   }, [dataset, filters]);
 }

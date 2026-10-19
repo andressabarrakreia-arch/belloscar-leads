@@ -182,10 +182,16 @@ Reutilizar padrão `filters--sticky` já existente.
 
 ---
 
-## 6. Fase 2 — `#/campanhas` (Portais & UTMs)
+## 6. Portais & UTMs
 
-- Portais: volume → visitas → sucessos → taxa (dataset campanhas).  
-- Agrupar aliases Meta/Social (lista explícita no código).  
+### Portais (implementado) — `#/agendamentos/portais`
+
+- Parse origem/canal (`src/lib/scheduling/portalOrigin.ts`) + métricas (`portalMetrics.ts`).  
+- Grupos expansíveis; multi-origem conta em cada portal.  
+- Sem custo / sem funil lead→agendamento / sem UTM.
+
+### Fase 2 — `#/campanhas` (UTMs)
+
 - UTMs: planilha LEADS POR UTM / enriquecimento — funil exclusivo tráfego pago.  
 - Links e admin **permanecem** sob `#/campanhas`.  
 - Não misturar storage com `agendamentos_*`.

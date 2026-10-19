@@ -9,6 +9,7 @@ import { SchedulingAdmin } from "./pages/agendamentos/SchedulingAdmin";
 import { SchedulingDetalhe } from "./pages/agendamentos/SchedulingDetalhe";
 import { SchedulingInsucessos } from "./pages/agendamentos/SchedulingInsucessos";
 import { SchedulingOverview } from "./pages/agendamentos/SchedulingOverview";
+import { SchedulingPortais } from "./pages/agendamentos/SchedulingPortais";
 import { SchedulingPreVendas } from "./pages/agendamentos/SchedulingPreVendas";
 import { SchedulingShell } from "./pages/agendamentos/SchedulingShell";
 import { SchedulingVendedores } from "./pages/agendamentos/SchedulingVendedores";
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="pre-vendas" element={<SchedulingPreVendas />} />
             <Route path="vendedores" element={<SchedulingVendedores />} />
             <Route path="detalhe" element={<SchedulingDetalhe />} />
+            <Route path="portais" element={<SchedulingPortais />} />
             <Route path="insucessos" element={<SchedulingInsucessos />} />
           </Route>
           <Route path="admin" element={<SchedulingAdmin />} />

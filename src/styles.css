@@ -803,6 +803,19 @@ tr:hover td {
   font-weight: 700;
 }
 
+.portal-group-row td {
+  background: rgba(247, 248, 250, 0.9);
+}
+
+.portal-detail h3 {
+  margin-top: 0;
+}
+
+.portal-detail h4 {
+  margin: 16px 0 8px;
+  font-size: 0.95rem;
+}
+
 .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

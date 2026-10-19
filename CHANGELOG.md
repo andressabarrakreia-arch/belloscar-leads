@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.6] - 2026-10-19
+
+### Added
+- Aba **Portais** `#/agendamentos/portais`: parse origem/canal, grupos expansíveis, ranking, detalhe (canais, propostas, tops, motivos) e série dos top 5
+
 ## [1.8.5] - 2026-10-19
 
 ### Changed

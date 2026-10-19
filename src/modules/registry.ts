@@ -49,6 +49,7 @@ export const MODULES: AppModule[] = [
       { to: "/agendamentos/pre-vendas", label: "Pré-Vendas" },
       { to: "/agendamentos/vendedores", label: "Vendedores" },
       { to: "/agendamentos/detalhe", label: "Agendamentos" },
+      { to: "/agendamentos/portais", label: "Portais" },
       { to: "/agendamentos/insucessos", label: "Insucessos" },
       { to: "/agendamentos/admin", label: "Gestão", adminOnly: true },
     ],

@@ -33,6 +33,7 @@ Agendamentos Visão Geral=https://andressabarrakreia-arch.github.io/belloscar-le
 Agendamentos Pré-Vendas=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/pre-vendas
 Agendamentos Vendedores=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/vendedores
 Agendamentos Detalhe=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/detalhe
+Agendamentos Portais=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/portais
 Agendamentos Insucessos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/insucessos
 Agendamentos Gestão=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
 ```
