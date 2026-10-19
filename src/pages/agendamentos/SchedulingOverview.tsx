@@ -28,7 +28,7 @@ export function SchedulingOverview() {
       <CanalKpiGrid
         kpis={kpisRecepcao}
         title="Recepção · visão geral (à parte)"
-        subtitle="Clientes que chegaram direto na loja (Recepção e Gabriela). Taxas: show-up = Visitas/Agendamentos · conv. = Sucessos/Agendamentos."
+        subtitle="Clientes atendidos pela Recepção (sem pré-atendimento da equipe web). Taxas: show-up = Visitas/Agendamentos · conv. = Sucessos/Agendamentos."
         accent
       />
 
@@ -96,7 +96,7 @@ export function SchedulingOverview() {
         <ProposalDistributionChart
           data={proposalsRecepcao}
           title="Propostas · Recepção"
-          subtitle="Mix só da Recepção / loja."
+          subtitle="Mix só do canal Recepção."
         />
         <TimeSeriesChart
           data={periodSeriesRecepcao.map((p) => ({

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.2] - 2026-10-19
+
+### Changed
+- UI de Agendamentos: canal exibido só como **Recepção** (Gabriela continua na regra de classificação, sem aparecer nos textos da página)
+
 ## [1.8.1] - 2026-10-19
 
 ### Changed

@@ -48,7 +48,7 @@ export function SchedulingVendedores() {
       <PerformanceComparisonTable
         rows={filteredComparisons.recepcao}
         title="Comparação direta entre vendedores · Recepção"
-        subtitle={`${scopeHint} Somente canal Recepção (loja) — totais e taxas próprios.`}
+        subtitle={`${scopeHint} Somente canal Recepção — totais e taxas próprios.`}
       />
     </>
   );

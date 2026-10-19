@@ -31,13 +31,13 @@ export function SchedulingPreVendas() {
       <SDRPerformanceTable
         rows={sdrRecepcao}
         title="Desempenho Recepção (à parte)"
-        subtitle="Atendimentos Recepção e Gabriela — totais e taxas próprios, fora do geral da pré-venda."
+        subtitle="Atendimentos da Recepção — totais e taxas próprios, fora do geral da pré-venda."
       />
 
       <PerformanceComparisonTable
         rows={comparisonSdrRecepcao}
         title="Comparação direta · Recepção"
-        subtitle="Somente Recepção / Gabriela. Resultados dos vendedores estão na aba Vendedores."
+        subtitle="Somente canal Recepção. Resultados dos vendedores estão na aba Vendedores."
       />
     </>
   );

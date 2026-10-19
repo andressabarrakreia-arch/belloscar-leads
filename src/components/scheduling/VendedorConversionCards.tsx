@@ -88,8 +88,8 @@ function DetailBlock({
     ? "Pré-Venda (geral de todos os vendedores)"
     : "Pré-Venda (geral do vendedor)";
   const recTitle = isAll
-    ? "Recepção (à parte — loja / Gabriela · todos)"
-    : "Recepção (à parte — loja / Gabriela)";
+    ? "Recepção (à parte · todos)"
+    : "Recepção (à parte)";
 
   return (
     <div className="stack">

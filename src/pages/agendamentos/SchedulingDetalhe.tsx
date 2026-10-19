@@ -22,7 +22,7 @@ export function SchedulingDetalhe() {
         <ProposalDistributionChart
           data={proposalsRecepcao}
           title="Tipos de proposta · Recepção"
-          subtitle="Rosca do mix de propostas na Recepção / loja (filtro atual)."
+          subtitle="Rosca do mix de propostas no canal Recepção (filtro atual)."
         />
       </div>
     </>
