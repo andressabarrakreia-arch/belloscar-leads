@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.10] - 2026-10-19
+
+### Added
+- Spec de reestruturação em abas: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md) (arquitetura, contrato de métricas, prompt mestre, fases)
+- Catálogo: rotas planejadas das abas de Agendamentos (Fase 1)
+
 ## [1.7.9] - 2026-10-17
 
 ### Changed

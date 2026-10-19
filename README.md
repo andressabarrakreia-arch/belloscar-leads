@@ -7,7 +7,8 @@ Hub **estático** de análises da BellosCar (Curitiba), organizado em **páginas
 - Dados por módulo em `public/data/`  
 - GitHub Pages + HashRouter  
 
-Catálogo completo: [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md) (`nome=link`).
+Catálogo completo: [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md) (`nome=link`).  
+Spec abas (próxima evolução de Agendamentos): [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md).
 
 ## Análise de Campanhas
 

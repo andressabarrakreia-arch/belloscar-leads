@@ -33,5 +33,15 @@ Agendamentos Dashboard=https://andressabarrakreia-arch.github.io/belloscar-leads
 Agendamentos Gestão=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
 ```
 
+### Planejado (Fase 1 — abas; ver `docs/REESTRUTURACAO_ABAS.md`)
+
+```
+Agendamentos Visão Geral=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
+Agendamentos Pré-Vendas=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/pre-vendas
+Agendamentos Vendedores=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/vendedores
+Agendamentos Detalhe=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/detalhe
+Agendamentos Insucessos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/insucessos
+```
+
 Fonte de verdade das rotas: `src/modules/registry.ts`.
 Manter este arquivo sincronizado ao criar ou renomear módulos.

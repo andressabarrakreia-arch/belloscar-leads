@@ -39,15 +39,20 @@
 - [x] Dashboard Campanhas enriquecido (funil, quinzena vs anterior, tempo até visita, tops)
 - [x] Módulo **Análise de Agendamentos** (`#/agendamentos`) + catálogo + regras de reuso/isolamento/dedupe
 - [x] Base inicial de agendamentos publicada (cruzamento AGENDAMENTOS + INSUCESSOS + LEADS GERAL)
+- [x] Spec de reestruturação em abas (`docs/REESTRUTURACAO_ABAS.md`) — arquitetura, métricas, prompt mestre
+- [ ] **Fase 1 UI:** abas em `#/agendamentos` (Visão Geral, Pré-Vendas, Vendedores, Detalhe, Insucessos)
+- [ ] **Fase 2:** Portais / UTMs no módulo `#/campanhas`
 - [ ] Próximos módulos com públicos/links próprios
 
 ## Backlog — próximos módulos e integrações (não esquecer)
 
 Cada item abaixo deve ser um **módulo/página com link próprio** (`#/<modulo>`), público distinto quando necessário.
 
+Spec detalhada: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md).
+
 ### Páginas / módulos
 
-- [ ] **Análise de Portais** — módulo `#/portais` (link de acesso separado da equipe de portais)
+- [ ] **Análise de Portais** — módulo `#/portais` (link de acesso separado da equipe de portais) *ou* aba em Campanhas (Fase 2)
 - [ ] **Fechamento mensal de Web** — módulo `#/fechamento-web` (link próprio)
 - [ ] **Fechamento mensal de Vendas** — módulo `#/fechamento-vendas` (link próprio)
 
