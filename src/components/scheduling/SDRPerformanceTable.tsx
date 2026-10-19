@@ -25,8 +25,8 @@ export function SDRPerformanceTable({ rows, title, subtitle }: Props) {
               <th>N/I</th>
               <th>Visitas</th>
               <th>Sucessos</th>
-              <th>% Visita</th>
-              <th>% Sucesso</th>
+              <th>Show-up (Vi/Ag)</th>
+              <th>Conv. (Su/Ag)</th>
             </tr>
           </thead>
           <tbody>

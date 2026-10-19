@@ -239,15 +239,15 @@ reaproveitamento máximo dos componentes scheduling existentes.
 
 ## 9. Checklist de aceite — Fase 1
 
-- [ ] Abas com URL própria (HashRouter)  
-- [ ] Filtros sticky afetam todas as abas  
-- [ ] Pré-Venda e Recepção com totais separados  
-- [ ] Fórmulas de % rotuladas com denominador  
-- [ ] SDR × Vendedor ordenado por SDR  
-- [ ] Insucessos: donut + cruzamento; 100% com motivo na base  
-- [ ] Admin e import intactos  
-- [ ] Catálogo e changelog atualizados  
-- [ ] Build `npm run build` OK  
+- [x] Abas com URL própria (HashRouter)  
+- [x] Filtros sticky afetam todas as abas  
+- [x] Pré-Venda e Recepção com totais separados  
+- [x] Fórmulas de % rotuladas com denominador  
+- [x] SDR × Vendedor ordenado por SDR  
+- [x] Insucessos: donut + cruzamento; 100% com motivo na base  
+- [x] Admin e import intactos  
+- [x] Catálogo e changelog atualizados  
+- [x] Build `npm run build` OK  
 
 ---
 
@@ -256,5 +256,5 @@ reaproveitamento máximo dos componentes scheduling existentes.
 | Item | Estado |
 |------|--------|
 | Spec / prompt / métricas | **Documentado** (este arquivo) |
-| Implementação UI abas Fase 1 | Pendente (próximo ciclo de Agent) |
+| Implementação UI abas Fase 1 | **Implementado** (branch `feat/abas-agendamentos`) |
 | Fase 2 Campanhas/UTMs | Pendente |

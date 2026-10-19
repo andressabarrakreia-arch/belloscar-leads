@@ -6,12 +6,17 @@ import { Attendants } from "./pages/Attendants";
 import { Compare } from "./pages/Compare";
 import { Dashboard } from "./pages/Dashboard";
 import { SchedulingAdmin } from "./pages/agendamentos/SchedulingAdmin";
-import { SchedulingAnalysis } from "./pages/agendamentos/SchedulingAnalysis";
+import { SchedulingDetalhe } from "./pages/agendamentos/SchedulingDetalhe";
+import { SchedulingInsucessos } from "./pages/agendamentos/SchedulingInsucessos";
+import { SchedulingOverview } from "./pages/agendamentos/SchedulingOverview";
+import { SchedulingPreVendas } from "./pages/agendamentos/SchedulingPreVendas";
+import { SchedulingShell } from "./pages/agendamentos/SchedulingShell";
+import { SchedulingVendedores } from "./pages/agendamentos/SchedulingVendedores";
 
 /**
  * Módulos com rotas e links distintos.
  * Análise de Campanhas: #/campanhas
- * Análise de Agendamentos: #/agendamentos
+ * Análise de Agendamentos: #/agendamentos (+ abas internas)
  */
 export default function App() {
   return (
@@ -27,7 +32,13 @@ export default function App() {
         </Route>
 
         <Route path="agendamentos" element={<ModuleLayout module={AGENDAMENTOS} />}>
-          <Route index element={<SchedulingAnalysis />} />
+          <Route element={<SchedulingShell />}>
+            <Route index element={<SchedulingOverview />} />
+            <Route path="pre-vendas" element={<SchedulingPreVendas />} />
+            <Route path="vendedores" element={<SchedulingVendedores />} />
+            <Route path="detalhe" element={<SchedulingDetalhe />} />
+            <Route path="insucessos" element={<SchedulingInsucessos />} />
+          </Route>
           <Route path="admin" element={<SchedulingAdmin />} />
         </Route>
 

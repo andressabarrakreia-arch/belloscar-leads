@@ -8,7 +8,7 @@ Hub **estático** de análises da BellosCar (Curitiba), organizado em **páginas
 - GitHub Pages + HashRouter  
 
 Catálogo completo: [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md) (`nome=link`).  
-Spec abas (próxima evolução de Agendamentos): [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md).
+Spec / abas Agendamentos: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md).
 
 ## Análise de Campanhas
 
@@ -39,7 +39,11 @@ https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
 
 | Página | Link |
 |--------|------|
-| Dashboard | `#/agendamentos` |
+| Visão Geral | `#/agendamentos` |
+| Pré-Vendas | `#/agendamentos/pre-vendas` |
+| Vendedores | `#/agendamentos/vendedores` |
+| Agendamentos (detalhe) | `#/agendamentos/detalhe` |
+| Insucessos | `#/agendamentos/insucessos` |
 | Gestão | `#/agendamentos/admin` |
 
 Dataset isolado: [`public/data/agendamentos-dataset.json`](public/data/agendamentos-dataset.json)  

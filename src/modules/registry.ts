@@ -45,7 +45,11 @@ export const MODULES: AppModule[] = [
     tagline: "Pré-venda, recepção, vendedores e motivos de insucesso · Vendas Web",
     publicPath: "/agendamentos",
     nav: [
-      { to: "/agendamentos", label: "Dashboard", end: true },
+      { to: "/agendamentos", label: "Visão Geral", end: true },
+      { to: "/agendamentos/pre-vendas", label: "Pré-Vendas" },
+      { to: "/agendamentos/vendedores", label: "Vendedores" },
+      { to: "/agendamentos/detalhe", label: "Agendamentos" },
+      { to: "/agendamentos/insucessos", label: "Insucessos" },
       { to: "/agendamentos/admin", label: "Gestão", adminOnly: true },
     ],
   },

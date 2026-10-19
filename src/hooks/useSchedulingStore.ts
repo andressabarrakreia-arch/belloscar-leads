@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   buildCanalKpis,
+  buildInsucessoKpis,
+  buildMotivosBySdr,
+  buildMotivosByVendedor,
+  buildMotivosStats,
   buildPeriodSeries,
   buildProposalDistribution,
   buildSdrComparisonRows,
@@ -65,6 +69,10 @@ export function useSchedulingAnalytics(
       proposalsRecepcao: buildProposalDistribution(recepcao),
       periodSeriesPreVenda: buildPeriodSeries(preVenda),
       periodSeriesRecepcao: buildPeriodSeries(recepcao),
+      insucessoKpis: buildInsucessoKpis(filtered),
+      motivosInsucesso: buildMotivosStats(filtered),
+      motivosBySdr: buildMotivosBySdr(filtered),
+      motivosByVendedor: buildMotivosByVendedor(filtered),
     };
   }, [dataset, filters]);
 }

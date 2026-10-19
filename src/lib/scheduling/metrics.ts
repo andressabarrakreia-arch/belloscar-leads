@@ -30,16 +30,30 @@ export function splitByCanal(items: AgendamentoItem[]): {
   return { preVenda, recepcao };
 }
 
+function digitsOnly(value: string): string {
+  return value.replace(/\D/g, "");
+}
+
 export function filterAgendamentos(
   items: AgendamentoItem[],
   filters: SchedulingFilters
 ): AgendamentoItem[] {
+  const q = filters.q?.trim().toLowerCase();
+  const qDigits = q ? digitsOnly(q) : "";
+
   return items.filter((item) => {
     if (filters.sdr && item.sdr !== filters.sdr) return false;
     if (filters.tipoProposta && item.tipoProposta !== filters.tipoProposta) return false;
     if (filters.vendedor && item.vendedor !== filters.vendedor) return false;
+    if (filters.origem && item.origem !== filters.origem) return false;
     if (filters.from && item.dataAgendamento < filters.from) return false;
     if (filters.to && item.dataAgendamento > filters.to) return false;
+    if (q) {
+      const idHit = item.id.toLowerCase().includes(q);
+      const nomeHit = item.cliente.toLowerCase().includes(q);
+      const phoneHit = qDigits.length > 0 && digitsOnly(item.celular).includes(qDigits);
+      if (!idHit && !nomeHit && !phoneHit) return false;
+    }
     return true;
   });
 }
@@ -48,7 +62,10 @@ export function getSchedulingFilterOptions(items: AgendamentoItem[]) {
   const sdrs = [...new Set(items.map((i) => i.sdr))].sort();
   const vendedores = [...new Set(items.map((i) => i.vendedor))].sort();
   const tipos = [...new Set(items.map((i) => i.tipoProposta))].sort() as TipoProposta[];
-  return { sdrs, vendedores, tipos };
+  const origens = [...new Set(items.map((i) => i.origem).filter(Boolean))].sort((a, b) =>
+    a.localeCompare(b, "pt-BR")
+  );
+  return { sdrs, vendedores, tipos, origens };
 }
 
 function breakdownPropostas(list: AgendamentoItem[]): PropostasBreakdown {
@@ -59,7 +76,8 @@ function breakdownPropostas(list: AgendamentoItem[]): PropostasBreakdown {
   return b;
 }
 
-function motivosFrom(list: AgendamentoItem[]): MotivoStats[] {
+/** Motivos de insucesso; % = qtd / total de insucessos do recorte. */
+export function buildMotivosStats(list: AgendamentoItem[]): MotivoStats[] {
   const closed = list.filter((i) => i.status === "Insucesso");
   const total = closed.length || 1;
   const map = new Map<string, number>();
@@ -74,6 +92,72 @@ function motivosFrom(list: AgendamentoItem[]): MotivoStats[] {
       percentual: round2((quantidade / total) * 100),
     }))
     .sort((a, b) => b.quantidade - a.quantidade);
+}
+
+function motivosFrom(list: AgendamentoItem[]): MotivoStats[] {
+  return buildMotivosStats(list);
+}
+
+export type MotivoByPersonRow = {
+  nome: string;
+  totalInsucessos: number;
+  motivos: MotivoStats[];
+};
+
+/** Insucessos agrupados por SDR (Atendido por). */
+export function buildMotivosBySdr(items: AgendamentoItem[]): MotivoByPersonRow[] {
+  const closed = items.filter((i) => i.status === "Insucesso");
+  const groups = new Map<string, AgendamentoItem[]>();
+  for (const item of closed) {
+    const list = groups.get(item.sdr) || [];
+    list.push(item);
+    groups.set(item.sdr, list);
+  }
+  return [...groups.entries()]
+    .map(([nome, list]) => ({
+      nome,
+      totalInsucessos: list.length,
+      motivos: buildMotivosStats(list),
+    }))
+    .sort((a, b) => b.totalInsucessos - a.totalInsucessos);
+}
+
+/** Insucessos agrupados por vendedor. */
+export function buildMotivosByVendedor(items: AgendamentoItem[]): MotivoByPersonRow[] {
+  const closed = items.filter((i) => i.status === "Insucesso");
+  const groups = new Map<string, AgendamentoItem[]>();
+  for (const item of closed) {
+    const nome = item.vendedor || "(sem vendedor)";
+    const list = groups.get(nome) || [];
+    list.push(item);
+    groups.set(nome, list);
+  }
+  return [...groups.entries()]
+    .map(([nome, list]) => ({
+      nome,
+      totalInsucessos: list.length,
+      motivos: buildMotivosStats(list),
+    }))
+    .sort((a, b) => b.totalInsucessos - a.totalInsucessos);
+}
+
+export type InsucessoKpis = {
+  agendamentos: number;
+  insucessos: number;
+  percentualInsucesso: number;
+  comMotivo: number;
+};
+
+export function buildInsucessoKpis(items: AgendamentoItem[]): InsucessoKpis {
+  const agendamentos = items.length;
+  const closed = items.filter((i) => i.status === "Insucesso");
+  const comMotivo = closed.filter((i) => i.motivoInsucesso?.trim()).length;
+  return {
+    agendamentos,
+    insucessos: closed.length,
+    percentualInsucesso: round2(agendamentos ? (closed.length / agendamentos) * 100 : 0),
+    comMotivo,
+  };
 }
 
 function origensFrom(list: AgendamentoItem[]): OrigemStats[] {

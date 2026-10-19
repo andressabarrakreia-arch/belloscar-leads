@@ -8,6 +8,10 @@ type Props = {
 };
 
 export function CanalKpiGrid({ kpis, title, subtitle, accent }: Props) {
+  const pctInsucesso = kpis.total
+    ? Math.round((kpis.insucessos / kpis.total) * 1000) / 10
+    : 0;
+
   return (
     <div className="card">
       <h2>{title}</h2>
@@ -16,26 +20,22 @@ export function CanalKpiGrid({ kpis, title, subtitle, accent }: Props) {
         <div className={`kpi-card ${accent ? "accent" : ""}`}>
           <h3>Agendamentos</h3>
           <p>{kpis.total}</p>
+          <small className="muted">universo do canal</small>
         </div>
         <div className="kpi-card">
           <h3>Visitas</h3>
           <p>{kpis.visitas}</p>
-        </div>
-        <div className="kpi-card">
-          <h3>Taxa visita</h3>
-          <p>{kpis.taxaVisita}%</p>
+          <small className="muted">show-up {kpis.taxaVisita}% · Vi/Ag</small>
         </div>
         <div className="kpi-card success">
           <h3>Sucessos</h3>
           <p>{kpis.sucessos}</p>
-        </div>
-        <div className="kpi-card success">
-          <h3>Taxa sucesso</h3>
-          <p>{kpis.taxaSucesso}%</p>
+          <small className="muted">conv. {kpis.taxaSucesso}% · Su/Ag</small>
         </div>
         <div className="kpi-card">
           <h3>Insucessos</h3>
           <p>{kpis.insucessos}</p>
+          <small className="muted">{pctInsucesso}% · Ins/Ag</small>
         </div>
       </div>
     </div>

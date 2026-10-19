@@ -53,6 +53,9 @@ export type SchedulingFilters = {
   sdr?: string;
   tipoProposta?: TipoProposta | "";
   vendedor?: string;
+  origem?: string;
+  /** Busca rápida: id, nome do cliente ou telefone */
+  q?: string;
 };
 
 export type PropostasBreakdown = Record<TipoProposta, number>;

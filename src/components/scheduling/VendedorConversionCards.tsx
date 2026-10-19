@@ -143,6 +143,17 @@ export function VendedorConversionCards({ rows }: Props) {
               <div className="kpi-card success">
                 <h3>Conv. Pré-Venda</h3>
                 <p>{v.conversaoPreVenda}%</p>
+                <small className="muted">Su/Recebidos PV</small>
+              </div>
+              <div className="kpi-card">
+                <h3>Fechamento salão</h3>
+                <p>
+                  {v.totalVisitas
+                    ? Math.round((v.totalSucesso / v.totalVisitas) * 1000) / 10
+                    : 0}
+                  %
+                </p>
+                <small className="muted">Su/Visitas PV</small>
               </div>
             </div>
 
@@ -176,12 +187,24 @@ export function VendedorConversionCards({ rows }: Props) {
                 <p>{v.insucessosRecepcao}</p>
               </div>
               <div className="kpi-card">
-                <h3>% Visita</h3>
+                <h3>Show-up Rec</h3>
                 <p>{v.taxaVisitaRecepcao}%</p>
+                <small className="muted">Vi/Recebidos Rec</small>
               </div>
               <div className="kpi-card success">
-                <h3>% Sucesso</h3>
+                <h3>Conv. Recepção</h3>
                 <p>{v.conversaoRecepcao}%</p>
+                <small className="muted">Su/Recebidos Rec</small>
+              </div>
+              <div className="kpi-card">
+                <h3>Fechamento salão Rec</h3>
+                <p>
+                  {v.visitasRecepcao
+                    ? Math.round((v.sucessoRecepcao / v.visitasRecepcao) * 1000) / 10
+                    : 0}
+                  %
+                </p>
+                <small className="muted">Su/Visitas Rec</small>
               </div>
             </div>
 

@@ -324,6 +324,66 @@ select {
   font-weight: 600;
 }
 
+.filters__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+  grid-column: 1 / -1;
+}
+
+.filters__search {
+  min-width: 180px;
+  flex: 1 1 180px;
+}
+
+.funnel-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.funnel-step {
+  flex: 1 1 120px;
+  min-width: 110px;
+  padding: 14px 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff, #f7f8fa);
+  border: 1px solid rgba(228, 229, 232, 0.95);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.funnel-step strong {
+  font-size: 1.55rem;
+  line-height: 1.1;
+  color: var(--brand-charcoal);
+}
+
+.funnel-step span {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.funnel-step--success {
+  border-color: rgba(22, 163, 74, 0.35);
+  background: linear-gradient(180deg, #f0fdf4, #fff);
+}
+
+.funnel-step--exit {
+  border-color: rgba(192, 32, 38, 0.28);
+  background: linear-gradient(180deg, #fff5f5, #fff);
+}
+
+.funnel-arrow {
+  align-self: center;
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .filters::before {
   content: "";
   position: absolute;

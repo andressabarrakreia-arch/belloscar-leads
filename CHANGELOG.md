@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.8.0] - 2026-10-19
+
+### Added
+- Fase 1 UI: abas em `#/agendamentos` com deep links (Visão Geral, Pré-Vendas, Vendedores, Detalhe, Insucessos)
+- Filtros sticky compartilhados entre abas (origem, busca rápida, presets de período)
+- Aba Insucessos: KPIs, donut de motivos, cruzamento por SDR e vendedor
+
+### Changed
+- Nav do módulo Agendamentos passa a listar as abas + Gestão
+- Labels de % com denominador (show-up Vi/Ag, conv. Su/Ag, fechamento de salão Su/Vi)
+
 ## [1.7.10] - 2026-10-19
 
 ### Added

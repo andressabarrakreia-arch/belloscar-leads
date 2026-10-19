@@ -26,14 +26,7 @@ Campanhas Atendentes=https://andressabarrakreia-arch.github.io/belloscar-leads/#
 Campanhas Comparar=https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/comparar
 ```
 
-## Subpáginas — Análise de Agendamentos
-
-```
-Agendamentos Dashboard=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
-Agendamentos Gestão=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
-```
-
-### Planejado (Fase 1 — abas; ver `docs/REESTRUTURACAO_ABAS.md`)
+## Subpáginas — Análise de Agendamentos (abas Fase 1)
 
 ```
 Agendamentos Visão Geral=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
@@ -41,7 +34,10 @@ Agendamentos Pré-Vendas=https://andressabarrakreia-arch.github.io/belloscar-lea
 Agendamentos Vendedores=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/vendedores
 Agendamentos Detalhe=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/detalhe
 Agendamentos Insucessos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/insucessos
+Agendamentos Gestão=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
 ```
+
+Spec: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md).
 
 Fonte de verdade das rotas: `src/modules/registry.ts`.
 Manter este arquivo sincronizado ao criar ou renomear módulos.
