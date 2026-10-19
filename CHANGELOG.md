@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0] - 2026-10-19
+
+### Added
+- Módulo **Análise de Negociações** `#/negociacoes` (Visão Geral · Lançamentos · Vendedores · Gestão)
+- Dataset `public/data/negociacoes-dataset.json` + merge acumulativo por **nº da Negociação**
+- Regras: sem Cancelado nos KPIs · ignora Compra de Consignado · Troca = 1 negócio · Venda/Compra multi-linha = 1 por linha
+
 ## [1.8.10] - 2026-10-19
 
 ### Changed

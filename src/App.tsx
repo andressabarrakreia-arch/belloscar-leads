@@ -1,6 +1,6 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ModuleLayout } from "./components/ModuleLayout";
-import { AGENDAMENTOS, CAMPANHAS } from "./modules/registry";
+import { AGENDAMENTOS, CAMPANHAS, NEGOCIACOES } from "./modules/registry";
 import { Admin } from "./pages/Admin";
 import { Attendants } from "./pages/Attendants";
 import { Compare } from "./pages/Compare";
@@ -13,11 +13,17 @@ import { SchedulingPortais } from "./pages/agendamentos/SchedulingPortais";
 import { SchedulingPreVendas } from "./pages/agendamentos/SchedulingPreVendas";
 import { SchedulingShell } from "./pages/agendamentos/SchedulingShell";
 import { SchedulingVendedores } from "./pages/agendamentos/SchedulingVendedores";
+import { NegociacoesAdmin } from "./pages/negociacoes/NegociacoesAdmin";
+import { NegociacoesLancamentos } from "./pages/negociacoes/NegociacoesLancamentos";
+import { NegociacoesOverview } from "./pages/negociacoes/NegociacoesOverview";
+import { NegociacoesShell } from "./pages/negociacoes/NegociacoesShell";
+import { NegociacoesVendedores } from "./pages/negociacoes/NegociacoesVendedores";
 
 /**
  * Módulos com rotas e links distintos.
  * Análise de Campanhas: #/campanhas
- * Análise de Agendamentos: #/agendamentos (+ abas internas)
+ * Análise de Agendamentos: #/agendamentos
+ * Análise de Negociações: #/negociacoes
  */
 export default function App() {
   return (
@@ -42,6 +48,15 @@ export default function App() {
             <Route path="insucessos" element={<SchedulingInsucessos />} />
           </Route>
           <Route path="admin" element={<SchedulingAdmin />} />
+        </Route>
+
+        <Route path="negociacoes" element={<ModuleLayout module={NEGOCIACOES} />}>
+          <Route element={<NegociacoesShell />}>
+            <Route index element={<NegociacoesOverview />} />
+            <Route path="lancamentos" element={<NegociacoesLancamentos />} />
+            <Route path="vendedores" element={<NegociacoesVendedores />} />
+          </Route>
+          <Route path="admin" element={<NegociacoesAdmin />} />
         </Route>
 
         {/* Compatibilidade com links antigos */}

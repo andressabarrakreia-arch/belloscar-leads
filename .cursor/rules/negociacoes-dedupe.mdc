@@ -1,0 +1,25 @@
+---
+description: Dedupe e contagem do módulo Negociações.
+alwaysApply: false
+globs:
+  - src/lib/negociacoes/**
+  - src/pages/negociacoes/**
+---
+
+# Negociações — merge e contagem
+
+## Merge (Gestão)
+
+- Chave de agregação: **número da Negociação** (`negociacaoId`).
+- Upload acumula: nº novo entra; nº já existente → **arquivo novo substitui todas as linhas daquele nº**.
+- Ignorar na importação: **Compra de Consignado**.
+
+## Contagem (KPIs / Lançamentos)
+
+- Excluir status **Cancelado** dos KPIs.
+- **Troca** (2+ linhas no mesmo nº) = **1 negócio**.
+- **Venda** ou **Compra** (2+ linhas no mesmo nº) = **1 negócio por linha**.
+- Demais tipos (ex.: Consignação): 1 negócio por linha.
+- **Devolvido** / Pendente contam (houve negociação).
+
+Dataset: `public/data/negociacoes-dataset.json` · path GitHub isolado.

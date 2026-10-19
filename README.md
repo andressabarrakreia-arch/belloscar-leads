@@ -1,6 +1,6 @@
 # BellosCar · Análise de Resultados
 
-Hub **estático** de análises da BellosCar (Curitiba), organizado em **páginas/módulos** com links distintos (**Análise de Campanhas**, **Análise de Agendamentos**, …).
+Hub **estático** de análises da BellosCar (Curitiba), organizado em **páginas/módulos** com links distintos (**Análise de Campanhas**, **Análise de Agendamentos**, **Análise de Negociações**, …).
 
 - React + Vite + TypeScript + Recharts  
 - Sem servidor em produção  
@@ -81,6 +81,30 @@ npm run generate:agendamentos
 2. Envie novas planilhas de **AGENDAMENTOS** (agrega por ID)  
 3. Opcional: INSUCESSOS / LEADS GERAL só **enriquecem** IDs existentes  
 4. Opcional: exportar CSV de clientes (nome, email, telefone)  
+
+## Análise de Negociações
+
+**Link da equipe:**  
+https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes
+
+| Página | Link |
+|--------|------|
+| Visão Geral | `#/negociacoes` |
+| Lançamentos | `#/negociacoes/lancamentos` |
+| Vendedores | `#/negociacoes/vendedores` |
+| Gestão | `#/negociacoes/admin` |
+
+Dataset isolado: [`public/data/negociacoes-dataset.json`](public/data/negociacoes-dataset.json)
+
+### Regras de contagem
+
+- Sem **Cancelado** nos totais · **Compra de Consignado** não entra  
+- **Troca** (2 linhas) = 1 negócio · **Venda/Compra** multi-linha = 1 por linha  
+- Gestão: merge acumulativo pelo **nº da Negociação** (arquivo novo atualiza o grupo)
+
+```bash
+node scripts/generate-negociacoes-dataset.mjs
+```
 
 ## Setup local
 

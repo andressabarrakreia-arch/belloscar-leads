@@ -26,6 +26,8 @@
 - Gestão Campanhas: https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/admin
 - **Análise de Agendamentos (equipe):** https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
 - Gestão Agendamentos: https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
+- **Análise de Negociações (equipe):** https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes
+- Gestão Negociações: https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/admin
 
 ## Pós-lançamento
 
@@ -42,6 +44,7 @@
 - [x] Spec de reestruturação em abas (`docs/REESTRUTURACAO_ABAS.md`) — arquitetura, métricas, prompt mestre
 - [x] **Fase 1 UI:** abas em `#/agendamentos` (Visão Geral, Pré-Vendas, Vendedores, Detalhe, Insucessos)
 - [x] Aba **Portais** em `#/agendamentos/portais` (origem/canal + grupos; sem UTM/custo)
+- [x] Módulo **Análise de Negociações** (`#/negociacoes`) + seed + Gestão (merge por nº)
 - [ ] **Fase 2:** UTMs / tráfego pago no módulo `#/campanhas`
 - [ ] Próximos módulos com públicos/links próprios
 

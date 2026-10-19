@@ -9,6 +9,7 @@ Hub: **Análise de Resultados**. Páginas com links distintos para envio a pesso
 ```
 Análise de Campanhas=https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
 Análise de Agendamentos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
+Análise de Negociações=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes
 ```
 
 ## Gestão (PIN — não enviar como link da equipe)
@@ -16,6 +17,7 @@ Análise de Agendamentos=https://andressabarrakreia-arch.github.io/belloscar-lea
 ```
 Gestão Campanhas=https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/admin
 Gestão Agendamentos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
+Gestão Negociações=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/admin
 ```
 
 ## Subpáginas — Análise de Campanhas
@@ -36,6 +38,15 @@ Agendamentos Detalhe=https://andressabarrakreia-arch.github.io/belloscar-leads/#
 Agendamentos Portais=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/portais
 Agendamentos Insucessos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/insucessos
 Agendamentos Gestão=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
+```
+
+## Subpáginas — Análise de Negociações
+
+```
+Negociações Visão Geral=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes
+Negociações Lançamentos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/lancamentos
+Negociações Vendedores=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/vendedores
+Negociações Gestão=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/admin
 ```
 
 Spec: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md).

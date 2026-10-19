@@ -16,6 +16,7 @@ Ao final de **toda** alteração, task ou criação, atualizar:
 - Stack tipada — `typescript-stack.mdc`
 - Isolamento de storage por módulo — `module-storage-isolation.mdc`
 - Agendamentos: dedupe só por `id` — `scheduling-dedupe.mdc`
+- Negociações: merge por nº da Negociação — `negociacoes-dedupe.mdc`
 
 ## Segurança
 
@@ -29,6 +30,8 @@ Ao final de **toda** alteração, task ou criação, atualizar:
 - **Análise de Campanhas** → `#/campanhas`
 - **Análise de Agendamentos** → `#/agendamentos` (Vendas Web · Andressa Barra)
   - Abas: Visão Geral · Pré-Vendas · Vendedores · Detalhe · Portais · Insucessos (+ Gestão)
+- **Análise de Negociações** → `#/negociacoes` (loja)
+  - Abas: Visão Geral · Lançamentos · Vendedores (+ Gestão)
 - Novos módulos: rota `#/<modulo>/...`, layout próprio, link de equipe separado
 - Regras: `multi-module-pages.mdc`, `belloscar-product-prefs.mdc` (alwaysApply)
-- Spec abas: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md) — abas **dentro** de Agendamentos; Campanhas permanece módulo separado
+- Spec abas: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md) — abas **dentro** de Agendamentos; Campanhas e Negociações são módulos separados

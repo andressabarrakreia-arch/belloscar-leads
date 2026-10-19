@@ -54,6 +54,19 @@ export const MODULES: AppModule[] = [
       { to: "/agendamentos/admin", label: "Gestão", adminOnly: true },
     ],
   },
+  {
+    id: "negociacoes",
+    name: "Análise de Negociações",
+    basePath: "/negociacoes",
+    tagline: "Vendas, trocas, compras e consignações · loja",
+    publicPath: "/negociacoes",
+    nav: [
+      { to: "/negociacoes", label: "Visão Geral", end: true },
+      { to: "/negociacoes/lancamentos", label: "Lançamentos" },
+      { to: "/negociacoes/vendedores", label: "Vendedores" },
+      { to: "/negociacoes/admin", label: "Gestão", adminOnly: true },
+    ],
+  },
 ];
 
 export function getModuleById(id: string): AppModule | undefined {
@@ -62,3 +75,4 @@ export function getModuleById(id: string): AppModule | undefined {
 
 export const CAMPANHAS = getModuleById("campanhas")!;
 export const AGENDAMENTOS = getModuleById("agendamentos")!;
+export const NEGOCIACOES = getModuleById("negociacoes")!;

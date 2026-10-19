@@ -11,6 +11,7 @@ Cada módulo tem namespace próprio de storage e dataset.
 |--------|-------------------|---------------------------|
 | Campanhas | `public/data/dataset.json` | (fluxo campanhas existente) |
 | Agendamentos | `public/data/agendamentos-dataset.json` | `agendamentos_dataset`, `agendamentos_admin_config` |
+| Negociações | `public/data/negociacoes-dataset.json` | `negociacoes_dataset`, `negociacoes_admin_config` |
 
 - Alterações em um módulo **não** podem sobrescrever chaves ou estado de outro.
 - Login/PIN admin unificado (`belloscar_admin_ok`) pode ser compartilhado; **dados e configs** não.
