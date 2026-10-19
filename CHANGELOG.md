@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.8] - 2026-10-19
+
+### Changed
+- Aba Portais: cascata **Grupo → Origem → Canal → Proposta**; removido Share; Show-up → **Conv. visita**; Top 5 abaixo do ranking
+
 ## [1.8.7] - 2026-10-19
 
 ### Changed

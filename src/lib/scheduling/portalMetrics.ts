@@ -8,13 +8,27 @@ import {
 } from "./portalOrigin";
 import type { AgendamentoItem, MotivoStats, TipoProposta } from "./types";
 
+export type ProposalBreakdownRow = {
+  tipo: string;
+  total: number;
+  visitas: number;
+  sucessos: number;
+  insucessos: number;
+  taxaVisita: number;
+  taxaSucesso: number;
+  taxaInsucesso: number;
+};
+
 export type ChannelBreakdown = {
   canal: string;
   total: number;
   visitas: number;
   sucessos: number;
+  insucessos: number;
   taxaVisita: number;
   taxaSucesso: number;
+  taxaInsucesso: number;
+  propostas: ProposalBreakdownRow[];
 };
 
 export type PortalOriginMetrics = {
@@ -133,13 +147,42 @@ function finalizeOrigin(
       const t = list.length;
       const v = list.filter((i) => i.teveVisita).length;
       const s = list.filter((i) => i.status === "Sucesso").length;
+      const ins = list.filter((i) => i.status === "Insucesso").length;
+      const byTipo = new Map<string, AgendamentoItem[]>();
+      for (const item of list) {
+        const tipo = item.tipoProposta;
+        const cur = byTipo.get(tipo) || [];
+        cur.push(item);
+        byTipo.set(tipo, cur);
+      }
+      const propostas: ProposalBreakdownRow[] = [...byTipo.entries()]
+        .map(([tipo, rows]) => {
+          const pt = rows.length;
+          const pv = rows.filter((i) => i.teveVisita).length;
+          const ps = rows.filter((i) => i.status === "Sucesso").length;
+          const pi = rows.filter((i) => i.status === "Insucesso").length;
+          return {
+            tipo,
+            total: pt,
+            visitas: pv,
+            sucessos: ps,
+            insucessos: pi,
+            taxaVisita: round2(pt ? (pv / pt) * 100 : 0),
+            taxaSucesso: round2(pt ? (ps / pt) * 100 : 0),
+            taxaInsucesso: round2(pt ? (pi / pt) * 100 : 0),
+          };
+        })
+        .sort((a, b) => b.total - a.total);
       return {
         canal,
         total: t,
         visitas: v,
         sucessos: s,
+        insucessos: ins,
         taxaVisita: round2(t ? (v / t) * 100 : 0),
         taxaSucesso: round2(t ? (s / t) * 100 : 0),
+        taxaInsucesso: round2(t ? (ins / t) * 100 : 0),
+        propostas,
       };
     })
     .sort((a, b) => b.total - a.total);
