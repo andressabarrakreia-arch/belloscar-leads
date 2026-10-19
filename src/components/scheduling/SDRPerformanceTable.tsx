@@ -1,12 +1,25 @@
 import type { SdrMetrics } from "../../lib/scheduling/types";
 
-type Props = {
-  rows: SdrMetrics[];
-  title: string;
-  subtitle: string;
+type Row = SdrMetrics & {
+  totalAtendimentos?: number;
+  taxaAgendamento?: number;
 };
 
-export function SDRPerformanceTable({ rows, title, subtitle }: Props) {
+type Props = {
+  rows: Row[];
+  title: string;
+  subtitle: string;
+  /** Exibe colunas de atendimentos (LEADS GERAL). */
+  showAtendimentos?: boolean;
+};
+
+export function SDRPerformanceTable({
+  rows,
+  title,
+  subtitle,
+  showAtendimentos = false,
+}: Props) {
+  const colSpan = showAtendimentos ? 14 : 12;
   return (
     <div className="card">
       <h2>{title}</h2>
@@ -16,7 +29,9 @@ export function SDRPerformanceTable({ rows, title, subtitle }: Props) {
           <thead>
             <tr>
               <th>Atendido por</th>
+              {showAtendimentos && <th>Atendimentos</th>}
               <th>Agendamentos</th>
+              {showAtendimentos && <th>% Agend.</th>}
               <th>Compra</th>
               <th>Venda</th>
               <th>Troca</th>
@@ -25,15 +40,17 @@ export function SDRPerformanceTable({ rows, title, subtitle }: Props) {
               <th>N/I</th>
               <th>Visitas</th>
               <th>Sucessos</th>
-              <th>Show-up (Vi/Ag)</th>
-              <th>Conv. (Su/Ag)</th>
+              <th>Conv. visita</th>
+              <th>Conv.</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
               <tr key={r.sdr}>
                 <td>{r.sdr}</td>
+                {showAtendimentos && <td>{r.totalAtendimentos ?? 0}</td>}
                 <td>{r.totalAgendamentos}</td>
+                {showAtendimentos && <td>{r.taxaAgendamento ?? 0}%</td>}
                 <td>{r.propostasBreakdown.Compra}</td>
                 <td>{r.propostasBreakdown.Venda}</td>
                 <td>{r.propostasBreakdown.Troca}</td>
@@ -48,7 +65,7 @@ export function SDRPerformanceTable({ rows, title, subtitle }: Props) {
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={12} className="muted">
+                <td colSpan={colSpan} className="muted">
                   Nenhum registro neste canal no filtro atual.
                 </td>
               </tr>

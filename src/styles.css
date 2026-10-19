@@ -803,8 +803,40 @@ tr:hover td {
   font-weight: 700;
 }
 
-.portal-group-row td {
-  background: rgba(247, 248, 250, 0.9);
+.portal-row-group td {
+  background: rgba(247, 248, 250, 0.95);
+  font-weight: 700;
+  color: var(--brand-charcoal);
+}
+
+.portal-row-origin td {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.portal-row-channel td {
+  color: #b45309;
+  font-weight: 500;
+}
+
+.portal-row-proposta td {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.portal-label-origin {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.portal-label-channel {
+  color: #b45309;
+  font-weight: 600;
+}
+
+.portal-label-proposta {
+  color: #6b7280;
+  font-weight: 600;
 }
 
 .portal-detail h3 {

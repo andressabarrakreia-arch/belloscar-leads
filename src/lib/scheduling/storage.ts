@@ -1,5 +1,5 @@
 import type { SchedulingAdminConfig, SchedulingDataset } from "./types";
-import { emptySchedulingDataset } from "./mergeById";
+import { emptySchedulingDataset, normalizeSchedulingDataset } from "./mergeById";
 
 /** Namespace isolado — não compartilhar com campanhas. */
 export const SCHEDULING_DATASET_KEY = "agendamentos_dataset";
@@ -54,17 +54,21 @@ export async function loadSchedulingDataset(): Promise<SchedulingDataset> {
   try {
     const res = await fetch(SCHEDULING_DATA_URL, { cache: "no-store" });
     if (res.ok) {
-      const published = (await res.json()) as SchedulingDataset;
+      const published = normalizeSchedulingDataset(
+        (await res.json()) as SchedulingDataset
+      );
       if (!local) return published;
       // Preferir o mais recente entre publicado e local
-      if (new Date(local.updatedAt) > new Date(published.updatedAt)) return local;
+      if (new Date(local.updatedAt) > new Date(published.updatedAt)) {
+        return normalizeSchedulingDataset(local);
+      }
       return published;
     }
   } catch {
     /* rede offline */
   }
 
-  return local || emptySchedulingDataset();
+  return local ? normalizeSchedulingDataset(local) : emptySchedulingDataset();
 }
 
 export function downloadSchedulingDataset(

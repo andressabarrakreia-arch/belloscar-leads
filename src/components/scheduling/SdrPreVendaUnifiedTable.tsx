@@ -16,22 +16,23 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
     <div className="card">
       <h2>Desempenho Pré-Vendas</h2>
       <p className="muted">
-        Por SDR (ordem da equipe web). Show-up = Visitas/Agendamentos · Conv. = Sucessos/Agendamentos
-        · % Insuc. = Insucessos/Agendamentos. Colunas Compra…N/I = volume por tipo. Recepção não
-        entra neste bloco.
+        Por SDR (ordem da equipe web). Atendimentos = LEADS GERAL · % Agend. = Agendamentos/Atendimentos
+        · Conv. visita = Visitas/Agendamentos · Conv. = Sucessos/Agendamentos. Recepção não entra
+        neste bloco.
       </p>
       <div className="table-scroll">
         <table>
           <thead>
             <tr>
               <th>Atendido por</th>
+              <th>Atendimentos</th>
               <th>Agend.</th>
+              <th>% Agend.</th>
               <th>Visitas</th>
               <th>Sucessos</th>
               <th>Insucessos</th>
-              <th>Show-up</th>
+              <th>Conv. visita</th>
               <th>Conv.</th>
-              <th>% Insuc.</th>
               <th>Compra</th>
               <th>Venda</th>
               <th>Troca</th>
@@ -44,13 +45,14 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
             {rows.map((r) => (
               <tr key={r.sdr}>
                 <td>{r.sdr}</td>
+                <td>{r.totalAtendimentos}</td>
                 <td>{r.totalAgendamentos}</td>
+                <td>{r.taxaAgendamento}%</td>
                 <td>{r.totalVisitas}</td>
                 <td>{r.totalSucesso}</td>
                 <td>{r.totalInsucesso}</td>
                 <td>{r.taxaConversaoVisita}%</td>
                 <td>{r.taxaConversaoSucesso}%</td>
-                <td>{r.taxaInsucesso}%</td>
                 <td>{r.propostasBreakdown.Compra}</td>
                 <td>{r.propostasBreakdown.Venda}</td>
                 <td>{r.propostasBreakdown.Troca}</td>
@@ -61,7 +63,7 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={14} className="muted">
+                <td colSpan={15} className="muted">
                   Nenhum registro de Pré-Venda no filtro atual.
                 </td>
               </tr>

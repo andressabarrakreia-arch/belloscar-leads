@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.8.9] - 2026-10-19
+
+### Added
+- Volume de **LEADS GERAL** persistido em `leadsAtendimentos` (atendimentos por origem/SDR)
+- Portais e Pré-Vendas: coluna **Atendimentos** + **% Agend.** (Ag/Atend)
+
+### Changed
+- Portais: cores por nível da cascata; removido % Insucesso
+
 ## [1.8.8] - 2026-10-19
 
 ### Changed

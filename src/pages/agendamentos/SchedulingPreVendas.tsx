@@ -20,9 +20,10 @@ export function SchedulingPreVendas() {
       <SdrPreVendaTopParceirosTable rows={sdrPreVendaRows} />
 
       <SDRPerformanceTable
-        rows={sdrRecepcao}
+        rows={[sdrRecepcao]}
+        showAtendimentos
         title="Desempenho Recepção (à parte)"
-        subtitle="Canal Recepção consolidado em uma linha (totais e taxas próprios, fora do geral da pré-venda)."
+        subtitle="Canal Recepção consolidado. Atendimentos = LEADS GERAL · % Agend. = Agendamentos/Atendimentos."
       />
     </>
   );

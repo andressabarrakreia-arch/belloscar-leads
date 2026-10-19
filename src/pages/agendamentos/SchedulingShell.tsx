@@ -20,9 +20,10 @@ function SchedulingShellInner() {
           <strong>Setor:</strong> Vendas Web · <strong>Gestão:</strong> Andressa Barra
         </p>
         <p className="muted">
-          Análise de Agendamentos · {analytics.filtered.length} no filtro ·{" "}
-          {dataset.items.length} na base · Pré-Venda e Recepção com totais separados ·
-          atualizado {new Date(dataset.updatedAt).toLocaleString("pt-BR")}
+          Análise de Agendamentos · {analytics.filtered.length} agendamentos no filtro ·{" "}
+          {(analytics.filteredLeads || []).length} atendimentos (LEADS) ·{" "}
+          {dataset.items.length} ag. na base · {(dataset.leadsAtendimentos || []).length} leads na
+          base · atualizado {new Date(dataset.updatedAt).toLocaleString("pt-BR")}
         </p>
       </div>
 

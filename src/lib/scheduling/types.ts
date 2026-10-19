@@ -41,10 +41,22 @@ export type SchedulingImportMeta = {
   notes: string[];
 };
 
+/** Atendimento (lead) da planilha LEADS GERAL — universo de recebidos. */
+export type LeadAtendimentoItem = {
+  id: string;
+  /** Data do lead (criado em), ISO YYYY-MM-DD */
+  data: string;
+  sdr: string;
+  origem: string;
+  tipoProposta: TipoProposta;
+};
+
 export type SchedulingDataset = {
   updatedAt: string;
   imports: SchedulingImportMeta[];
   items: AgendamentoItem[];
+  /** Volume de LEADS GERAL (dedupe por id); usado em Portais e Pré-Vendas. */
+  leadsAtendimentos?: LeadAtendimentoItem[];
 };
 
 export type SchedulingFilters = {
@@ -90,6 +102,10 @@ export type SdrVendedorTop = {
 
 /** Linha unificada da aba Pré-Vendas (desempenho + extras). */
 export type SdrPreVendaRow = SdrMetrics & {
+  /** Leads/atendimentos do SDR (LEADS GERAL). */
+  totalAtendimentos: number;
+  /** Agendamentos / Atendimentos × 100 (0 se sem atendimentos). */
+  taxaAgendamento: number;
   taxaInsucesso: number;
   conversaoPorProposta: PropostaConversao[];
   topParceiros: SdrVendedorTop[];

@@ -13,9 +13,11 @@ import {
   buildVendedorComparisonRows,
   buildVendedorMetrics,
   filterAgendamentos,
+  filterLeadsAtendimentos,
   getSchedulingFilterOptions,
   splitByCanal,
 } from "../lib/scheduling/metrics";
+import { isRecepcaoName } from "../lib/scheduling/normalize";
 import { buildPortalDashboard } from "../lib/scheduling/portalMetrics";
 import { loadSchedulingDataset } from "../lib/scheduling/storage";
 import type { SchedulingDataset, SchedulingFilters } from "../lib/scheduling/types";
@@ -42,14 +44,21 @@ export function useSchedulingAnalytics(
   return useMemo(() => {
     if (!dataset) return null;
     const filtered = filterAgendamentos(dataset.items, filters);
+    const filteredLeads = filterLeadsAtendimentos(
+      dataset.leadsAtendimentos || [],
+      filters
+    );
     const { preVenda, recepcao } = splitByCanal(filtered);
+    const leadsPv = filteredLeads.filter((l) => !isRecepcaoName(l.sdr));
+    const leadsRec = filteredLeads.filter((l) => isRecepcaoName(l.sdr));
 
-    const sdrPreVendaRows = buildSdrPreVendaRows(preVenda);
-    const sdrRecepcao = buildRecepcaoConsolidatedMetrics(recepcao);
+    const sdrPreVendaRows = buildSdrPreVendaRows(preVenda, leadsPv);
+    const sdrRecepcao = buildRecepcaoConsolidatedMetrics(recepcao, leadsRec);
     const vendedorMetrics = buildVendedorMetrics(filtered);
 
     return {
       filtered,
+      filteredLeads,
       preVenda,
       recepcao,
       options: getSchedulingFilterOptions(dataset.items),
@@ -58,10 +67,8 @@ export function useSchedulingAnalytics(
       sdrPreVendaRows,
       sdrRecepcao,
       vendedorMetrics,
-      /** Só vendedores, por canal */
       comparisonVendedoresPreVenda: buildVendedorComparisonRows(vendedorMetrics, "Pré-Venda"),
       comparisonVendedoresRecepcao: buildVendedorComparisonRows(vendedorMetrics, "Recepção"),
-      /** Pares SDR × Vendedor (Pré-Venda) */
       sdrVendedorPairs: buildSdrVendedorProposalRows(preVenda),
       proposalsPreVenda: buildProposalDistribution(preVenda),
       proposalsRecepcao: buildProposalDistribution(recepcao),
@@ -71,7 +78,7 @@ export function useSchedulingAnalytics(
       motivosInsucesso: buildMotivosStats(filtered),
       motivosBySdr: buildMotivosBySdr(filtered),
       motivosByVendedor: buildMotivosByVendedor(filtered),
-      portais: buildPortalDashboard(filtered),
+      portais: buildPortalDashboard(filtered, filteredLeads),
     };
   }, [dataset, filters]);
 }

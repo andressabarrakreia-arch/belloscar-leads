@@ -1,9 +1,32 @@
 import { canalFromSdr } from "./normalize";
 import { isoToMonthKey, isoToPeriodKey } from "./dates";
-import type { AgendamentoItem, SchedulingDataset, SchedulingImportMeta } from "./types";
+import type {
+  AgendamentoItem,
+  LeadAtendimentoItem,
+  SchedulingDataset,
+  SchedulingImportMeta,
+} from "./types";
 import type { ParsedSchedulingRow, SheetKind } from "./parseSchedulingExcel";
 
 export type { SheetKind };
+
+function mergeLeadsAtendimentos(
+  current: LeadAtendimentoItem[],
+  incoming: ParsedSchedulingRow[]
+): LeadAtendimentoItem[] {
+  const map = new Map(current.map((l) => [l.id, l]));
+  for (const row of incoming) {
+    if (!row.id) continue;
+    map.set(row.id, {
+      id: row.id,
+      data: row.dataAgendamento || "1970-01-01",
+      sdr: row.sdr?.trim() || "(sem SDR)",
+      origem: row.origem?.trim() || "Não informado",
+      tipoProposta: row.tipoProposta || "não informado(celulas em branco)",
+    });
+  }
+  return [...map.values()];
+}
 
 function mergeItem(
   existing: AgendamentoItem | undefined,
@@ -159,6 +182,14 @@ export function emptySchedulingDataset(): SchedulingDataset {
     updatedAt: new Date().toISOString(),
     imports: [],
     items: [],
+    leadsAtendimentos: [],
+  };
+}
+
+export function normalizeSchedulingDataset(dataset: SchedulingDataset): SchedulingDataset {
+  return {
+    ...dataset,
+    leadsAtendimentos: dataset.leadsAtendimentos ?? [],
   };
 }
 
@@ -169,13 +200,25 @@ export function applySchedulingImport(
   fileName: string,
   label?: string
 ): { dataset: SchedulingDataset; meta: SchedulingImportMeta } {
+  const base = normalizeSchedulingDataset(current);
   // Insucessos/leads só enriquecem a base de agendamentos — não criam órfãos.
   const enrichOnly = kind === "insucessos" || kind === "leads";
   const { items, kept, removed, enriched, skipped, notes } = mergeById(
-    current.items,
+    base.items,
     incoming,
     { enrichOnly }
   );
+
+  const leadsAtendimentos =
+    kind === "leads"
+      ? mergeLeadsAtendimentos(base.leadsAtendimentos || [], incoming)
+      : base.leadsAtendimentos || [];
+
+  const leadNote =
+    kind === "leads"
+      ? [`LEADS GERAL: ${leadsAtendimentos.length} atendimentos únicos na base`]
+      : [];
+
   const meta: SchedulingImportMeta = {
     fileName,
     label: label || fileName,
@@ -185,16 +228,18 @@ export function applySchedulingImport(
     kept,
     removed: removed + skipped,
     enriched,
-    notes:
-      skipped > 0
-        ? [`${skipped} IDs ignorados (enrich-only)`, ...notes]
-        : notes,
+    notes: [
+      ...(skipped > 0 ? [`${skipped} IDs ignorados (enrich-only)`] : []),
+      ...leadNote,
+      ...notes,
+    ],
   };
   return {
     dataset: {
       updatedAt: meta.at,
-      imports: [meta, ...current.imports].slice(0, 50),
+      imports: [meta, ...base.imports].slice(0, 50),
       items,
+      leadsAtendimentos,
     },
     meta,
   };

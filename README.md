@@ -58,6 +58,7 @@ Storage local: `agendamentos_dataset`, `agendamentos_admin_config`
 - Comparação direta entre vendedores (Pré-Venda e Recepção) e comparação só de quem atendeu  
 - Conversão por vendedor: geral = Pré-Venda; Recepção com índices próprios  
 - Motivos de insucesso e origem por canal  
+- **Atendimentos (LEADS GERAL)** na Pré-Vendas e Portais, com % Agendamento = Ag/Atend  
 - Filtros por data, SDR e tipo de proposta (inclui **Financiamento**) · barra sticky  
 
 ### Base inicial (já publicada)

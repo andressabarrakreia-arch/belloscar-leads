@@ -6,42 +6,47 @@ import {
   PORTAL_GROUPS,
   type PortalGroupId,
 } from "./portalOrigin";
-import type { AgendamentoItem, MotivoStats, TipoProposta } from "./types";
+import type {
+  AgendamentoItem,
+  LeadAtendimentoItem,
+  MotivoStats,
+  TipoProposta,
+} from "./types";
 
 export type ProposalBreakdownRow = {
   tipo: string;
+  atendimentos: number;
   total: number;
   visitas: number;
   sucessos: number;
   insucessos: number;
   taxaVisita: number;
   taxaSucesso: number;
-  taxaInsucesso: number;
 };
 
 export type ChannelBreakdown = {
   canal: string;
+  atendimentos: number;
   total: number;
   visitas: number;
   sucessos: number;
   insucessos: number;
   taxaVisita: number;
   taxaSucesso: number;
-  taxaInsucesso: number;
   propostas: ProposalBreakdownRow[];
 };
 
 export type PortalOriginMetrics = {
   origin: string;
   groupId: PortalGroupId;
+  atendimentos: number;
   total: number;
   visitas: number;
   sucessos: number;
   insucessos: number;
   taxaVisita: number;
   taxaSucesso: number;
-  taxaInsucesso: number;
-  sharePct: number;
+  taxaAgendamento: number;
   preVenda: number;
   recepcao: number;
   propostas: Record<string, number>;
@@ -55,22 +60,22 @@ export type PortalOriginMetrics = {
 export type PortalGroupMetrics = {
   id: PortalGroupId;
   label: string;
+  atendimentos: number;
   total: number;
   visitas: number;
   sucessos: number;
   insucessos: number;
   taxaVisita: number;
   taxaSucesso: number;
-  taxaInsucesso: number;
-  sharePct: number;
+  taxaAgendamento: number;
   origins: PortalOriginMetrics[];
 };
 
 export type PortalDashboard = {
-  /** Contagem única de agendamentos no filtro (sem multi-contar). */
   uniqueTotal: number;
-  /** Soma das atribuições a portais (pode ser > uniqueTotal se multi-origem). */
+  uniqueLeads: number;
   attributedTotal: number;
+  attributedLeads: number;
   groups: PortalGroupMetrics[];
   origins: PortalOriginMetrics[];
   topByVolume: PortalOriginMetrics[];
@@ -83,7 +88,9 @@ export type PortalDashboard = {
 
 type Acc = {
   items: AgendamentoItem[];
+  leads: LeadAtendimentoItem[];
   channels: Map<string, AgendamentoItem[]>;
+  leadChannels: Map<string, LeadAtendimentoItem[]>;
   raw: Map<string, number>;
 };
 
@@ -126,13 +133,26 @@ function personTops(
     .slice(0, limit);
 }
 
-function finalizeOrigin(
-  origin: string,
-  acc: Acc,
-  uniqueTotal: number
-): PortalOriginMetrics {
+function ensureAcc(map: Map<string, Acc>, origin: string): Acc {
+  let acc = map.get(origin);
+  if (!acc) {
+    acc = {
+      items: [],
+      leads: [],
+      channels: new Map(),
+      leadChannels: new Map(),
+      raw: new Map(),
+    };
+    map.set(origin, acc);
+  }
+  return acc;
+}
+
+function finalizeOrigin(origin: string, acc: Acc): PortalOriginMetrics {
   const items = acc.items;
+  const leads = acc.leads;
   const total = items.length;
+  const atendimentos = leads.length;
   const visitas = items.filter((i) => i.teveVisita).length;
   const sucessos = items.filter((i) => i.status === "Sucesso").length;
   const insucessos = items.filter((i) => i.status === "Insucesso").length;
@@ -142,62 +162,74 @@ function finalizeOrigin(
     propostas[t] = (propostas[t] || 0) + 1;
   }
 
-  const channels: ChannelBreakdown[] = [...acc.channels.entries()]
-    .map(([canal, list]) => {
+  const channelNames = new Set([
+    ...acc.channels.keys(),
+    ...acc.leadChannels.keys(),
+  ]);
+
+  const channels: ChannelBreakdown[] = [...channelNames]
+    .map((canal) => {
+      const list = acc.channels.get(canal) || [];
+      const leadList = acc.leadChannels.get(canal) || [];
       const t = list.length;
+      const atend = leadList.length;
       const v = list.filter((i) => i.teveVisita).length;
       const s = list.filter((i) => i.status === "Sucesso").length;
       const ins = list.filter((i) => i.status === "Insucesso").length;
-      const byTipo = new Map<string, AgendamentoItem[]>();
-      for (const item of list) {
-        const tipo = item.tipoProposta;
-        const cur = byTipo.get(tipo) || [];
-        cur.push(item);
-        byTipo.set(tipo, cur);
-      }
-      const propostas: ProposalBreakdownRow[] = [...byTipo.entries()]
-        .map(([tipo, rows]) => {
+
+      const tipos = new Set([
+        ...list.map((i) => i.tipoProposta),
+        ...leadList.map((i) => i.tipoProposta),
+      ]);
+
+      const propostasRows: ProposalBreakdownRow[] = [...tipos]
+        .map((tipo) => {
+          const rows = list.filter((i) => i.tipoProposta === tipo);
+          const leadRows = leadList.filter((i) => i.tipoProposta === tipo);
           const pt = rows.length;
+          const pa = leadRows.length;
           const pv = rows.filter((i) => i.teveVisita).length;
           const ps = rows.filter((i) => i.status === "Sucesso").length;
           const pi = rows.filter((i) => i.status === "Insucesso").length;
           return {
             tipo,
+            atendimentos: pa,
             total: pt,
             visitas: pv,
             sucessos: ps,
             insucessos: pi,
             taxaVisita: round2(pt ? (pv / pt) * 100 : 0),
             taxaSucesso: round2(pt ? (ps / pt) * 100 : 0),
-            taxaInsucesso: round2(pt ? (pi / pt) * 100 : 0),
           };
         })
-        .sort((a, b) => b.total - a.total);
+        .filter((p) => p.atendimentos > 0 || p.total > 0)
+        .sort((a, b) => b.total - a.total || b.atendimentos - a.atendimentos);
+
       return {
         canal,
+        atendimentos: atend,
         total: t,
         visitas: v,
         sucessos: s,
         insucessos: ins,
         taxaVisita: round2(t ? (v / t) * 100 : 0),
         taxaSucesso: round2(t ? (s / t) * 100 : 0),
-        taxaInsucesso: round2(t ? (ins / t) * 100 : 0),
-        propostas,
+        propostas: propostasRows,
       };
     })
-    .sort((a, b) => b.total - a.total);
+    .sort((a, b) => b.total - a.total || b.atendimentos - a.atendimentos);
 
   return {
     origin,
     groupId: portalGroupIdForOrigin(origin),
+    atendimentos,
     total,
     visitas,
     sucessos,
     insucessos,
     taxaVisita: round2(total ? (visitas / total) * 100 : 0),
     taxaSucesso: round2(total ? (sucessos / total) * 100 : 0),
-    taxaInsucesso: round2(total ? (insucessos / total) * 100 : 0),
-    sharePct: round2(uniqueTotal ? (total / uniqueTotal) * 100 : 0),
+    taxaAgendamento: round2(atendimentos ? (total / atendimentos) * 100 : 0),
     preVenda: items.filter((i) => i.canal === "Pré-Venda").length,
     recepcao: items.filter((i) => i.canal === "Recepção").length,
     propostas,
@@ -211,17 +243,16 @@ function finalizeOrigin(
   };
 }
 
-export function buildPortalDashboard(items: AgendamentoItem[]): PortalDashboard {
+export function buildPortalDashboard(
+  items: AgendamentoItem[],
+  leads: LeadAtendimentoItem[] = []
+): PortalDashboard {
   const byOrigin = new Map<string, Acc>();
 
   for (const item of items) {
     const parsed = parseOrigemRaw(item.origem);
     for (const origin of parsed.origins) {
-      let acc = byOrigin.get(origin);
-      if (!acc) {
-        acc = { items: [], channels: new Map(), raw: new Map() };
-        byOrigin.set(origin, acc);
-      }
+      const acc = ensureAcc(byOrigin, origin);
       acc.items.push(item);
       acc.raw.set(parsed.raw, (acc.raw.get(parsed.raw) || 0) + 1);
       const channelList =
@@ -234,41 +265,66 @@ export function buildPortalDashboard(items: AgendamentoItem[]): PortalDashboard 
     }
   }
 
-  const uniqueTotal = items.length;
-  const origins = [...byOrigin.entries()]
-    .map(([origin, acc]) => finalizeOrigin(origin, acc, uniqueTotal))
-    .sort((a, b) => b.total - a.total || a.origin.localeCompare(b.origin, "pt-BR"));
+  for (const lead of leads) {
+    const parsed = parseOrigemRaw(lead.origem);
+    for (const origin of parsed.origins) {
+      const acc = ensureAcc(byOrigin, origin);
+      acc.leads.push(lead);
+      acc.raw.set(parsed.raw, (acc.raw.get(parsed.raw) || 0) + 1);
+      const channelList =
+        parsed.channels.length > 0 ? parsed.channels : ["(não informado)"];
+      for (const ch of channelList) {
+        const list = acc.leadChannels.get(ch) || [];
+        list.push(lead);
+        acc.leadChannels.set(ch, list);
+      }
+    }
+  }
 
+  const origins = [...byOrigin.entries()]
+    .map(([origin, acc]) => finalizeOrigin(origin, acc))
+    .sort(
+      (a, b) =>
+        b.atendimentos - a.atendimentos ||
+        b.total - a.total ||
+        a.origin.localeCompare(b.origin, "pt-BR")
+    );
+
+  const uniqueTotal = items.length;
+  const uniqueLeads = leads.length;
   const attributedTotal = origins.reduce((s, o) => s + o.total, 0);
+  const attributedLeads = origins.reduce((s, o) => s + o.atendimentos, 0);
 
   const groups: PortalGroupMetrics[] = PORTAL_GROUPS.map((g) => {
     const gOrigins = origins.filter((o) => o.groupId === g.id);
     const total = gOrigins.reduce((s, o) => s + o.total, 0);
+    const atendimentos = gOrigins.reduce((s, o) => s + o.atendimentos, 0);
     const visitas = gOrigins.reduce((s, o) => s + o.visitas, 0);
     const sucessos = gOrigins.reduce((s, o) => s + o.sucessos, 0);
     const insucessos = gOrigins.reduce((s, o) => s + o.insucessos, 0);
     return {
       id: g.id,
       label: g.label,
+      atendimentos,
       total,
       visitas,
       sucessos,
       insucessos,
       taxaVisita: round2(total ? (visitas / total) * 100 : 0),
       taxaSucesso: round2(total ? (sucessos / total) * 100 : 0),
-      taxaInsucesso: round2(total ? (insucessos / total) * 100 : 0),
-      sharePct: round2(uniqueTotal ? (total / uniqueTotal) * 100 : 0),
+      taxaAgendamento: round2(atendimentos ? (total / atendimentos) * 100 : 0),
       origins: gOrigins,
     };
-  }).filter((g) => g.total > 0);
+  }).filter((g) => g.total > 0 || g.atendimentos > 0);
 
-  const topByVolume = origins.slice(0, 5);
+  const topByVolume = [...origins]
+    .sort((a, b) => b.atendimentos - a.atendimentos || b.total - a.total)
+    .slice(0, 5);
   const topByConversion = [...origins]
     .filter((o) => o.total >= 20)
     .sort((a, b) => b.taxaSucesso - a.taxaSucesso || b.total - a.total)
     .slice(0, 5);
 
-  // Série por quinzena dos top 5 portais por volume
   const topNames = new Set(topByVolume.map((o) => o.origin));
   const periodMap = new Map<
     string,
@@ -300,7 +356,9 @@ export function buildPortalDashboard(items: AgendamentoItem[]): PortalDashboard 
 
   return {
     uniqueTotal,
+    uniqueLeads,
     attributedTotal,
+    attributedLeads,
     groups,
     origins,
     topByVolume,

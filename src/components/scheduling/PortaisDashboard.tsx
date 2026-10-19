@@ -40,9 +40,8 @@ function OriginSummary({ origin }: { origin: PortalOriginMetrics }) {
     <div className="portal-detail stack">
       <h3>{origin.origin}</h3>
       <p className="muted">
-        Conv. visita = Visitas/Agendamentos · Conv. = Sucessos/Agendamentos. Pré-Venda{" "}
-        {origin.preVenda} · Recepção {origin.recepcao}. Multi-origem: o mesmo agendamento pode
-        entrar em mais de um portal.
+        Atendimentos = LEADS GERAL · % Agend. = Agend./Atend. · Conv. visita = Vi/Ag · Conv. =
+        Su/Ag. Pré-Venda {origin.preVenda} · Recepção {origin.recepcao}.
       </p>
 
       <div className="charts" style={{ gridTemplateColumns: "1fr 1fr" }}>
@@ -133,38 +132,40 @@ export function PortaisDashboard({ data }: Props) {
       <div className="card">
         <h2>Portais</h2>
         <p className="muted">
-          Cascata: <strong>Grupo → Origem → Canal → Tipo de proposta</strong>. Conv. visita =
-          Visitas/Ag · Conv. = Sucessos/Ag. Totais de grupo podem somar além do universo quando há
-          multi-origem. Filtro: {data.uniqueTotal} agendamentos · atribuições:{" "}
-          {data.attributedTotal}.
+          Cascata colorida: <strong>Grupo</strong> → <span className="portal-label-origin">Origem</span>{" "}
+          → <span className="portal-label-channel">Canal</span> →{" "}
+          <span className="portal-label-proposta">Proposta</span>. Atendimentos vêm do{" "}
+          <strong>LEADS GERAL</strong>. Multi-origem pode somar além do universo. Filtro:{" "}
+          {data.uniqueLeads} atendimentos · {data.uniqueTotal} agendamentos.
         </p>
       </div>
 
       <div className="card">
         <h2>Ranking por grupo</h2>
         <p className="muted">
-          Expanda o grupo, depois a origem (canais) e o canal (tipos de proposta). Clique no nome
-          da origem para ver top SDR / vendedores abaixo.
+          Expanda grupo → origem → canal → proposta. Clique no nome da origem para top SDR /
+          vendedores.
         </p>
         <div className="table-scroll">
-          <table>
+          <table className="portal-cascade-table">
             <thead>
               <tr>
                 <th></th>
                 <th>Grupo / Origem / Canal / Proposta</th>
+                <th>Atend.</th>
                 <th>Ag.</th>
+                <th>% Agend.</th>
                 <th>Visitas</th>
                 <th>Sucessos</th>
                 <th>Insucessos</th>
                 <th>Conv. visita</th>
                 <th>Conv.</th>
-                <th>% Insuc.</th>
               </tr>
             </thead>
             <tbody>
               {data.groups.map((g) => (
                 <Fragment key={g.id}>
-                  <tr className="portal-group-row">
+                  <tr className="portal-row-group">
                     <td>
                       <ExpandBtn
                         open={!!expandedGroups[g.id]}
@@ -175,13 +176,14 @@ export function PortaisDashboard({ data }: Props) {
                     <td>
                       <strong>{g.label}</strong>
                     </td>
+                    <td>{g.atendimentos}</td>
                     <td>{g.total}</td>
+                    <td>{g.taxaAgendamento}%</td>
                     <td>{g.visitas}</td>
                     <td>{g.sucessos}</td>
                     <td>{g.insucessos}</td>
                     <td>{g.taxaVisita}%</td>
                     <td>{g.taxaSucesso}%</td>
-                    <td>{g.taxaInsucesso}%</td>
                   </tr>
 
                   {expandedGroups[g.id] &&
@@ -191,7 +193,7 @@ export function PortaisDashboard({ data }: Props) {
                       return (
                         <Fragment key={originKey}>
                           <tr
-                            className={selected === o.origin ? "highlight-row" : undefined}
+                            className={`portal-row-origin ${selected === o.origin ? "highlight-row" : ""}`}
                             style={{ cursor: "pointer" }}
                             onClick={() => setSelected(o.origin)}
                           >
@@ -203,13 +205,14 @@ export function PortaisDashboard({ data }: Props) {
                               />
                             </td>
                             <td style={{ paddingLeft: 20 }}>{o.origin}</td>
+                            <td>{o.atendimentos}</td>
                             <td>{o.total}</td>
+                            <td>{o.taxaAgendamento}%</td>
                             <td>{o.visitas}</td>
                             <td>{o.sucessos}</td>
                             <td>{o.insucessos}</td>
                             <td>{o.taxaVisita}%</td>
                             <td>{o.taxaSucesso}%</td>
-                            <td>{o.taxaInsucesso}%</td>
                           </tr>
 
                           {originOpen &&
@@ -218,7 +221,7 @@ export function PortaisDashboard({ data }: Props) {
                               const chOpen = !!expandedChannels[chKey];
                               return (
                                 <Fragment key={chKey}>
-                                  <tr>
+                                  <tr className="portal-row-channel">
                                     <td>
                                       <ExpandBtn
                                         open={chOpen}
@@ -226,32 +229,40 @@ export function PortaisDashboard({ data }: Props) {
                                         label={`Expandir canal ${c.canal}`}
                                       />
                                     </td>
-                                    <td style={{ paddingLeft: 40 }} className="muted">
-                                      Canal · {c.canal}
-                                    </td>
+                                    <td style={{ paddingLeft: 40 }}>Canal · {c.canal}</td>
+                                    <td>{c.atendimentos}</td>
                                     <td>{c.total}</td>
+                                    <td>
+                                      {c.atendimentos
+                                        ? `${Math.round((c.total / c.atendimentos) * 1000) / 10}%`
+                                        : "0%"}
+                                    </td>
                                     <td>{c.visitas}</td>
                                     <td>{c.sucessos}</td>
                                     <td>{c.insucessos}</td>
                                     <td>{c.taxaVisita}%</td>
                                     <td>{c.taxaSucesso}%</td>
-                                    <td>{c.taxaInsucesso}%</td>
                                   </tr>
 
                                   {chOpen &&
                                     c.propostas.map((p) => (
-                                      <tr key={`${chKey}::${p.tipo}`}>
+                                      <tr key={`${chKey}::${p.tipo}`} className="portal-row-proposta">
                                         <td></td>
-                                        <td style={{ paddingLeft: 60 }} className="muted">
+                                        <td style={{ paddingLeft: 60 }}>
                                           Proposta · {tipoLabel(p.tipo)}
                                         </td>
+                                        <td>{p.atendimentos}</td>
                                         <td>{p.total}</td>
+                                        <td>
+                                          {p.atendimentos
+                                            ? `${Math.round((p.total / p.atendimentos) * 1000) / 10}%`
+                                            : "0%"}
+                                        </td>
                                         <td>{p.visitas}</td>
                                         <td>{p.sucessos}</td>
                                         <td>{p.insucessos}</td>
                                         <td>{p.taxaVisita}%</td>
                                         <td>{p.taxaSucesso}%</td>
-                                        <td>{p.taxaInsucesso}%</td>
                                       </tr>
                                     ))}
                                 </Fragment>
@@ -269,7 +280,7 @@ export function PortaisDashboard({ data }: Props) {
 
       <div className="charts">
         <div className="card">
-          <h2>Top 5 · volume</h2>
+          <h2>Top 5 · volume (atendimentos)</h2>
           <p className="muted">Clique para selecionar a origem e ver tops abaixo.</p>
           <div className="kpi-grid">
             {data.topByVolume.map((o) => (
@@ -281,9 +292,9 @@ export function PortaisDashboard({ data }: Props) {
                 onClick={() => setSelected(o.origin)}
               >
                 <h3>{o.origin}</h3>
-                <p>{o.total}</p>
+                <p>{o.atendimentos}</p>
                 <small className="muted">
-                  Conv. {o.taxaSucesso}% · Conv. visita {o.taxaVisita}%
+                  {o.total} ag · Conv. {o.taxaSucesso}%
                 </small>
               </button>
             ))}
@@ -323,10 +334,7 @@ export function PortaisDashboard({ data }: Props) {
 
       {data.periodSeriesTop.length > 0 && (
         <div className="card">
-          <h2>Série por quinzena · top 5 portais (volume)</h2>
-          <p className="muted">
-            Agendamentos atribuídos a cada portal no período (multi-origem pode repetir).
-          </p>
+          <h2>Série por quinzena · top 5 portais (agendamentos)</h2>
           <div className="table-scroll">
             <table>
               <thead>

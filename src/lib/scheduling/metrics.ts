@@ -8,6 +8,7 @@ import type {
   PropostasBreakdown,
   SchedulingFilters,
   PropostaConversao,
+  LeadAtendimentoItem,
   SdrMetrics,
   SdrPreVendaRow,
   SdrVendedorTop,
@@ -109,6 +110,41 @@ export function filterAgendamentos(
     }
     return true;
   });
+}
+
+/** Filtra LEADS GERAL (atendimentos). Ignora filtro de vendedor (lead ainda sem vendedor). */
+export function filterLeadsAtendimentos(
+  leads: LeadAtendimentoItem[],
+  filters: SchedulingFilters
+): LeadAtendimentoItem[] {
+  return leads.filter((lead) => {
+    if (filters.sdr) {
+      if (filters.sdr === "Recepção") {
+        if (!isRecepcaoName(lead.sdr)) return false;
+      } else if (lead.sdr !== filters.sdr) {
+        return false;
+      }
+    }
+    if (filters.tipoProposta && lead.tipoProposta !== filters.tipoProposta) return false;
+    if (filters.origem && lead.origem !== filters.origem) return false;
+    if (filters.from && lead.data < filters.from) return false;
+    if (filters.to && lead.data > filters.to) return false;
+    if (filters.q?.trim()) {
+      const q = filters.q.trim().toLowerCase();
+      if (!lead.id.toLowerCase().includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+/** Contagem de atendimentos (leads) por SDR, com Recepção consolidada. */
+export function countLeadsBySdr(leads: LeadAtendimentoItem[]): Map<string, number> {
+  const map = new Map<string, number>();
+  for (const lead of leads) {
+    const key = displaySdrName(lead.sdr);
+    map.set(key, (map.get(key) || 0) + 1);
+  }
+  return map;
 }
 
 export function getSchedulingFilterOptions(items: AgendamentoItem[]) {
@@ -288,9 +324,22 @@ export function buildSdrMetrics(items: AgendamentoItem[]): SdrMetrics[] {
  * Desempenho/comparação Recepção: soma Recepção + Gabriela (e equivalentes)
  * e apresenta uma única linha "Recepção".
  */
-export function buildRecepcaoConsolidatedMetrics(items: AgendamentoItem[]): SdrMetrics[] {
-  if (items.length === 0) return [];
-  return [metricsFromSdrGroup("Recepção", items, "Recepção")];
+export function buildRecepcaoConsolidatedMetrics(
+  items: AgendamentoItem[],
+  leads: LeadAtendimentoItem[] = []
+): SdrMetrics & { totalAtendimentos: number; taxaAgendamento: number } {
+  const base =
+    items.length === 0
+      ? metricsFromSdrGroup("Recepção", [], "Recepção")
+      : metricsFromSdrGroup("Recepção", items, "Recepção");
+  const totalAtendimentos = leads.filter((l) => isRecepcaoName(l.sdr)).length;
+  return {
+    ...base,
+    totalAtendimentos,
+    taxaAgendamento: round2(
+      totalAtendimentos ? (base.totalAgendamentos / totalAtendimentos) * 100 : 0
+    ),
+  };
 }
 
 function conversaoPorTipoProposta(list: AgendamentoItem[]): PropostaConversao[] {
@@ -341,7 +390,10 @@ function topParceirosDoSdr(list: AgendamentoItem[], limit = 3): SdrVendedorTop[]
 }
 
 /** Painel unificado Pré-Vendas: desempenho + conv. por proposta + top 3 vendedores. */
-export function buildSdrPreVendaRows(items: AgendamentoItem[]): SdrPreVendaRow[] {
+export function buildSdrPreVendaRows(
+  items: AgendamentoItem[],
+  leads: LeadAtendimentoItem[] = []
+): SdrPreVendaRow[] {
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of items) {
     const list = groups.get(item.sdr) || [];
@@ -349,11 +401,23 @@ export function buildSdrPreVendaRows(items: AgendamentoItem[]): SdrPreVendaRow[]
     groups.set(item.sdr, list);
   }
 
-  return [...groups.entries()]
-    .map(([sdr, list]) => {
-      const base = metricsFromSdrGroup(sdr, list, "Pré-Venda");
+  const leadsBySdr = countLeadsBySdr(leads.filter((l) => !isRecepcaoName(l.sdr)));
+  const allSdrs = new Set([...groups.keys(), ...leadsBySdr.keys()]);
+
+  return [...allSdrs]
+    .map((sdr) => {
+      const list = groups.get(sdr) || [];
+      const base =
+        list.length > 0
+          ? metricsFromSdrGroup(sdr, list, "Pré-Venda")
+          : metricsFromSdrGroup(sdr, [], "Pré-Venda");
+      const totalAtendimentos = leadsBySdr.get(sdr) || 0;
       return {
         ...base,
+        totalAtendimentos,
+        taxaAgendamento: round2(
+          totalAtendimentos ? (base.totalAgendamentos / totalAtendimentos) * 100 : 0
+        ),
         taxaInsucesso: round2(
           base.totalAgendamentos
             ? (base.totalInsucesso / base.totalAgendamentos) * 100
@@ -364,7 +428,7 @@ export function buildSdrPreVendaRows(items: AgendamentoItem[]): SdrPreVendaRow[]
       };
     })
     .sort((a, b) =>
-      comparePreVendaSdrNames(a.sdr, b.sdr, () => b.totalAgendamentos - a.totalAgendamentos)
+      comparePreVendaSdrNames(a.sdr, b.sdr, () => b.totalAtendimentos - a.totalAtendimentos)
     );
 }
 

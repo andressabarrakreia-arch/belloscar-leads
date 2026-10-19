@@ -1,7 +1,7 @@
 /**
  * Gera public/data/agendamentos-dataset.json a partir das planilhas base.
  *
- * Ordem: AGENDAMENTOS → INSUCESSOS (enrich) → LEADS GERAL (enrich)
+ * Ordem: AGENDAMENTOS → INSUCESSOS (enrich) → LEADS GERAL (enrich + volume de atendimentos)
  * Exclui LEADS CAMPANHA e LEADS POR UTM.
  *
  * Uso: npm run generate:agendamentos
@@ -87,11 +87,25 @@ async function main() {
     );
   }
 
+  // Política: Insucesso sem motivo cruzado não entra na base publicada
+  const beforeDrop = dataset.items.length;
+  dataset = {
+    ...dataset,
+    items: dataset.items.filter(
+      (i) => i.status !== "Insucesso" || (i.motivoInsucesso && String(i.motivoInsucesso).trim())
+    ),
+  };
+  const dropped = beforeDrop - dataset.items.length;
+  if (dropped > 0) {
+    console.log(`→ Removidos ${dropped} Insucesso sem motivo`);
+  }
+
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, JSON.stringify(dataset, null, 2), "utf8");
 
   const summary = {
     items: dataset.items.length,
+    leadsAtendimentos: (dataset.leadsAtendimentos || []).length,
     sucessos: dataset.items.filter((i) => i.status === "Sucesso").length,
     visitas: dataset.items.filter((i) => i.teveVisita).length,
     insucessos: dataset.items.filter((i) => i.status === "Insucesso").length,
@@ -115,6 +129,11 @@ async function main() {
   }
   if (summary.comOrigem < 4000) {
     throw new Error(`Poucas origens cruzadas: ${summary.comOrigem}`);
+  }
+  if (summary.leadsAtendimentos < 5000) {
+    throw new Error(
+      `Poucos atendimentos LEADS GERAL: ${summary.leadsAtendimentos} (esperado dezenas de milhares)`
+    );
   }
 }
 
