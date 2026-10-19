@@ -81,8 +81,8 @@ export function SdrPreVendaConvPropostaTable({ rows }: Props) {
     <div className="card">
       <h2>Conversão por tipo de proposta</h2>
       <p className="muted">
-        Por SDR — % = Sucessos do tipo / Agendamentos daquele tipo (Su/Ag). Tipos sem volume
-        aparecem como —.
+        Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno) — % = Sucessos do tipo /
+        Agendamentos daquele tipo (Su/Ag). Tipos sem volume aparecem como —.
       </p>
       <div className="table-scroll">
         <table>
@@ -129,8 +129,8 @@ export function SdrPreVendaTopParceirosTable({ rows }: Props) {
     <div className="card">
       <h2>Top 3 vendedores por SDR</h2>
       <p className="muted">
-        Resumo SDR × vendedor — os 3 vendedores com mais agendamentos de cada SDR (volume e %
-        Su/Ag). Detalhe completo na aba Agendamentos.
+        Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno) — os 3 vendedores com mais
+        agendamentos de cada SDR (volume e % Su/Ag). Detalhe completo na aba Agendamentos.
       </p>
       <div className="table-scroll">
         <table>

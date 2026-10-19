@@ -29,7 +29,15 @@ const PRE_VENDA_SDR_PRIORITY_KEYS = [
   "thayna pre vendas",
   "lais narima ferreira vieira",
   "matheus imbroinise",
+  "liriane larissa ribeiro",
+  "bruno prospeccao",
 ] as const;
+
+/**
+ * SDRs exibidos em Conversão por tipo de proposta e Top 3 vendedores.
+ * (Desempenho Pré-Vendas continua listando todos.)
+ */
+const PRE_VENDA_FEATURED_SDR_KEYS = new Set<string>(PRE_VENDA_SDR_PRIORITY_KEYS);
 
 function normalizePersonKey(name: string): string {
   return name
@@ -39,6 +47,11 @@ function normalizePersonKey(name: string): string {
     .replace(/[^a-z0-9]+/g, " ")
     .trim()
     .replace(/\s+/g, " ");
+}
+
+/** True se o SDR entra nas tabelas Conv. proposta / Top 3. */
+export function isFeaturedPreVendaSdr(name: string): boolean {
+  return PRE_VENDA_FEATURED_SDR_KEYS.has(normalizePersonKey(name));
 }
 
 /** Nome exibido: Gabriela (e similares) → Recepção. */

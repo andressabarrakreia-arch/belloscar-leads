@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.10] - 2026-10-19
+
+### Changed
+- Pré-Vendas: **Conversão por tipo** e **Top 3 vendedores** só para Allan, Thayna, Lais, Matheus, Liriane e Bruno
+- Insucessos: donut de motivos → **barras horizontais** (sem rótulo “Donut”)
+
 ## [1.8.9] - 2026-10-19
 
 ### Added

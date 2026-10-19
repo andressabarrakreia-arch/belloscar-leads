@@ -43,7 +43,7 @@ export function SchedulingInsucessos() {
 
       <MotivoDistributionChart
         data={motivosInsucesso.map((m) => ({ label: m.motivo, value: m.quantidade }))}
-        title="Donut · motivos de insucesso"
+        title="Motivos de insucesso"
         subtitle="% motivo = Qtd do motivo / Insucessos do filtro atual."
       />
 
