@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.7] - 2026-10-19
+
+### Changed
+- Aba Pré-Vendas: **3 tabelas** — Desempenho · Conversão por tipo de proposta · Top 3 vendedores por SDR
+
 ## [1.8.6] - 2026-10-19
 
 ### Added

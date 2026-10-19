@@ -4,38 +4,21 @@ type Props = {
   rows: SdrPreVendaRow[];
 };
 
-function shortTipo(tipo: string): string {
-  if (tipo === "não informado(celulas em branco)") return "N/I";
-  if (tipo === "Consignação") return "Consign.";
-  if (tipo === "Financiamento") return "Financ.";
-  return tipo;
+function taxaOf(rows: PropostaConversao[], tipo: string): string {
+  const hit = rows.find((r) => r.tipo === tipo);
+  if (!hit) return "—";
+  return `${hit.taxa}% (${hit.sucessos}/${hit.agendamentos})`;
 }
 
-function ConvPropostaCell({ rows }: { rows: PropostaConversao[] }) {
-  if (rows.length === 0) return <span className="muted">—</span>;
-  return (
-    <ul className="mini-list">
-      {rows.map((r) => (
-        <li key={r.tipo}>
-          <strong>{shortTipo(r.tipo)}</strong> {r.taxa}%{" "}
-          <span className="muted">
-            ({r.sucessos}/{r.agendamentos})
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-/** Tabela única Pré-Vendas: volumes, taxas, conv. por proposta e top 3 parceiros. */
+/** 1) Desempenho unificado (volumes + taxas + mix em quantidade). */
 export function SdrPreVendaUnifiedTable({ rows }: Props) {
   return (
     <div className="card">
       <h2>Desempenho Pré-Vendas</h2>
       <p className="muted">
-        Painel unificado por SDR (ordem da equipe web). Show-up = Visitas/Agendamentos · Conv. =
-        Sucessos/Agendamentos · Conv. por proposta = Sucessos do tipo / Agendamentos do tipo · Top 3
-        = vendedores com mais agendamentos daquele SDR. Recepção não entra neste bloco.
+        Por SDR (ordem da equipe web). Show-up = Visitas/Agendamentos · Conv. = Sucessos/Agendamentos
+        · % Insuc. = Insucessos/Agendamentos. Colunas Compra…N/I = volume por tipo. Recepção não
+        entra neste bloco.
       </p>
       <div className="table-scroll">
         <table>
@@ -55,8 +38,6 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
               <th>Consign.</th>
               <th>Financ.</th>
               <th>N/I</th>
-              <th>Conv. por proposta (Su/Ag do tipo)</th>
-              <th>Top 3 vendedores</th>
             </tr>
           </thead>
           <tbody>
@@ -76,30 +57,115 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
                 <td>{r.propostasBreakdown.Consignação}</td>
                 <td>{r.propostasBreakdown.Financiamento}</td>
                 <td>{r.propostasBreakdown["não informado(celulas em branco)"]}</td>
-                <td>
-                  <ConvPropostaCell rows={r.conversaoPorProposta} />
-                </td>
-                <td>
-                  {r.topParceiros.length === 0 ? (
-                    <span className="muted">—</span>
-                  ) : (
-                    <ol className="mini-list mini-list--ol">
-                      {r.topParceiros.map((p, idx) => (
-                        <li key={p.vendedor}>
-                          {idx + 1}. {p.vendedor}{" "}
-                          <span className="muted">
-                            ({p.total} ag · {p.taxaSucesso}% Su/Ag)
-                          </span>
-                        </li>
-                      ))}
-                    </ol>
-                  )}
-                </td>
               </tr>
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={16} className="muted">
+                <td colSpan={14} className="muted">
+                  Nenhum registro de Pré-Venda no filtro atual.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+/** 2) Conversão por tipo de proposta (Su/Ag do tipo), por SDR. */
+export function SdrPreVendaConvPropostaTable({ rows }: Props) {
+  return (
+    <div className="card">
+      <h2>Conversão por tipo de proposta</h2>
+      <p className="muted">
+        Por SDR — % = Sucessos do tipo / Agendamentos daquele tipo (Su/Ag). Tipos sem volume
+        aparecem como —.
+      </p>
+      <div className="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Atendido por</th>
+              <th>Compra</th>
+              <th>Venda</th>
+              <th>Troca</th>
+              <th>Consign.</th>
+              <th>Financ.</th>
+              <th>N/I</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.sdr}>
+                <td>{r.sdr}</td>
+                <td>{taxaOf(r.conversaoPorProposta, "Compra")}</td>
+                <td>{taxaOf(r.conversaoPorProposta, "Venda")}</td>
+                <td>{taxaOf(r.conversaoPorProposta, "Troca")}</td>
+                <td>{taxaOf(r.conversaoPorProposta, "Consignação")}</td>
+                <td>{taxaOf(r.conversaoPorProposta, "Financiamento")}</td>
+                <td>{taxaOf(r.conversaoPorProposta, "não informado(celulas em branco)")}</td>
+              </tr>
+            ))}
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={7} className="muted">
+                  Nenhum registro de Pré-Venda no filtro atual.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+/** 3) Top 3 vendedores por SDR. */
+export function SdrPreVendaTopParceirosTable({ rows }: Props) {
+  return (
+    <div className="card">
+      <h2>Top 3 vendedores por SDR</h2>
+      <p className="muted">
+        Resumo SDR × vendedor — os 3 vendedores com mais agendamentos de cada SDR (volume e %
+        Su/Ag). Detalhe completo na aba Agendamentos.
+      </p>
+      <div className="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Atendido por</th>
+              <th>1º</th>
+              <th>2º</th>
+              <th>3º</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => {
+              const [a, b, c] = r.topParceiros;
+              const fmt = (p?: (typeof r.topParceiros)[0]) =>
+                p ? (
+                  <>
+                    {p.vendedor}{" "}
+                    <span className="muted">
+                      ({p.total} ag · {p.taxaSucesso}% Su/Ag)
+                    </span>
+                  </>
+                ) : (
+                  <span className="muted">—</span>
+                );
+              return (
+                <tr key={r.sdr}>
+                  <td>{r.sdr}</td>
+                  <td>{fmt(a)}</td>
+                  <td>{fmt(b)}</td>
+                  <td>{fmt(c)}</td>
+                </tr>
+              );
+            })}
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={4} className="muted">
                   Nenhum registro de Pré-Venda no filtro atual.
                 </td>
               </tr>
