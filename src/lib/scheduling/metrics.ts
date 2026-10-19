@@ -7,7 +7,10 @@ import type {
   OrigemStats,
   PropostasBreakdown,
   SchedulingFilters,
+  PropostaConversao,
   SdrMetrics,
+  SdrPreVendaRow,
+  SdrVendedorTop,
   TipoProposta,
   VendedorMetrics,
 } from "./types";
@@ -288,6 +291,81 @@ export function buildSdrMetrics(items: AgendamentoItem[]): SdrMetrics[] {
 export function buildRecepcaoConsolidatedMetrics(items: AgendamentoItem[]): SdrMetrics[] {
   if (items.length === 0) return [];
   return [metricsFromSdrGroup("Recepção", items, "Recepção")];
+}
+
+function conversaoPorTipoProposta(list: AgendamentoItem[]): PropostaConversao[] {
+  const tipos: TipoProposta[] = [
+    "Compra",
+    "Venda",
+    "Troca",
+    "Consignação",
+    "Financiamento",
+    "não informado(celulas em branco)",
+  ];
+  return tipos
+    .map((tipo) => {
+      const ofTipo = list.filter((i) => i.tipoProposta === tipo);
+      const agendamentos = ofTipo.length;
+      const sucessos = ofTipo.filter((i) => i.status === "Sucesso").length;
+      return {
+        tipo,
+        agendamentos,
+        sucessos,
+        taxa: round2(agendamentos ? (sucessos / agendamentos) * 100 : 0),
+      };
+    })
+    .filter((r) => r.agendamentos > 0);
+}
+
+function topParceirosDoSdr(list: AgendamentoItem[], limit = 3): SdrVendedorTop[] {
+  const groups = new Map<string, AgendamentoItem[]>();
+  for (const item of list) {
+    if (!item.vendedor || item.vendedor === "(sem vendedor)") continue;
+    const cur = groups.get(item.vendedor) || [];
+    cur.push(item);
+    groups.set(item.vendedor, cur);
+  }
+  return [...groups.entries()]
+    .map(([vendedor, rows]) => {
+      const total = rows.length;
+      const sucessos = rows.filter((i) => i.status === "Sucesso").length;
+      return {
+        vendedor,
+        total,
+        sucessos,
+        taxaSucesso: round2(total ? (sucessos / total) * 100 : 0),
+      };
+    })
+    .sort((a, b) => b.total - a.total || b.taxaSucesso - a.taxaSucesso)
+    .slice(0, limit);
+}
+
+/** Painel unificado Pré-Vendas: desempenho + conv. por proposta + top 3 vendedores. */
+export function buildSdrPreVendaRows(items: AgendamentoItem[]): SdrPreVendaRow[] {
+  const groups = new Map<string, AgendamentoItem[]>();
+  for (const item of items) {
+    const list = groups.get(item.sdr) || [];
+    list.push(item);
+    groups.set(item.sdr, list);
+  }
+
+  return [...groups.entries()]
+    .map(([sdr, list]) => {
+      const base = metricsFromSdrGroup(sdr, list, "Pré-Venda");
+      return {
+        ...base,
+        taxaInsucesso: round2(
+          base.totalAgendamentos
+            ? (base.totalInsucesso / base.totalAgendamentos) * 100
+            : 0
+        ),
+        conversaoPorProposta: conversaoPorTipoProposta(list),
+        topParceiros: topParceirosDoSdr(list, 3),
+      };
+    })
+    .sort((a, b) =>
+      comparePreVendaSdrNames(a.sdr, b.sdr, () => b.totalAgendamentos - a.totalAgendamentos)
+    );
 }
 
 export function buildVendedorMetrics(items: AgendamentoItem[]): VendedorMetrics[] {

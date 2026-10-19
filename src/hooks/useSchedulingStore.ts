@@ -8,8 +8,7 @@ import {
   buildPeriodSeries,
   buildProposalDistribution,
   buildRecepcaoConsolidatedMetrics,
-  buildSdrComparisonRows,
-  buildSdrMetrics,
+  buildSdrPreVendaRows,
   buildSdrVendedorProposalRows,
   buildVendedorComparisonRows,
   buildVendedorMetrics,
@@ -44,7 +43,7 @@ export function useSchedulingAnalytics(
     const filtered = filterAgendamentos(dataset.items, filters);
     const { preVenda, recepcao } = splitByCanal(filtered);
 
-    const sdrPreVenda = buildSdrMetrics(preVenda);
+    const sdrPreVendaRows = buildSdrPreVendaRows(preVenda);
     const sdrRecepcao = buildRecepcaoConsolidatedMetrics(recepcao);
     const vendedorMetrics = buildVendedorMetrics(filtered);
 
@@ -55,12 +54,9 @@ export function useSchedulingAnalytics(
       options: getSchedulingFilterOptions(dataset.items),
       kpisPreVenda: buildCanalKpis(preVenda, "Pré-Venda"),
       kpisRecepcao: buildCanalKpis(recepcao, "Recepção"),
-      sdrPreVenda,
+      sdrPreVendaRows,
       sdrRecepcao,
       vendedorMetrics,
-      /** Só quem atendeu (SDR) — sem vendedores */
-      comparisonSdrPreVenda: buildSdrComparisonRows(sdrPreVenda),
-      comparisonSdrRecepcao: buildSdrComparisonRows(sdrRecepcao),
       /** Só vendedores, por canal */
       comparisonVendedoresPreVenda: buildVendedorComparisonRows(vendedorMetrics, "Pré-Venda"),
       comparisonVendedoresRecepcao: buildVendedorComparisonRows(vendedorMetrics, "Recepção"),

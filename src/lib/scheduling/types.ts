@@ -72,6 +72,29 @@ export type SdrMetrics = {
   taxaConversaoSucesso: number;
 };
 
+/** Conv. ag→sucesso dentro de um tipo de proposta (Su do tipo / Ag do tipo). */
+export type PropostaConversao = {
+  tipo: TipoProposta;
+  agendamentos: number;
+  sucessos: number;
+  taxa: number;
+};
+
+/** Par SDR × Vendedor resumido (top parceiros). */
+export type SdrVendedorTop = {
+  vendedor: string;
+  total: number;
+  sucessos: number;
+  taxaSucesso: number;
+};
+
+/** Linha unificada da aba Pré-Vendas (desempenho + extras). */
+export type SdrPreVendaRow = SdrMetrics & {
+  taxaInsucesso: number;
+  conversaoPorProposta: PropostaConversao[];
+  topParceiros: SdrVendedorTop[];
+};
+
 export type MotivoStats = {
   motivo: string;
   quantidade: number;

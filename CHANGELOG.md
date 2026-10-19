@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.5] - 2026-10-19
+
+### Changed
+- Aba Pré-Vendas: **uma tabela unificada** (desempenho + insucessos) com **conv. por tipo de proposta** e **top 3 vendedores** por SDR
+- Removida a tabela duplicada “Comparação direta · Pré-Venda” (e a de Recepção redundante nessa aba)
+
 ## [1.8.4] - 2026-10-19
 
 ### Changed
