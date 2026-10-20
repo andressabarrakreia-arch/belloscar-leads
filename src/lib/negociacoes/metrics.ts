@@ -1,6 +1,7 @@
 import { formatPeriodLabel } from "../dates";
 import { linesToDeals } from "./deals";
 import type {
+  AvaliacaoConvRow,
   NegociacaoDeal,
   NegociacaoLine,
   NegociacoesFilters,
@@ -166,4 +167,117 @@ export function buildLancamentoRows(deals: NegociacaoDeal[]): LancamentoRow[] {
       };
     })
     .sort((a, b) => b.data.localeCompare(a.data) || a.negociacaoId.localeCompare(b.negociacaoId));
+}
+
+export type RankSlot = {
+  vendedor: string;
+  qtde: number;
+};
+
+export type AvaliacaoRankSlot = {
+  vendedor: string;
+  realizadas: number;
+  aprovadas: number;
+  percentual: number;
+};
+
+export type UnifiedRankRow = {
+  pos: number;
+  vendasTrocas: RankSlot | null;
+  compras: RankSlot | null;
+  consignacoes: RankSlot | null;
+  avaliacao: AvaliacaoRankSlot | null;
+};
+
+/** Agrega avaliações pelo filtro de mês (e vendedor, se houver). */
+export function filterAvaliacoes(
+  rows: AvaliacaoConvRow[],
+  filters: NegociacoesFilters
+): AvaliacaoConvRow[] {
+  const filtered = rows.filter((r) => {
+    if (filters.month !== "all" && r.monthKey !== filters.month) return false;
+    if (filters.vendedor !== "all" && r.vendedor !== filters.vendedor) return false;
+    return true;
+  });
+
+  if (filters.month !== "all") return filtered;
+
+  // "Todos" os meses: soma por vendedor
+  const map = new Map<string, AvaliacaoConvRow>();
+  for (const r of filtered) {
+    const cur = map.get(r.vendedor) || {
+      monthKey: "all",
+      vendedor: r.vendedor,
+      aprovadas: 0,
+      realizadas: 0,
+      percentual: 0,
+    };
+    cur.aprovadas += r.aprovadas;
+    cur.realizadas += r.realizadas;
+    map.set(r.vendedor, cur);
+  }
+  return [...map.values()].map((r) => ({
+    ...r,
+    percentual: r.realizadas
+      ? Math.round((r.aprovadas / r.realizadas) * 10000) / 100
+      : 0,
+  }));
+}
+
+function topSlots(
+  rows: { vendedor: string; qtde: number }[],
+  limit = 10
+): RankSlot[] {
+  return rows
+    .filter((r) => r.qtde > 0)
+    .sort((a, b) => b.qtde - a.qtde || a.vendedor.localeCompare(b.vendedor, "pt-BR"))
+    .slice(0, limit)
+    .map((r) => ({ vendedor: r.vendedor, qtde: r.qtde }));
+}
+
+export function buildUnifiedRankings(
+  vendedores: VendedorNegociacaoRow[],
+  avaliacoes: AvaliacaoConvRow[],
+  limit = 10
+): UnifiedRankRow[] {
+  const vt = topSlots(
+    vendedores.map((v) => ({ vendedor: v.vendedor, qtde: v.vendasMaisTrocas })),
+    limit
+  );
+  const compras = topSlots(
+    vendedores.map((v) => ({ vendedor: v.vendedor, qtde: v.compras })),
+    limit
+  );
+  const consig = topSlots(
+    vendedores.map((v) => ({ vendedor: v.vendedor, qtde: v.consignacoes })),
+    limit
+  );
+  const aval = [...avaliacoes]
+    .filter((a) => a.realizadas > 0)
+    .sort(
+      (a, b) =>
+        b.percentual - a.percentual ||
+        b.aprovadas - a.aprovadas ||
+        a.vendedor.localeCompare(b.vendedor, "pt-BR")
+    )
+    .slice(0, limit)
+    .map((a) => ({
+      vendedor: a.vendedor,
+      realizadas: a.realizadas,
+      aprovadas: a.aprovadas,
+      percentual: a.percentual,
+    }));
+
+  const n = Math.max(vt.length, compras.length, consig.length, aval.length);
+  const rows: UnifiedRankRow[] = [];
+  for (let i = 0; i < n; i++) {
+    rows.push({
+      pos: i + 1,
+      vendasTrocas: vt[i] || null,
+      compras: compras[i] || null,
+      consignacoes: consig[i] || null,
+      avaliacao: aval[i] || null,
+    });
+  }
+  return rows;
 }

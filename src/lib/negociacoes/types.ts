@@ -59,10 +59,21 @@ export type NegociacoesImportMeta = {
   notes: string[];
 };
 
+/** Linha de conversão de avaliações (planilha mensal por vendedor). */
+export type AvaliacaoConvRow = {
+  monthKey: string;
+  vendedor: string;
+  aprovadas: number;
+  realizadas: number;
+  percentual: number;
+};
+
 export type NegociacoesDataset = {
   updatedAt: string;
   imports: NegociacoesImportMeta[];
   lines: NegociacaoLine[];
+  /** Conversão Aval→aprovada por vendedor/mês. */
+  avaliacoes: AvaliacaoConvRow[];
 };
 
 export type NegociacoesFilters = {

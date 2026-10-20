@@ -8,7 +8,14 @@ import {
   publishJsonToGitHub,
   setStoredToken,
 } from "../../lib/githubPublish";
-import { applyNegociacoesImport } from "../../lib/negociacoes/mergeByNegociacao";
+import {
+  applyAvaliacoesImport,
+  applyNegociacoesImport,
+} from "../../lib/negociacoes/mergeByNegociacao";
+import {
+  isAvaliacoesSheet,
+  parseAvaliacoesArrayBuffer,
+} from "../../lib/negociacoes/parseAvaliacoesExcel";
 import { parseNegociacoesArrayBuffer } from "../../lib/negociacoes/parseNegociacoesExcel";
 import {
   downloadNegociacoesDataset,
@@ -94,7 +101,7 @@ export function NegociacoesAdmin() {
     }
     const result = await publishJsonToGitHub(next, pat, {
       path: NEGOCIACOES_GITHUB_PATH,
-      message: `Agrega negociações: ${importLabel} (${next.lines.length} linhas)`,
+      message: `Agrega negociações: ${importLabel} (${next.lines.length} linhas, ${next.avaliacoes?.length || 0} aval.)`,
     });
     setCommitUrl(result.commitUrl);
     setDataset(next);
@@ -112,13 +119,26 @@ export function NegociacoesAdmin() {
     setCommitUrl(null);
     try {
       const buffer = await file.arrayBuffer();
-      const rows = parseNegociacoesArrayBuffer(buffer);
-      if (rows.length === 0) {
-        throw new Error(
-          "Nenhuma linha válida. Use a aba Página1 com coluna Negociação (Compra de Consignado é ignorada)."
-        );
-      }
-      const result = applyNegociacoesImport(dataset, rows, file.name, label || file.name);
+      const asAvaliacoes = isAvaliacoesSheet(buffer);
+      const result = asAvaliacoes
+        ? (() => {
+            const rows = parseAvaliacoesArrayBuffer(buffer);
+            if (rows.length === 0) {
+              throw new Error(
+                "Nenhuma linha de avaliação válida (esperado: Vendedor / Aprovadas / Realizadas por mês)."
+              );
+            }
+            return applyAvaliacoesImport(dataset, rows, file.name, label || file.name);
+          })()
+        : (() => {
+            const rows = parseNegociacoesArrayBuffer(buffer);
+            if (rows.length === 0) {
+              throw new Error(
+                "Nenhuma linha válida. Use Página1 com coluna Negociação, ou a planilha de conversão de avaliações."
+              );
+            }
+            return applyNegociacoesImport(dataset, rows, file.name, label || file.name);
+          })();
       setPreview(result.dataset);
       setMeta(result.meta);
       saveLocalNegociacoesDataset(result.dataset);
@@ -129,7 +149,9 @@ export function NegociacoesAdmin() {
         setPreview(result.dataset);
       } else {
         setSuccess(
-          `Importação local OK: +${result.meta.kept} novos nº, ${result.meta.replaced} atualizados.`
+          asAvaliacoes
+            ? `Importação local OK (avaliações): ${result.meta.kept} linhas em ${result.meta.replaced} mês(es).`
+            : `Importação local OK: +${result.meta.kept} novos nº, ${result.meta.replaced} atualizados.`
         );
       }
     } catch (err) {
@@ -265,9 +287,10 @@ export function NegociacoesAdmin() {
       <div className="card">
         <h2>Importar planilha (.xlsx)</h2>
         <p className="muted">
-          Export bruto com coluna <strong>Negociação</strong> (aba Página1). Agrega a base;
-          dedupe pelo <strong>nº da negociação</strong> (arquivo novo substitui o grupo desse
-          nº). Compra de Consignado é ignorada. Cancelado não conta nos KPIs.
+          Aceita (1) export com coluna <strong>Negociação</strong> — merge por nº; ou (2)
+          planilha de <strong>conversão de avaliações</strong> (Aprovadas/Realizadas por mês) —
+          substitui os meses do arquivo. Compra de Consignado é ignorada. Cancelado não conta
+          nos KPIs.
         </p>
         <div className="stack">
           <label>
@@ -351,7 +374,8 @@ export function NegociacoesAdmin() {
         <div className="card">
           <h2>Dataset atual (negociações)</h2>
           <p>
-            {dataset.lines.length} linhas · atualizado em{" "}
+            {dataset.lines.length} linhas de negócio · {(dataset.avaliacoes || []).length}{" "}
+            linhas de avaliação · atualizado em{" "}
             {new Date(dataset.updatedAt).toLocaleString("pt-BR")}
           </p>
           <h3>Últimos imports</h3>

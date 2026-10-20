@@ -3,8 +3,10 @@ import {
   buildLancamentoRows,
   buildNegociacoesKpis,
   buildPeriodSeries,
+  buildUnifiedRankings,
   buildVendedorRows,
   dealsFromLines,
+  filterAvaliacoes,
   filterDeals,
   getNegociacoesFilterOptions,
   statusBreakdown,
@@ -37,12 +39,16 @@ export function useNegociacoesAnalytics(
     if (!dataset) return null;
     const allDeals = dealsFromLines(dataset.lines);
     const filtered = filterDeals(allDeals, filters);
+    const vendedores = buildVendedorRows(filtered);
+    const avaliacoes = filterAvaliacoes(dataset.avaliacoes || [], filters);
     return {
       allDeals,
       filtered,
       options: getNegociacoesFilterOptions(allDeals),
       kpis: buildNegociacoesKpis(filtered),
-      vendedores: buildVendedorRows(filtered),
+      vendedores,
+      avaliacoes,
+      rankings: buildUnifiedRankings(vendedores, avaliacoes),
       periodSeries: buildPeriodSeries(filtered),
       statusRows: statusBreakdown(filtered),
       lancamentos: buildLancamentoRows(filtered),

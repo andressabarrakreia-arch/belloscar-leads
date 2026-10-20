@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.1] - 2026-10-19
+
+### Added
+- Negociações · Vendedores: ranking **unificado** (colocação única + blocos) e **conversão de avaliações**
+- Gestão Negociações: upload da planilha de conversão de avaliações (merge por mês)
+
+### Changed
+- Rankings: uma tabela com # compartilhado (Vendas+Trocas · Compras · Consignações · Conv. avaliação)
+
 ## [1.9.0] - 2026-10-19
 
 ### Added

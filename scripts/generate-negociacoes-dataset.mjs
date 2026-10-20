@@ -126,6 +126,75 @@ for (const row of rows) {
   });
 }
 
+const avalPath = path.resolve(
+  root,
+  "..",
+  "EXEMPLOS DE ARQUIVOS NEGOCIAÇÕES",
+  "conversão avaliação 01_01_2026 a 15_10_2026.xlsx"
+);
+
+function parsePercent(value, aprovadas, realizadas) {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value <= 1 ? Math.round(value * 10000) / 100 : Math.round(value * 100) / 100;
+  }
+  const raw = String(value ?? "")
+    .replace("%", "")
+    .replace(",", ".")
+    .trim();
+  const n = Number(raw);
+  if (Number.isFinite(n)) {
+    return n <= 1 && !String(value).includes("%")
+      ? Math.round(n * 10000) / 100
+      : Math.round(n * 100) / 100;
+  }
+  return realizadas ? Math.round((aprovadas / realizadas) * 10000) / 100 : 0;
+}
+
+const avaliacoes = [];
+if (fs.existsSync(avalPath)) {
+  const awb = XLSX.readFile(avalPath, { cellDates: true });
+  const arows = XLSX.utils.sheet_to_json(awb.Sheets[awb.SheetNames[0]], {
+    header: 1,
+    defval: "",
+    cellDates: true,
+  });
+  let monthKey = null;
+  let inTable = false;
+  for (const row of arows) {
+    const c0 = row[0];
+    if (c0 instanceof Date && !Number.isNaN(c0.getTime())) {
+      const y = c0.getFullYear();
+      const m = String(c0.getMonth() + 1).padStart(2, "0");
+      monthKey = `${y}-${m}`;
+      inTable = false;
+      continue;
+    }
+    const h0 = String(c0 || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/\p{M}/gu, "");
+    if (h0 === "vendedor" && String(row[1] || "").toLowerCase().includes("aprov")) {
+      inTable = true;
+      continue;
+    }
+    if (!inTable || !monthKey) continue;
+    const vendedor = String(c0 || "").trim();
+    if (!vendedor || vendedor.toLowerCase() === "total") {
+      if (vendedor.toLowerCase() === "total") inTable = false;
+      continue;
+    }
+    const aprovadas = Number(row[1]) || 0;
+    const realizadas = Number(row[2]) || 0;
+    avaliacoes.push({
+      monthKey,
+      vendedor,
+      aprovadas,
+      realizadas,
+      percentual: parsePercent(row[3], aprovadas, realizadas),
+    });
+  }
+}
+
 const dataset = {
   updatedAt: new Date().toISOString(),
   imports: [
@@ -142,14 +211,18 @@ const dataset = {
         skippedCompraConsig
           ? `${skippedCompraConsig} linhas Compra de Consignado ignoradas`
           : "Sem Compra de Consignado",
+        avaliacoes.length
+          ? `+ ${avaliacoes.length} linhas conversão avaliações`
+          : "Sem arquivo de avaliações",
       ],
     },
   ],
   lines,
+  avaliacoes,
 };
 
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, JSON.stringify(dataset));
 console.log(
-  `OK ${outPath}: ${lines.length} linhas, ${new Set(lines.map((l) => l.negociacaoId)).size} nº únicos, skip consignado=${skippedCompraConsig}`
+  `OK ${outPath}: ${lines.length} linhas, ${new Set(lines.map((l) => l.negociacaoId)).size} nº únicos, skip consignado=${skippedCompraConsig}, avaliacoes=${avaliacoes.length}`
 );

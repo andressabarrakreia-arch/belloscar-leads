@@ -1,10 +1,16 @@
-import type { NegociacaoLine, NegociacoesDataset, NegociacoesImportMeta } from "./types";
+import type {
+  AvaliacaoConvRow,
+  NegociacaoLine,
+  NegociacoesDataset,
+  NegociacoesImportMeta,
+} from "./types";
 
 export function emptyNegociacoesDataset(): NegociacoesDataset {
   return {
     updatedAt: new Date().toISOString(),
     imports: [],
     lines: [],
+    avaliacoes: [],
   };
 }
 
@@ -13,6 +19,7 @@ export function normalizeNegociacoesDataset(dataset: NegociacoesDataset): Negoci
     ...dataset,
     lines: dataset.lines || [],
     imports: dataset.imports || [],
+    avaliacoes: dataset.avaliacoes || [],
   };
 }
 
@@ -32,12 +39,10 @@ export function mergeByNegociacao(
     byId.set(line.negociacaoId, list);
   }
 
-  const incomingIds = new Set(incoming.map((l) => l.negociacaoId));
   let replaced = 0;
   let kept = 0;
   let removed = 0;
 
-  // Dedupe dentro do lote: se o mesmo id aparece, todas as linhas do lote entram juntas
   const batchById = new Map<string, NegociacaoLine[]>();
   for (const line of incoming) {
     if (!line.negociacaoId) {
@@ -61,9 +66,23 @@ export function mergeByNegociacao(
     byId.set(id, group);
   }
 
-  const lines = [...byId.values()].flat();
-  void incomingIds;
-  return { lines, kept, replaced, removed, notes };
+  return { lines: [...byId.values()].flat(), kept, replaced, removed, notes };
+}
+
+/** Substitui avaliações dos meses presentes no arquivo novo; mantém os demais. */
+export function mergeAvaliacoes(
+  existing: AvaliacaoConvRow[],
+  incoming: AvaliacaoConvRow[]
+): { avaliacoes: AvaliacaoConvRow[]; kept: number; replaced: number; notes: string[] } {
+  const months = new Set(incoming.map((r) => r.monthKey));
+  const keptMonths = existing.filter((r) => !months.has(r.monthKey));
+  const notes = [...months].slice(0, 12).map((m) => `Avaliações ${m}: substituídas pelo arquivo novo`);
+  return {
+    avaliacoes: [...keptMonths, ...incoming],
+    kept: incoming.length,
+    replaced: months.size,
+    notes,
+  };
 }
 
 export function applyNegociacoesImport(
@@ -91,6 +110,38 @@ export function applyNegociacoesImport(
       updatedAt: meta.at,
       imports: [meta, ...base.imports].slice(0, 50),
       lines,
+      avaliacoes: base.avaliacoes,
+    },
+    meta,
+  };
+}
+
+export function applyAvaliacoesImport(
+  current: NegociacoesDataset,
+  incoming: AvaliacaoConvRow[],
+  fileName: string,
+  label?: string
+): { dataset: NegociacoesDataset; meta: NegociacoesImportMeta } {
+  const base = normalizeNegociacoesDataset(current);
+  const { avaliacoes, kept, replaced, notes } = mergeAvaliacoes(base.avaliacoes, incoming);
+
+  const meta: NegociacoesImportMeta = {
+    fileName,
+    label: label || fileName,
+    at: new Date().toISOString(),
+    received: incoming.length,
+    kept,
+    replaced,
+    removed: 0,
+    notes: ["Tipo: conversão de avaliações", ...notes],
+  };
+
+  return {
+    dataset: {
+      updatedAt: meta.at,
+      imports: [meta, ...base.imports].slice(0, 50),
+      lines: base.lines,
+      avaliacoes,
     },
     meta,
   };

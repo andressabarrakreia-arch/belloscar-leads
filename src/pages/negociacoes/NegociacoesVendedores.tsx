@@ -4,10 +4,7 @@ export function NegociacoesVendedores() {
   const { analytics } = useNegociacoesAnalyticsContext();
   if (!analytics) return null;
 
-  const { vendedores } = analytics;
-  const rankingVt = [...vendedores].sort((a, b) => b.vendasMaisTrocas - a.vendasMaisTrocas);
-  const rankingCompra = [...vendedores].sort((a, b) => b.compras - a.compras);
-  const rankingConsig = [...vendedores].sort((a, b) => b.consignacoes - a.consignacoes);
+  const { vendedores, rankings, avaliacoes } = analytics;
 
   return (
     <>
@@ -55,52 +52,103 @@ export function NegociacoesVendedores() {
 
       <div className="card">
         <h2>Rankings</h2>
-        <div className="charts" style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
-          <RankingBlock title="Vendas + Trocas" rows={rankingVt.map((r) => ({ nome: r.vendedor, qtde: r.vendasMaisTrocas }))} />
-          <RankingBlock title="Compras" rows={rankingCompra.map((r) => ({ nome: r.vendedor, qtde: r.compras }))} />
-          <RankingBlock title="Consignações" rows={rankingConsig.map((r) => ({ nome: r.vendedor, qtde: r.consignacoes }))} />
+        <p className="muted">
+          Uma linha por colocação. Cada bloco mostra o vendedor e a quantidade daquela métrica.
+          Conv. avaliação = Aprovadas / Realizadas (planilha de conversão de avaliações).
+        </p>
+        <div className="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th rowSpan={2}>#</th>
+                <th colSpan={2}>Vendas + Trocas</th>
+                <th colSpan={2}>Compras</th>
+                <th colSpan={2}>Consignações</th>
+                <th colSpan={4}>Conv. avaliação</th>
+              </tr>
+              <tr>
+                <th>Vendedor</th>
+                <th>Qtde</th>
+                <th>Vendedor</th>
+                <th>Qtde</th>
+                <th>Vendedor</th>
+                <th>Qtde</th>
+                <th>Vendedor</th>
+                <th>Real.</th>
+                <th>Aprov.</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rankings.map((r) => (
+                <tr key={r.pos}>
+                  <td>{r.pos}</td>
+                  <td>{r.vendasTrocas?.vendedor || "—"}</td>
+                  <td>{r.vendasTrocas ? r.vendasTrocas.qtde : "—"}</td>
+                  <td>{r.compras?.vendedor || "—"}</td>
+                  <td>{r.compras ? r.compras.qtde : "—"}</td>
+                  <td>{r.consignacoes?.vendedor || "—"}</td>
+                  <td>{r.consignacoes ? r.consignacoes.qtde : "—"}</td>
+                  <td>{r.avaliacao?.vendedor || "—"}</td>
+                  <td>{r.avaliacao ? r.avaliacao.realizadas : "—"}</td>
+                  <td>{r.avaliacao ? r.avaliacao.aprovadas : "—"}</td>
+                  <td>{r.avaliacao ? `${r.avaliacao.percentual}%` : "—"}</td>
+                </tr>
+              ))}
+              {rankings.length === 0 && (
+                <tr>
+                  <td colSpan={11} className="muted">
+                    Sem dados de ranking no filtro atual.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="card">
+        <h2>Conversão de avaliações</h2>
+        <p className="muted">
+          Solicitações por vendedor (filtro de mês). % = Aprovadas / Realizadas.
+        </p>
+        <div className="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Vendedor</th>
+                <th>Realizadas</th>
+                <th>Aprovadas</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...avaliacoes]
+                .sort(
+                  (a, b) =>
+                    b.percentual - a.percentual ||
+                    b.realizadas - a.realizadas ||
+                    a.vendedor.localeCompare(b.vendedor, "pt-BR")
+                )
+                .map((r) => (
+                  <tr key={`${r.monthKey}-${r.vendedor}`}>
+                    <td>{r.vendedor}</td>
+                    <td>{r.realizadas}</td>
+                    <td>{r.aprovadas}</td>
+                    <td>{r.percentual}%</td>
+                  </tr>
+                ))}
+              {avaliacoes.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="muted">
+                    Sem dados de avaliação no filtro. Envie a planilha pela Gestão.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </>
-  );
-}
-
-function RankingBlock({
-  title,
-  rows,
-}: {
-  title: string;
-  rows: { nome: string; qtde: number }[];
-}) {
-  const top = rows.filter((r) => r.qtde > 0).slice(0, 8);
-  return (
-    <div>
-      <h3>{title}</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Vendedor</th>
-            <th>Qtde</th>
-          </tr>
-        </thead>
-        <tbody>
-          {top.map((r, i) => (
-            <tr key={r.nome}>
-              <td>{i + 1}</td>
-              <td>{r.nome}</td>
-              <td>{r.qtde}</td>
-            </tr>
-          ))}
-          {top.length === 0 && (
-            <tr>
-              <td colSpan={3} className="muted">
-                —
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
   );
 }

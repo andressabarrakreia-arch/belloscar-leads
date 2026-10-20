@@ -100,7 +100,8 @@ Dataset isolado: [`public/data/negociacoes-dataset.json`](public/data/negociacoe
 
 - Sem **Cancelado** nos totais · **Compra de Consignado** não entra  
 - **Troca** (2 linhas) = 1 negócio · **Venda/Compra** multi-linha = 1 por linha  
-- Gestão: merge acumulativo pelo **nº da Negociação** (arquivo novo atualiza o grupo)
+- Gestão: merge acumulativo pelo **nº da Negociação** (arquivo novo atualiza o grupo)  
+- Também aceita planilha de **conversão de avaliações** (Aprovadas/Realizadas) — ranking na aba Vendedores  
 
 ```bash
 node scripts/generate-negociacoes-dataset.mjs

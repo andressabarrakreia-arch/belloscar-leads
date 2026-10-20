@@ -22,4 +22,10 @@ globs:
 - Demais tipos (ex.: Consignação): 1 negócio por linha.
 - **Devolvido** / Pendente contam (houve negociação).
 
+## Conversão de avaliações
+
+- Planilha separada (Aprovadas / Realizadas por mês).
+- Merge: substitui os **meses** presentes no arquivo; mantém os demais.
+- Ranking e tabela na aba Vendedores; % = Aprovadas / Realizadas.
+
 Dataset: `public/data/negociacoes-dataset.json` · path GitHub isolado.
