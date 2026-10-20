@@ -54,7 +54,6 @@ export function NegociacoesVendedores() {
         <h2>Rankings</h2>
         <p className="muted">
           Uma linha por colocação. Cada bloco mostra o vendedor e a quantidade daquela métrica.
-          Conv. avaliação = Aprovadas / Realizadas (planilha de conversão de avaliações).
         </p>
         <div className="table-scroll">
           <table>
@@ -64,7 +63,6 @@ export function NegociacoesVendedores() {
                 <th colSpan={2}>Vendas + Trocas</th>
                 <th colSpan={2}>Compras</th>
                 <th colSpan={2}>Consignações</th>
-                <th colSpan={4}>Conv. avaliação</th>
               </tr>
               <tr>
                 <th>Vendedor</th>
@@ -73,10 +71,6 @@ export function NegociacoesVendedores() {
                 <th>Qtde</th>
                 <th>Vendedor</th>
                 <th>Qtde</th>
-                <th>Vendedor</th>
-                <th>Real.</th>
-                <th>Aprov.</th>
-                <th>%</th>
               </tr>
             </thead>
             <tbody>
@@ -89,15 +83,11 @@ export function NegociacoesVendedores() {
                   <td>{r.compras ? r.compras.qtde : "—"}</td>
                   <td>{r.consignacoes?.vendedor || "—"}</td>
                   <td>{r.consignacoes ? r.consignacoes.qtde : "—"}</td>
-                  <td>{r.avaliacao?.vendedor || "—"}</td>
-                  <td>{r.avaliacao ? r.avaliacao.realizadas : "—"}</td>
-                  <td>{r.avaliacao ? r.avaliacao.aprovadas : "—"}</td>
-                  <td>{r.avaliacao ? `${r.avaliacao.percentual}%` : "—"}</td>
                 </tr>
               ))}
               {rankings.length === 0 && (
                 <tr>
-                  <td colSpan={11} className="muted">
+                  <td colSpan={7} className="muted">
                     Sem dados de ranking no filtro atual.
                   </td>
                 </tr>

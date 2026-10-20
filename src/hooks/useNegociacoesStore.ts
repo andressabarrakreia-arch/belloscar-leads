@@ -48,7 +48,7 @@ export function useNegociacoesAnalytics(
       kpis: buildNegociacoesKpis(filtered),
       vendedores,
       avaliacoes,
-      rankings: buildUnifiedRankings(vendedores, avaliacoes),
+      rankings: buildUnifiedRankings(vendedores),
       periodSeries: buildPeriodSeries(filtered),
       statusRows: statusBreakdown(filtered),
       lancamentos: buildLancamentoRows(filtered),

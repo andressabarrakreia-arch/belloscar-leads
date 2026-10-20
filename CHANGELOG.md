@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.9.2] - 2026-10-19
+
+### Changed
+- Negociações · Rankings: removida Conv. avaliação (fica só na tabela abaixo)
+
 ## [1.9.1] - 2026-10-19
 
 ### Added
@@ -7,7 +12,7 @@
 - Gestão Negociações: upload da planilha de conversão de avaliações (merge por mês)
 
 ### Changed
-- Rankings: uma tabela com # compartilhado (Vendas+Trocas · Compras · Consignações · Conv. avaliação)
+- Rankings: uma tabela com # compartilhado (Vendas+Trocas · Compras · Consignações)
 
 ## [1.9.0] - 2026-10-19
 

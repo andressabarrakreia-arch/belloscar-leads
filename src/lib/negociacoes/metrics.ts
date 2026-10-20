@@ -174,19 +174,11 @@ export type RankSlot = {
   qtde: number;
 };
 
-export type AvaliacaoRankSlot = {
-  vendedor: string;
-  realizadas: number;
-  aprovadas: number;
-  percentual: number;
-};
-
 export type UnifiedRankRow = {
   pos: number;
   vendasTrocas: RankSlot | null;
   compras: RankSlot | null;
   consignacoes: RankSlot | null;
-  avaliacao: AvaliacaoRankSlot | null;
 };
 
 /** Agrega avaliações pelo filtro de mês (e vendedor, se houver). */
@@ -237,7 +229,6 @@ function topSlots(
 
 export function buildUnifiedRankings(
   vendedores: VendedorNegociacaoRow[],
-  avaliacoes: AvaliacaoConvRow[],
   limit = 10
 ): UnifiedRankRow[] {
   const vt = topSlots(
@@ -252,23 +243,8 @@ export function buildUnifiedRankings(
     vendedores.map((v) => ({ vendedor: v.vendedor, qtde: v.consignacoes })),
     limit
   );
-  const aval = [...avaliacoes]
-    .filter((a) => a.realizadas > 0)
-    .sort(
-      (a, b) =>
-        b.percentual - a.percentual ||
-        b.aprovadas - a.aprovadas ||
-        a.vendedor.localeCompare(b.vendedor, "pt-BR")
-    )
-    .slice(0, limit)
-    .map((a) => ({
-      vendedor: a.vendedor,
-      realizadas: a.realizadas,
-      aprovadas: a.aprovadas,
-      percentual: a.percentual,
-    }));
 
-  const n = Math.max(vt.length, compras.length, consig.length, aval.length);
+  const n = Math.max(vt.length, compras.length, consig.length);
   const rows: UnifiedRankRow[] = [];
   for (let i = 0; i < n; i++) {
     rows.push({
@@ -276,7 +252,6 @@ export function buildUnifiedRankings(
       vendasTrocas: vt[i] || null,
       compras: compras[i] || null,
       consignacoes: consig[i] || null,
-      avaliacao: aval[i] || null,
     });
   }
   return rows;
