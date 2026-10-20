@@ -100,6 +100,8 @@ type Acc = {
   sucessos: SucessoItem[];
   channels: Map<string, AgendamentoItem[]>;
   leadChannels: Map<string, LeadAtendimentoItem[]>;
+  visitaChannels: Map<string, RealizadoItem[]>;
+  sucessoChannels: Map<string, SucessoItem[]>;
   raw: Map<string, number>;
 };
 
@@ -152,11 +154,56 @@ function ensureAcc(map: Map<string, Acc>, origin: string): Acc {
       sucessos: [],
       channels: new Map(),
       leadChannels: new Map(),
+      visitaChannels: new Map(),
+      sucessoChannels: new Map(),
       raw: new Map(),
     };
     map.set(origin, acc);
   }
   return acc;
+}
+
+function pushChannel<T>(map: Map<string, T[]>, canal: string, row: T) {
+  const list = map.get(canal) || [];
+  list.push(row);
+  map.set(canal, list);
+}
+
+/** Origem efetiva: prioriza a da linha; fallback por ID (agenda / leads). */
+function resolveOrigemRaw(
+  id: string,
+  primary: string | undefined,
+  origemById: Map<string, string>
+): string {
+  const p = (primary || "").trim();
+  if (p && p !== "Não informado") return p;
+  return origemById.get(id) || p || "Não informado";
+}
+
+function attributeByOrigemChannels<T extends { id: string; origem: string }>(
+  byOrigin: Map<string, Acc>,
+  row: T,
+  origemRaw: string,
+  bucket: "visitas" | "sucessos"
+) {
+  const parsed = parseOrigemRaw(origemRaw);
+  const channelList =
+    parsed.channels.length > 0 ? parsed.channels : ["(não informado)"];
+
+  for (const origin of parsed.origins) {
+    const acc = ensureAcc(byOrigin, origin);
+    if (bucket === "visitas") {
+      acc.visitas.push(row as unknown as RealizadoItem);
+      for (const ch of channelList) {
+        pushChannel(acc.visitaChannels, ch, row as unknown as RealizadoItem);
+      }
+    } else {
+      acc.sucessos.push(row as unknown as SucessoItem);
+      for (const ch of channelList) {
+        pushChannel(acc.sucessoChannels, ch, row as unknown as SucessoItem);
+      }
+    }
+  }
 }
 
 function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOriginMetrics {
@@ -180,6 +227,8 @@ function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOrig
   const channelNames = new Set([
     ...acc.channels.keys(),
     ...acc.leadChannels.keys(),
+    ...acc.visitaChannels.keys(),
+    ...acc.sucessoChannels.keys(),
   ]);
 
   const channels: ChannelBreakdown[] = [...channelNames]
@@ -188,14 +237,20 @@ function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOrig
       const leadList = acc.leadChannels.get(canal) || [];
       const t = list.length;
       const atend = leadList.length;
-      // Canal: visitas/sucessos extras não têm canal próprio — mantém flag da agenda
-      const v = list.filter((i) => i.teveVisita).length;
-      const s = list.filter((i) => i.status === "Sucesso").length;
+      const visitaList = acc.visitaChannels.get(canal) || [];
+      const sucessoList = acc.sucessoChannels.get(canal) || [];
+      const v = useExtra
+        ? visitaList.length
+        : list.filter((i) => i.teveVisita).length;
+      const s = useExtra
+        ? sucessoList.length
+        : list.filter((i) => i.status === "Sucesso").length;
       const ins = list.filter((i) => i.status === "Insucesso").length;
 
       const tipos = new Set([
         ...list.map((i) => i.tipoProposta),
         ...leadList.map((i) => i.tipoProposta),
+        ...(useExtra ? sucessoList.map((i) => i.tipoProposta) : []),
       ]);
 
       const propostasRows: ProposalBreakdownRow[] = [...tipos]
@@ -204,8 +259,12 @@ function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOrig
           const leadRows = leadList.filter((i) => i.tipoProposta === tipo);
           const pt = rows.length;
           const pa = leadRows.length;
-          const pv = rows.filter((i) => i.teveVisita).length;
-          const ps = rows.filter((i) => i.status === "Sucesso").length;
+          const pv = useExtra
+            ? visitaList.filter((i) => i.tipoProposta === tipo).length
+            : rows.filter((i) => i.teveVisita).length;
+          const ps = useExtra
+            ? sucessoList.filter((i) => i.tipoProposta === tipo).length
+            : rows.filter((i) => i.status === "Sucesso").length;
           const pi = rows.filter((i) => i.status === "Insucesso").length;
           return {
             tipo,
@@ -215,10 +274,10 @@ function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOrig
             sucessos: ps,
             insucessos: pi,
             taxaVisita: round2(pt ? (pv / pt) * 100 : 0),
-            taxaSucesso: round2(pt ? (ps / pt) * 100 : 0),
+            taxaSucesso: round2(pv ? (ps / pv) * 100 : pt ? (ps / pt) * 100 : 0),
           };
         })
-        .filter((p) => p.atendimentos > 0 || p.total > 0)
+        .filter((p) => p.atendimentos > 0 || p.total > 0 || p.visitas > 0 || p.sucessos > 0)
         .sort((a, b) => b.total - a.total || b.atendimentos - a.atendimentos);
 
       return {
@@ -229,7 +288,8 @@ function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOrig
         sucessos: s,
         insucessos: ins,
         taxaVisita: round2(t ? (v / t) * 100 : 0),
-        taxaSucesso: round2(t ? (s / t) * 100 : 0),
+        // Mesma regra da origem: Suc/Vis quando há visitas
+        taxaSucesso: round2(v ? (s / v) * 100 : t ? (s / t) * 100 : 0),
         propostas: propostasRows,
       };
     })
@@ -267,6 +327,19 @@ export function buildPortalDashboard(
   const byOrigin = new Map<string, Acc>();
   const useExtra = Boolean(extra.visitas?.length || extra.sucessos?.length);
 
+  // Fallback de origem por ID (agenda e leads/realizados)
+  const origemById = new Map<string, string>();
+  for (const item of items) {
+    if (item.origem && item.origem !== "Não informado") {
+      origemById.set(item.id, item.origem);
+    }
+  }
+  for (const lead of leads) {
+    if (lead.origem && lead.origem !== "Não informado" && !origemById.has(lead.id)) {
+      origemById.set(lead.id, lead.origem);
+    }
+  }
+
   for (const item of items) {
     const parsed = parseOrigemRaw(item.origem);
     for (const origin of parsed.origins) {
@@ -276,9 +349,7 @@ export function buildPortalDashboard(
       const channelList =
         parsed.channels.length > 0 ? parsed.channels : ["(não informado)"];
       for (const ch of channelList) {
-        const list = acc.channels.get(ch) || [];
-        list.push(item);
-        acc.channels.set(ch, list);
+        pushChannel(acc.channels, ch, item);
       }
     }
   }
@@ -292,25 +363,19 @@ export function buildPortalDashboard(
       const channelList =
         parsed.channels.length > 0 ? parsed.channels : ["(não informado)"];
       for (const ch of channelList) {
-        const list = acc.leadChannels.get(ch) || [];
-        list.push(lead);
-        acc.leadChannels.set(ch, list);
+        pushChannel(acc.leadChannels, ch, lead);
       }
     }
   }
 
   for (const v of extra.visitas || []) {
-    const parsed = parseOrigemRaw(v.origem);
-    for (const origin of parsed.origins) {
-      ensureAcc(byOrigin, origin).visitas.push(v);
-    }
+    const origemRaw = resolveOrigemRaw(v.id, v.origem, origemById);
+    attributeByOrigemChannels(byOrigin, { ...v, origem: origemRaw }, origemRaw, "visitas");
   }
 
   for (const s of extra.sucessos || []) {
-    const parsed = parseOrigemRaw(s.origem);
-    for (const origin of parsed.origins) {
-      ensureAcc(byOrigin, origin).sucessos.push(s);
-    }
+    const origemRaw = resolveOrigemRaw(s.id, s.origem, origemById);
+    attributeByOrigemChannels(byOrigin, { ...s, origem: origemRaw }, origemRaw, "sucessos");
   }
 
   const origins = [...byOrigin.entries()]
@@ -343,17 +408,17 @@ export function buildPortalDashboard(
       sucessos,
       insucessos,
       taxaVisita: round2(total ? (visitas / total) * 100 : 0),
-      taxaSucesso: round2(total ? (sucessos / total) * 100 : 0),
+      taxaSucesso: round2(visitas ? (sucessos / visitas) * 100 : 0),
       taxaAgendamento: round2(atendimentos ? (total / atendimentos) * 100 : 0),
       origins: gOrigins,
     };
-  }).filter((g) => g.total > 0 || g.atendimentos > 0);
+  }).filter((g) => g.total > 0 || g.atendimentos > 0 || g.visitas > 0 || g.sucessos > 0);
 
   const topByVolume = [...origins]
     .sort((a, b) => b.atendimentos - a.atendimentos || b.total - a.total)
     .slice(0, 5);
   const topByConversion = [...origins]
-    .filter((o) => o.total >= 20)
+    .filter((o) => o.total >= 20 || o.visitas >= 10)
     .sort((a, b) => b.taxaSucesso - a.taxaSucesso || b.total - a.total)
     .slice(0, 5);
 
@@ -371,10 +436,28 @@ export function buildPortalDashboard(
       const m = periodMap.get(pk)!;
       const cur = m.get(origin) || { total: 0, sucessos: 0 };
       cur.total += 1;
-      if (item.status === "Sucesso") cur.sucessos += 1;
+      // Sem SUCESSOS extra: mantém status da agenda
+      if (!useExtra && item.status === "Sucesso") cur.sucessos += 1;
       m.set(origin, cur);
     }
   }
+  // Com SUCESSOS: Finalizado em (mês) — não mistura com status da agenda
+  if (useExtra) {
+    for (const s of extra.sucessos || []) {
+      const origemRaw = resolveOrigemRaw(s.id, s.origem, origemById);
+      const parsed = parseOrigemRaw(origemRaw);
+      const pk = s.dataFinalizado.slice(0, 7);
+      for (const origin of parsed.origins) {
+        if (!topNames.has(origin)) continue;
+        if (!periodMap.has(pk)) periodMap.set(pk, new Map());
+        const m = periodMap.get(pk)!;
+        const cur = m.get(origin) || { total: 0, sucessos: 0 };
+        cur.sucessos += 1;
+        m.set(origin, cur);
+      }
+    }
+  }
+
   const periodSeriesTop = [...periodMap.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([periodKey, m]) => ({
