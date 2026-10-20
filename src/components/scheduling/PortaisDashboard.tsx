@@ -134,8 +134,8 @@ export function PortaisDashboard({ data }: Props) {
         <p className="muted">
           Cascata colorida: <strong>Grupo</strong> → <span className="portal-label-origin">Origem</span>{" "}
           → <span className="portal-label-channel">Canal</span> →{" "}
-          <span className="portal-label-proposta">Proposta</span>. Atendimentos vêm do{" "}
-          <strong>LEADS GERAL</strong>. Multi-origem pode somar além do universo. Filtro:{" "}
+          <span className="portal-label-proposta">Proposta</span>. Atendimentos =
+          REALIZADOS · Multi-origem pode somar além do universo. Filtro:{" "}
           {data.uniqueLeads} atendimentos · {data.uniqueTotal} agendamentos.
         </p>
       </div>
@@ -146,7 +146,7 @@ export function PortaisDashboard({ data }: Props) {
           Expanda grupo → origem → canal → proposta. Clique no nome da origem para top SDR /
           vendedores.
         </p>
-        <div className="table-scroll">
+        <div className="table-scroll table-scroll--cascade">
           <table className="portal-cascade-table">
             <thead>
               <tr>

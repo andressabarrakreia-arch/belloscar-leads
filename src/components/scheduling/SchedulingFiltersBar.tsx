@@ -11,6 +11,8 @@ type Props = {
   options: Options;
   filters: SchedulingFilters;
   onChange: (next: SchedulingFilters) => void;
+  /** Meses YYYY-MM disponíveis na base (mais recentes primeiro). */
+  monthOptions?: string[];
 };
 
 function isoToday(): string {
@@ -37,7 +39,46 @@ function isoMonthStart(): string {
   return `${y}-${m}-01`;
 }
 
-export function SchedulingFiltersBar({ options, filters, onChange }: Props) {
+/** Primeiro e último dia do mês YYYY-MM. */
+export function closedMonthBounds(ym: string): { from: string; to: string } {
+  const [y, m] = ym.split("-").map(Number);
+  const lastDay = new Date(y, m, 0).getDate();
+  return {
+    from: `${ym}-01`,
+    to: `${ym}-${String(lastDay).padStart(2, "0")}`,
+  };
+}
+
+/** Se from/to cobrem exatamente um mês fechado, devolve YYYY-MM; senão "". */
+export function closedMonthFromFilters(filters: SchedulingFilters): string {
+  const from = filters.from;
+  const to = filters.to;
+  if (!from || !to || from.length < 10 || to.length < 10) return "";
+  const ym = from.slice(0, 7);
+  if (to.slice(0, 7) !== ym) return "";
+  if (from.slice(8, 10) !== "01") return "";
+  const { to: monthEnd } = closedMonthBounds(ym);
+  return to === monthEnd ? ym : "";
+}
+
+function formatMonthLabel(ym: string): string {
+  const [y, m] = ym.split("-").map(Number);
+  if (!y || !m) return ym;
+  const label = new Date(y, m - 1, 1).toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+export function SchedulingFiltersBar({
+  options,
+  filters,
+  onChange,
+  monthOptions = [],
+}: Props) {
+  const selectedMonth = closedMonthFromFilters(filters);
+
   return (
     <div className="filters filters--sticky" role="search" aria-label="Filtros de agendamentos">
       <div className="filters__presets" role="group" aria-label="Atalhos de período">
@@ -63,6 +104,29 @@ export function SchedulingFiltersBar({ options, filters, onChange }: Props) {
           Quinzena
         </button>
       </div>
+      <label>
+        Mês
+        <select
+          value={selectedMonth}
+          onChange={(e) => {
+            const ym = e.target.value;
+            if (!ym) {
+              onChange({ ...filters, from: undefined, to: undefined });
+              return;
+            }
+            const { from, to } = closedMonthBounds(ym);
+            onChange({ ...filters, from, to });
+          }}
+          aria-label="Mês fechado"
+        >
+          <option value="">Personalizado / todos</option>
+          {monthOptions.map((ym) => (
+            <option key={ym} value={ym}>
+              {formatMonthLabel(ym)}
+            </option>
+          ))}
+        </select>
+      </label>
       <label>
         De
         <input

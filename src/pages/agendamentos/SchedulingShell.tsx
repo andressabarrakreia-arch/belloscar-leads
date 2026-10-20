@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Outlet } from "react-router-dom";
 import { SchedulingFiltersBar } from "../../components/scheduling/SchedulingFiltersBar";
 import {
@@ -11,10 +11,34 @@ import {
   schedulingFilterHint,
 } from "../../lib/tickerItems";
 
+function collectMonthOptions(dataset: {
+  items: { dataAgendamento: string }[];
+  realizados?: { dataAtendido: string; dataVisita: string | null }[];
+  sucessosEventos?: { dataFinalizado: string }[];
+}): string[] {
+  const set = new Set<string>();
+  for (const i of dataset.items) {
+    if (i.dataAgendamento?.length >= 7) set.add(i.dataAgendamento.slice(0, 7));
+  }
+  for (const r of dataset.realizados || []) {
+    if (r.dataAtendido?.length >= 7) set.add(r.dataAtendido.slice(0, 7));
+    if (r.dataVisita && r.dataVisita.length >= 7) set.add(r.dataVisita.slice(0, 7));
+  }
+  for (const s of dataset.sucessosEventos || []) {
+    if (s.dataFinalizado?.length >= 7) set.add(s.dataFinalizado.slice(0, 7));
+  }
+  return [...set].sort((a, b) => b.localeCompare(a));
+}
+
 function SchedulingShellInner() {
   const { dataset, loading, error, filters, setFilters, analytics } =
     useSchedulingAnalyticsContext();
   const { setOverrideItems } = useModuleTicker();
+
+  const monthOptions = useMemo(
+    () => (dataset ? collectMonthOptions(dataset) : []),
+    [dataset]
+  );
 
   useEffect(() => {
     if (!analytics || !dataset) {
@@ -61,6 +85,7 @@ function SchedulingShellInner() {
         options={analytics.options}
         filters={filters}
         onChange={setFilters}
+        monthOptions={monthOptions}
       />
 
       {dataset.items.length === 0 && (

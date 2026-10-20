@@ -69,7 +69,21 @@ export function buildAgendamentosTickerItems(
 
 export function schedulingFilterHint(filters: SchedulingFilters): string | undefined {
   const parts: string[] = [];
-  if (filters.from || filters.to) {
+  if (filters.from && filters.to && filters.from.slice(0, 7) === filters.to.slice(0, 7)) {
+    const ym = filters.from.slice(0, 7);
+    const [y, m] = ym.split("-").map(Number);
+    const last = new Date(y, m, 0).getDate();
+    const monthEnd = `${ym}-${String(last).padStart(2, "0")}`;
+    if (filters.from.endsWith("-01") && filters.to === monthEnd) {
+      const label = new Date(y, m - 1, 1).toLocaleDateString("pt-BR", {
+        month: "short",
+        year: "numeric",
+      });
+      parts.push(label);
+    } else {
+      parts.push(`${filters.from} → ${filters.to}`);
+    }
+  } else if (filters.from || filters.to) {
     parts.push(`${filters.from || "…"} → ${filters.to || "…"}`);
   }
   if (filters.sdr) parts.push(filters.sdr);
