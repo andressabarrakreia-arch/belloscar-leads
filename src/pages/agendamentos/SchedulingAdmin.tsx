@@ -274,10 +274,12 @@ export function SchedulingAdmin() {
       <div className="card">
         <h2>Importar planilha (.xlsx / .csv)</h2>
         <p className="muted">
-          Dedupe <strong>somente por ID</strong>. Fontes:{" "}
+          Dedupe <strong>somente por ID</strong>. Após cada upload a base{" "}
+          <strong>recruza automaticamente</strong> origem/tipo entre LEADS ↔ REALIZADOS ↔
+          agenda ↔ SUCESSOS (não precisa reenviar tudo). Fontes:{" "}
           <strong>AGENDAMENTOS</strong> (Agendado em) · <strong>REALIZADOS</strong> (Atendido
-          em + Visita/Visita em) · <strong>SUCESSOS</strong> (Finalizado em) · INSUCESSOS/LEADS
-          GERAL só <strong>enriquecem</strong> IDs já existentes.
+          em + Visita) · <strong>SUCESSOS</strong> (Finalizado em) ·{" "}
+          <strong>LEADS GERAL</strong> (origem/volume) · INSUCESSOS enriquecem agenda.
         </p>
         <div className="stack">
           <label>

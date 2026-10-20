@@ -282,6 +282,134 @@ export function normalizeSchedulingDataset(dataset: SchedulingDataset): Scheduli
   };
 }
 
+function isMissingOrigem(origem?: string | null): boolean {
+  const s = (origem || "").trim();
+  return !s || s === "Não informado";
+}
+
+function isMissingTipo(
+  tipo?: RealizadoItem["tipoProposta"] | AgendamentoItem["tipoProposta"] | null
+): boolean {
+  return !tipo || tipo === "não informado(celulas em branco)";
+}
+
+/**
+ * Após qualquer import: recruzar por ID origem/tipo entre
+ * LEADS GERAL ↔ REALIZADOS ↔ agenda ↔ SUCESSOS.
+ * Assim subir LEADS depois do REALIZADOS já atualiza Portais sem reenviar tudo.
+ */
+export function reconcileSchedulingDataset(dataset: SchedulingDataset): {
+  dataset: SchedulingDataset;
+  notes: string[];
+} {
+  const base = normalizeSchedulingDataset(dataset);
+  const origemById = new Map<string, string>();
+  const tipoById = new Map<string, RealizadoItem["tipoProposta"]>();
+
+  const preferOrigem = (id: string, origem?: string | null) => {
+    if (isMissingOrigem(origem)) return;
+    if (!origemById.has(id)) origemById.set(id, origem!.trim());
+  };
+  const preferTipo = (
+    id: string,
+    tipo?: RealizadoItem["tipoProposta"] | null
+  ) => {
+    if (isMissingTipo(tipo)) return;
+    if (!tipoById.has(id)) tipoById.set(id, tipo!);
+  };
+
+  // Prioridade: LEADS (mais completo) → agenda → sucessos → realizados
+  for (const l of base.leadsAtendimentos || []) {
+    preferOrigem(l.id, l.origem);
+    preferTipo(l.id, l.tipoProposta);
+  }
+  for (const i of base.items) {
+    preferOrigem(i.id, i.origem);
+    preferTipo(i.id, i.tipoProposta);
+  }
+  for (const s of base.sucessosEventos || []) {
+    preferOrigem(s.id, s.origem);
+    preferTipo(s.id, s.tipoProposta);
+  }
+  for (const r of base.realizados || []) {
+    preferOrigem(r.id, r.origem);
+    preferTipo(r.id, r.tipoProposta);
+  }
+
+  let filledRealizados = 0;
+  let filledItems = 0;
+  let filledSucessos = 0;
+  let filledTipos = 0;
+
+  const realizados = (base.realizados || []).map((r) => {
+    let next = r;
+    if (isMissingOrigem(r.origem) && origemById.has(r.id)) {
+      filledRealizados += 1;
+      next = { ...next, origem: origemById.get(r.id)! };
+    }
+    if (isMissingTipo(next.tipoProposta) && tipoById.has(r.id)) {
+      filledTipos += 1;
+      next = { ...next, tipoProposta: tipoById.get(r.id)! };
+    }
+    return next;
+  });
+
+  const items = base.items.map((i) => {
+    let next = i;
+    if (isMissingOrigem(i.origem) && origemById.has(i.id)) {
+      filledItems += 1;
+      next = { ...next, origem: origemById.get(i.id)! };
+    }
+    if (isMissingTipo(next.tipoProposta) && tipoById.has(i.id)) {
+      filledTipos += 1;
+      next = { ...next, tipoProposta: tipoById.get(i.id)! };
+    }
+    return next;
+  });
+
+  const sucessosEventos = (base.sucessosEventos || []).map((s) => {
+    if (isMissingOrigem(s.origem) && origemById.has(s.id)) {
+      filledSucessos += 1;
+      return { ...s, origem: origemById.get(s.id)! };
+    }
+    return s;
+  });
+
+  const notes: string[] = [];
+  if (filledRealizados > 0) {
+    notes.push(
+      `Reconciliação: origem preenchida em ${filledRealizados} REALIZADOS (cruzamento por ID)`
+    );
+  }
+  if (filledItems > 0) {
+    notes.push(
+      `Reconciliação: origem preenchida em ${filledItems} agendamentos (cruzamento por ID)`
+    );
+  }
+  if (filledSucessos > 0) {
+    notes.push(
+      `Reconciliação: origem preenchida em ${filledSucessos} SUCESSOS (cruzamento por ID)`
+    );
+  }
+  if (filledTipos > 0) {
+    notes.push(`Reconciliação: tipo de proposta preenchido em ${filledTipos} registros`);
+  }
+  if (notes.length === 0) {
+    notes.push("Reconciliação: coleções já alinhadas por ID");
+  }
+
+  return {
+    dataset: {
+      ...base,
+      items,
+      realizados,
+      sucessosEventos,
+      leadsAtendimentos: base.leadsAtendimentos,
+    },
+    notes,
+  };
+}
+
 function dedupeCount(incoming: ParsedSchedulingRow[]): {
   unique: ParsedSchedulingRow[];
   removed: number;
@@ -306,6 +434,25 @@ function dedupeCount(incoming: ParsedSchedulingRow[]): {
   return { unique: [...seen.values()], removed, notes };
 }
 
+function finishImport(
+  draft: SchedulingDataset,
+  meta: SchedulingImportMeta
+): { dataset: SchedulingDataset; meta: SchedulingImportMeta } {
+  const { dataset: reconciled, notes: reconNotes } = reconcileSchedulingDataset(draft);
+  const fullMeta: SchedulingImportMeta = {
+    ...meta,
+    notes: [...meta.notes, ...reconNotes],
+  };
+  return {
+    dataset: {
+      ...reconciled,
+      updatedAt: meta.at,
+      imports: [fullMeta, ...(draft.imports || [])].slice(0, 50),
+    },
+    meta: fullMeta,
+  };
+}
+
 export function applySchedulingImport(
   current: SchedulingDataset,
   incoming: ParsedSchedulingRow[],
@@ -314,6 +461,7 @@ export function applySchedulingImport(
   label?: string
 ): { dataset: SchedulingDataset; meta: SchedulingImportMeta } {
   const base = normalizeSchedulingDataset(current);
+  const at = new Date().toISOString();
 
   // REALIZADOS / SUCESSOS: coleções próprias (não entram como órfãos de agendamentos)
   if (kind === "realizados") {
@@ -335,7 +483,7 @@ export function applySchedulingImport(
       fileName,
       label: label || fileName,
       kind,
-      at: new Date().toISOString(),
+      at,
       received: incoming.length,
       kept,
       removed,
@@ -345,17 +493,17 @@ export function applySchedulingImport(
         ...notes,
       ],
     };
-    return {
-      dataset: {
-        updatedAt: meta.at,
-        imports: [meta, ...base.imports].slice(0, 50),
+    return finishImport(
+      {
+        updatedAt: at,
+        imports: base.imports,
         items: base.items,
         leadsAtendimentos: base.leadsAtendimentos,
         realizados,
         sucessosEventos: base.sucessosEventos,
       },
-      meta,
-    };
+      meta
+    );
   }
 
   if (kind === "sucessos") {
@@ -368,7 +516,7 @@ export function applySchedulingImport(
       fileName,
       label: label || fileName,
       kind,
-      at: new Date().toISOString(),
+      at,
       received: incoming.length,
       kept,
       removed,
@@ -378,20 +526,20 @@ export function applySchedulingImport(
         ...notes,
       ],
     };
-    return {
-      dataset: {
-        updatedAt: meta.at,
-        imports: [meta, ...base.imports].slice(0, 50),
+    return finishImport(
+      {
+        updatedAt: at,
+        imports: base.imports,
         items: base.items,
         leadsAtendimentos: base.leadsAtendimentos,
         realizados: base.realizados,
         sucessosEventos,
       },
-      meta,
-    };
+      meta
+    );
   }
 
-  // Insucessos/leads só enriquecem a base de agendamentos — não criam órfãos.
+  // Insucessos só enriquecem a agenda. LEADS: agenda enrich-only + volume em leadsAtendimentos.
   const enrichOnly = kind === "insucessos" || kind === "leads";
   const { items, kept, removed, enriched, skipped, notes } = mergeById(
     base.items,
@@ -406,33 +554,38 @@ export function applySchedulingImport(
 
   const leadNote =
     kind === "leads"
-      ? [`LEADS GERAL: ${leadsAtendimentos.length} leads únicos (enrich)`]
+      ? [
+          `LEADS GERAL: ${leadsAtendimentos.length} leads únicos na base`,
+          "Após o import, origem/tipo são recruzados por ID em REALIZADOS/agenda/SUCESSOS",
+        ]
       : [];
 
   const meta: SchedulingImportMeta = {
     fileName,
     label: label || fileName,
     kind,
-    at: new Date().toISOString(),
+    at,
     received: incoming.length,
     kept,
     removed: removed + skipped,
     enriched,
     notes: [
-      ...(skipped > 0 ? [`${skipped} IDs ignorados (enrich-only)`] : []),
+      ...(skipped > 0
+        ? [`${skipped} IDs sem agendamento (não criam órfãos na agenda)`]
+        : []),
       ...leadNote,
       ...notes,
     ],
   };
-  return {
-    dataset: {
-      updatedAt: meta.at,
-      imports: [meta, ...base.imports].slice(0, 50),
+  return finishImport(
+    {
+      updatedAt: at,
+      imports: base.imports,
       items,
       leadsAtendimentos,
       realizados: base.realizados,
       sucessosEventos: base.sucessosEventos,
     },
-    meta,
-  };
+    meta
+  );
 }
