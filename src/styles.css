@@ -854,11 +854,25 @@ tr:hover td {
   border-radius: var(--radius-sm);
 }
 
-/** Tabelas longas: scroll vertical + cabeçalho de colunas fixo. */
+/**
+ * Cabeçalho fixo na rolagem da PÁGINA (abaixo dos filtros sticky).
+ * Não usar overflow:auto no wrapper — isso prende o sticky na caixinha e a barra some.
+ */
+.scheduling-layout {
+  --sticky-table-header-top: 168px;
+}
+
+@media (max-width: 900px) {
+  .scheduling-layout {
+    --sticky-table-header-top: 220px;
+  }
+}
+
 .table-scroll--cascade,
 .table-scroll--sticky-head {
-  max-height: min(70vh, 720px);
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
+  max-height: none;
   border: 1px solid var(--border);
 }
 
@@ -872,11 +886,13 @@ tr:hover td {
 .portal-cascade-table thead th,
 .table-scroll--sticky-head thead th,
 .table-sticky-head thead th {
+  position: -webkit-sticky;
   position: sticky;
-  top: 0;
-  z-index: 3;
+  top: var(--sticky-table-header-top, 12px);
+  z-index: 30;
   background: linear-gradient(135deg, var(--brand-charcoal), #2f2f30);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  background-clip: padding-box;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
 }
 
 .portal-cascade-table thead th:first-child,
