@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { ModuleTickerProvider } from "../context/ModuleTickerContext";
 import type { AppModule } from "../modules/registry";
 import { KeyTicker } from "./KeyTicker";
 
@@ -23,34 +24,36 @@ export function ModuleLayout({ module, showAdminNav = true }: Props) {
   }, [module.name]);
 
   return (
-    <div className="app-shell">
-      <header className="topbar">
-        <div className="brand">
-          <img className="brand-mark" src={brandIcon} alt="BellosCar" width={52} height={52} />
-          <div className="brand-text">
-            <h1>
-              Bellos<span className="car">Car</span>
-            </h1>
-            <span>{module.name}</span>
+    <ModuleTickerProvider>
+      <div className="app-shell">
+        <header className="topbar">
+          <div className="brand">
+            <img className="brand-mark" src={brandIcon} alt="BellosCar" width={52} height={52} />
+            <div className="brand-text">
+              <h1>
+                Bellos<span className="car">Car</span>
+              </h1>
+              <span>{module.name}</span>
+            </div>
           </div>
-        </div>
-        <nav className="nav" aria-label={`Navegação · ${module.name}`}>
-          {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.end}>
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-      </header>
-      <p className="module-tagline">{module.tagline}</p>
-      <KeyTicker moduleId={module.id} />
-      <Outlet />
-      <footer className="page-footer">
-        <span>
-          BellosCar · {module.name} · Curitiba
-        </span>
-        <span className="checkered" aria-hidden="true" />
-      </footer>
-    </div>
+          <nav className="nav" aria-label={`Navegação · ${module.name}`}>
+            {navItems.map((item) => (
+              <NavLink key={item.to} to={item.to} end={item.end}>
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+        </header>
+        <p className="module-tagline">{module.tagline}</p>
+        <KeyTicker moduleId={module.id} />
+        <Outlet />
+        <footer className="page-footer">
+          <span>
+            BellosCar · {module.name} · Curitiba
+          </span>
+          <span className="checkered" aria-hidden="true" />
+        </footer>
+      </div>
+    </ModuleTickerProvider>
   );
 }

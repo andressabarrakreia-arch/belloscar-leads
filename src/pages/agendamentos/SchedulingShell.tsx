@@ -1,13 +1,36 @@
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { SchedulingFiltersBar } from "../../components/scheduling/SchedulingFiltersBar";
 import {
   SchedulingAnalyticsProvider,
   useSchedulingAnalyticsContext,
 } from "../../context/SchedulingAnalyticsContext";
+import { useModuleTicker } from "../../context/ModuleTickerContext";
+import {
+  buildAgendamentosTickerItems,
+  schedulingFilterHint,
+} from "../../lib/tickerItems";
 
 function SchedulingShellInner() {
   const { dataset, loading, error, filters, setFilters, analytics } =
     useSchedulingAnalyticsContext();
+  const { setOverrideItems } = useModuleTicker();
+
+  useEffect(() => {
+    if (!analytics || !dataset) {
+      setOverrideItems(null);
+      return;
+    }
+    setOverrideItems(
+      buildAgendamentosTickerItems(
+        analytics.filtered,
+        analytics.filteredLeads || [],
+        dataset.updatedAt,
+        schedulingFilterHint(filters)
+      )
+    );
+    return () => setOverrideItems(null);
+  }, [analytics, dataset, filters, setOverrideItems]);
 
   if (loading) return <p className="muted">Carregando agendamentos…</p>;
   if (error) return <p className="error">{error}</p>;

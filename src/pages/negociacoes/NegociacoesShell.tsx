@@ -1,13 +1,33 @@
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NegociacoesFiltersBar } from "../../components/negociacoes/NegociacoesFiltersBar";
 import {
   NegociacoesAnalyticsProvider,
   useNegociacoesAnalyticsContext,
 } from "../../context/NegociacoesAnalyticsContext";
+import { useModuleTicker } from "../../context/ModuleTickerContext";
+import { buildNegociacoesTickerItems } from "../../lib/tickerItems";
 
 function NegociacoesShellInner() {
   const { dataset, loading, error, filters, setFilters, analytics } =
     useNegociacoesAnalyticsContext();
+  const { setOverrideItems } = useModuleTicker();
+
+  useEffect(() => {
+    if (!analytics || !dataset) {
+      setOverrideItems(null);
+      return;
+    }
+    setOverrideItems(
+      buildNegociacoesTickerItems(
+        analytics.filtered,
+        dataset.avaliacoes || [],
+        filters,
+        dataset.updatedAt
+      )
+    );
+    return () => setOverrideItems(null);
+  }, [analytics, dataset, filters, setOverrideItems]);
 
   if (loading) return <p className="muted">Carregando negociações…</p>;
   if (error) return <p className="error">{error}</p>;

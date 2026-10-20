@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.9.4] - 2026-10-20
+
+### Changed
+- Ticker do topo acompanha o **filtro ativo** (Negociações e Agendamentos)
+
 ## [1.9.3] - 2026-10-20
 
 ### Changed
