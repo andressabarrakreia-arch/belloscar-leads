@@ -43,7 +43,7 @@ export function ModuleLayout({ module, showAdminNav = true }: Props) {
         </nav>
       </header>
       <p className="module-tagline">{module.tagline}</p>
-      <KeyTicker />
+      <KeyTicker moduleId={module.id} />
       <Outlet />
       <footer className="page-footer">
         <span>

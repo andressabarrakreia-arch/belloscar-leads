@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.9.3] - 2026-10-20
+
+### Changed
+- Ticker do topo **por módulo**: Campanhas · Agendamentos · Negociações (totais + tops)
+
 ## [1.9.2] - 2026-10-19
 
 ### Changed
