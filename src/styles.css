@@ -854,20 +854,24 @@ tr:hover td {
   border-radius: var(--radius-sm);
 }
 
-/** Cascata Portais: scroll vertical + cabeçalho fixo ao expandir origens/canais. */
-.table-scroll--cascade {
+/** Tabelas longas: scroll vertical + cabeçalho de colunas fixo. */
+.table-scroll--cascade,
+.table-scroll--sticky-head {
   max-height: min(70vh, 720px);
   overflow: auto;
   border: 1px solid var(--border);
 }
 
-.portal-cascade-table {
+.portal-cascade-table,
+.table-sticky-head {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
 }
 
-.portal-cascade-table thead th {
+.portal-cascade-table thead th,
+.table-scroll--sticky-head thead th,
+.table-sticky-head thead th {
   position: sticky;
   top: 0;
   z-index: 3;
@@ -875,11 +879,13 @@ tr:hover td {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
 
-.portal-cascade-table thead th:first-child {
+.portal-cascade-table thead th:first-child,
+.table-scroll--sticky-head thead th:first-child {
   border-top-left-radius: 0;
 }
 
-.portal-cascade-table thead th:last-child {
+.portal-cascade-table thead th:last-child,
+.table-scroll--sticky-head thead th:last-child {
   border-top-right-radius: 0;
 }
 

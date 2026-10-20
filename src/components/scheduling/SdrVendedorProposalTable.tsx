@@ -13,8 +13,8 @@ export function SdrVendedorProposalTable({ rows }: Props) {
         vendedor, por tipo de proposta, visitas, sucessos e insucessos (com %). Ordem SDR: Allan
         Junior → Thayna PRE-VENDAS → Lais Narimã → Matheus → demais.
       </p>
-      <div className="table-scroll">
-        <table>
+      <div className="table-scroll table-scroll--sticky-head">
+        <table className="table-sticky-head">
           <thead>
             <tr>
               <th>SDR</th>
