@@ -467,10 +467,17 @@ function conversaoPorTipoProposta(list: AgendamentoItem[]): PropostaConversao[] 
     .filter((r) => r.agendamentos > 0);
 }
 
+function isExcludedTopParceiro(vendedor: string): boolean {
+  const key = normalizePersonKey(vendedor);
+  // Placeholder interno / fila da loja — não entra no ranking Top 3
+  return key === "espaco bellos" || key.startsWith("espaco bellos ");
+}
+
 function topParceirosDoSdr(list: AgendamentoItem[], limit = 3): SdrVendedorTop[] {
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of list) {
     if (!item.vendedor || item.vendedor === "(sem vendedor)") continue;
+    if (isExcludedTopParceiro(item.vendedor)) continue;
     const cur = groups.get(item.vendedor) || [];
     cur.push(item);
     groups.set(item.vendedor, cur);
