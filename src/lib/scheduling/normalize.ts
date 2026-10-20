@@ -1,7 +1,28 @@
 import type { CanalAtendimento, StatusAgendamento, TipoProposta } from "./types";
 
+/**
+ * CSV UTF-8 às vezes chega como Latin-1 (ex.: ResponsÃ¡vel).
+ * Reinterpreta bytes Latin-1 como UTF-8 quando parece mojibake.
+ */
+export function repairUtf8Mojibake(raw: string): string {
+  if (!/[ÃÂ]/.test(raw)) return raw;
+  const bytes = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) {
+    const code = raw.charCodeAt(i);
+    if (code > 255) return raw;
+    bytes[i] = code;
+  }
+  try {
+    const decoded = new TextDecoder("utf-8").decode(bytes);
+    if (decoded.includes("\uFFFD")) return raw;
+    return decoded;
+  } catch {
+    return raw;
+  }
+}
+
 export function normHeader(h: unknown): string {
-  return String(h ?? "")
+  return repairUtf8Mojibake(String(h ?? ""))
     .trim()
     .toLowerCase()
     .normalize("NFD")

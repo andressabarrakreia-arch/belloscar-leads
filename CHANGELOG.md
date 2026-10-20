@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.9.5] - 2026-10-20
+
+### Fixed
+- LEADS GERAL CSV UTF-8: coluna **Responsável** reconhecida (antes virava `(sem SDR)`)
+- Merge de atendimentos: SDR/origem vazios no arquivo **não apagam** o valor já existente
+
 ## [1.9.4] - 2026-10-20
 
 ### Changed

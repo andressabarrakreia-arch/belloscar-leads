@@ -17,12 +17,23 @@ function mergeLeadsAtendimentos(
   const map = new Map(current.map((l) => [l.id, l]));
   for (const row of incoming) {
     if (!row.id) continue;
+    const prev = map.get(row.id);
+    const sdr = row.sdr?.trim() || prev?.sdr || "(sem SDR)";
+    const origem =
+      row.origem?.trim() && row.origem.trim() !== "Não informado"
+        ? row.origem.trim()
+        : prev?.origem || row.origem?.trim() || "Não informado";
+    const tipoProposta =
+      row.tipoProposta && row.tipoProposta !== "não informado(celulas em branco)"
+        ? row.tipoProposta
+        : prev?.tipoProposta || row.tipoProposta || "não informado(celulas em branco)";
     map.set(row.id, {
       id: row.id,
-      data: row.dataAgendamento || "1970-01-01",
-      sdr: row.sdr?.trim() || "(sem SDR)",
-      origem: row.origem?.trim() || "Não informado",
-      tipoProposta: row.tipoProposta || "não informado(celulas em branco)",
+      // Arquivo novo manda na data quando vier preenchida
+      data: row.dataAgendamento || prev?.data || "1970-01-01",
+      sdr,
+      origem,
+      tipoProposta,
     });
   }
   return [...map.values()];

@@ -53,6 +53,7 @@ const LEADS_ALIASES: Record<string, string> = {
   "#id": "id",
   "criado em": "dataAgendamento",
   responsavel: "sdr",
+  "atendido por": "sdr",
   status: "status",
   visita: "visita",
   origem: "origem",
@@ -63,13 +64,26 @@ const LEADS_ALIASES: Record<string, string> = {
   email: "email",
 };
 
+/** Resolve alias; fallback para cabeçalhos com encoding quebrado. */
+function resolveHeaderAlias(
+  raw: unknown,
+  aliases: Record<string, string>
+): string | undefined {
+  const norm = normHeader(raw);
+  if (aliases[norm]) return aliases[norm];
+  // Mojibake residual / variações: ResponsÃ¡vel → responsa¡vel
+  if (norm.startsWith("responsa") || norm.includes("responsavel")) return "sdr";
+  if (norm.includes("atendido")) return "sdr";
+  return undefined;
+}
+
 function mapHeaders(
   row: unknown[],
   aliases: Record<string, string>
 ): Record<string, number> {
   const map: Record<string, number> = {};
   row.forEach((cell, idx) => {
-    const key = aliases[normHeader(cell)];
+    const key = resolveHeaderAlias(cell, aliases);
     if (key && map[key] === undefined) map[key] = idx;
   });
   return map;
@@ -138,7 +152,12 @@ export function parseSchedulingArrayBuffer(buffer: ArrayBuffer): {
   kind: SheetKind;
   rows: ParsedSchedulingRow[];
 } {
-  const workbook = XLSX.read(buffer, { type: "array", cellDates: true });
+  // codepage 65001 = UTF-8 (CSV exportado do sistema com acentos em Responsável)
+  const workbook = XLSX.read(buffer, {
+    type: "array",
+    cellDates: true,
+    codepage: 65001,
+  });
   const sheetName = workbook.SheetNames[0];
   if (!sheetName) throw new Error("Planilha vazia: nenhuma aba encontrada.");
   const sheet = workbook.Sheets[sheetName];
