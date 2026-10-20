@@ -3,13 +3,19 @@ import { useModuleTicker } from "../context/ModuleTickerContext";
 import { loadDataset } from "../lib/dataset";
 import { dealsFromLines } from "../lib/negociacoes/metrics";
 import { loadNegociacoesDataset } from "../lib/negociacoes/storage";
-import { filterAgendamentos } from "../lib/scheduling/metrics";
+import {
+  filterAgendamentos,
+  filterRealizadosAtendimentos,
+  filterRealizadosVisitas,
+  filterSucessosEventos,
+} from "../lib/scheduling/metrics";
 import { loadSchedulingDataset } from "../lib/scheduling/storage";
 import {
   buildAgendamentosTickerItems,
   buildCampanhasTickerItems,
   buildNegociacoesTickerItems,
 } from "../lib/tickerItems";
+import type { LeadAtendimentoItem } from "../lib/scheduling/types";
 
 type Props = {
   /** id do módulo no registry: campanhas | agendamentos | negociacoes */
@@ -53,11 +59,28 @@ export function KeyTicker({ moduleId }: Props) {
           const ds = await loadSchedulingDataset();
           if (!cancelled) {
             const items = filterAgendamentos(ds.items, {});
+            const realizados = ds.realizados || [];
+            const leadsAsAtend: LeadAtendimentoItem[] =
+              realizados.length > 0
+                ? filterRealizadosAtendimentos(realizados, {}).map((r) => ({
+                    id: r.id,
+                    data: r.dataAtendido,
+                    sdr: r.sdr,
+                    origem: r.origem,
+                    tipoProposta: r.tipoProposta,
+                  }))
+                : ds.leadsAtendimentos || [];
             setFallbackItems(
               buildAgendamentosTickerItems(
                 items,
-                ds.leadsAtendimentos || [],
-                ds.updatedAt
+                leadsAsAtend,
+                ds.updatedAt,
+                undefined,
+                {
+                  visitas: filterRealizadosVisitas(realizados, {}).length,
+                  sucessos: filterSucessosEventos(ds.sucessosEventos || [], {})
+                    .length,
+                }
               )
             );
           }

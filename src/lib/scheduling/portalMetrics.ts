@@ -10,8 +10,15 @@ import type {
   AgendamentoItem,
   LeadAtendimentoItem,
   MotivoStats,
+  RealizadoItem,
+  SucessoItem,
   TipoProposta,
 } from "./types";
+
+export type PortalExtraCounts = {
+  visitas?: RealizadoItem[];
+  sucessos?: SucessoItem[];
+};
 
 export type ProposalBreakdownRow = {
   tipo: string;
@@ -89,6 +96,8 @@ export type PortalDashboard = {
 type Acc = {
   items: AgendamentoItem[];
   leads: LeadAtendimentoItem[];
+  visitas: RealizadoItem[];
+  sucessos: SucessoItem[];
   channels: Map<string, AgendamentoItem[]>;
   leadChannels: Map<string, LeadAtendimentoItem[]>;
   raw: Map<string, number>;
@@ -139,6 +148,8 @@ function ensureAcc(map: Map<string, Acc>, origin: string): Acc {
     acc = {
       items: [],
       leads: [],
+      visitas: [],
+      sucessos: [],
       channels: new Map(),
       leadChannels: new Map(),
       raw: new Map(),
@@ -148,13 +159,17 @@ function ensureAcc(map: Map<string, Acc>, origin: string): Acc {
   return acc;
 }
 
-function finalizeOrigin(origin: string, acc: Acc): PortalOriginMetrics {
+function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOriginMetrics {
   const items = acc.items;
   const leads = acc.leads;
   const total = items.length;
   const atendimentos = leads.length;
-  const visitas = items.filter((i) => i.teveVisita).length;
-  const sucessos = items.filter((i) => i.status === "Sucesso").length;
+  const visitas = useExtra
+    ? acc.visitas.length
+    : items.filter((i) => i.teveVisita).length;
+  const sucessos = useExtra
+    ? acc.sucessos.length
+    : items.filter((i) => i.status === "Sucesso").length;
   const insucessos = items.filter((i) => i.status === "Insucesso").length;
   const propostas = emptyPropostas();
   for (const item of items) {
@@ -173,6 +188,7 @@ function finalizeOrigin(origin: string, acc: Acc): PortalOriginMetrics {
       const leadList = acc.leadChannels.get(canal) || [];
       const t = list.length;
       const atend = leadList.length;
+      // Canal: visitas/sucessos extras não têm canal próprio — mantém flag da agenda
       const v = list.filter((i) => i.teveVisita).length;
       const s = list.filter((i) => i.status === "Sucesso").length;
       const ins = list.filter((i) => i.status === "Insucesso").length;
@@ -228,7 +244,7 @@ function finalizeOrigin(origin: string, acc: Acc): PortalOriginMetrics {
     sucessos,
     insucessos,
     taxaVisita: round2(total ? (visitas / total) * 100 : 0),
-    taxaSucesso: round2(total ? (sucessos / total) * 100 : 0),
+    taxaSucesso: round2(visitas ? (sucessos / visitas) * 100 : 0),
     taxaAgendamento: round2(atendimentos ? (total / atendimentos) * 100 : 0),
     preVenda: items.filter((i) => i.canal === "Pré-Venda").length,
     recepcao: items.filter((i) => i.canal === "Recepção").length,
@@ -245,9 +261,11 @@ function finalizeOrigin(origin: string, acc: Acc): PortalOriginMetrics {
 
 export function buildPortalDashboard(
   items: AgendamentoItem[],
-  leads: LeadAtendimentoItem[] = []
+  leads: LeadAtendimentoItem[] = [],
+  extra: PortalExtraCounts = {}
 ): PortalDashboard {
   const byOrigin = new Map<string, Acc>();
+  const useExtra = Boolean(extra.visitas?.length || extra.sucessos?.length);
 
   for (const item of items) {
     const parsed = parseOrigemRaw(item.origem);
@@ -281,8 +299,22 @@ export function buildPortalDashboard(
     }
   }
 
+  for (const v of extra.visitas || []) {
+    const parsed = parseOrigemRaw(v.origem);
+    for (const origin of parsed.origins) {
+      ensureAcc(byOrigin, origin).visitas.push(v);
+    }
+  }
+
+  for (const s of extra.sucessos || []) {
+    const parsed = parseOrigemRaw(s.origem);
+    for (const origin of parsed.origins) {
+      ensureAcc(byOrigin, origin).sucessos.push(s);
+    }
+  }
+
   const origins = [...byOrigin.entries()]
-    .map(([origin, acc]) => finalizeOrigin(origin, acc))
+    .map(([origin, acc]) => finalizeOrigin(origin, acc, useExtra))
     .sort(
       (a, b) =>
         b.atendimentos - a.atendimentos ||

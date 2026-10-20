@@ -69,13 +69,18 @@ export function normalizeStatus(raw: unknown): StatusAgendamento {
   return "Agendado";
 }
 
-export function isVisitFlag(visita: unknown, status: StatusAgendamento): boolean {
+/** Só o campo Visita (Sim/Não) — usado em REALIZADOS. */
+export function isVisitYesNo(visita: unknown): boolean {
   const v = String(visita ?? "")
     .trim()
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
-  if (v === "sim" || v === "s" || v === "yes" || v === "1") return true;
+  return v === "sim" || v === "s" || v === "yes" || v === "1" || v === "true";
+}
+
+export function isVisitFlag(visita: unknown, status: StatusAgendamento): boolean {
+  if (isVisitYesNo(visita)) return true;
   if (status === "Visita" || status === "Sucesso") return true;
   return false;
 }

@@ -274,10 +274,10 @@ export function SchedulingAdmin() {
       <div className="card">
         <h2>Importar planilha (.xlsx / .csv)</h2>
         <p className="muted">
-          A base inicial do ano (01/01–15/10/2026) já está publicada. Use este painel para{" "}
-          <strong>próximas</strong> planilhas. Dedupe <strong>somente por ID</strong>. Novos
-          AGENDAMENTOS agregam; INSUCESSOS/LEADS GERAL só <strong>enriquecem</strong> IDs já
-          existentes (não criam órfãos).
+          Dedupe <strong>somente por ID</strong>. Fontes:{" "}
+          <strong>AGENDAMENTOS</strong> (Agendado em) · <strong>REALIZADOS</strong> (Atendido
+          em + Visita/Visita em) · <strong>SUCESSOS</strong> (Finalizado em) · INSUCESSOS/LEADS
+          GERAL só <strong>enriquecem</strong> IDs já existentes.
         </p>
         <div className="stack">
           <label>
@@ -377,7 +377,8 @@ export function SchedulingAdmin() {
         <div className="card">
           <h2>Dataset atual (agendamentos)</h2>
           <p>
-            {dataset.items.length} registros · atualizado em{" "}
+            {dataset.items.length} agendamentos · {(dataset.realizados || []).length}{" "}
+            realizados · {(dataset.sucessosEventos || []).length} sucessos · atualizado{" "}
             {new Date(dataset.updatedAt).toLocaleString("pt-BR")}
           </p>
           <h3>Últimos imports</h3>

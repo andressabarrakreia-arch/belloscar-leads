@@ -1,12 +1,19 @@
 /**
  * Gera public/data/agendamentos-dataset.json a partir das planilhas base.
  *
- * Ordem: AGENDAMENTOS → INSUCESSOS (enrich) → LEADS GERAL (enrich + volume de atendimentos)
- * Exclui LEADS CAMPANHA e LEADS POR UTM.
+ * Ordem:
+ * 1. AGENDAMENTOS (Agendado em)
+ * 2. INSUCESSOS (enrich)
+ * 3. LEADS GERAL (enrich origem)
+ * 4. LEADS REALIZADOS (Atendido em / Visita em)
+ * 5. SUCESSOS (Finalizado em)
+ *
+ * Se existir dataset anterior, preserva itens de agendamento já publicados
+ * (ex.: atualização até 19/10) e só reprocessa coleções.
  *
  * Uso: npm run generate:agendamentos
  */
-import { readFileSync, writeFileSync, readdirSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { build } from "esbuild";
@@ -31,9 +38,12 @@ async function loadModules() {
   return import(pathToFileURL(tmpOut).href + `?t=${Date.now()}`);
 }
 
-function pickFile(files, predicate, label) {
+function pickFile(files, predicate, label, optional = false) {
   const hit = files.find(predicate);
-  if (!hit) throw new Error(`${label} não encontrado em ${dataDir}`);
+  if (!hit) {
+    if (optional) return null;
+    throw new Error(`${label} não encontrado em ${dataDir}`);
+  }
   return join(dataDir, hit);
 }
 
@@ -47,7 +57,7 @@ async function main() {
   const files = readdirSync(dataDir).filter((f) => f.toLowerCase().endsWith(".xlsx"));
   const agPath = pickFile(
     files,
-    (f) => /agendamentos/i.test(f) && !/performance/i.test(f),
+    (f) => /agendamentos/i.test(f) && !/performance/i.test(f) && !/realizad/i.test(f),
     "AGENDAMENTOS"
   );
   const insPath = pickFile(files, (f) => /insucessos/i.test(f), "INSUCESSOS");
@@ -58,22 +68,61 @@ async function main() {
       (/leads/i.test(f) &&
         !/campanha/i.test(f) &&
         !/utm/i.test(f) &&
-        !/performance/i.test(f)),
+        !/performance/i.test(f) &&
+        !/realizad/i.test(f)),
     "LEADS GERAL"
+  );
+  const realizadosPath = pickFile(
+    files,
+    (f) => /realizad/i.test(f),
+    "LEADS REALIZADOS",
+    true
+  );
+  const sucessosPath = pickFile(
+    files,
+    (f) => /^sucessos/i.test(f) || /\bsucessos\b/i.test(f),
+    "SUCESSOS",
+    true
   );
 
   console.log("Fonte:", dataDir);
   console.log("1)", agPath);
   console.log("2)", insPath);
   console.log("3)", leadsPath);
+  console.log("4)", realizadosPath || "(ausente)");
+  console.log("5)", sucessosPath || "(ausente)");
 
+  // Preserva só a base de agendamentos já publicada (ex.: lote até 19/10).
+  // REALIZADOS/SUCESSOS são sempre reprocessados do zero a partir das planilhas.
   let dataset = emptySchedulingDataset();
+  if (existsSync(outPath)) {
+    try {
+      const prev = JSON.parse(readFileSync(outPath, "utf8"));
+      if (Array.isArray(prev.items) && prev.items.length > 0) {
+        dataset = {
+          ...emptySchedulingDataset(),
+          items: prev.items,
+          // leads/realizados/sucessos serão reimportados abaixo
+          leadsAtendimentos: [],
+          realizados: [],
+          sucessosEventos: [],
+          imports: [],
+          updatedAt: prev.updatedAt,
+        };
+        console.log(`→ Base anterior: ${dataset.items.length} agendamentos preservados`);
+      }
+    } catch {
+      /* ignora JSON inválido */
+    }
+  }
 
   const steps = [
-    ["Base AGENDAMENTOS 01/01–15/10/2026", agPath],
-    ["Enrich INSUCESSOS 01/01–15/10/2026", insPath],
-    ["Enrich LEADS GERAL 01/01–15/10/2026", leadsPath],
+    ["Base AGENDAMENTOS", agPath],
+    ["Enrich INSUCESSOS", insPath],
+    ["Enrich LEADS GERAL", leadsPath],
   ];
+  if (realizadosPath) steps.push(["REALIZADOS (Atendido em / Visita em)", realizadosPath]);
+  if (sucessosPath) steps.push(["SUCESSOS (Finalizado em)", sucessosPath]);
 
   for (const [label, filePath] of steps) {
     const buf = readFileSync(filePath);
@@ -83,7 +132,7 @@ async function main() {
     const result = applySchedulingImport(dataset, rows, kind, fileName, label);
     dataset = result.dataset;
     console.log(
-      `→ ${label} [${kind}]: recebidos=${result.meta.received} novos=${result.meta.kept} enriquecidos=${result.meta.enriched} ignorados=${result.meta.removed} total=${dataset.items.length}`
+      `→ ${label} [${kind}]: recebidos=${result.meta.received} novos=${result.meta.kept} enriquecidos=${result.meta.enriched} ignorados=${result.meta.removed} ag=${dataset.items.length} realizados=${(dataset.realizados || []).length} sucessos=${(dataset.sucessosEventos || []).length}`
     );
   }
 
@@ -106,16 +155,16 @@ async function main() {
   const summary = {
     items: dataset.items.length,
     leadsAtendimentos: (dataset.leadsAtendimentos || []).length,
+    realizados: (dataset.realizados || []).length,
+    sucessosEventos: (dataset.sucessosEventos || []).length,
+    visitasComData: (dataset.realizados || []).filter((r) => r.teveVisita && r.dataVisita)
+      .length,
     sucessos: dataset.items.filter((i) => i.status === "Sucesso").length,
-    visitas: dataset.items.filter((i) => i.teveVisita).length,
+    visitasAgenda: dataset.items.filter((i) => i.teveVisita).length,
     insucessos: dataset.items.filter((i) => i.status === "Insucesso").length,
     comMotivo: dataset.items.filter((i) => i.motivoInsucesso).length,
     comOrigem: dataset.items.filter((i) => i.origem && i.origem !== "Não informado")
       .length,
-    comEmail: dataset.items.filter((i) => i.email).length,
-    financimento: dataset.items.filter((i) => i.tipoProposta === "Financiamento").length,
-    recepcao: dataset.items.filter((i) => i.canal === "Recepção").length,
-    preVenda: dataset.items.filter((i) => i.canal === "Pré-Venda").length,
   };
 
   console.log("\nGravado:", outPath);
@@ -124,16 +173,13 @@ async function main() {
   if (dataset.items.length < 4000) {
     throw new Error(`Base suspeita: ${dataset.items.length} itens (esperado ~4450)`);
   }
-  if (summary.comMotivo < 2000) {
-    throw new Error(`Poucos motivos cruzados: ${summary.comMotivo}`);
-  }
-  if (summary.comOrigem < 4000) {
-    throw new Error(`Poucas origens cruzadas: ${summary.comOrigem}`);
-  }
-  if (summary.leadsAtendimentos < 5000) {
+  if (summary.realizados < 5000) {
     throw new Error(
-      `Poucos atendimentos LEADS GERAL: ${summary.leadsAtendimentos} (esperado dezenas de milhares)`
+      `Poucos REALIZADOS: ${summary.realizados} (esperado dezenas de milhares)`
     );
+  }
+  if (summary.sucessosEventos < 100) {
+    throw new Error(`Poucos SUCESSOS: ${summary.sucessosEventos}`);
   }
 }
 

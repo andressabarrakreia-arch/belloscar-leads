@@ -40,7 +40,8 @@ export function buildAgendamentosTickerItems(
   items: AgendamentoItem[],
   leads: LeadAtendimentoItem[],
   updatedAt: string,
-  filterHint?: string
+  filterHint?: string,
+  extras?: { visitas?: number; sucessos?: number }
 ): string[] {
   const { preVenda, recepcao } = splitByCanal(items);
   const kpisPv = buildCanalKpis(preVenda, "Pré-Venda");
@@ -49,10 +50,18 @@ export function buildAgendamentosTickerItems(
 
   const out = [
     `Agendamentos: ${items.length.toLocaleString("pt-BR")}`,
-    `Atendimentos (LEADS): ${leads.length.toLocaleString("pt-BR")}`,
-    `Pré-Venda: ${kpisPv.total.toLocaleString("pt-BR")} · Su ${kpisPv.sucessos} (${kpisPv.taxaSucesso}%)`,
-    `Recepção: ${kpisRec.total.toLocaleString("pt-BR")} · Su ${kpisRec.sucessos} (${kpisRec.taxaSucesso}%)`,
+    `Atendimentos: ${leads.length.toLocaleString("pt-BR")}`,
   ];
+  if (extras?.visitas !== undefined) {
+    out.push(`Visitas: ${extras.visitas.toLocaleString("pt-BR")}`);
+  }
+  if (extras?.sucessos !== undefined) {
+    out.push(`Sucessos: ${extras.sucessos.toLocaleString("pt-BR")}`);
+  }
+  out.push(
+    `Pré-Venda ag.: ${kpisPv.total.toLocaleString("pt-BR")}`,
+    `Recepção ag.: ${kpisRec.total.toLocaleString("pt-BR")}`
+  );
   if (filterHint) out.unshift(`Filtro: ${filterHint}`);
   out.push(`Atualizado em ${updated}`);
   return out;

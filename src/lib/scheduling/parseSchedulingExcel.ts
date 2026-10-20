@@ -3,18 +3,25 @@ import { isoToMonthKey, isoToPeriodKey, toIsoDate } from "./dates";
 import {
   canalFromSdr,
   isVisitFlag,
+  isVisitYesNo,
   normalizeId,
   normalizeStatus,
   normalizeTipoProposta,
   normHeader,
 } from "./normalize";
-import type { AgendamentoItem } from "./types";
+import type { AgendamentoItem, SchedulingSheetKind } from "./types";
 
-export type SheetKind = "agendamentos" | "insucessos" | "leads" | "desconhecido";
+export type SheetKind = SchedulingSheetKind;
 
 export type ParsedSchedulingRow = Partial<AgendamentoItem> & {
   id: string;
   kind: SheetKind;
+  /** REALIZADOS: Atendido em */
+  dataAtendido?: string;
+  /** REALIZADOS: Visita em */
+  dataVisita?: string | null;
+  /** SUCESSOS: Finalizado em */
+  dataFinalizado?: string;
 };
 
 const AGENDAMENTOS_ALIASES: Record<string, string> = {
@@ -64,6 +71,37 @@ const LEADS_ALIASES: Record<string, string> = {
   email: "email",
 };
 
+const REALIZADOS_ALIASES: Record<string, string> = {
+  id: "id",
+  "#id": "id",
+  responsavel: "sdr",
+  "atendido por": "sdr",
+  "atendido em": "dataAtendido",
+  visita: "visita",
+  "visita em": "dataVisita",
+  "data visita": "dataVisita",
+  "data da visita": "dataVisita",
+  status: "status",
+  cliente: "cliente",
+  celular: "celular",
+  origem: "origem",
+  "tipo proposta": "tipoProposta",
+  "tipo de negociacao": "tipoProposta",
+};
+
+const SUCESSOS_ALIASES: Record<string, string> = {
+  id: "id",
+  "#id": "id",
+  "finalizado em": "dataFinalizado",
+  "atendido por": "sdr",
+  "agendado para": "vendedor",
+  "tipo de negociacao": "tipoProposta",
+  "tipo negociacao": "tipoProposta",
+  cliente: "cliente",
+  celular: "celular",
+  origem: "origem",
+};
+
 /** Resolve alias; fallback para cabeçalhos com encoding quebrado. */
 function resolveHeaderAlias(
   raw: unknown,
@@ -73,7 +111,8 @@ function resolveHeaderAlias(
   if (aliases[norm]) return aliases[norm];
   // Mojibake residual / variações: ResponsÃ¡vel → responsa¡vel
   if (norm.startsWith("responsa") || norm.includes("responsavel")) return "sdr";
-  if (norm.includes("atendido")) return "sdr";
+  // Não mapear "atendido em" como SDR
+  if (norm === "atendido por" || norm.startsWith("atendido por")) return "sdr";
   return undefined;
 }
 
@@ -81,12 +120,12 @@ function mapHeaders(
   row: unknown[],
   aliases: Record<string, string>
 ): Record<string, number> {
-  const map: Record<string, number> = {};
+  const out: Record<string, number> = {};
   row.forEach((cell, idx) => {
     const key = resolveHeaderAlias(cell, aliases);
-    if (key && map[key] === undefined) map[key] = idx;
+    if (key && out[key] === undefined) out[key] = idx;
   });
-  return map;
+  return out;
 }
 
 function cell(row: unknown[], idx: number | undefined): unknown {
@@ -94,14 +133,54 @@ function cell(row: unknown[], idx: number | undefined): unknown {
   return row[idx] ?? "";
 }
 
+function aliasesFor(kind: SheetKind): Record<string, string> {
+  switch (kind) {
+    case "agendamentos":
+      return AGENDAMENTOS_ALIASES;
+    case "insucessos":
+      return INSUCESSOS_ALIASES;
+    case "realizados":
+      return REALIZADOS_ALIASES;
+    case "sucessos":
+      return SUCESSOS_ALIASES;
+    case "leads":
+      return LEADS_ALIASES;
+    default:
+      return LEADS_ALIASES;
+  }
+}
+
 function detectKind(headerRow: unknown[]): SheetKind {
   const headers = headerRow.map(normHeader);
   const has = (h: string) => headers.includes(h);
+  const hasPrefix = (p: string) => headers.some((h) => h.startsWith(p) || h.includes(p));
+
+  // Insucessos: tem Motivo (+ Finalizado em / Origem)
   if (has("motivo") && (has("origem") || has("finalizado em"))) return "insucessos";
-  if (has("agendado para") && has("agendado em") && has("status")) return "agendamentos";
-  if (has("agendado para") && has("#id")) return "agendamentos";
-  if (has("criado em") && has("origem") && has("tipo proposta")) return "leads";
   if (has("motivo")) return "insucessos";
+
+  // Sucessos: Finalizado em sem Motivo
+  if (has("finalizado em") && (has("atendido por") || hasPrefix("veiculo"))) {
+    return "sucessos";
+  }
+
+  // AGENDAMENTOS: Agendado em + Agendado para (pode também ter Atendido em / Visita em)
+  if (has("agendado em") && has("agendado para")) return "agendamentos";
+  if (has("agendado para") && has("status") && has("#id")) return "agendamentos";
+
+  // REALIZADOS: Atendido em + Visita, sem Agendado em (coluna "Agendado" = Sim/Não)
+  if (
+    has("atendido em") &&
+    (has("visita") || has("visita em") || has("data visita")) &&
+    !has("agendado em")
+  ) {
+    return "realizados";
+  }
+  if (has("atendido em") && hasPrefix("responsa") && !has("agendado em")) {
+    return "realizados";
+  }
+
+  if (has("criado em") && has("origem") && has("tipo proposta")) return "leads";
   return "desconhecido";
 }
 
@@ -172,17 +251,11 @@ export function parseSchedulingArrayBuffer(buffer: ArrayBuffer): {
   const { index: headerIndex, kind } = findHeaderRow(rows);
   if (kind === "desconhecido") {
     throw new Error(
-      "Não foi possível identificar o tipo de planilha (agendamentos, insucessos ou leads)."
+      "Não foi possível identificar o tipo de planilha (agendamentos, insucessos, realizados, sucessos ou leads)."
     );
   }
 
-  const aliases =
-    kind === "agendamentos"
-      ? AGENDAMENTOS_ALIASES
-      : kind === "insucessos"
-        ? INSUCESSOS_ALIASES
-        : LEADS_ALIASES;
-
+  const aliases = aliasesFor(kind);
   const headers = mapHeaders(rows[headerIndex] as unknown[], aliases);
   if (headers.id === undefined) {
     throw new Error("Coluna obrigatória ausente: ID");
@@ -265,7 +338,54 @@ export function parseSchedulingArrayBuffer(buffer: ArrayBuffer): {
       continue;
     }
 
-    // leads — enriquecimento (origem/email/cliente) e fallback se id novo
+    if (kind === "realizados") {
+      const dataAtendido =
+        toIsoDate(cell(row, headers.dataAtendido)) ||
+        toIsoDate(cell(row, headers.dataAgendamento)) ||
+        undefined;
+      const dataVisita = toIsoDate(cell(row, headers.dataVisita)) || null;
+      const teveVisita = isVisitYesNo(cell(row, headers.visita));
+      const sdr = String(cell(row, headers.sdr) ?? "").trim() || "(sem SDR)";
+      parsed.push({
+        id,
+        kind,
+        dataAtendido,
+        dataVisita,
+        dataAgendamento: dataAtendido,
+        sdr,
+        teveVisita,
+        status: normalizeStatus(cell(row, headers.status)),
+        origem: String(cell(row, headers.origem) ?? "").trim() || undefined,
+        tipoProposta: normalizeTipoProposta(cell(row, headers.tipoProposta)),
+        cliente: String(cell(row, headers.cliente) ?? "").trim() || undefined,
+        celular: String(cell(row, headers.celular) ?? "").trim() || undefined,
+      });
+      continue;
+    }
+
+    if (kind === "sucessos") {
+      const dataFinalizado = toIsoDate(cell(row, headers.dataFinalizado)) || undefined;
+      const sdr = String(cell(row, headers.sdr) ?? "").trim() || "(sem SDR)";
+      const vendedor =
+        String(cell(row, headers.vendedor) ?? "").trim() || "(sem vendedor)";
+      parsed.push({
+        id,
+        kind,
+        dataFinalizado,
+        dataAgendamento: dataFinalizado,
+        sdr,
+        vendedor,
+        tipoProposta: normalizeTipoProposta(cell(row, headers.tipoProposta)),
+        status: "Sucesso",
+        teveVisita: true,
+        origem: String(cell(row, headers.origem) ?? "").trim() || undefined,
+        cliente: String(cell(row, headers.cliente) ?? "").trim() || undefined,
+        celular: String(cell(row, headers.celular) ?? "").trim() || undefined,
+      });
+      continue;
+    }
+
+    // leads — enriquecimento (origem/email/cliente)
     const dataAgendamento = toIsoDate(cell(row, headers.dataAgendamento));
     const sdr = String(cell(row, headers.sdr) ?? "").trim();
     const status = normalizeStatus(cell(row, headers.status));

@@ -9,6 +9,8 @@ import type {
   SchedulingFilters,
   PropostaConversao,
   LeadAtendimentoItem,
+  RealizadoItem,
+  SucessoItem,
   SdrMetrics,
   SdrPreVendaRow,
   SdrVendedorTop,
@@ -125,19 +127,19 @@ export function filterAgendamentos(
   });
 }
 
-/** Filtra LEADS GERAL (atendimentos). Ignora filtro de vendedor (lead ainda sem vendedor). */
+function matchSdrFilter(sdr: string, filters: SchedulingFilters): boolean {
+  if (!filters.sdr) return true;
+  if (filters.sdr === "Recepção") return isRecepcaoName(sdr);
+  return sdr === filters.sdr || displaySdrName(sdr) === filters.sdr;
+}
+
+/** Filtra LEADS GERAL (enrich). Ignora filtro de vendedor. */
 export function filterLeadsAtendimentos(
   leads: LeadAtendimentoItem[],
   filters: SchedulingFilters
 ): LeadAtendimentoItem[] {
   return leads.filter((lead) => {
-    if (filters.sdr) {
-      if (filters.sdr === "Recepção") {
-        if (!isRecepcaoName(lead.sdr)) return false;
-      } else if (lead.sdr !== filters.sdr) {
-        return false;
-      }
-    }
+    if (!matchSdrFilter(lead.sdr, filters)) return false;
     if (filters.tipoProposta && lead.tipoProposta !== filters.tipoProposta) return false;
     if (filters.origem && lead.origem !== filters.origem) return false;
     if (filters.from && lead.data < filters.from) return false;
@@ -150,14 +152,89 @@ export function filterLeadsAtendimentos(
   });
 }
 
-/** Contagem de atendimentos (leads) por SDR, com Recepção consolidada. */
-export function countLeadsBySdr(leads: LeadAtendimentoItem[]): Map<string, number> {
+/**
+ * REALIZADOS no período por Atendido em → contagem de Atendimentos.
+ * Ignora filtro de vendedor.
+ */
+export function filterRealizadosAtendimentos(
+  realizados: RealizadoItem[],
+  filters: SchedulingFilters
+): RealizadoItem[] {
+  return realizados.filter((r) => {
+    if (!matchSdrFilter(r.sdr, filters)) return false;
+    if (filters.tipoProposta && r.tipoProposta !== filters.tipoProposta) return false;
+    if (filters.origem && r.origem !== filters.origem) return false;
+    if (filters.from && r.dataAtendido < filters.from) return false;
+    if (filters.to && r.dataAtendido > filters.to) return false;
+    if (filters.q?.trim()) {
+      const q = filters.q.trim().toLowerCase();
+      if (!r.id.toLowerCase().includes(q) && !r.cliente.toLowerCase().includes(q)) {
+        return false;
+      }
+    }
+    return true;
+  });
+}
+
+/**
+ * REALIZADOS com Visita=Sim e Visita em no período → Visitas.
+ */
+export function filterRealizadosVisitas(
+  realizados: RealizadoItem[],
+  filters: SchedulingFilters
+): RealizadoItem[] {
+  return realizados.filter((r) => {
+    if (!r.teveVisita || !r.dataVisita) return false;
+    if (!matchSdrFilter(r.sdr, filters)) return false;
+    if (filters.tipoProposta && r.tipoProposta !== filters.tipoProposta) return false;
+    if (filters.origem && r.origem !== filters.origem) return false;
+    if (filters.from && r.dataVisita < filters.from) return false;
+    if (filters.to && r.dataVisita > filters.to) return false;
+    if (filters.q?.trim()) {
+      const q = filters.q.trim().toLowerCase();
+      if (!r.id.toLowerCase().includes(q) && !r.cliente.toLowerCase().includes(q)) {
+        return false;
+      }
+    }
+    return true;
+  });
+}
+
+/** SUCESSOS no período por Finalizado em. */
+export function filterSucessosEventos(
+  sucessos: SucessoItem[],
+  filters: SchedulingFilters
+): SucessoItem[] {
+  return sucessos.filter((s) => {
+    if (!matchSdrFilter(s.sdr, filters)) return false;
+    if (filters.vendedor && s.vendedor !== filters.vendedor) return false;
+    if (filters.tipoProposta && s.tipoProposta !== filters.tipoProposta) return false;
+    if (filters.origem && s.origem !== filters.origem) return false;
+    if (filters.from && s.dataFinalizado < filters.from) return false;
+    if (filters.to && s.dataFinalizado > filters.to) return false;
+    if (filters.q?.trim()) {
+      const q = filters.q.trim().toLowerCase();
+      if (!s.id.toLowerCase().includes(q) && !s.cliente.toLowerCase().includes(q)) {
+        return false;
+      }
+    }
+    return true;
+  });
+}
+
+/** Contagem por SDR (display name), com Recepção consolidada. */
+export function countBySdrName(names: { sdr: string }[]): Map<string, number> {
   const map = new Map<string, number>();
-  for (const lead of leads) {
-    const key = displaySdrName(lead.sdr);
+  for (const row of names) {
+    const key = displaySdrName(row.sdr);
     map.set(key, (map.get(key) || 0) + 1);
   }
   return map;
+}
+
+/** @deprecated Preferir countBySdrName */
+export function countLeadsBySdr(leads: LeadAtendimentoItem[]): Map<string, number> {
+  return countBySdrName(leads);
 }
 
 export function getSchedulingFilterOptions(items: AgendamentoItem[]) {
@@ -336,18 +413,29 @@ export function buildSdrMetrics(items: AgendamentoItem[]): SdrMetrics[] {
 /**
  * Desempenho/comparação Recepção: soma Recepção + Gabriela (e equivalentes)
  * e apresenta uma única linha "Recepção".
+ * Atend/Visitas/Sucessos vêm das coleções filtradas por data própria.
  */
 export function buildRecepcaoConsolidatedMetrics(
   items: AgendamentoItem[],
-  leads: LeadAtendimentoItem[] = []
+  realizadosAtend: RealizadoItem[] = [],
+  realizadosVisitas: RealizadoItem[] = [],
+  sucessos: SucessoItem[] = []
 ): SdrMetrics & { totalAtendimentos: number; taxaAgendamento: number } {
   const base =
     items.length === 0
       ? metricsFromSdrGroup("Recepção", [], "Recepção")
       : metricsFromSdrGroup("Recepção", items, "Recepção");
-  const totalAtendimentos = leads.filter((l) => isRecepcaoName(l.sdr)).length;
+  const totalAtendimentos = realizadosAtend.filter((l) => isRecepcaoName(l.sdr)).length;
+  const totalVisitas = realizadosVisitas.filter((l) => isRecepcaoName(l.sdr)).length;
+  const totalSucesso = sucessos.filter((s) => isRecepcaoName(s.sdr)).length;
   return {
     ...base,
+    totalVisitas,
+    totalSucesso,
+    taxaConversaoVisita: round2(
+      base.totalAgendamentos ? (totalVisitas / base.totalAgendamentos) * 100 : 0
+    ),
+    taxaConversaoSucesso: round2(totalVisitas ? (totalSucesso / totalVisitas) * 100 : 0),
     totalAtendimentos,
     taxaAgendamento: round2(
       totalAtendimentos ? (base.totalAgendamentos / totalAtendimentos) * 100 : 0
@@ -402,20 +490,40 @@ function topParceirosDoSdr(list: AgendamentoItem[], limit = 3): SdrVendedorTop[]
     .slice(0, limit);
 }
 
-/** Painel unificado Pré-Vendas: desempenho + conv. por proposta + top 3 vendedores. */
+/**
+ * Painel unificado Pré-Vendas.
+ * Atendimentos = REALIZADOS (Atendido em) · Agend. = planilha (Agendado em)
+ * Visitas = REALIZADOS (Visita em) · Sucessos = SUCESSOS (Finalizado em)
+ * Conv. visita = Vis/Ag · Conv. = Suc/Vis (como no CRM).
+ */
 export function buildSdrPreVendaRows(
   items: AgendamentoItem[],
-  leads: LeadAtendimentoItem[] = []
+  realizadosAtend: RealizadoItem[] = [],
+  realizadosVisitas: RealizadoItem[] = [],
+  sucessos: SucessoItem[] = []
 ): SdrPreVendaRow[] {
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of items) {
-    const list = groups.get(item.sdr) || [];
+    const key = displaySdrName(item.sdr);
+    const list = groups.get(key) || [];
     list.push(item);
-    groups.set(item.sdr, list);
+    groups.set(key, list);
   }
 
-  const leadsBySdr = countLeadsBySdr(leads.filter((l) => !isRecepcaoName(l.sdr)));
-  const allSdrs = new Set([...groups.keys(), ...leadsBySdr.keys()]);
+  const atendBySdr = countBySdrName(
+    realizadosAtend.filter((l) => !isRecepcaoName(l.sdr))
+  );
+  const visitasBySdr = countBySdrName(
+    realizadosVisitas.filter((l) => !isRecepcaoName(l.sdr))
+  );
+  const sucessosBySdr = countBySdrName(sucessos.filter((s) => !isRecepcaoName(s.sdr)));
+
+  const allSdrs = new Set([
+    ...groups.keys(),
+    ...atendBySdr.keys(),
+    ...visitasBySdr.keys(),
+    ...sucessosBySdr.keys(),
+  ]);
 
   return [...allSdrs]
     .map((sdr) => {
@@ -424,9 +532,19 @@ export function buildSdrPreVendaRows(
         list.length > 0
           ? metricsFromSdrGroup(sdr, list, "Pré-Venda")
           : metricsFromSdrGroup(sdr, [], "Pré-Venda");
-      const totalAtendimentos = leadsBySdr.get(sdr) || 0;
+      const totalAtendimentos = atendBySdr.get(sdr) || 0;
+      const totalVisitas = visitasBySdr.get(sdr) || 0;
+      const totalSucesso = sucessosBySdr.get(sdr) || 0;
       return {
         ...base,
+        totalVisitas,
+        totalSucesso,
+        taxaConversaoVisita: round2(
+          base.totalAgendamentos ? (totalVisitas / base.totalAgendamentos) * 100 : 0
+        ),
+        taxaConversaoSucesso: round2(
+          totalVisitas ? (totalSucesso / totalVisitas) * 100 : 0
+        ),
         totalAtendimentos,
         taxaAgendamento: round2(
           totalAtendimentos ? (base.totalAgendamentos / totalAtendimentos) * 100 : 0

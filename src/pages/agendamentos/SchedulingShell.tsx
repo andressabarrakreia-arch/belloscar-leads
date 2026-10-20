@@ -26,7 +26,11 @@ function SchedulingShellInner() {
         analytics.filtered,
         analytics.filteredLeads || [],
         dataset.updatedAt,
-        schedulingFilterHint(filters)
+        schedulingFilterHint(filters),
+        {
+          visitas: (analytics.filteredVisitas || []).length,
+          sucessos: (analytics.filteredSucessos || []).length,
+        }
       )
     );
     return () => setOverrideItems(null);
@@ -43,10 +47,13 @@ function SchedulingShellInner() {
           <strong>Setor:</strong> Vendas Web · <strong>Gestão:</strong> Andressa Barra
         </p>
         <p className="muted">
-          Análise de Agendamentos · {analytics.filtered.length} agendamentos no filtro ·{" "}
-          {(analytics.filteredLeads || []).length} atendimentos (LEADS) ·{" "}
-          {dataset.items.length} ag. na base · {(dataset.leadsAtendimentos || []).length} leads na
-          base · atualizado {new Date(dataset.updatedAt).toLocaleString("pt-BR")}
+          Análise · {analytics.filtered.length} agend. (Agendado em) ·{" "}
+          {(analytics.filteredLeads || []).length} atend. (Atendido em) ·{" "}
+          {(analytics.filteredVisitas || []).length} visitas (Visita em) ·{" "}
+          {(analytics.filteredSucessos || []).length} sucessos (Finalizado em) · base{" "}
+          {dataset.items.length} ag. / {(dataset.realizados || []).length} realizados /{" "}
+          {(dataset.sucessosEventos || []).length} sucessos · atualizado{" "}
+          {new Date(dataset.updatedAt).toLocaleString("pt-BR")}
         </p>
       </div>
 

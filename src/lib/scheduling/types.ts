@@ -29,10 +29,18 @@ export interface AgendamentoItem {
   periodKey: string;
 }
 
+export type SchedulingSheetKind =
+  | "agendamentos"
+  | "insucessos"
+  | "leads"
+  | "realizados"
+  | "sucessos"
+  | "desconhecido";
+
 export type SchedulingImportMeta = {
   fileName: string;
   label: string;
-  kind: "agendamentos" | "insucessos" | "leads" | "desconhecido";
+  kind: SchedulingSheetKind;
   at: string;
   received: number;
   kept: number;
@@ -41,7 +49,7 @@ export type SchedulingImportMeta = {
   notes: string[];
 };
 
-/** Atendimento (lead) da planilha LEADS GERAL — universo de recebidos. */
+/** Atendimento (lead) da planilha LEADS GERAL — enriquecimento (origem etc.). */
 export type LeadAtendimentoItem = {
   id: string;
   /** Data do lead (criado em), ISO YYYY-MM-DD */
@@ -51,12 +59,46 @@ export type LeadAtendimentoItem = {
   tipoProposta: TipoProposta;
 };
 
+/**
+ * LEADS REALIZADOS — fonte de Atendimentos (Atendido em) e Visitas (Visita + Visita em).
+ */
+export type RealizadoItem = {
+  id: string;
+  /** Atendido em — ISO YYYY-MM-DD */
+  dataAtendido: string;
+  /** Visita em — ISO YYYY-MM-DD ou null */
+  dataVisita: string | null;
+  teveVisita: boolean;
+  sdr: string;
+  origem: string;
+  tipoProposta: TipoProposta;
+  cliente: string;
+  celular: string;
+};
+
+/** Planilha SUCESSOS — Finalizado em. */
+export type SucessoItem = {
+  id: string;
+  /** Finalizado em — ISO YYYY-MM-DD */
+  dataFinalizado: string;
+  sdr: string;
+  vendedor: string;
+  tipoProposta: TipoProposta;
+  origem: string;
+  cliente: string;
+  celular: string;
+};
+
 export type SchedulingDataset = {
   updatedAt: string;
   imports: SchedulingImportMeta[];
   items: AgendamentoItem[];
-  /** Volume de LEADS GERAL (dedupe por id); usado em Portais e Pré-Vendas. */
+  /** LEADS GERAL (enrich); legado para Portais se realizados vazio. */
   leadsAtendimentos?: LeadAtendimentoItem[];
+  /** LEADS REALIZADOS — atendimentos e visitas por data própria. */
+  realizados?: RealizadoItem[];
+  /** Planilha SUCESSOS — sucessos por Finalizado em. */
+  sucessosEventos?: SucessoItem[];
 };
 
 export type SchedulingFilters = {
@@ -102,7 +144,7 @@ export type SdrVendedorTop = {
 
 /** Linha unificada da aba Pré-Vendas (desempenho + extras). */
 export type SdrPreVendaRow = SdrMetrics & {
-  /** Leads/atendimentos do SDR (LEADS GERAL). */
+  /** Atendimentos do SDR (REALIZADOS · Atendido em). */
   totalAtendimentos: number;
   /** Agendamentos / Atendimentos × 100 (0 se sem atendimentos). */
   taxaAgendamento: number;

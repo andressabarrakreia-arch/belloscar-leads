@@ -3,8 +3,10 @@ import { isoToMonthKey, isoToPeriodKey } from "./dates";
 import type {
   AgendamentoItem,
   LeadAtendimentoItem,
+  RealizadoItem,
   SchedulingDataset,
   SchedulingImportMeta,
+  SucessoItem,
 } from "./types";
 import type { ParsedSchedulingRow, SheetKind } from "./parseSchedulingExcel";
 
@@ -29,11 +31,83 @@ function mergeLeadsAtendimentos(
         : prev?.tipoProposta || row.tipoProposta || "não informado(celulas em branco)";
     map.set(row.id, {
       id: row.id,
-      // Arquivo novo manda na data quando vier preenchida
       data: row.dataAgendamento || prev?.data || "1970-01-01",
       sdr,
       origem,
       tipoProposta,
+    });
+  }
+  return [...map.values()];
+}
+
+function mergeRealizados(
+  current: RealizadoItem[],
+  incoming: ParsedSchedulingRow[],
+  origemById: Map<string, string>
+): RealizadoItem[] {
+  const map = new Map(current.map((r) => [r.id, r]));
+  for (const row of incoming) {
+    if (!row.id) continue;
+    const prev = map.get(row.id);
+    const sdr = row.sdr?.trim() || prev?.sdr || "(sem SDR)";
+    const origemFromRow =
+      row.origem?.trim() && row.origem.trim() !== "Não informado"
+        ? row.origem.trim()
+        : "";
+    const origem =
+      origemFromRow ||
+      prev?.origem ||
+      origemById.get(row.id) ||
+      "Não informado";
+    const tipoProposta =
+      row.tipoProposta && row.tipoProposta !== "não informado(celulas em branco)"
+        ? row.tipoProposta
+        : prev?.tipoProposta || row.tipoProposta || "não informado(celulas em branco)";
+    map.set(row.id, {
+      id: row.id,
+      dataAtendido:
+        row.dataAtendido || row.dataAgendamento || prev?.dataAtendido || "1970-01-01",
+      dataVisita:
+        row.dataVisita !== undefined ? row.dataVisita : prev?.dataVisita ?? null,
+      teveVisita:
+        row.teveVisita !== undefined ? Boolean(row.teveVisita) : Boolean(prev?.teveVisita),
+      sdr,
+      origem,
+      tipoProposta,
+      cliente: row.cliente?.trim() || prev?.cliente || "",
+      celular: row.celular?.trim() || prev?.celular || "",
+    });
+  }
+  return [...map.values()];
+}
+
+function mergeSucessosEventos(
+  current: SucessoItem[],
+  incoming: ParsedSchedulingRow[]
+): SucessoItem[] {
+  const map = new Map(current.map((s) => [s.id, s]));
+  for (const row of incoming) {
+    if (!row.id) continue;
+    const prev = map.get(row.id);
+    map.set(row.id, {
+      id: row.id,
+      dataFinalizado:
+        row.dataFinalizado ||
+        row.dataAgendamento ||
+        prev?.dataFinalizado ||
+        "1970-01-01",
+      sdr: row.sdr?.trim() || prev?.sdr || "(sem SDR)",
+      vendedor: row.vendedor?.trim() || prev?.vendedor || "(sem vendedor)",
+      tipoProposta:
+        row.tipoProposta && row.tipoProposta !== "não informado(celulas em branco)"
+          ? row.tipoProposta
+          : prev?.tipoProposta || row.tipoProposta || "não informado(celulas em branco)",
+      origem:
+        row.origem?.trim() && row.origem.trim() !== "Não informado"
+          ? row.origem.trim()
+          : prev?.origem || "Não informado",
+      cliente: row.cliente?.trim() || prev?.cliente || "",
+      celular: row.celular?.trim() || prev?.celular || "",
     });
   }
   return [...map.values()];
@@ -194,6 +268,8 @@ export function emptySchedulingDataset(): SchedulingDataset {
     imports: [],
     items: [],
     leadsAtendimentos: [],
+    realizados: [],
+    sucessosEventos: [],
   };
 }
 
@@ -201,7 +277,33 @@ export function normalizeSchedulingDataset(dataset: SchedulingDataset): Scheduli
   return {
     ...dataset,
     leadsAtendimentos: dataset.leadsAtendimentos ?? [],
+    realizados: dataset.realizados ?? [],
+    sucessosEventos: dataset.sucessosEventos ?? [],
   };
+}
+
+function dedupeCount(incoming: ParsedSchedulingRow[]): {
+  unique: ParsedSchedulingRow[];
+  removed: number;
+  notes: string[];
+} {
+  const seen = new Map<string, ParsedSchedulingRow>();
+  let removed = 0;
+  const notes: string[] = [];
+  for (const row of incoming) {
+    if (!row.id) {
+      removed += 1;
+      continue;
+    }
+    if (seen.has(row.id)) {
+      removed += 1;
+      if (notes.length < 25) {
+        notes.push(`Duplicado no arquivo id ${row.id}: mantida última ocorrência`);
+      }
+    }
+    seen.set(row.id, row);
+  }
+  return { unique: [...seen.values()], removed, notes };
 }
 
 export function applySchedulingImport(
@@ -212,6 +314,83 @@ export function applySchedulingImport(
   label?: string
 ): { dataset: SchedulingDataset; meta: SchedulingImportMeta } {
   const base = normalizeSchedulingDataset(current);
+
+  // REALIZADOS / SUCESSOS: coleções próprias (não entram como órfãos de agendamentos)
+  if (kind === "realizados") {
+    const { unique, removed, notes } = dedupeCount(incoming);
+    const origemById = new Map<string, string>();
+    for (const l of base.leadsAtendimentos || []) {
+      if (l.origem && l.origem !== "Não informado") origemById.set(l.id, l.origem);
+    }
+    for (const i of base.items) {
+      if (i.origem && i.origem !== "Não informado" && !origemById.has(i.id)) {
+        origemById.set(i.id, i.origem);
+      }
+    }
+    const before = (base.realizados || []).length;
+    const realizados = mergeRealizados(base.realizados || [], unique, origemById);
+    const kept = Math.max(0, realizados.length - before);
+    const enriched = unique.length - kept;
+    const meta: SchedulingImportMeta = {
+      fileName,
+      label: label || fileName,
+      kind,
+      at: new Date().toISOString(),
+      received: incoming.length,
+      kept,
+      removed,
+      enriched: Math.max(0, enriched),
+      notes: [
+        `REALIZADOS: ${realizados.length} atendimentos únicos (Atendido em / Visita em)`,
+        ...notes,
+      ],
+    };
+    return {
+      dataset: {
+        updatedAt: meta.at,
+        imports: [meta, ...base.imports].slice(0, 50),
+        items: base.items,
+        leadsAtendimentos: base.leadsAtendimentos,
+        realizados,
+        sucessosEventos: base.sucessosEventos,
+      },
+      meta,
+    };
+  }
+
+  if (kind === "sucessos") {
+    const { unique, removed, notes } = dedupeCount(incoming);
+    const before = (base.sucessosEventos || []).length;
+    const sucessosEventos = mergeSucessosEventos(base.sucessosEventos || [], unique);
+    const kept = Math.max(0, sucessosEventos.length - before);
+    const enriched = unique.length - kept;
+    const meta: SchedulingImportMeta = {
+      fileName,
+      label: label || fileName,
+      kind,
+      at: new Date().toISOString(),
+      received: incoming.length,
+      kept,
+      removed,
+      enriched: Math.max(0, enriched),
+      notes: [
+        `SUCESSOS: ${sucessosEventos.length} eventos únicos (Finalizado em)`,
+        ...notes,
+      ],
+    };
+    return {
+      dataset: {
+        updatedAt: meta.at,
+        imports: [meta, ...base.imports].slice(0, 50),
+        items: base.items,
+        leadsAtendimentos: base.leadsAtendimentos,
+        realizados: base.realizados,
+        sucessosEventos,
+      },
+      meta,
+    };
+  }
+
   // Insucessos/leads só enriquecem a base de agendamentos — não criam órfãos.
   const enrichOnly = kind === "insucessos" || kind === "leads";
   const { items, kept, removed, enriched, skipped, notes } = mergeById(
@@ -227,7 +406,7 @@ export function applySchedulingImport(
 
   const leadNote =
     kind === "leads"
-      ? [`LEADS GERAL: ${leadsAtendimentos.length} atendimentos únicos na base`]
+      ? [`LEADS GERAL: ${leadsAtendimentos.length} leads únicos (enrich)`]
       : [];
 
   const meta: SchedulingImportMeta = {
@@ -251,6 +430,8 @@ export function applySchedulingImport(
       imports: [meta, ...base.imports].slice(0, 50),
       items,
       leadsAtendimentos,
+      realizados: base.realizados,
+      sucessosEventos: base.sucessosEventos,
     },
     meta,
   };

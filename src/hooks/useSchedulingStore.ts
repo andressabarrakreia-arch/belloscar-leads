@@ -14,13 +14,20 @@ import {
   buildVendedorMetrics,
   filterAgendamentos,
   filterLeadsAtendimentos,
+  filterRealizadosAtendimentos,
+  filterRealizadosVisitas,
+  filterSucessosEventos,
   getSchedulingFilterOptions,
   splitByCanal,
 } from "../lib/scheduling/metrics";
 import { isRecepcaoName } from "../lib/scheduling/normalize";
 import { buildPortalDashboard } from "../lib/scheduling/portalMetrics";
 import { loadSchedulingDataset } from "../lib/scheduling/storage";
-import type { SchedulingDataset, SchedulingFilters } from "../lib/scheduling/types";
+import type {
+  LeadAtendimentoItem,
+  SchedulingDataset,
+  SchedulingFilters,
+} from "../lib/scheduling/types";
 
 export function useSchedulingStore() {
   const [dataset, setDataset] = useState<SchedulingDataset | null>(null);
@@ -44,21 +51,102 @@ export function useSchedulingAnalytics(
   return useMemo(() => {
     if (!dataset) return null;
     const filtered = filterAgendamentos(dataset.items, filters);
-    const filteredLeads = filterLeadsAtendimentos(
+    const realizados = dataset.realizados || [];
+    const filteredRealizados = filterRealizadosAtendimentos(realizados, filters);
+    const filteredVisitas = filterRealizadosVisitas(realizados, filters);
+    const filteredSucessos = filterSucessosEventos(
+      dataset.sucessosEventos || [],
+      filters
+    );
+
+    // Fallback legado: sem REALIZADOS, usa LEADS GERAL para atendimentos
+    const legacyLeads = filterLeadsAtendimentos(
       dataset.leadsAtendimentos || [],
       filters
     );
-    const { preVenda, recepcao } = splitByCanal(filtered);
-    const leadsPv = filteredLeads.filter((l) => !isRecepcaoName(l.sdr));
-    const leadsRec = filteredLeads.filter((l) => isRecepcaoName(l.sdr));
+    const atendSource =
+      realizados.length > 0
+        ? filteredRealizados
+        : legacyLeads.map(
+            (l): LeadAtendimentoItem & { dataAtendido?: string } => l
+          );
 
-    const sdrPreVendaRows = buildSdrPreVendaRows(preVenda, leadsPv);
-    const sdrRecepcao = buildRecepcaoConsolidatedMetrics(recepcao, leadsRec);
+    const { preVenda, recepcao } = splitByCanal(filtered);
+    const atendPv = filteredRealizados.filter((l) => !isRecepcaoName(l.sdr));
+    const atendRec = filteredRealizados.filter((l) => isRecepcaoName(l.sdr));
+    const visitasPv = filteredVisitas.filter((l) => !isRecepcaoName(l.sdr));
+    const visitasRec = filteredVisitas.filter((l) => isRecepcaoName(l.sdr));
+    const sucessosPv = filteredSucessos.filter((s) => !isRecepcaoName(s.sdr));
+    const sucessosRec = filteredSucessos.filter((s) => isRecepcaoName(s.sdr));
+
+    const sdrPreVendaRows =
+      realizados.length > 0
+        ? buildSdrPreVendaRows(preVenda, atendPv, visitasPv, sucessosPv)
+        : buildSdrPreVendaRows(
+            preVenda,
+            legacyLeads
+              .filter((l) => !isRecepcaoName(l.sdr))
+              .map((l) => ({
+                id: l.id,
+                dataAtendido: l.data,
+                dataVisita: null,
+                teveVisita: false,
+                sdr: l.sdr,
+                origem: l.origem,
+                tipoProposta: l.tipoProposta,
+                cliente: "",
+                celular: "",
+              })),
+            [],
+            []
+          );
+
+    const sdrRecepcao =
+      realizados.length > 0
+        ? buildRecepcaoConsolidatedMetrics(
+            recepcao,
+            atendRec,
+            visitasRec,
+            sucessosRec
+          )
+        : buildRecepcaoConsolidatedMetrics(
+            recepcao,
+            legacyLeads
+              .filter((l) => isRecepcaoName(l.sdr))
+              .map((l) => ({
+                id: l.id,
+                dataAtendido: l.data,
+                dataVisita: null,
+                teveVisita: false,
+                sdr: l.sdr,
+                origem: l.origem,
+                tipoProposta: l.tipoProposta,
+                cliente: "",
+                celular: "",
+              })),
+            [],
+            []
+          );
+
     const vendedorMetrics = buildVendedorMetrics(filtered);
+
+    const leadsForPortal: LeadAtendimentoItem[] =
+      realizados.length > 0
+        ? filteredRealizados.map((r) => ({
+            id: r.id,
+            data: r.dataAtendido,
+            sdr: r.sdr,
+            origem: r.origem,
+            tipoProposta: r.tipoProposta,
+          }))
+        : legacyLeads;
 
     return {
       filtered,
-      filteredLeads,
+      filteredLeads: leadsForPortal,
+      filteredRealizados,
+      filteredVisitas,
+      filteredSucessos,
       preVenda,
       recepcao,
       options: getSchedulingFilterOptions(dataset.items),
@@ -78,7 +166,11 @@ export function useSchedulingAnalytics(
       motivosInsucesso: buildMotivosStats(filtered),
       motivosBySdr: buildMotivosBySdr(filtered),
       motivosByVendedor: buildMotivosByVendedor(filtered),
-      portais: buildPortalDashboard(filtered, filteredLeads),
+      portais: buildPortalDashboard(filtered, leadsForPortal, {
+        visitas: filteredVisitas,
+        sucessos: filteredSucessos,
+      }),
+      atendSourceCount: atendSource.length,
     };
   }, [dataset, filters]);
 }

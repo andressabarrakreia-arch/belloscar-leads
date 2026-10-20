@@ -16,9 +16,9 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
     <div className="card">
       <h2>Desempenho Pré-Vendas</h2>
       <p className="muted">
-        Por SDR (ordem da equipe web). Atendimentos = LEADS GERAL · % Agend. = Agendamentos/Atendimentos
-        · Conv. visita = Visitas/Agendamentos · Conv. = Sucessos/Agendamentos. Recepção não entra
-        neste bloco.
+        Por SDR. Atendimentos = REALIZADOS (Atendido em) · Agend. = planilha (Agendado em) ·
+        Visitas = REALIZADOS (Visita em) · Sucessos = SUCESSOS (Finalizado em) · % Agend. =
+        Ag/Atend · Conv. visita = Vis/Ag · Conv. = Suc/Vis. Recepção não entra neste bloco.
       </p>
       <div className="table-scroll">
         <table>
