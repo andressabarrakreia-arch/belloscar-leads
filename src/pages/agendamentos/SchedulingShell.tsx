@@ -65,7 +65,7 @@ function SchedulingShellInner() {
   if (!analytics || !dataset) return null;
 
   return (
-    <div className="scheduling-layout">
+    <>
       <div className="card report-signature">
         <p>
           <strong>Setor:</strong> Vendas Web · <strong>Gestão:</strong> Andressa Barra
@@ -99,7 +99,7 @@ function SchedulingShellInner() {
       )}
 
       <Outlet />
-    </div>
+    </>
   );
 }
 
