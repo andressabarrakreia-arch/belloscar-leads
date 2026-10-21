@@ -229,6 +229,9 @@ export function IndiceGeral() {
 
         <footer className="indice-foot">
           <p>BellosCar · Índice Geral · Curitiba</p>
+          <Link className="indice-gestao-link" to="/indice/gestao">
+            Gestão
+          </Link>
           <SiteCredit />
         </footer>
       </div>

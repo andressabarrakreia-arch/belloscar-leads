@@ -1603,6 +1603,20 @@ tr:hover td {
   margin: 0;
 }
 
+.indice-gestao-link {
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-shadow: 0 2px 10px rgba(20, 16, 16, 0.45);
+}
+
+.indice-gestao-link:hover {
+  color: #ffd0d2;
+}
+
 .indice-foot .site-credit {
   align-items: center;
 }

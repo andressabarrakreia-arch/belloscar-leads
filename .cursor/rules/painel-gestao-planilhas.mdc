@@ -1,0 +1,26 @@
+---
+description: Upload de planilhas só no Painel de Gestão do Índice. Gestão de cada módulo só baixa clientes.
+alwaysApply: true
+---
+
+# Painel de Gestão e planilhas
+
+A usuária sobe cada planilha uma vez. O painel reconhece o arquivo e atualiza as páginas que usam aquela base.
+
+## Onde sobe
+
+- Upload só em `#/indice/gestao`, com o mesmo PIN de `src/lib/adminAuth.ts`.
+- Vários arquivos de uma vez. Sem pedir para repetir o envio em Campanhas, Agendamentos ou Negociações.
+- LEADS, agendamentos, realizados, sucessos e insucessos atualizam a base de Agendamentos. Campanhas lê essa mesma base.
+- Negociações e conversão de avaliações atualizam a base da loja.
+- Dedupe continua o atual: por ID na agenda e por nº na negociação. O arquivo novo preenche o que veio preenchido.
+- Arquivo não reconhecido não apaga o que já foi publicado. Mostrar sucesso ou erro por arquivo.
+
+## Onde baixa
+
+- `#/campanhas/admin`, `#/agendamentos/admin` e `#/negociacoes/admin` ficam só para baixar clientes daquela página.
+- Essas telas não recebem planilha, token nem publicação.
+
+```tsx
+<Link to="/indice/gestao">Painel de Gestão do Índice</Link>
+```

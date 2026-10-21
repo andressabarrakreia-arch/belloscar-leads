@@ -22,9 +22,10 @@ Análise de Negociações=https://andressacarmetrics.com.br/#/negociacoes
 ## Gestão (PIN — não enviar como link da equipe)
 
 ```
-Gestão Campanhas=https://andressacarmetrics.com.br/#/campanhas/admin
-Gestão Agendamentos=https://andressacarmetrics.com.br/#/agendamentos/admin
-Gestão Negociações=https://andressacarmetrics.com.br/#/negociacoes/admin
+Gestão do Índice (upload das planilhas)=https://andressacarmetrics.com.br/#/indice/gestao
+Gestão Campanhas (baixar clientes)=https://andressacarmetrics.com.br/#/campanhas/admin
+Gestão Agendamentos (baixar clientes)=https://andressacarmetrics.com.br/#/agendamentos/admin
+Gestão Negociações (baixar clientes)=https://andressacarmetrics.com.br/#/negociacoes/admin
 ```
 
 ## Subpáginas — Análise de Campanhas

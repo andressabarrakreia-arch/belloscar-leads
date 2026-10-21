@@ -20,6 +20,7 @@ import { NegociacoesOverview } from "./pages/negociacoes/NegociacoesOverview";
 import { NegociacoesShell } from "./pages/negociacoes/NegociacoesShell";
 import { NegociacoesVendedores } from "./pages/negociacoes/NegociacoesVendedores";
 import { IndiceGeral } from "./pages/IndiceGeral";
+import { IndiceGestao } from "./pages/IndiceGestao";
 
 /**
  * Módulos com rotas e links distintos.
@@ -40,6 +41,7 @@ export default function App() {
       <Routes>
         <Route index element={<IndiceGeral />} />
         <Route path="indice" element={<IndiceGeral />} />
+        <Route path="indice/gestao" element={<IndiceGestao />} />
 
         <Route path="campanhas" element={<ModuleLayout module={CAMPANHAS} />}>
           <Route index element={<Dashboard />} />
