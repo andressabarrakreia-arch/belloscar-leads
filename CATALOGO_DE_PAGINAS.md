@@ -7,46 +7,46 @@ Hub: **Análise de Resultados**. Páginas com links distintos para envio a pesso
 ## Links da equipe (somente leitura)
 
 ```
-Análise de Campanhas=https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
-Análise de Agendamentos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
-Análise de Negociações=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes
+Análise de Campanhas=https://andressacarmetrics.com.br/#/campanhas
+Análise de Agendamentos=https://andressacarmetrics.com.br/#/agendamentos
+Análise de Negociações=https://andressacarmetrics.com.br/#/negociacoes
 ```
 
 ## Gestão (PIN — não enviar como link da equipe)
 
 ```
-Gestão Campanhas=https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/admin
-Gestão Agendamentos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
-Gestão Negociações=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/admin
+Gestão Campanhas=https://andressacarmetrics.com.br/#/campanhas/admin
+Gestão Agendamentos=https://andressacarmetrics.com.br/#/agendamentos/admin
+Gestão Negociações=https://andressacarmetrics.com.br/#/negociacoes/admin
 ```
 
 ## Subpáginas — Análise de Campanhas
 
 ```
-Campanhas Dashboard=https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
-Campanhas Atendentes=https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/atendentes
-Campanhas Comparar=https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/comparar
+Campanhas Dashboard=https://andressacarmetrics.com.br/#/campanhas
+Campanhas Atendentes=https://andressacarmetrics.com.br/#/campanhas/atendentes
+Campanhas Comparar=https://andressacarmetrics.com.br/#/campanhas/comparar
 ```
 
 ## Subpáginas — Análise de Agendamentos (abas Fase 1)
 
 ```
-Agendamentos Visão Geral=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
-Agendamentos Pré-Vendas=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/pre-vendas
-Agendamentos Vendedores=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/vendedores
-Agendamentos Detalhe=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/detalhe
-Agendamentos Portais=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/portais
-Agendamentos Insucessos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/insucessos
-Agendamentos Gestão=https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
+Agendamentos Visão Geral=https://andressacarmetrics.com.br/#/agendamentos
+Agendamentos Pré-Vendas=https://andressacarmetrics.com.br/#/agendamentos/pre-vendas
+Agendamentos Vendedores=https://andressacarmetrics.com.br/#/agendamentos/vendedores
+Agendamentos Detalhe=https://andressacarmetrics.com.br/#/agendamentos/detalhe
+Agendamentos Portais=https://andressacarmetrics.com.br/#/agendamentos/portais
+Agendamentos Insucessos=https://andressacarmetrics.com.br/#/agendamentos/insucessos
+Agendamentos Gestão=https://andressacarmetrics.com.br/#/agendamentos/admin
 ```
 
 ## Subpáginas — Análise de Negociações
 
 ```
-Negociações Visão Geral=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes
-Negociações Lançamentos=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/lancamentos
-Negociações Vendedores=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/vendedores
-Negociações Gestão=https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/admin
+Negociações Visão Geral=https://andressacarmetrics.com.br/#/negociacoes
+Negociações Lançamentos=https://andressacarmetrics.com.br/#/negociacoes/lancamentos
+Negociações Vendedores=https://andressacarmetrics.com.br/#/negociacoes/vendedores
+Negociações Gestão=https://andressacarmetrics.com.br/#/negociacoes/admin
 ```
 
 Spec: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md).
