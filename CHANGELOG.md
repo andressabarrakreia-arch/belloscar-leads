@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0] - 2026-10-20
+
+### Changed
+- Página **Análise de Campanhas** conta só IDs com origem Facebook ou Instagram no LEADS GERAL (incluindo Ads e canal junto, ex. `WhatsApp | Instagram Ads`)
+- Atendimentos e visitas vêm de LEADS REALIZADOS (`Atendido em` / `Visita em`); agendamentos de `Agendado em` + `Agendado para`; sucessos de `Finalizado em`
+- Demais origens ficam de fora. Dedupe e cruzamento por ID. A página lê o JSON de Agendamentos e não altera o storage desse módulo
+
 ## [1.9.5] - 2026-10-20
 
 ### Fixed

@@ -22,12 +22,12 @@
 
 - Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
 - Catálogo: [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md)
-- **Análise de Campanhas (equipe):** https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
-- Gestão Campanhas: https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas/admin
-- **Análise de Agendamentos (equipe):** https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
-- Gestão Agendamentos: https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos/admin
-- **Análise de Negociações (equipe):** https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes
-- Gestão Negociações: https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes/admin
+- **Análise de Campanhas (equipe):** https://andressacarmetrics.com.br/#/campanhas
+- Gestão Campanhas: https://andressacarmetrics.com.br/#/campanhas/admin
+- **Análise de Agendamentos (equipe):** https://andressacarmetrics.com.br/#/agendamentos
+- Gestão Agendamentos: https://andressacarmetrics.com.br/#/agendamentos/admin
+- **Análise de Negociações (equipe):** https://andressacarmetrics.com.br/#/negociacoes
+- Gestão Negociações: https://andressacarmetrics.com.br/#/negociacoes/admin
 
 ## Pós-lançamento
 
@@ -45,6 +45,7 @@
 - [x] **Fase 1 UI:** abas em `#/agendamentos` (Visão Geral, Pré-Vendas, Vendedores, Detalhe, Insucessos)
 - [x] Aba **Portais** em `#/agendamentos/portais` (origem/canal + grupos; sem UTM/custo)
 - [x] Módulo **Análise de Negociações** (`#/negociacoes`) + seed + Gestão (merge por nº)
+- [x] Campanhas restrita a Facebook/Instagram (origem do LEADS GERAL, cruzamento por ID)
 - [ ] **Fase 2:** UTMs / tráfego pago no módulo `#/campanhas`
 - [ ] Próximos módulos com públicos/links próprios
 

@@ -1,54 +1,60 @@
-import { useState } from "react";
-import { FiltersBar } from "../components/FiltersBar";
-import { KpiGrid } from "../components/KpiGrid";
-import { useDataset, useFilteredAnalytics } from "../hooks/useDataset";
-import { calcMetrics } from "../lib/metrics";
-import type { AnalyticsFilters } from "../lib/types";
+import { useMemo, useState } from "react";
+import { CampanhasFilters } from "../components/CampanhasFilters";
+import { useCampanhas } from "../hooks/useCampanhas";
+import {
+  buildSdrRows,
+  buildVendedorRows,
+  listSdrOptions,
+  sliceCampanhas,
+  type CampanhaFilters,
+} from "../lib/campanhas/analytics";
 
 export function Attendants() {
-  const { dataset, loading, error } = useDataset();
-  const [filters, setFilters] = useState<AnalyticsFilters>({});
-  const analytics = useFilteredAnalytics(dataset, filters);
+  const { rows, loading, error } = useCampanhas();
+  const [filters, setFilters] = useState<CampanhaFilters>({});
+  const sdrs = useMemo(() => listSdrOptions(rows), [rows]);
+  const slice = useMemo(() => sliceCampanhas(rows, filters), [rows, filters]);
+  const sdrRows = useMemo(() => buildSdrRows(slice), [slice]);
+  const vendedores = useMemo(() => buildVendedorRows(slice), [slice]);
 
-  if (loading) return <p className="muted">Carregando dados…</p>;
+  if (loading) return <p className="muted">Carregando campanhas…</p>;
   if (error) return <p className="error">{error}</p>;
-  if (!analytics) return null;
-
-  const { attendants, options, filtered } = analytics;
-  const totals = calcMetrics(filtered);
 
   return (
     <>
-      <FiltersBar options={options} filters={filters} onChange={setFilters} />
-      <KpiGrid kpis={totals} />
+      <CampanhasFilters filters={filters} sdrs={sdrs} onChange={setFilters} />
 
       <div className="card">
-        <h2>Desempenho por Atendente</h2>
+        <h2>SDR · só Facebook e Instagram</h2>
+        <p className="muted">
+          Atendimentos e visitas pelo SDR de LEADS REALIZADOS. Agendamentos e sucessos do mesmo
+          ID, nas datas de Agendado em e Finalizado em.
+        </p>
         <div className="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Atendente</th>
-                <th>Leads</th>
+                <th>SDR</th>
+                <th>Atendimentos</th>
                 <th>Visitas</th>
-                <th>Taxa Visita</th>
+                <th>Visita / atend.</th>
+                <th>Agendamentos</th>
                 <th>Sucessos</th>
-                <th>Taxa Sucesso</th>
-                <th>Visita → Sucesso</th>
+                <th>Sucesso / visita</th>
               </tr>
             </thead>
             <tbody>
-              {attendants.attendants.map((a) => (
-                <tr key={a.responsavel}>
+              {sdrRows.map((row) => (
+                <tr key={row.sdr}>
                   <td>
-                    <strong>{a.responsavel}</strong>
+                    <strong>{row.sdr}</strong>
                   </td>
-                  <td>{a.leads}</td>
-                  <td className={a.visitas ? "positive" : "zero"}>{a.visitas}</td>
-                  <td>{a.taxaVisita}%</td>
-                  <td className={a.sucessos ? "positive" : "zero"}>{a.sucessos}</td>
-                  <td>{a.taxaSucesso}%</td>
-                  <td>{a.taxaVisitaParaSucesso}%</td>
+                  <td>{row.atendimentos}</td>
+                  <td className={row.visitas ? "positive" : "zero"}>{row.visitas}</td>
+                  <td>{row.taxaVisita}%</td>
+                  <td>{row.agendamentos}</td>
+                  <td className={row.sucessos ? "positive" : "zero"}>{row.sucessos}</td>
+                  <td>{row.taxaVisitaParaSucesso}%</td>
                 </tr>
               ))}
             </tbody>
@@ -57,31 +63,29 @@ export function Attendants() {
       </div>
 
       <div className="card">
-        <h2>Atendente × Origem (leads / sucessos)</h2>
+        <h2>Vendedor · Agendado para</h2>
+        <p className="muted">
+          Só IDs Meta. Agendamentos pela data Agendado em; sucessos pela data Finalizado em.
+        </p>
         <div className="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>Atendente</th>
-                {attendants.origens.map((o) => (
-                  <th key={o}>{o}</th>
-                ))}
+                <th>Vendedor</th>
+                <th>Agendamentos</th>
+                <th>Sucessos</th>
+                <th>Sucesso / agendamento</th>
               </tr>
             </thead>
             <tbody>
-              {attendants.matrix.map((row) => (
-                <tr key={row.responsavel}>
+              {vendedores.map((row) => (
+                <tr key={row.vendedor}>
                   <td>
-                    <strong>{row.responsavel}</strong>
+                    <strong>{row.vendedor}</strong>
                   </td>
-                  {attendants.origens.map((o) => {
-                    const m = row.byOrigem[o];
-                    return (
-                      <td key={o} className={m.leads ? "" : "zero"}>
-                        {m.leads} / {m.sucessos}
-                      </td>
-                    );
-                  })}
+                  <td>{row.agendamentos}</td>
+                  <td className={row.sucessos ? "positive" : "zero"}>{row.sucessos}</td>
+                  <td>{row.taxaSucesso}%</td>
                 </tr>
               ))}
             </tbody>

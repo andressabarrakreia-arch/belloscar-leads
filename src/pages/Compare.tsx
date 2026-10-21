@@ -1,144 +1,117 @@
 import { useMemo, useState } from "react";
-import { FiltersBar } from "../components/FiltersBar";
-import { useDataset, useFilteredAnalytics } from "../hooks/useDataset";
-import { comparePeriods, getFilterOptions } from "../lib/metrics";
-import type { AnalyticsFilters } from "../lib/types";
+import { CampanhasFilters } from "../components/CampanhasFilters";
+import { useCampanhas } from "../hooks/useCampanhas";
+import {
+  listSdrOptions,
+  sliceCampanhas,
+  type CampanhaFilters,
+  type CampanhaKpis,
+} from "../lib/campanhas/analytics";
+
+function delta(a: number, b: number) {
+  const n = b - a;
+  const sign = n > 0 ? "+" : "";
+  return `${sign}${n}`;
+}
+
+function KpiCompare({
+  label,
+  a,
+  b,
+}: {
+  label: string;
+  a: CampanhaKpis;
+  b: CampanhaKpis;
+}) {
+  const rows: { name: string; va: number; vb: number }[] = [
+    { name: "Atendimentos", va: a.atendimentos, vb: b.atendimentos },
+    { name: "Visitas", va: a.visitas, vb: b.visitas },
+    { name: "Agendamentos", va: a.agendamentos, vb: b.agendamentos },
+    { name: "Sucessos", va: a.sucessos, vb: b.sucessos },
+  ];
+  return (
+    <div className="card">
+      <h2>{label}</h2>
+      <div className="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Período A</th>
+              <th>Período B</th>
+              <th>Δ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.name}>
+                <td>
+                  <strong>{row.name}</strong>
+                </td>
+                <td>{row.va.toLocaleString("pt-BR")}</td>
+                <td>{row.vb.toLocaleString("pt-BR")}</td>
+                <td className={row.vb - row.va > 0 ? "positive" : row.vb - row.va < 0 ? "delta-neg" : "zero"}>
+                  {delta(row.va, row.vb)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
 
 export function Compare() {
-  const { dataset, loading, error } = useDataset();
-  const [filters, setFilters] = useState<AnalyticsFilters>({});
-  const [periodA, setPeriodA] = useState("");
-  const [periodB, setPeriodB] = useState("");
-  const analytics = useFilteredAnalytics(dataset, {
-    origem: filters.origem,
-    responsavel: filters.responsavel,
-    from: filters.from,
-    to: filters.to,
-  });
-
-  const options = dataset ? getFilterOptions(dataset.leads) : null;
+  const { rows, loading, error } = useCampanhas();
+  const [filters, setFilters] = useState<CampanhaFilters>({});
+  const [fromA, setFromA] = useState("");
+  const [toA, setToA] = useState("");
+  const [fromB, setFromB] = useState("");
+  const [toB, setToB] = useState("");
+  const sdrs = useMemo(() => listSdrOptions(rows), [rows]);
 
   const result = useMemo(() => {
-    if (!analytics || !periodA || !periodB) return null;
-    return comparePeriods(analytics.filtered, periodA, periodB);
-  }, [analytics, periodA, periodB]);
+    if (!fromA || !toA || !fromB || !toB) return null;
+    const identity = { sdr: filters.sdr, canal: filters.canal };
+    return {
+      a: sliceCampanhas(rows, { ...identity, from: fromA, to: toA }).kpis,
+      b: sliceCampanhas(rows, { ...identity, from: fromB, to: toB }).kpis,
+    };
+  }, [rows, filters.sdr, filters.canal, fromA, toA, fromB, toB]);
 
-  if (loading) return <p className="muted">Carregando dados…</p>;
+  if (loading) return <p className="muted">Carregando campanhas…</p>;
   if (error) return <p className="error">{error}</p>;
-  if (!options) return null;
 
   return (
     <>
-      <FiltersBar
-        options={options}
-        filters={filters}
-        onChange={(f) => setFilters({ ...f, periodKeys: undefined, monthKeys: undefined })}
+      <CampanhasFilters
+        filters={{ sdr: filters.sdr, canal: filters.canal }}
+        sdrs={sdrs}
+        onChange={(next) => setFilters({ sdr: next.sdr, canal: next.canal })}
       />
 
       <div className="filters">
         <label>
-          Período A
-          <select value={periodA} onChange={(e) => setPeriodA(e.target.value)}>
-            <option value="">Selecione</option>
-            {options.periods.map((p) => (
-              <option key={p.key} value={p.key}>
-                {p.label}
-              </option>
-            ))}
-          </select>
+          A · de
+          <input type="date" value={fromA} onChange={(e) => setFromA(e.target.value)} />
         </label>
         <label>
-          Período B
-          <select value={periodB} onChange={(e) => setPeriodB(e.target.value)}>
-            <option value="">Selecione</option>
-            {options.periods.map((p) => (
-              <option key={p.key} value={p.key}>
-                {p.label}
-              </option>
-            ))}
-          </select>
+          A · até
+          <input type="date" value={toA} onChange={(e) => setToA(e.target.value)} />
+        </label>
+        <label>
+          B · de
+          <input type="date" value={fromB} onChange={(e) => setFromB(e.target.value)} />
+        </label>
+        <label>
+          B · até
+          <input type="date" value={toB} onChange={(e) => setToB(e.target.value)} />
         </label>
       </div>
 
-      {!result && <p className="muted">Selecione dois períodos para comparar.</p>}
-
-      {result && (
-        <>
-          <div className="kpi-grid">
-            <div className="kpi-card">
-              <h3>Δ Leads</h3>
-              <p>{result.delta.leads}</p>
-            </div>
-            <div className="kpi-card">
-              <h3>Δ Visitas</h3>
-              <p>{result.delta.visitas}</p>
-            </div>
-            <div className="kpi-card accent">
-              <h3>Δ Sucessos</h3>
-              <p>{result.delta.sucessos}</p>
-            </div>
-            <div className="kpi-card success">
-              <h3>Δ Taxa Sucesso (p.p.)</h3>
-              <p>{result.delta.taxaSucesso}</p>
-            </div>
-          </div>
-
-          <div className="charts">
-            <div className="card">
-              <h2>{result.periodA.label}</h2>
-              <p>
-                Leads: <strong>{result.periodA.kpis.leads}</strong> · Visitas:{" "}
-                <strong>{result.periodA.kpis.visitas}</strong> · Sucessos:{" "}
-                <strong>{result.periodA.kpis.sucessos}</strong> · Conv:{" "}
-                <strong>{result.periodA.kpis.taxaSucesso}%</strong>
-              </p>
-            </div>
-            <div className="card">
-              <h2>{result.periodB.label}</h2>
-              <p>
-                Leads: <strong>{result.periodB.kpis.leads}</strong> · Visitas:{" "}
-                <strong>{result.periodB.kpis.visitas}</strong> · Sucessos:{" "}
-                <strong>{result.periodB.kpis.sucessos}</strong> · Conv:{" "}
-                <strong>{result.periodB.kpis.taxaSucesso}%</strong>
-              </p>
-            </div>
-          </div>
-
-          <div className="card">
-            <h2>Origem — A vs B</h2>
-            <div className="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Canal</th>
-                    <th>Leads A</th>
-                    <th>Leads B</th>
-                    <th>Δ Leads</th>
-                    <th>Taxa Suc. A</th>
-                    <th>Taxa Suc. B</th>
-                    <th>Δ Taxa</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.byOrigin.map((row) => (
-                    <tr key={row.canal}>
-                      <td>
-                        <strong>{row.canal}</strong>
-                      </td>
-                      <td>{row.periodA.leads}</td>
-                      <td>{row.periodB.leads}</td>
-                      <td>{row.deltaLeads}</td>
-                      <td>{row.periodA.taxaSucesso}%</td>
-                      <td>{row.periodB.taxaSucesso}%</td>
-                      <td>{row.deltaTaxaSucesso}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </>
-      )}
+      {!result && <p className="muted">Escolha as duas datas de cada período.</p>}
+      {result && <KpiCompare label="Período A × período B" a={result.a} b={result.b} />}
     </>
   );
 }

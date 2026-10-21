@@ -241,9 +241,13 @@ export function Admin() {
       <div className="card">
         <h2>Importar planilha (.xlsx)</h2>
         <p className="muted">
-          O arquivo <strong>agrega</strong> ao histórico (não substitui). A limpeza de duplicados
-          roda no mesmo mês: prioriza visita/agendamento; senão o mais recente; Sucesso sempre
-          permanece.
+          A página da equipe em Campanhas não usa mais este arquivo. Ela lê a base de
+          Agendamentos e fica só com os IDs de Facebook e Instagram do LEADS GERAL. Para mudar
+          esses números, publique em Gestão de Agendamentos.
+        </p>
+        <p className="muted">
+          O envio abaixo ainda agrega o histórico antigo deste módulo (dedupe mensal por
+          telefone) em <strong>dataset.json</strong>.
         </p>
         <div className="stack">
           <label>

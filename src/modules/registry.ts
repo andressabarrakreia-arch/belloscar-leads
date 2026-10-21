@@ -29,7 +29,7 @@ export const MODULES: AppModule[] = [
     id: "campanhas",
     name: "Análise de Campanhas",
     basePath: "/campanhas",
-    tagline: "Leads, origens, atendentes e conversão",
+    tagline: "Facebook e Instagram · atendimento, visita, agendamento e sucesso",
     publicPath: "/campanhas",
     nav: [
       { to: "/campanhas", label: "Dashboard", end: true },

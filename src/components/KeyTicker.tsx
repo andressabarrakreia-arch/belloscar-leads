@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useModuleTicker } from "../context/ModuleTickerContext";
-import { loadDataset } from "../lib/dataset";
+import { indexCampanhas, sliceCampanhas } from "../lib/campanhas/analytics";
+import { normalizeSchedulingDataset } from "../lib/scheduling/mergeById";
+import { SCHEDULING_DATA_URL } from "../lib/scheduling/storage";
+import type { SchedulingDataset } from "../lib/scheduling/types";
 import { dealsFromLines } from "../lib/negociacoes/metrics";
 import { loadNegociacoesDataset } from "../lib/negociacoes/storage";
 import {
@@ -86,8 +89,19 @@ export function KeyTicker({ moduleId }: Props) {
           }
           return;
         }
-        const ds = await loadDataset();
-        if (!cancelled) setFallbackItems(buildCampanhasTickerItems(ds));
+        const res = await fetch(SCHEDULING_DATA_URL, { cache: "no-store" });
+        if (!res.ok) throw new Error("base");
+        const published = normalizeSchedulingDataset((await res.json()) as SchedulingDataset);
+        const campanhaRows = indexCampanhas(published);
+        if (!cancelled) {
+          setFallbackItems(
+            buildCampanhasTickerItems(
+              campanhaRows,
+              published.updatedAt,
+              sliceCampanhas(campanhaRows, {}).kpis
+            )
+          );
+        }
       } catch {
         if (!cancelled) setFallbackItems(null);
       }

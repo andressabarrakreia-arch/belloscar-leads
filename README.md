@@ -13,7 +13,18 @@ Spec / abas Agendamentos: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_AB
 ## Análise de Campanhas
 
 **Link da equipe:**  
-https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
+https://andressacarmetrics.com.br/#/campanhas
+
+Só entram IDs cuja coluna **Origem** no LEADS GERAL é Facebook, Facebook Ads, Instagram ou Instagram Ads (também com canal junto, ex.: `WhatsApp | Instagram Ads`). O restante é ignorado. Cruzamento por ID:
+
+| Número | Planilha | Data |
+|--------|----------|------|
+| Atendimentos (total e por SDR) | LEADS REALIZADOS | Atendido em |
+| Visitas | LEADS REALIZADOS | Visita em, Visita = Sim |
+| Agendamentos e vendedor | AGENDAMENTOS | Agendado em · Agendado para |
+| Sucessos | SUCESSOS | Finalizado em |
+
+A página lê o JSON publicado de Agendamentos e aplica esse recorte no navegador. Não grava dados de Agendamentos.
 
 | Página | Link |
 |--------|------|
@@ -22,20 +33,18 @@ https://andressabarrakreia-arch.github.io/belloscar-leads/#/campanhas
 | Comparar períodos | `#/campanhas/comparar` |
 | Gestão | `#/campanhas/admin` |
 
-Dataset: [`public/data/dataset.json`](public/data/dataset.json)
+### Atualizar os números de Campanhas
 
-### Atualizar dados de campanhas
+Publique a base em **Gestão de Agendamentos** (`#/agendamentos/admin`): LEADS GERAL (origem), LEADS REALIZADOS, AGENDAMENTOS e SUCESSOS. A página de Campanhas acompanha esse arquivo.
 
-1. Abra `#/campanhas/admin` e entre com o PIN  
-2. Salve o PAT GitHub neste computador (`localStorage`)  
-3. Envie a planilha `.xlsx` (agrega + dedupe + publica)  
+O envio em `#/campanhas/admin` ainda atualiza só o histórico antigo `dataset.json` e não muda o dashboard da equipe.  
 
 ## Análise de Agendamentos
 
 **Setor:** Vendas Web · **Gestão:** Andressa Barra  
 
 **Link da equipe:**  
-https://andressabarrakreia-arch.github.io/belloscar-leads/#/agendamentos
+https://andressacarmetrics.com.br/#/agendamentos
 
 | Página | Link |
 |--------|------|
@@ -85,7 +94,7 @@ npm run generate:agendamentos
 ## Análise de Negociações
 
 **Link da equipe:**  
-https://andressabarrakreia-arch.github.io/belloscar-leads/#/negociacoes
+https://andressacarmetrics.com.br/#/negociacoes
 
 | Página | Link |
 |--------|------|

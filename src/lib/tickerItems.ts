@@ -1,4 +1,5 @@
-import { buildSummary, calcMetrics } from "./metrics";
+import { sliceCampanhas, type CampanhaKpis } from "./campanhas/analytics";
+import type { CampanhaRecord } from "./campanhas/analytics";
 import {
   buildNegociacoesKpis,
   buildVendedorRows,
@@ -11,29 +12,22 @@ import {
   splitByCanal,
 } from "./scheduling/metrics";
 import type { AgendamentoItem, LeadAtendimentoItem, SchedulingFilters } from "./scheduling/types";
-import type { Dataset } from "./types";
 
-export function buildCampanhasTickerItems(dataset: Dataset): string[] {
-  const kpis = calcMetrics(dataset.leads);
-  const summary = buildSummary(dataset.leads);
-  const topOrigin = summary.byOrigin[0];
-  const updated = new Date(dataset.updatedAt).toLocaleDateString("pt-BR");
-
-  const items = [
-    `Leads: ${kpis.leads.toLocaleString("pt-BR")}`,
-    `Visitas: ${kpis.visitas.toLocaleString("pt-BR")} (${kpis.taxaVisita}%)`,
-    `Sucessos: ${kpis.sucessos.toLocaleString("pt-BR")} (${kpis.taxaSucesso}%)`,
-    `Visita → Sucesso: ${kpis.taxaVisitaParaSucesso}%`,
+export function buildCampanhasTickerItems(
+  rows: CampanhaRecord[],
+  updatedAt: string,
+  kpis?: CampanhaKpis
+): string[] {
+  const totals = kpis ?? sliceCampanhas(rows, {}).kpis;
+  const updated = new Date(updatedAt).toLocaleDateString("pt-BR");
+  return [
+    "Campanhas: Facebook e Instagram",
+    `Atendimentos: ${totals.atendimentos.toLocaleString("pt-BR")}`,
+    `Visitas: ${totals.visitas.toLocaleString("pt-BR")} (${totals.taxaVisita}%)`,
+    `Agendamentos: ${totals.agendamentos.toLocaleString("pt-BR")}`,
+    `Sucessos: ${totals.sucessos.toLocaleString("pt-BR")} (${totals.taxaVisitaParaSucesso}% da visita)`,
+    `Atualizado em ${updated}`,
   ];
-
-  if (topOrigin) {
-    items.push(
-      `Top origem: ${topOrigin.canal} · ${topOrigin.leads} leads · ${topOrigin.sucessos} sucessos`
-    );
-  }
-
-  items.push(`Atualizado em ${updated}`);
-  return items;
 }
 
 export function buildAgendamentosTickerItems(
