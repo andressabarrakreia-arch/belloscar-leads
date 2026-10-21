@@ -1,0 +1,32 @@
+---
+description: Barra de filtros — botão Limpar filtros e fundo vermelho transparente no filtro em uso.
+alwaysApply: true
+---
+
+# Filtros nas páginas
+
+Toda página com barra de filtros (atual ou nova) segue este padrão. Formulários de login, importação e gestão não entram aqui.
+
+## Limpar filtros
+
+- Incluir `ClearFiltersButton` (`src/components/ClearFiltersButton.tsx`) em cada barra `.filters`.
+- O clique volta todos os campos ao valor padrão (vazio, "Todos" ou `"all"`).
+- Não recriar o botão com `.btn`. O tamanho (metade do botão padrão) e o alinhamento à base dos campos vêm de `.filters__clear` e `.filters__clear-btn`.
+
+## Fundo do filtro em uso
+
+- No `select`, `input` ou botão de atalho que saiu do padrão, usar `filterActiveClass(true)` (classe `is-active`).
+- O fundo fica vermelho transparente (`rgba(192, 32, 38, 0.12)`), o tom da marca.
+- Valor padrão (vazio, "Todos", "Todas", `"all"`, "Escolher mês") fica sem `is-active` e com o fundo branco original.
+- Limpar filtros remove `is-active` de todos os campos da barra.
+
+```tsx
+<select
+  className={filterActiveClass(Boolean(filters.sdr))}
+  value={filters.sdr || ""}
+  onChange={(e) => onChange({ ...filters, sdr: e.target.value || undefined })}
+>
+  <option value="">Todos</option>
+</select>
+<ClearFiltersButton onClick={() => onChange({})} />
+```

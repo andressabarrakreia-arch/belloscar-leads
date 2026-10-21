@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.1] - 2026-10-21
+
+### Added
+- Regra `escopo-estrito`: alterar só o que foi pedido; qualquer mudança extra exige confirmação antes
+
 ## [1.11.0] - 2026-10-21
 
 ### Changed

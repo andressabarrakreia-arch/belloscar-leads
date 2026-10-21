@@ -98,9 +98,11 @@ select {
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1.5px solid var(--brand-red);
   border-radius: calc(var(--radius) + 4px);
-  box-shadow: var(--shadow);
+  box-shadow:
+    0 12px 28px rgba(192, 32, 38, 0.22),
+    0 2px 8px rgba(192, 32, 38, 0.14);
 }
 
 .brand {
@@ -527,6 +529,40 @@ select {
   box-shadow: 0 0 0 3px rgba(192, 32, 38, 0.12);
 }
 
+.filters select.is-active,
+.filters input.is-active,
+.filters .btn.secondary.is-active {
+  background: rgba(192, 32, 38, 0.12);
+  border-color: rgba(192, 32, 38, 0.45);
+}
+
+.filters .btn.secondary.is-active {
+  color: var(--brand-red-deep);
+}
+
+.filters__clear {
+  display: flex;
+  align-items: flex-end;
+}
+
+.filters__clear-btn {
+  padding: 5.5px 9px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--brand-charcoal);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(64, 64, 65, 0.06);
+}
+
+.filters__clear-btn:hover {
+  border-color: rgba(192, 32, 38, 0.35);
+  color: var(--brand-red);
+}
+
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
@@ -614,11 +650,10 @@ select {
 
 .card h2::before {
   content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--brand-red);
-  box-shadow: 0 0 0 4px rgba(192, 32, 38, 0.15);
+  width: 1.05em;
+  height: 1.05em;
+  border-radius: 3px;
+  background: url("/brand/bc-icon.png") center / cover no-repeat;
   flex-shrink: 0;
 }
 

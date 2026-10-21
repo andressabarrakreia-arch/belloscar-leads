@@ -1,4 +1,14 @@
+import { ClearFiltersButton, filterActiveClass } from "../ClearFiltersButton";
 import type { NegociacoesFilters } from "../../lib/negociacoes/types";
+
+const CLEARED_FILTERS: NegociacoesFilters = {
+  month: "all",
+  period: "all",
+  vendedor: "all",
+  tipo: "all",
+  status: "all",
+  tipoVenda: "all",
+};
 
 type Options = {
   months: string[];
@@ -24,7 +34,11 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
     <div className="filters filters--sticky" role="search" aria-label="Filtros de negociações">
         <label>
           Mês
-          <select value={filters.month} onChange={(e) => set("month", e.target.value)}>
+          <select
+            className={filterActiveClass(filters.month !== "all")}
+            value={filters.month}
+            onChange={(e) => set("month", e.target.value)}
+          >
             <option value="all">Todos</option>
             {options.months.map((m) => (
               <option key={m} value={m}>
@@ -35,7 +49,11 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
         </label>
         <label>
           Quinzena
-          <select value={filters.period} onChange={(e) => set("period", e.target.value)}>
+          <select
+            className={filterActiveClass(filters.period !== "all")}
+            value={filters.period}
+            onChange={(e) => set("period", e.target.value)}
+          >
             <option value="all">Todas</option>
             {options.periods.map((p) => (
               <option key={p} value={p}>
@@ -46,7 +64,11 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
         </label>
         <label>
           Vendedor
-          <select value={filters.vendedor} onChange={(e) => set("vendedor", e.target.value)}>
+          <select
+            className={filterActiveClass(filters.vendedor !== "all")}
+            value={filters.vendedor}
+            onChange={(e) => set("vendedor", e.target.value)}
+          >
             <option value="all">Todos</option>
             {options.vendedores.map((v) => (
               <option key={v} value={v}>
@@ -57,7 +79,11 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
         </label>
         <label>
           Tipo
-          <select value={filters.tipo} onChange={(e) => set("tipo", e.target.value)}>
+          <select
+            className={filterActiveClass(filters.tipo !== "all")}
+            value={filters.tipo}
+            onChange={(e) => set("tipo", e.target.value)}
+          >
             <option value="all">Todos</option>
             {options.tipos.map((t) => (
               <option key={t} value={t}>
@@ -68,7 +94,11 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
         </label>
         <label>
           Status
-          <select value={filters.status} onChange={(e) => set("status", e.target.value)}>
+          <select
+            className={filterActiveClass(filters.status !== "all")}
+            value={filters.status}
+            onChange={(e) => set("status", e.target.value)}
+          >
             <option value="all">Todos</option>
             {options.statuses.map((s) => (
               <option key={s} value={s}>
@@ -79,7 +109,11 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
         </label>
         <label>
           Tipo venda
-          <select value={filters.tipoVenda} onChange={(e) => set("tipoVenda", e.target.value)}>
+          <select
+            className={filterActiveClass(filters.tipoVenda !== "all")}
+            value={filters.tipoVenda}
+            onChange={(e) => set("tipoVenda", e.target.value)}
+          >
             <option value="all">Todos</option>
             {options.tiposVenda.map((t) => (
               <option key={t} value={t}>
@@ -88,6 +122,7 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
             ))}
           </select>
         </label>
+        <ClearFiltersButton onClick={() => onChange(CLEARED_FILTERS)} />
     </div>
   );
 }

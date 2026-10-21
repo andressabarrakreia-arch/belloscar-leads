@@ -264,3 +264,36 @@ export function listSdrOptions(rows: CampanhaRecord[]): string[] {
     a.localeCompare(b, "pt-BR")
   );
 }
+
+/** Meses YYYY-MM que aparecem em atendimento, visita, agendamento ou sucesso. */
+export function listMonthOptions(rows: CampanhaRecord[]): string[] {
+  const set = new Set<string>();
+  for (const row of rows) {
+    for (const date of [row.dataAtendido, row.dataVisita, row.dataAgendamento, row.dataSucesso]) {
+      if (date && date.length >= 7) set.add(date.slice(0, 7));
+    }
+  }
+  return [...set].sort((a, b) => b.localeCompare(a));
+}
+
+export function monthBounds(ym: string): { from: string; to: string } {
+  const [y, m] = ym.split("-").map(Number);
+  const last = new Date(y, m, 0).getDate();
+  return { from: `${ym}-01`, to: `${ym}-${String(last).padStart(2, "0")}` };
+}
+
+/** YYYY-MM quando o intervalo cobre o mês inteiro; senão vazio. */
+export function monthKeyFromRange(from?: string, to?: string): string {
+  if (!from || !to || from.slice(0, 7) !== to.slice(0, 7) || !from.endsWith("-01")) return "";
+  return to === monthBounds(from.slice(0, 7)).to ? from.slice(0, 7) : "";
+}
+
+export function formatMonthLabel(ym: string): string {
+  const [y, m] = ym.split("-").map(Number);
+  if (!y || !m) return ym;
+  const label = new Date(y, m - 1, 1).toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}

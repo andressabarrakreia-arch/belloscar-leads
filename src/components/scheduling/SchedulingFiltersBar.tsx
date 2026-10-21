@@ -1,3 +1,4 @@
+import { ClearFiltersButton, filterActiveClass } from "../ClearFiltersButton";
 import type { SchedulingFilters, TipoProposta } from "../../lib/scheduling/types";
 
 type Options = {
@@ -78,28 +79,32 @@ export function SchedulingFiltersBar({
   monthOptions = [],
 }: Props) {
   const selectedMonth = closedMonthFromFilters(filters);
+  const today = isoToday();
+  const monthStart = isoMonthStart();
+  const weekStart = isoDaysAgo(6);
+  const fortnightStart = isoDaysAgo(14);
 
   return (
     <div className="filters filters--sticky" role="search" aria-label="Filtros de agendamentos">
       <div className="filters__presets" role="group" aria-label="Atalhos de período">
         <button
           type="button"
-          className="btn secondary"
-          onClick={() => onChange({ ...filters, from: isoMonthStart(), to: isoToday() })}
+          className={`btn secondary${filters.from === monthStart && filters.to === today ? " is-active" : ""}`}
+          onClick={() => onChange({ ...filters, from: monthStart, to: today })}
         >
           Mês atual
         </button>
         <button
           type="button"
-          className="btn secondary"
-          onClick={() => onChange({ ...filters, from: isoDaysAgo(6), to: isoToday() })}
+          className={`btn secondary${filters.from === weekStart && filters.to === today ? " is-active" : ""}`}
+          onClick={() => onChange({ ...filters, from: weekStart, to: today })}
         >
           Últimos 7 dias
         </button>
         <button
           type="button"
-          className="btn secondary"
-          onClick={() => onChange({ ...filters, from: isoDaysAgo(14), to: isoToday() })}
+          className={`btn secondary${filters.from === fortnightStart && filters.to === today ? " is-active" : ""}`}
+          onClick={() => onChange({ ...filters, from: fortnightStart, to: today })}
         >
           Quinzena
         </button>
@@ -107,6 +112,7 @@ export function SchedulingFiltersBar({
       <label>
         Mês
         <select
+          className={filterActiveClass(Boolean(selectedMonth))}
           value={selectedMonth}
           onChange={(e) => {
             const ym = e.target.value;
@@ -130,6 +136,7 @@ export function SchedulingFiltersBar({
       <label>
         De
         <input
+          className={filterActiveClass(Boolean(filters.from))}
           type="date"
           value={filters.from || ""}
           onChange={(e) => onChange({ ...filters, from: e.target.value || undefined })}
@@ -138,6 +145,7 @@ export function SchedulingFiltersBar({
       <label>
         Até
         <input
+          className={filterActiveClass(Boolean(filters.to))}
           type="date"
           value={filters.to || ""}
           onChange={(e) => onChange({ ...filters, to: e.target.value || undefined })}
@@ -146,6 +154,7 @@ export function SchedulingFiltersBar({
       <label>
         Origem
         <select
+          className={filterActiveClass(Boolean(filters.origem))}
           value={filters.origem || ""}
           onChange={(e) => onChange({ ...filters, origem: e.target.value || undefined })}
         >
@@ -160,6 +169,7 @@ export function SchedulingFiltersBar({
       <label>
         SDR / Atendido por
         <select
+          className={filterActiveClass(Boolean(filters.sdr))}
           value={filters.sdr || ""}
           onChange={(e) => onChange({ ...filters, sdr: e.target.value || undefined })}
         >
@@ -174,6 +184,7 @@ export function SchedulingFiltersBar({
       <label>
         Tipo de proposta
         <select
+          className={filterActiveClass(Boolean(filters.tipoProposta))}
           value={filters.tipoProposta || ""}
           onChange={(e) =>
             onChange({
@@ -193,6 +204,7 @@ export function SchedulingFiltersBar({
       <label className="filters__vendedor">
         Vendedor
         <select
+          className={filterActiveClass(Boolean(filters.vendedor))}
           value={filters.vendedor || ""}
           onChange={(e) => onChange({ ...filters, vendedor: e.target.value || undefined })}
         >
@@ -207,20 +219,14 @@ export function SchedulingFiltersBar({
       <label className="filters__search">
         Busca rápida
         <input
+          className={filterActiveClass(Boolean(filters.q))}
           type="search"
           placeholder="ID, cliente ou telefone"
           value={filters.q || ""}
           onChange={(e) => onChange({ ...filters, q: e.target.value || undefined })}
         />
       </label>
-      <button
-        className="btn secondary"
-        type="button"
-        onClick={() => onChange({})}
-        style={{ alignSelf: "end" }}
-      >
-        Limpar filtros
-      </button>
+      <ClearFiltersButton onClick={() => onChange({})} />
     </div>
   );
 }

@@ -16,6 +16,7 @@ import {
   buildCanalRows,
   buildMonthRows,
   buildSdrRows,
+  listMonthOptions,
   listSdrOptions,
   sliceCampanhas,
   type CampanhaFilters,
@@ -25,10 +26,11 @@ export function Dashboard() {
   const { dataset, rows, loading, error } = useCampanhas();
   const [filters, setFilters] = useState<CampanhaFilters>({});
   const sdrs = useMemo(() => listSdrOptions(rows), [rows]);
+  const months = useMemo(() => listMonthOptions(rows), [rows]);
   const slice = useMemo(() => sliceCampanhas(rows, filters), [rows, filters]);
   const canais = useMemo(() => buildCanalRows(slice), [slice]);
   const sdrRows = useMemo(() => buildSdrRows(slice).slice(0, 12), [slice]);
-  const months = useMemo(() => buildMonthRows(slice), [slice]);
+  const monthChart = useMemo(() => buildMonthRows(slice), [slice]);
 
   if (loading) return <p className="muted">Carregando campanhas…</p>;
   if (error) return <p className="error">{error}</p>;
@@ -52,7 +54,7 @@ export function Dashboard() {
         </h2>
       </div>
 
-      <CampanhasFilters filters={filters} sdrs={sdrs} onChange={setFilters} />
+      <CampanhasFilters filters={filters} sdrs={sdrs} months={months} onChange={setFilters} />
 
       <div className="kpi-grid">
         <div className="kpi-card">
@@ -141,7 +143,7 @@ export function Dashboard() {
         <div className="card">
           <h2>Por mês</h2>
           <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={months}>
+            <BarChart data={monthChart}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" tick={{ fontSize: 11 }} />
               <YAxis />

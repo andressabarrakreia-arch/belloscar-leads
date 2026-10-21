@@ -30,10 +30,15 @@ export function ModuleLayout({ module, showAdminNav = true }: Props) {
         <header className="topbar">
           <div className="brand">
             <img className="brand-logo" src={brandLogo} alt="Andressa Car Metrics" />
-            <span className="brand-module-row">
-              <span>{module.name}</span>
-              <InfoTip>{module.tagline}</InfoTip>
-            </span>
+            <div className="brand-text">
+              <h1>
+                Bellos<span className="car">Car</span>
+              </h1>
+              <span className="brand-module-row">
+                <span>{module.name}</span>
+                <InfoTip>{module.tagline}</InfoTip>
+              </span>
+            </div>
           </div>
           <nav className="nav" aria-label={`Navegação · ${module.name}`}>
             {navItems.map((item) => (

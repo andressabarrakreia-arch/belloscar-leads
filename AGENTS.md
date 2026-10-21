@@ -1,8 +1,13 @@
 # Instruções para agentes (BellosCar Analytics)
 
-## Documentação obrigatória
+## Escopo
 
-Ao final de **toda** alteração, task ou criação, atualizar:
+- Alterar somente o que foi pedido. Arquivo, refatoração, teste ou documentação fora do pedido exige pergunta e confirmação antes — `escopo-estrito.mdc`
+- Essa regra prevalece sobre a atualização automática de documentação abaixo
+
+## Documentação
+
+Quando o pedido incluir documentação, ou depois de confirmação explícita, atualizar:
 
 - `CHANGELOG.md`, `ROADMAP.md`
 - `README.md` / `DEPLOY.md` quando URLs, módulos ou deploy mudarem

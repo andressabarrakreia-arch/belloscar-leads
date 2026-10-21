@@ -1,8 +1,13 @@
 import { useMemo, useState } from "react";
 import { CampanhasFilters } from "../components/CampanhasFilters";
+import { ClearFiltersButton, filterActiveClass } from "../components/ClearFiltersButton";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
+  formatMonthLabel,
+  listMonthOptions,
   listSdrOptions,
+  monthBounds,
+  monthKeyFromRange,
   sliceCampanhas,
   type CampanhaFilters,
   type CampanhaKpis,
@@ -70,6 +75,7 @@ export function Compare() {
   const [fromB, setFromB] = useState("");
   const [toB, setToB] = useState("");
   const sdrs = useMemo(() => listSdrOptions(rows), [rows]);
+  const months = useMemo(() => listMonthOptions(rows), [rows]);
 
   const result = useMemo(() => {
     if (!fromA || !toA || !fromB || !toB) return null;
@@ -93,24 +99,104 @@ export function Compare() {
 
       <div className="filters">
         <label>
+          Mês A
+          <select
+            className={filterActiveClass(Boolean(monthKeyFromRange(fromA, toA)))}
+            value={monthKeyFromRange(fromA, toA)}
+            aria-label="Mês do período A"
+            onChange={(e) => {
+              const ym = e.target.value;
+              if (!ym) {
+                setFromA("");
+                setToA("");
+                return;
+              }
+              const range = monthBounds(ym);
+              setFromA(range.from);
+              setToA(range.to);
+            }}
+          >
+            <option value="">Escolher mês</option>
+            {months.map((ym) => (
+              <option key={ym} value={ym}>
+                {formatMonthLabel(ym)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
           A · de
-          <input type="date" value={fromA} onChange={(e) => setFromA(e.target.value)} />
+          <input
+            className={filterActiveClass(Boolean(fromA))}
+            type="date"
+            value={fromA}
+            onChange={(e) => setFromA(e.target.value)}
+          />
         </label>
         <label>
           A · até
-          <input type="date" value={toA} onChange={(e) => setToA(e.target.value)} />
+          <input
+            className={filterActiveClass(Boolean(toA))}
+            type="date"
+            value={toA}
+            onChange={(e) => setToA(e.target.value)}
+          />
+        </label>
+        <label>
+          Mês B
+          <select
+            className={filterActiveClass(Boolean(monthKeyFromRange(fromB, toB)))}
+            value={monthKeyFromRange(fromB, toB)}
+            aria-label="Mês do período B"
+            onChange={(e) => {
+              const ym = e.target.value;
+              if (!ym) {
+                setFromB("");
+                setToB("");
+                return;
+              }
+              const range = monthBounds(ym);
+              setFromB(range.from);
+              setToB(range.to);
+            }}
+          >
+            <option value="">Escolher mês</option>
+            {months.map((ym) => (
+              <option key={ym} value={ym}>
+                {formatMonthLabel(ym)}
+              </option>
+            ))}
+          </select>
         </label>
         <label>
           B · de
-          <input type="date" value={fromB} onChange={(e) => setFromB(e.target.value)} />
+          <input
+            className={filterActiveClass(Boolean(fromB))}
+            type="date"
+            value={fromB}
+            onChange={(e) => setFromB(e.target.value)}
+          />
         </label>
         <label>
           B · até
-          <input type="date" value={toB} onChange={(e) => setToB(e.target.value)} />
+          <input
+            className={filterActiveClass(Boolean(toB))}
+            type="date"
+            value={toB}
+            onChange={(e) => setToB(e.target.value)}
+          />
         </label>
+        <ClearFiltersButton
+          onClick={() => {
+            setFromA("");
+            setToA("");
+            setFromB("");
+            setToB("");
+          }}
+        />
       </div>
 
-      {!result && <p className="muted">Escolha as duas datas de cada período.</p>}
+      {!result && <p className="muted">Escolha o mês ou as datas de cada período.</p>}
       {result && <KpiCompare label="Período A × período B" a={result.a} b={result.b} />}
     </>
   );

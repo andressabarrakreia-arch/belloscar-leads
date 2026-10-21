@@ -5,6 +5,7 @@ import { useCampanhas } from "../hooks/useCampanhas";
 import {
   buildSdrRows,
   buildVendedorRows,
+  listMonthOptions,
   listSdrOptions,
   sliceCampanhas,
   type CampanhaFilters,
@@ -14,6 +15,7 @@ export function Attendants() {
   const { rows, loading, error } = useCampanhas();
   const [filters, setFilters] = useState<CampanhaFilters>({});
   const sdrs = useMemo(() => listSdrOptions(rows), [rows]);
+  const months = useMemo(() => listMonthOptions(rows), [rows]);
   const slice = useMemo(() => sliceCampanhas(rows, filters), [rows, filters]);
   const sdrRows = useMemo(() => buildSdrRows(slice), [slice]);
   const vendedores = useMemo(() => buildVendedorRows(slice), [slice]);
@@ -23,7 +25,7 @@ export function Attendants() {
 
   return (
     <>
-      <CampanhasFilters filters={filters} sdrs={sdrs} onChange={setFilters} />
+      <CampanhasFilters filters={filters} sdrs={sdrs} months={months} onChange={setFilters} />
 
       <div className="card">
         <h2>
