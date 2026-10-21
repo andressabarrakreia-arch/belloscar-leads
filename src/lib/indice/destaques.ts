@@ -160,3 +160,54 @@ export function lojaPeople(lines: NegociacaoLine[]): SectorPeople {
   };
   return { positive: spot(high), negative: low ? spot(low) : null };
 }
+
+export type RevenueSpot = {
+  place: string;
+  name: string;
+  value: string;
+  detail: string;
+};
+
+function money(value: number): string {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+}
+
+/** Valor da venda que saiu. Na troca, só a linha de saída entra no total. */
+function saleValue(lines: NegociacaoLine[]): number {
+  const saidas = lines.filter((line) => line.movimentacao.toLowerCase().includes("sa"));
+  const pool = saidas.length > 0 ? saidas : lines;
+  return pool.reduce((sum, line) => sum + (line.valorVenda ?? 0), 0);
+}
+
+/** Top 3 do mês corrente pelo Valor Venda. Só Negociações tem preço. */
+export function topFaturamento(lines: NegociacaoLine[]): RevenueSpot[] {
+  const ym = monthKey();
+  const deals = filterDeals(dealsFromLines(lines), {
+    month: ym,
+    period: "all",
+    vendedor: "all",
+    tipo: "all",
+    status: "all",
+    tipoVenda: "all",
+  });
+  const totals = new Map<string, { total: number; deals: number }>();
+  for (const deal of deals) {
+    if (!usable(deal.vendedor)) continue;
+    const value = saleValue(deal.lines);
+    if (value <= 0) continue;
+    const current = totals.get(deal.vendedor) ?? { total: 0, deals: 0 };
+    current.total += value;
+    current.deals += 1;
+    totals.set(deal.vendedor, current);
+  }
+  const title = monthTitle(ym);
+  return [...totals.entries()]
+    .sort((a, b) => b[1].total - a[1].total || b[1].deals - a[1].deals)
+    .slice(0, 3)
+    .map(([name, row], index) => ({
+      place: `${index + 1}º`,
+      name,
+      value: money(row.total),
+      detail: `${title}: ${money(row.total)} em ${num(row.deals)} ${row.deals === 1 ? "negócio" : "negócios"}.`,
+    }));
+}

@@ -1,4 +1,5 @@
 import { ClearFiltersButton, filterActiveClass } from "../ClearFiltersButton";
+import { FiltersPanel } from "../FiltersPanel";
 import type { SchedulingFilters, TipoProposta } from "../../lib/scheduling/types";
 
 type Options = {
@@ -84,8 +85,13 @@ export function SchedulingFiltersBar({
   const weekStart = isoDaysAgo(6);
   const fortnightStart = isoDaysAgo(14);
 
+  const active = Boolean(
+    filters.from || filters.to || filters.origem || filters.sdr || filters.tipoProposta || filters.vendedor || filters.q
+  );
+
   return (
-    <div className="filters filters--sticky" role="search" aria-label="Filtros de agendamentos">
+    <FiltersPanel active={active} label="filtros">
+    <div className="filters" role="search" aria-label="Filtros de agendamentos">
       <div className="filters__presets" role="group" aria-label="Atalhos de período">
         <button
           type="button"
@@ -228,5 +234,6 @@ export function SchedulingFiltersBar({
       </label>
       <ClearFiltersButton onClick={() => onChange({})} />
     </div>
+    </FiltersPanel>
   );
 }

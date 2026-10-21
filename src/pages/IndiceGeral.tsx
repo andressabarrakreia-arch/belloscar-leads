@@ -6,7 +6,7 @@ import { useCampanhas } from "../hooks/useCampanhas";
 import { useNegociacoesAnalytics, useNegociacoesStore } from "../hooks/useNegociacoesStore";
 import { useSchedulingAnalytics, useSchedulingStore } from "../hooks/useSchedulingStore";
 import { sliceCampanhas } from "../lib/campanhas/analytics";
-import { agendaPeople, campanhaPeople, lojaPeople, type SectorPeople } from "../lib/indice/destaques";
+import { agendaPeople, campanhaPeople, lojaPeople, topFaturamento, type SectorPeople } from "../lib/indice/destaques";
 import type { NegociacoesFilters } from "../lib/negociacoes/types";
 
 const brandLogo = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
@@ -97,6 +97,10 @@ export function IndiceGeral() {
       negociacoes: negociacoes.dataset ? lojaPeople(negociacoes.dataset.lines) : null,
     }),
     [agendamentos.dataset, campanhas.rows, negociacoes.dataset]
+  );
+  const ranking = useMemo(
+    () => (negociacoes.dataset ? topFaturamento(negociacoes.dataset.lines) : []),
+    [negociacoes.dataset]
   );
 
   useEffect(() => {
@@ -194,6 +198,33 @@ export function IndiceGeral() {
               ) : null}
             </article>
           ))}
+        </section>
+
+        <section className="indice-rank indice-card" aria-label="Quem mais faturou no mês">
+          <header className="indice-rank-head">
+            <h2>Faturamento do mês</h2>
+            <p>Valor de venda · passe o mouse para ver os negócios</p>
+          </header>
+          {negociacoes.loading ? (
+            <p className="indice-rank-empty">Carregando…</p>
+          ) : ranking.length === 0 ? (
+            <p className="indice-rank-empty">Sem vendas com valor neste mês.</p>
+          ) : (
+            <ol>
+              {ranking.map((spot) => (
+                <li key={spot.place}>
+                  <button type="button" className="indice-rank-item">
+                    <span>{spot.place}</span>
+                    <strong>{spot.name}</strong>
+                    <em>{spot.value}</em>
+                    <span className="indice-person-tip" role="tooltip">
+                      {spot.detail}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          )}
         </section>
 
         <footer className="indice-foot">

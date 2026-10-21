@@ -1,3 +1,4 @@
+import { FiltersPanel } from "./FiltersPanel";
 import type { AnalyticsFilters } from "../lib/types";
 
 type FilterOptions = {
@@ -14,7 +15,17 @@ type Props = {
 };
 
 export function FiltersBar({ options, filters, onChange }: Props) {
+  const active = Boolean(
+    filters.periodKeys?.length ||
+      filters.monthKeys?.length ||
+      filters.origem ||
+      filters.responsavel ||
+      filters.from ||
+      filters.to
+  );
+
   return (
+    <FiltersPanel active={active} label="filtros">
     <div className="filters">
       <label>
         Período (quinzena)
@@ -101,5 +112,6 @@ export function FiltersBar({ options, filters, onChange }: Props) {
         />
       </label>
     </div>
+    </FiltersPanel>
   );
 }

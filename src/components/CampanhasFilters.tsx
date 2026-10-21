@@ -1,4 +1,5 @@
 import { ClearFiltersButton, filterActiveClass } from "./ClearFiltersButton";
+import { FiltersPanel } from "./FiltersPanel";
 import {
   formatMonthLabel,
   monthBounds,
@@ -17,7 +18,10 @@ type Props = {
 export function CampanhasFilters({ filters, sdrs, months = [], onChange }: Props) {
   const selectedMonth = monthKeyFromRange(filters.from, filters.to);
 
+  const active = Boolean(filters.from || filters.to || filters.canal || filters.sdr);
+
   return (
+    <FiltersPanel active={active} label="filtros">
     <div className="filters">
       {months.length > 0 && (
         <label>
@@ -97,5 +101,6 @@ export function CampanhasFilters({ filters, sdrs, months = [], onChange }: Props
       </label>
       <ClearFiltersButton onClick={() => onChange({})} />
     </div>
+    </FiltersPanel>
   );
 }

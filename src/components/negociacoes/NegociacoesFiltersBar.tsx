@@ -1,4 +1,5 @@
 import { ClearFiltersButton, filterActiveClass } from "../ClearFiltersButton";
+import { FiltersPanel } from "../FiltersPanel";
 import type { NegociacoesFilters } from "../../lib/negociacoes/types";
 
 const CLEARED_FILTERS: NegociacoesFilters = {
@@ -30,8 +31,11 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
     onChange({ ...filters, [key]: value });
   }
 
+  const active = Object.values(filters).some((value) => value !== "all");
+
   return (
-    <div className="filters filters--sticky" role="search" aria-label="Filtros de negociações">
+    <FiltersPanel active={active} label="filtros">
+    <div className="filters" role="search" aria-label="Filtros de negociações">
         <label>
           Mês
           <select
@@ -124,5 +128,6 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
         </label>
         <ClearFiltersButton onClick={() => onChange(CLEARED_FILTERS)} />
     </div>
+    </FiltersPanel>
   );
 }

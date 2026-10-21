@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { CampanhasFilters } from "../components/CampanhasFilters";
 import { ClearFiltersButton, filterActiveClass } from "../components/ClearFiltersButton";
+import { FiltersPanel } from "../components/FiltersPanel";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
   formatMonthLabel,
@@ -97,6 +98,7 @@ export function Compare() {
         onChange={(next) => setFilters({ sdr: next.sdr, canal: next.canal })}
       />
 
+      <FiltersPanel active={Boolean(fromA || toA || fromB || toB)} label="filtros do período">
       <div className="filters">
         <label>
           Mês A
@@ -195,6 +197,7 @@ export function Compare() {
           }}
         />
       </div>
+      </FiltersPanel>
 
       {!result && <p className="muted">Escolha o mês ou as datas de cada período.</p>}
       {result && <KpiCompare label="Período A × período B" a={result.a} b={result.b} />}
