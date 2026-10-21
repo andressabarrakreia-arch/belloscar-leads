@@ -1,4 +1,5 @@
 import type { SdrVendedorPairRow } from "../../lib/scheduling/metrics";
+import { InfoTip } from "../InfoTip";
 
 type Props = {
   rows: SdrVendedorPairRow[];
@@ -7,13 +8,15 @@ type Props = {
 export function SdrVendedorProposalTable({ rows }: Props) {
   return (
     <div className="card">
-      <h2>Comparação direta: agendamentos × proposta</h2>
-      <p className="muted">
-        Pré-Venda — cada linha é um par SDR × Vendedor: quantos agendamentos o SDR fez para aquele
-        vendedor, por tipo de proposta, visitas, sucessos e insucessos (com %). Ordem SDR: Allan
-        Junior → Thayna PRE-VENDAS → Lais Narimã → Matheus → demais. Role a tabela na caixa abaixo —
-        o cabeçalho das colunas permanece no topo.
-      </p>
+      <h2>
+        Comparação direta: agendamentos × proposta
+        <InfoTip>
+          Pré-Venda — cada linha é um par SDR × Vendedor: quantos agendamentos o SDR fez para
+          aquele vendedor, por tipo de proposta, visitas, sucessos e insucessos (com %). Ordem SDR:
+          Allan Junior → Thayna PRE-VENDAS → Lais Narimã → Matheus → demais. Role a tabela na caixa
+          abaixo — o cabeçalho das colunas permanece no topo.
+        </InfoTip>
+      </h2>
       <div className="table-scroll table-scroll--sticky-head" tabIndex={0}>
         <table className="table-sticky-head">
           <thead>

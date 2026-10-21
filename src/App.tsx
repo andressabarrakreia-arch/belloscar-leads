@@ -1,5 +1,6 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ModuleLayout } from "./components/ModuleLayout";
+import { ParticleField } from "./components/ParticleField";
 import { AGENDAMENTOS, CAMPANHAS, NEGOCIACOES } from "./modules/registry";
 import { Admin } from "./pages/Admin";
 import { Attendants } from "./pages/Attendants";
@@ -27,6 +28,8 @@ import { NegociacoesVendedores } from "./pages/negociacoes/NegociacoesVendedores
  */
 export default function App() {
   return (
+    <>
+    <ParticleField />
     <HashRouter>
       <Routes>
         <Route index element={<Navigate to="/campanhas" replace />} />
@@ -67,5 +70,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/campanhas" replace />} />
       </Routes>
     </HashRouter>
+    </>
   );
 }

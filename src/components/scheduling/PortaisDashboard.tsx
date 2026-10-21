@@ -1,4 +1,5 @@
 import { Fragment, useMemo, useState } from "react";
+import { InfoTip } from "../InfoTip";
 import type { PortalDashboard, PortalOriginMetrics } from "../../lib/scheduling/portalMetrics";
 
 type Props = {
@@ -38,11 +39,13 @@ function ExpandBtn({
 function OriginSummary({ origin }: { origin: PortalOriginMetrics }) {
   return (
     <div className="portal-detail stack">
-      <h3>{origin.origin}</h3>
-      <p className="muted">
-        Atendimentos = LEADS GERAL · % Agend. = Agend./Atend. · Conv. visita = Vi/Ag · Conv. =
-        Su/Ag. Pré-Venda {origin.preVenda} · Recepção {origin.recepcao}.
-      </p>
+      <h3>
+        {origin.origin}
+        <InfoTip>
+          Atendimentos = LEADS GERAL · % Agend. = Agend./Atend. · Conv. visita = Vi/Ag · Conv. =
+          Su/Ag. Pré-Venda {origin.preVenda} · Recepção {origin.recepcao}.
+        </InfoTip>
+      </h3>
 
       <div className="charts" style={{ gridTemplateColumns: "1fr 1fr" }}>
         <div>
@@ -130,22 +133,24 @@ export function PortaisDashboard({ data }: Props) {
   return (
     <>
       <div className="card">
-        <h2>Portais</h2>
-        <p className="muted">
-          Cascata colorida: <strong>Grupo</strong> → <span className="portal-label-origin">Origem</span>{" "}
-          → <span className="portal-label-channel">Canal</span> →{" "}
-          <span className="portal-label-proposta">Proposta</span>. Atendimentos =
-          REALIZADOS · Multi-origem pode somar além do universo. Filtro:{" "}
-          {data.uniqueLeads} atendimentos · {data.uniqueTotal} agendamentos.
-        </p>
+        <h2>
+          Portais
+          <InfoTip>
+            Cascata colorida: <strong>Grupo</strong> → Origem → Canal → Proposta. Atendimentos =
+            REALIZADOS · Multi-origem pode somar além do universo. Filtro: {data.uniqueLeads}{" "}
+            atendimentos · {data.uniqueTotal} agendamentos.
+          </InfoTip>
+        </h2>
       </div>
 
       <div className="card">
-        <h2>Ranking por grupo</h2>
-        <p className="muted">
-          Expanda grupo → origem → canal → proposta. Clique no nome da origem para top SDR /
-          vendedores.
-        </p>
+        <h2>
+          Ranking por grupo
+          <InfoTip>
+            Expanda grupo → origem → canal → proposta. Clique no nome da origem para top SDR /
+            vendedores.
+          </InfoTip>
+        </h2>
         <div className="table-scroll table-scroll--cascade">
           <table className="portal-cascade-table">
             <thead>
@@ -280,8 +285,10 @@ export function PortaisDashboard({ data }: Props) {
 
       <div className="charts">
         <div className="card">
-          <h2>Top 5 · volume (atendimentos)</h2>
-          <p className="muted">Clique para selecionar a origem e ver tops abaixo.</p>
+          <h2>
+            Top 5 · volume (atendimentos)
+            <InfoTip>Clique para selecionar a origem e ver tops abaixo.</InfoTip>
+          </h2>
           <div className="kpi-grid">
             {data.topByVolume.map((o) => (
               <button
@@ -301,8 +308,10 @@ export function PortaisDashboard({ data }: Props) {
           </div>
         </div>
         <div className="card">
-          <h2>Top 5 · conversão</h2>
-          <p className="muted">Mínimo 20 agendamentos. Clique para selecionar.</p>
+          <h2>
+            Top 5 · conversão
+            <InfoTip>Mínimo 20 agendamentos. Clique para selecionar.</InfoTip>
+          </h2>
           <div className="kpi-grid">
             {data.topByConversion.map((o) => (
               <button

@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { InfoTip } from "../InfoTip";
 
 const BAR_COLOR = "#c02026";
 
@@ -31,8 +32,10 @@ export function MotivoDistributionChart({
 
   return (
     <div className="card">
-      <h2>{title}</h2>
-      <p className="muted">{subtitle}</p>
+      <h2>
+        {title}
+        {subtitle ? <InfoTip>{subtitle}</InfoTip> : null}
+      </h2>
       {chartData.length === 0 ? (
         <p className="muted">Nenhum insucesso no filtro atual.</p>
       ) : (

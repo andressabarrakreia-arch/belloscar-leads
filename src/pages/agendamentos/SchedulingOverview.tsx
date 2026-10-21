@@ -1,3 +1,4 @@
+import { InfoTip } from "../../components/InfoTip";
 import { CanalKpiGrid } from "../../components/scheduling/CanalKpiGrid";
 import { ProposalDistributionChart } from "../../components/scheduling/ProposalDistributionChart";
 import { TimeSeriesChart } from "../../components/scheduling/TimeSeriesChart";
@@ -33,11 +34,13 @@ export function SchedulingOverview() {
       />
 
       <div className="card">
-        <h2>Funil · Pré-Venda</h2>
-        <p className="muted">
-          Agendamentos → Visitas → Sucessos · Insucessos como saída lateral (mesmo universo
-          filtrado).
-        </p>
+        <h2>
+          Funil · Pré-Venda
+          <InfoTip>
+            Agendamentos → Visitas → Sucessos · Insucessos como saída lateral (mesmo universo
+            filtrado).
+          </InfoTip>
+        </h2>
         <div className="funnel-row" aria-label="Funil Pré-Venda">
           <div className="funnel-step">
             <strong>{kpisPreVenda.total}</strong>

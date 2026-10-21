@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { InfoTip } from "../InfoTip";
 import { aggregateVendedorMetrics } from "../../lib/scheduling/metrics";
 import type { MotivoStats, OrigemStats, VendedorMetrics } from "../../lib/scheduling/types";
 
@@ -130,10 +131,10 @@ function DetailBlock({
       <h3>Origem — Pré-Venda</h3>
       <OrigensTable rows={v.origens} />
 
-      <h3>{recTitle}</h3>
-      <p className="muted">
-        Atendimentos que não passaram pelo pré-atendimento da equipe web.
-      </p>
+      <h3>
+        {recTitle}
+        <InfoTip>Atendimentos que não passaram pelo pré-atendimento da equipe web.</InfoTip>
+      </h3>
       <div className="kpi-grid">
         <div className="kpi-card accent">
           <h3>Recebidos</h3>
@@ -198,11 +199,13 @@ export function VendedorConversionCards({
 
   return (
     <div className="card">
-      <h2>Desempenho por vendedor</h2>
-      <p className="muted">
-        Cards com a conversão de cada vendedor (Pré-Venda). Abaixo: resultado geral de todos, ou
-        só do vendedor escolhido em <strong>Ver vendedor</strong>. Recepção fica à parte.
-      </p>
+      <h2>
+        Desempenho por vendedor
+        <InfoTip>
+          Cards com a conversão de cada vendedor (Pré-Venda). Abaixo: resultado geral de todos, ou
+          só do vendedor escolhido em <strong>Ver vendedor</strong>. Recepção fica à parte.
+        </InfoTip>
+      </h2>
       <div className="kpi-grid" style={{ marginBottom: 16 }}>
         {rows.map((v) => (
           <button

@@ -1,0 +1,20 @@
+---
+description: Depois de uma task aprovada, pedir teste e perguntar se publica.
+alwaysApply: true
+---
+
+# Testar e perguntar se publica
+
+Quando Andressa aprovar a execução de uma task, ao terminar o trabalho:
+
+1. Diga o que ficou pronto e onde testar (local e, se já estiver no ar, `https://andressacarmetrics.com.br`).
+2. Peça para ela testar.
+3. Pergunte se quer que publique.
+
+Não faça commit nem push até ela responder que sim. Se a mesma mensagem já pedir a publicação, publique e ainda peça o teste.
+
+Publicar é commit na `main` e push, para o GitHub Pages atualizar o domínio.
+
+## Exemplo
+
+Task aprovada: trocar o título de um card. Ao terminar: "O título do card mudou em Campanhas. Testa em `#/campanhas`. Quer que eu publique?"

@@ -176,11 +176,11 @@ export function NegociacoesAdmin() {
   }
 
   if (!authed) {
-    const logo = `${import.meta.env.BASE_URL}brand/bc-icon.png`;
+    const logo = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
     return (
       <div className="login-page" style={{ minHeight: "60vh" }}>
         <div className="login-card">
-          <img className="login-logo" src={logo} alt="BellosCar" width={64} height={64} />
+          <img className="login-logo" src={logo} alt="Andressa Car Metrics" />
           <h1>Gestão · Negociações</h1>
           <p>Mesmo PIN do admin unificado.</p>
           <form onSubmit={login}>

@@ -1,4 +1,5 @@
 import type { CanalKpis } from "../../lib/scheduling/metrics";
+import { InfoTip } from "../InfoTip";
 
 type Props = {
   kpis: CanalKpis;
@@ -14,8 +15,10 @@ export function CanalKpiGrid({ kpis, title, subtitle, accent }: Props) {
 
   return (
     <div className="card">
-      <h2>{title}</h2>
-      <p className="muted">{subtitle}</p>
+      <h2>
+        {title}
+        {subtitle ? <InfoTip>{subtitle}</InfoTip> : null}
+      </h2>
       <div className="kpi-grid">
         <div className={`kpi-card ${accent ? "accent" : ""}`}>
           <h3>Agendamentos</h3>

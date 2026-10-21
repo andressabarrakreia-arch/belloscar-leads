@@ -1,3 +1,4 @@
+import { InfoTip } from "../../components/InfoTip";
 import { MotivoByPersonTable } from "../../components/scheduling/MotivoByPersonTable";
 import { MotivoDistributionChart } from "../../components/scheduling/MotivoDistributionChart";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
@@ -12,11 +13,13 @@ export function SchedulingInsucessos() {
   return (
     <>
       <div className="card">
-        <h2>Insucessos · resumo</h2>
-        <p className="muted">
-          % Insucesso = Insucessos / Agendamentos (filtro atual). Motivos só entram com texto
-          cruzado na base.
-        </p>
+        <h2>
+          Insucessos · resumo
+          <InfoTip>
+            % Insucesso = Insucessos / Agendamentos (filtro atual). Motivos só entram com texto
+            cruzado na base.
+          </InfoTip>
+        </h2>
         <div className="kpi-grid">
           <div className="kpi-card">
             <h3>Agendamentos</h3>
@@ -48,8 +51,10 @@ export function SchedulingInsucessos() {
       />
 
       <div className="card">
-        <h2>Motivos · ranking</h2>
-        <p className="muted">Todos os motivos do recorte, ordenados por volume.</p>
+        <h2>
+          Motivos · ranking
+          <InfoTip>Todos os motivos do recorte, ordenados por volume.</InfoTip>
+        </h2>
         <div className="table-scroll">
           <table>
             <thead>

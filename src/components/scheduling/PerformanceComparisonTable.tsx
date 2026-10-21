@@ -1,4 +1,5 @@
 import type { ComparisonRow } from "../../lib/scheduling/metrics";
+import { InfoTip } from "../InfoTip";
 
 type Props = {
   rows: ComparisonRow[];
@@ -15,8 +16,10 @@ export function PerformanceComparisonTable({
 }: Props) {
   return (
     <div className="card">
-      <h2>{title}</h2>
-      <p className="muted">{subtitle}</p>
+      <h2>
+        {title}
+        {subtitle ? <InfoTip>{subtitle}</InfoTip> : null}
+      </h2>
       <div className="table-scroll">
         <table>
           <thead>

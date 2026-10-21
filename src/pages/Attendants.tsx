@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { CampanhasFilters } from "../components/CampanhasFilters";
+import { InfoTip } from "../components/InfoTip";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
   buildSdrRows,
@@ -25,11 +26,13 @@ export function Attendants() {
       <CampanhasFilters filters={filters} sdrs={sdrs} onChange={setFilters} />
 
       <div className="card">
-        <h2>SDR · só Facebook e Instagram</h2>
-        <p className="muted">
-          Atendimentos e visitas pelo SDR de LEADS REALIZADOS. Agendamentos e sucessos do mesmo
-          ID, nas datas de Agendado em e Finalizado em.
-        </p>
+        <h2>
+          SDR · só Facebook e Instagram
+          <InfoTip>
+            Atendimentos e visitas pelo SDR de LEADS REALIZADOS. Agendamentos e sucessos do mesmo
+            ID, nas datas de Agendado em e Finalizado em.
+          </InfoTip>
+        </h2>
         <div className="table-scroll">
           <table>
             <thead>
@@ -63,10 +66,12 @@ export function Attendants() {
       </div>
 
       <div className="card">
-        <h2>Vendedor · Agendado para</h2>
-        <p className="muted">
-          Só IDs Meta. Agendamentos pela data Agendado em; sucessos pela data Finalizado em.
-        </p>
+        <h2>
+          Vendedor · Agendado para
+          <InfoTip>
+            Só IDs Meta. Agendamentos pela data Agendado em; sucessos pela data Finalizado em.
+          </InfoTip>
+        </h2>
         <div className="table-scroll">
           <table>
             <thead>

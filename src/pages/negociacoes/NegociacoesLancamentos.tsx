@@ -1,3 +1,4 @@
+import { InfoTip } from "../../components/InfoTip";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
 function fmtDate(iso: string): string {
@@ -15,10 +16,12 @@ export function NegociacoesLancamentos() {
 
   return (
     <div className="card">
-      <h2>Lançamentos</h2>
-      <p className="muted">
-        Uma linha por negócio. Troca aparece consolidada (placa entrada + placa saída).
-      </p>
+      <h2>
+        Lançamentos
+        <InfoTip>
+          Uma linha por negócio. Troca aparece consolidada (placa entrada + placa saída).
+        </InfoTip>
+      </h2>
       <div className="table-scroll">
         <table>
           <thead>

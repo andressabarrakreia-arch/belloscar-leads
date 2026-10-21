@@ -1,3 +1,4 @@
+import { InfoTip } from "../InfoTip";
 import type { PropostaConversao, SdrPreVendaRow } from "../../lib/scheduling/types";
 
 type Props = {
@@ -14,13 +15,15 @@ function taxaOf(rows: PropostaConversao[], tipo: string): string {
 export function SdrPreVendaUnifiedTable({ rows }: Props) {
   return (
     <div className="card">
-      <h2>Desempenho Pré-Vendas</h2>
-      <p className="muted">
-        Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno). Outros SDRs só aparecem se
-        selecionados no filtro. Atendimentos = REALIZADOS (Atendido em) · Agend. = Agendado em ·
-        Visitas = Visita em · Sucessos = Finalizado em · % Agend. = Ag/Atend · Conv. visita =
-        Vis/Ag · Conv. = Suc/Vis. Recepção não entra neste bloco.
-      </p>
+      <h2>
+        Desempenho Pré-Vendas
+        <InfoTip>
+          Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno). Outros SDRs só aparecem se
+          selecionados no filtro. Atendimentos = REALIZADOS (Atendido em) · Agend. = Agendado em ·
+          Visitas = Visita em · Sucessos = Finalizado em · % Agend. = Ag/Atend · Conv. visita =
+          Vis/Ag · Conv. = Suc/Vis. Recepção não entra neste bloco.
+        </InfoTip>
+      </h2>
       <div className="table-scroll">
         <table>
           <thead>
@@ -80,11 +83,13 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
 export function SdrPreVendaConvPropostaTable({ rows }: Props) {
   return (
     <div className="card">
-      <h2>Conversão por tipo de proposta</h2>
-      <p className="muted">
-        Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno) — % = Sucessos do tipo /
-        Agendamentos daquele tipo (Su/Ag). Tipos sem volume aparecem como —.
-      </p>
+      <h2>
+        Conversão por tipo de proposta
+        <InfoTip>
+          Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno) — % = Sucessos do tipo /
+          Agendamentos daquele tipo (Su/Ag). Tipos sem volume aparecem como —.
+        </InfoTip>
+      </h2>
       <div className="table-scroll">
         <table>
           <thead>
@@ -128,11 +133,13 @@ export function SdrPreVendaConvPropostaTable({ rows }: Props) {
 export function SdrPreVendaTopParceirosTable({ rows }: Props) {
   return (
     <div className="card">
-      <h2>Top 3 vendedores por SDR</h2>
-      <p className="muted">
-        Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno) — os 3 vendedores com mais
-        agendamentos de cada SDR (volume e % Su/Ag). Detalhe completo na aba Agendamentos.
-      </p>
+      <h2>
+        Top 3 vendedores por SDR
+        <InfoTip>
+          Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno) — os 3 vendedores com mais
+          agendamentos de cada SDR (volume e % Su/Ag). Detalhe completo na aba Agendamentos.
+        </InfoTip>
+      </h2>
       <div className="table-scroll">
         <table>
           <thead>

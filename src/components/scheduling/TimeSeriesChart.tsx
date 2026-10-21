@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { InfoTip } from "../InfoTip";
 
 type Point = {
   date?: string;
@@ -31,8 +32,10 @@ export function TimeSeriesChart({
 }: Props) {
   return (
     <div className="card">
-      <h2>{title}</h2>
-      <p className="muted">Evolução preservando datas ISO para filtros coerentes.</p>
+      <h2>
+        {title}
+        <InfoTip>Evolução preservando datas ISO para filtros coerentes.</InfoTip>
+      </h2>
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer>
           <LineChart data={data}>

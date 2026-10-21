@@ -1,3 +1,4 @@
+import { InfoTip } from "../../components/InfoTip";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
 export function NegociacoesVendedores() {
@@ -9,10 +10,10 @@ export function NegociacoesVendedores() {
   return (
     <>
       <div className="card">
-        <h2>Desempenho por vendedor</h2>
-        <p className="muted">
-          Vendas + Trocas · Consignações · Compras · Total (filtro atual).
-        </p>
+        <h2>
+          Desempenho por vendedor
+          <InfoTip>Vendas + Trocas · Consignações · Compras · Total (filtro atual).</InfoTip>
+        </h2>
         <div className="table-scroll">
           <table>
             <thead>
@@ -51,10 +52,12 @@ export function NegociacoesVendedores() {
       </div>
 
       <div className="card">
-        <h2>Rankings</h2>
-        <p className="muted">
-          Uma linha por colocação. Cada bloco mostra o vendedor e a quantidade daquela métrica.
-        </p>
+        <h2>
+          Rankings
+          <InfoTip>
+            Uma linha por colocação. Cada bloco mostra o vendedor e a quantidade daquela métrica.
+          </InfoTip>
+        </h2>
         <div className="table-scroll">
           <table>
             <thead>
@@ -98,10 +101,10 @@ export function NegociacoesVendedores() {
       </div>
 
       <div className="card">
-        <h2>Conversão de avaliações</h2>
-        <p className="muted">
-          Solicitações por vendedor (filtro de mês). % = Aprovadas / Realizadas.
-        </p>
+        <h2>
+          Conversão de avaliações
+          <InfoTip>Solicitações por vendedor (filtro de mês). % = Aprovadas / Realizadas.</InfoTip>
+        </h2>
         <div className="table-scroll">
           <table>
             <thead>

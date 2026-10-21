@@ -10,6 +10,7 @@ import {
   YAxis,
 } from "recharts";
 import { CampanhasFilters } from "../components/CampanhasFilters";
+import { InfoTip } from "../components/InfoTip";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
   buildCanalRows,
@@ -38,15 +39,17 @@ export function Dashboard() {
   return (
     <>
       <div className="card">
-        <h2>Facebook e Instagram</h2>
-        <p className="muted">
-          Só entram IDs cuja origem no LEADS GERAL é Facebook, Facebook Ads, Instagram ou
-          Instagram Ads (também com canal junto, como WhatsApp | Instagram Ads). Os demais
-          atendimentos ficam de fora. Cada número usa a própria data: atendimento em{" "}
-          <strong>Atendido em</strong>, visita em <strong>Visita em</strong> (Visita = Sim),
-          agendamento em <strong>Agendado em</strong>, sucesso em <strong>Finalizado em</strong>.
-          Cruzamento e dedupe por ID.
-        </p>
+        <h2>
+          Facebook e Instagram
+          <InfoTip>
+            Só entram IDs cuja origem no LEADS GERAL é Facebook, Facebook Ads, Instagram ou
+            Instagram Ads (também com canal junto, como WhatsApp | Instagram Ads). Os demais
+            atendimentos ficam de fora. Cada número usa a própria data: atendimento em{" "}
+            <strong>Atendido em</strong>, visita em <strong>Visita em</strong> (Visita = Sim),
+            agendamento em <strong>Agendado em</strong>, sucesso em <strong>Finalizado em</strong>.
+            Cruzamento e dedupe por ID.
+          </InfoTip>
+        </h2>
       </div>
 
       <CampanhasFilters filters={filters} sdrs={sdrs} onChange={setFilters} />
@@ -79,11 +82,13 @@ export function Dashboard() {
       </div>
 
       <div className="card">
-        <h2>Por canal</h2>
-        <p className="muted">
-          Um ID com Facebook e Instagram entra nas duas linhas. O total dos cards acima conta o
-          ID uma vez.
-        </p>
+        <h2>
+          Por canal
+          <InfoTip>
+            Um ID com Facebook e Instagram entra nas duas linhas. O total dos cards acima conta o
+            ID uma vez.
+          </InfoTip>
+        </h2>
         <div className="table-scroll">
           <table>
             <thead>

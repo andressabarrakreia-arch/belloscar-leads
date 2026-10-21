@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0] - 2026-10-21
+
+### Changed
+- Cabeçalho e tela de PIN usam a logo Andressa Car Metrics (sem o ícone vermelho BC)
+- Definições dos títulos ficam num ícone **i**, visíveis ao passar o mouse
+- Fundo com partículas leves em vermelho, rosa e bronze
+
 ## [1.10.0] - 2026-10-20
 
 ### Changed

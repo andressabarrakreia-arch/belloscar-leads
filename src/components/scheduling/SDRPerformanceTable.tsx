@@ -1,4 +1,5 @@
 import type { SdrMetrics } from "../../lib/scheduling/types";
+import { InfoTip } from "../InfoTip";
 
 type Row = SdrMetrics & {
   totalAtendimentos?: number;
@@ -22,8 +23,10 @@ export function SDRPerformanceTable({
   const colSpan = showAtendimentos ? 14 : 12;
   return (
     <div className="card">
-      <h2>{title}</h2>
-      <p className="muted">{subtitle}</p>
+      <h2>
+        {title}
+        {subtitle ? <InfoTip>{subtitle}</InfoTip> : null}
+      </h2>
       <div className="table-scroll">
         <table>
           <thead>

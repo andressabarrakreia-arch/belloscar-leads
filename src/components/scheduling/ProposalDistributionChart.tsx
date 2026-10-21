@@ -1,4 +1,5 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { InfoTip } from "../InfoTip";
 
 const COLORS = ["#c02026", "#2563eb", "#16a34a", "#404041", "#e21e26", "#929497", "#1e3a8a"];
 
@@ -15,8 +16,10 @@ export function ProposalDistributionChart({
 }: Props) {
   return (
     <div className="card">
-      <h2>{title}</h2>
-      <p className="muted">{subtitle}</p>
+      <h2>
+        {title}
+        {subtitle ? <InfoTip>{subtitle}</InfoTip> : null}
+      </h2>
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer>
           <PieChart>

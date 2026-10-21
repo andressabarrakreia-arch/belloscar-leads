@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { InfoTip } from "../../components/InfoTip";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
 export function NegociacoesOverview() {
@@ -19,11 +20,13 @@ export function NegociacoesOverview() {
   return (
     <>
       <div className="card">
-        <h2>Resumo da loja</h2>
-        <p className="muted">
-          Total = negócios contáveis (sem Cancelado · sem Compra de Consignado). Troca com 2
-          linhas conta como 1; Venda/Compra multi-linha contam por linha.
-        </p>
+        <h2>
+          Resumo da loja
+          <InfoTip>
+            Total = negócios contáveis (sem Cancelado · sem Compra de Consignado). Troca com 2
+            linhas conta como 1; Venda/Compra multi-linha contam por linha.
+          </InfoTip>
+        </h2>
         <div className="kpi-grid">
           <div className="kpi-card accent">
             <h3>Total negócios</h3>

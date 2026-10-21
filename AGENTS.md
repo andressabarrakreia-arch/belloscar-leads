@@ -34,4 +34,5 @@ Ao final de **toda** alteração, task ou criação, atualizar:
   - Abas: Visão Geral · Lançamentos · Vendedores (+ Gestão)
 - Novos módulos: rota `#/<modulo>/...`, layout próprio, link de equipe separado
 - Regras: `multi-module-pages.mdc`, `belloscar-product-prefs.mdc` (alwaysApply)
+- Depois de task aprovada: pedir teste e perguntar se publica — `testar-e-perguntar-publicacao.mdc`
 - Spec abas: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md) — abas **dentro** de Agendamentos; Campanhas e Negociações são módulos separados

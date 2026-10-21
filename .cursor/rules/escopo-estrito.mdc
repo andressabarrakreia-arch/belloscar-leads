@@ -1,0 +1,21 @@
+---
+description: Só alterar o que foi pedido; qualquer mudança extra exige confirmação antes.
+alwaysApply: true
+---
+
+# Escopo estrito das alterações
+
+Altere somente o que a solicitação pede. Qualquer arquivo, comportamento, refatoração, documentação, dependência, teste ou ajuste colateral fora desse pedido exige pergunta e confirmação explícita antes de ser feito.
+
+## O que fazer
+
+1. Implemente apenas o pedido, no menor conjunto de arquivos necessário para ele funcionar.
+2. Se surgir algo fora do pedido (bug vizinho, estilo, rename, documentação, teste, limpeza, formatação), pare e pergunte.
+3. Espere a resposta antes de editar esse extra. Silêncio não é autorização.
+
+Esta regra prevalece sobre atualizações automáticas de documentação e sobre melhorias “de passagem”. Se outra regra pedir um arquivo que o pedido não citou, pergunte antes de alterá-lo.
+
+## Exemplos
+
+- Pedido: corrigir o filtro de data em Agendamentos. Faça só o filtro. Renomear componentes ou atualizar o CHANGELOG sem ter sido pedido: pergunte antes.
+- Pedido: adicionar uma coluna na tabela. Faça a coluna e o tipo que ela exige. Reformatar o arquivo inteiro ou trocar a biblioteca: pergunte antes.

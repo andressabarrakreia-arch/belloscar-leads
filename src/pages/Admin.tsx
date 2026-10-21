@@ -125,11 +125,11 @@ export function Admin() {
   }
 
   if (!authed) {
-    const logo = `${import.meta.env.BASE_URL}brand/bc-icon.png`;
+    const logo = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
     return (
       <div className="login-page" style={{ minHeight: "60vh" }}>
         <div className="login-card">
-          <img className="login-logo" src={logo} alt="BellosCar" width={64} height={64} />
+          <img className="login-logo" src={logo} alt="Andressa Car Metrics" />
           <h1>
             Gestão Bellos<span className="car" style={{ color: "var(--brand-red)", fontWeight: 800 }}>Car</span>
           </h1>

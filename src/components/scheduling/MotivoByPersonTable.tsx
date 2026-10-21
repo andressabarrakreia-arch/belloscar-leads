@@ -1,4 +1,5 @@
 import type { MotivoByPersonRow } from "../../lib/scheduling/metrics";
+import { InfoTip } from "../InfoTip";
 
 type Props = {
   rows: MotivoByPersonRow[];
@@ -11,8 +12,10 @@ type Props = {
 export function MotivoByPersonTable({ rows, title, subtitle, nameLabel }: Props) {
   return (
     <div className="card">
-      <h2>{title}</h2>
-      <p className="muted">{subtitle}</p>
+      <h2>
+        {title}
+        {subtitle ? <InfoTip>{subtitle}</InfoTip> : null}
+      </h2>
       <div className="table-scroll">
         <table>
           <thead>

@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { ModuleTickerProvider } from "../context/ModuleTickerContext";
 import type { AppModule } from "../modules/registry";
+import { InfoTip } from "./InfoTip";
 import { KeyTicker } from "./KeyTicker";
 
-const brandIcon = `${import.meta.env.BASE_URL}brand/bc-icon.png`;
+const brandLogo = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
 const HUB_TITLE = "Análise de Resultados";
 
 type Props = {
@@ -28,13 +29,11 @@ export function ModuleLayout({ module, showAdminNav = true }: Props) {
       <div className="app-shell">
         <header className="topbar">
           <div className="brand">
-            <img className="brand-mark" src={brandIcon} alt="BellosCar" width={52} height={52} />
-            <div className="brand-text">
-              <h1>
-                Bellos<span className="car">Car</span>
-              </h1>
+            <img className="brand-logo" src={brandLogo} alt="Andressa Car Metrics" />
+            <span className="brand-module-row">
               <span>{module.name}</span>
-            </div>
+              <InfoTip>{module.tagline}</InfoTip>
+            </span>
           </div>
           <nav className="nav" aria-label={`Navegação · ${module.name}`}>
             {navItems.map((item) => (
@@ -44,7 +43,6 @@ export function ModuleLayout({ module, showAdminNav = true }: Props) {
             ))}
           </nav>
         </header>
-        <p className="module-tagline">{module.tagline}</p>
         <KeyTicker moduleId={module.id} />
         <Outlet />
         <footer className="page-footer">
