@@ -1,4 +1,4 @@
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ModuleLayout } from "./components/ModuleLayout";
 import { ParticleField } from "./components/ParticleField";
 import { AGENDAMENTOS, CAMPANHAS, NEGOCIACOES } from "./modules/registry";
@@ -19,6 +19,7 @@ import { NegociacoesLancamentos } from "./pages/negociacoes/NegociacoesLancament
 import { NegociacoesOverview } from "./pages/negociacoes/NegociacoesOverview";
 import { NegociacoesShell } from "./pages/negociacoes/NegociacoesShell";
 import { NegociacoesVendedores } from "./pages/negociacoes/NegociacoesVendedores";
+import { IndiceGeral } from "./pages/IndiceGeral";
 
 /**
  * Módulos com rotas e links distintos.
@@ -26,13 +27,19 @@ import { NegociacoesVendedores } from "./pages/negociacoes/NegociacoesVendedores
  * Análise de Agendamentos: #/agendamentos
  * Análise de Negociações: #/negociacoes
  */
+function Ambient() {
+  const { pathname } = useLocation();
+  if (pathname === "/" || pathname === "/indice") return null;
+  return <ParticleField />;
+}
+
 export default function App() {
   return (
-    <>
-    <ParticleField />
     <HashRouter>
+      <Ambient />
       <Routes>
-        <Route index element={<Navigate to="/campanhas" replace />} />
+        <Route index element={<IndiceGeral />} />
+        <Route path="indice" element={<IndiceGeral />} />
 
         <Route path="campanhas" element={<ModuleLayout module={CAMPANHAS} />}>
           <Route index element={<Dashboard />} />
@@ -70,6 +77,5 @@ export default function App() {
         <Route path="*" element={<Navigate to="/campanhas" replace />} />
       </Routes>
     </HashRouter>
-    </>
   );
 }

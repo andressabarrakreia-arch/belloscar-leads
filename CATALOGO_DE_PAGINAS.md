@@ -4,6 +4,13 @@ Formato: `(nome da pagina)=(link da pagina)`
 
 Hub: **Análise de Resultados**. Páginas com links distintos para envio a pessoas diferentes da equipe.
 
+## Índice Geral
+
+```
+Índice Geral=https://andressacarmetrics.com.br/
+Índice Geral (atalho)=https://andressacarmetrics.com.br/#/indice
+```
+
 ## Links da equipe (somente leitura)
 
 ```

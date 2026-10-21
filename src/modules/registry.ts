@@ -24,6 +24,7 @@ export type AppModule = {
   nav: ModuleNavItem[];
 };
 
+/** Índice Geral (`#/indice`) monta um card e um botão por item daqui. */
 export const MODULES: AppModule[] = [
   {
     id: "campanhas",

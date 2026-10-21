@@ -4,6 +4,7 @@ import { ModuleTickerProvider } from "../context/ModuleTickerContext";
 import type { AppModule } from "../modules/registry";
 import { InfoTip } from "./InfoTip";
 import { KeyTicker } from "./KeyTicker";
+import { SiteCredit } from "./SiteCredit";
 
 const brandLogo = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
 const HUB_TITLE = "Análise de Resultados";
@@ -51,9 +52,10 @@ export function ModuleLayout({ module, showAdminNav = true }: Props) {
         <KeyTicker moduleId={module.id} />
         <Outlet />
         <footer className="page-footer">
-          <span>
-            BellosCar · {module.name} · Curitiba
-          </span>
+          <div className="page-signoff">
+            <span>BellosCar · {module.name} · Curitiba</span>
+            <SiteCredit />
+          </div>
           <span className="checkered" aria-hidden="true" />
         </footer>
       </div>

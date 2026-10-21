@@ -1,0 +1,10 @@
+---
+description: Perguntar a Andressa antes de transformar um padrão repetido em regra ou skill.
+alwaysApply: true
+---
+
+# Perguntar antes de gravar um padrão
+
+Leia `.cursor/skills/identificar-padroes/SKILL.md` quando uma task de interface, filtro, página ou botão mostrar um padrão repetido.
+
+Se o mesmo comportamento já vale para mais de uma página, ou se páginas futuras vão precisar dele, pergunte a Andressa se ela quer transformar isso em regra ou em skill. Não crie nenhum dos dois até ela dizer que sim.

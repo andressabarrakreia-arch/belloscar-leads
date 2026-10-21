@@ -1035,6 +1035,34 @@ tr:hover td {
   margin: 0 0 6px;
 }
 
+.page-signoff {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.site-credit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.site-credit p {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+.site-credit a {
+  color: var(--brand-red);
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.site-credit a:hover {
+  text-decoration: underline;
+}
+
 .page-footer {
   margin-top: 8px;
   padding-top: 8px;
@@ -1058,6 +1086,389 @@ tr:hover td {
   background-size: 8px 8px;
   background-position: 0 0, 0 4px, 4px -4px, -4px 0;
   opacity: 0.35;
+}
+
+.indice {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.indice-bg {
+  position: fixed;
+  inset: -28px;
+  pointer-events: none;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(8px);
+}
+
+.indice-content {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 18px 48px;
+}
+
+.indice-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.indice-logo {
+  height: 72px;
+  width: auto;
+  max-width: min(180px, 46vw);
+  object-fit: contain;
+}
+
+.indice-hero h1 {
+  margin: 8px 0 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(20, 16, 16, 0.45);
+}
+
+.indice-hero h1 span {
+  color: #ffd0d2;
+}
+
+.indice-hero p {
+  margin: 4px 0 0;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 12px rgba(20, 16, 16, 0.4);
+}
+
+.indice-doors {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.indice-door {
+  position: relative;
+  min-width: 168px;
+  padding: 14px 18px 12px;
+  border-radius: 18px;
+  text-align: center;
+  color: var(--brand-charcoal);
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 28px rgba(20, 16, 16, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.indice-door strong {
+  display: block;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+}
+
+.indice-door small {
+  display: block;
+  margin-top: 3px;
+  color: var(--brand-charcoal);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.indice-door-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+  width: min(240px, 72vw);
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(32, 28, 28, 0.9);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 2;
+}
+
+.indice-door:hover .indice-door-tip,
+.indice-door:focus-visible .indice-door-tip {
+  opacity: 1;
+}
+
+.indice-market,
+.indice-card {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 18px;
+  box-shadow: 0 12px 28px rgba(20, 16, 16, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.indice-market {
+  padding: 12px 14px 14px;
+  margin-bottom: 16px;
+}
+
+.indice-market-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.indice-market-head h2 {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.92rem;
+  color: var(--brand-charcoal);
+}
+
+.indice-card h2 {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.1rem;
+  color: var(--brand-charcoal);
+}
+
+.indice-market-head p {
+  margin: 0;
+  color: var(--brand-charcoal);
+  font-size: 0.72rem;
+}
+
+.indice-card p {
+  margin: 0;
+  color: var(--brand-charcoal);
+  font-size: 0.86rem;
+}
+
+.indice-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.indice-market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.indice-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.indice-facts div {
+  background: rgba(255, 255, 255, 0.34);
+  border-radius: 12px;
+  padding: 7px 10px;
+}
+
+.indice-quote {
+  background: rgba(255, 255, 255, 0.34);
+  border-radius: 12px;
+  padding: 6px 8px;
+}
+
+.indice-facts dt {
+  display: block;
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-charcoal);
+}
+
+.indice-quote span {
+  display: block;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-charcoal);
+}
+
+.indice-facts dd {
+  display: block;
+  margin: 2px 0 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.14rem;
+  color: var(--brand-charcoal);
+}
+
+.indice-quote strong {
+  display: block;
+  margin: 2px 0 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.95rem;
+  color: var(--brand-charcoal);
+}
+
+.indice-facts .is-highlight dd {
+  font-size: 1.62rem;
+  color: var(--brand-red);
+}
+
+.indice-quote small,
+.indice-quote em {
+  display: block;
+  margin-top: 2px;
+  font-style: normal;
+  font-size: 0.68rem;
+  color: var(--brand-charcoal);
+}
+
+.indice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.indice-card {
+  padding: 12px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.indice-card h2::before {
+  content: "";
+  display: inline-block;
+  width: 0.95em;
+  height: 0.95em;
+  margin-right: 6px;
+  border-radius: 3px;
+  background: url("/brand/bc-icon.png") center / cover no-repeat;
+  vertical-align: -0.12em;
+}
+
+.indice-people {
+  display: grid;
+  gap: 6px;
+}
+
+.indice-person {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 6px;
+  align-items: baseline;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.34);
+  color: var(--brand-charcoal);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.indice-person span:not(.indice-person-tip) {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.indice-person strong {
+  font-size: 0.78rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.indice-person em {
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.indice-person--up em {
+  color: var(--success);
+}
+
+.indice-person--down em {
+  color: var(--brand-red);
+}
+
+.indice-person-tip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 8px);
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(32, 28, 28, 0.92);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.35;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.indice-person:hover .indice-person-tip,
+.indice-person:focus-visible .indice-person-tip {
+  opacity: 1;
+}
+
+.indice-foot {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  color: #fff;
+  font-size: 0.78rem;
+  text-shadow: 0 2px 10px rgba(20, 16, 16, 0.45);
+}
+
+.indice-foot p {
+  margin: 0;
+}
+
+.indice-foot .site-credit {
+  align-items: center;
+}
+
+.indice-foot .site-credit p {
+  color: #fff;
+  font-size: 0.72rem;
+}
+
+.indice-foot .site-credit a {
+  text-shadow: 0 1px 8px rgba(20, 16, 16, 0.35);
 }
 
 @media (max-width: 900px) {
@@ -1116,6 +1527,14 @@ tr:hover td {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     padding: 14px 12px 14px 16px;
+  }
+
+  .indice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .indice-market-grid {
+    grid-template-columns: 1fr 1fr;
   }
 
   .row .btn,
