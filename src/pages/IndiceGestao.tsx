@@ -94,7 +94,7 @@ export function IndiceGestao() {
     setCommitUrls([]);
     setResults([]);
     try {
-      const imported = await importarPlanilhas([...list], scheduling, negociacoes);
+      const imported = await importarPlanilhas(Array.from(list), scheduling, negociacoes);
       setResults(imported.results);
       const urls: string[] = [];
       if (imported.schedulingChanged) {
