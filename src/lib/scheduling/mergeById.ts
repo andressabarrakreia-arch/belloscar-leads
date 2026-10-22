@@ -3,6 +3,7 @@ import { isoToMonthKey, isoToPeriodKey } from "./dates";
 import type {
   AgendamentoItem,
   LeadAtendimentoItem,
+  LeadCampanhaItem,
   RealizadoItem,
   SchedulingDataset,
   SchedulingImportMeta,
@@ -270,6 +271,7 @@ export function emptySchedulingDataset(): SchedulingDataset {
     leadsAtendimentos: [],
     realizados: [],
     sucessosEventos: [],
+    leadsCampanha: [],
   };
 }
 
@@ -279,6 +281,7 @@ export function normalizeSchedulingDataset(dataset: SchedulingDataset): Scheduli
     leadsAtendimentos: dataset.leadsAtendimentos ?? [],
     realizados: dataset.realizados ?? [],
     sucessosEventos: dataset.sucessosEventos ?? [],
+    leadsCampanha: dataset.leadsCampanha ?? [],
   };
 }
 
@@ -501,6 +504,7 @@ export function applySchedulingImport(
         leadsAtendimentos: base.leadsAtendimentos,
         realizados,
         sucessosEventos: base.sucessosEventos,
+        leadsCampanha: base.leadsCampanha,
       },
       meta
     );
@@ -534,6 +538,7 @@ export function applySchedulingImport(
         leadsAtendimentos: base.leadsAtendimentos,
         realizados: base.realizados,
         sucessosEventos,
+        leadsCampanha: base.leadsCampanha,
       },
       meta
     );
@@ -585,6 +590,56 @@ export function applySchedulingImport(
       leadsAtendimentos,
       realizados: base.realizados,
       sucessosEventos: base.sucessosEventos,
+      leadsCampanha: base.leadsCampanha,
+    },
+    meta
+  );
+}
+
+function dedupeLeadsCampanha(incoming: LeadCampanhaItem[]): LeadCampanhaItem[] {
+  const seen = new Set<string>();
+  const out: LeadCampanhaItem[] = [];
+  for (const row of incoming) {
+    const phones = (row.phoneKeys?.length ? row.phoneKeys : row.phoneKey ? [row.phoneKey] : []).join(",");
+    const key = `${row.criadoEm}|${row.formulario}|${phones}|${row.nome}`.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({
+      ...row,
+      phoneKey: row.phoneKey || row.phoneKeys?.[0] || "",
+      phoneKeys: row.phoneKeys?.length ? row.phoneKeys : row.phoneKey ? [row.phoneKey] : [],
+    });
+  }
+  return out;
+}
+
+/** Substitui a coleção de formulários. Não mexe em agenda, realizados nem sucessos. */
+export function applyLeadsCampanhaImport(
+  current: SchedulingDataset,
+  incoming: LeadCampanhaItem[],
+  fileName: string,
+  label?: string
+): { dataset: SchedulingDataset; meta: SchedulingImportMeta } {
+  const base = normalizeSchedulingDataset(current);
+  const at = new Date().toISOString();
+  const leadsCampanha = dedupeLeadsCampanha(incoming);
+  const meta: SchedulingImportMeta = {
+    fileName,
+    label: label || fileName,
+    kind: "leadsCampanha",
+    at,
+    received: incoming.length,
+    kept: leadsCampanha.length,
+    removed: incoming.length - leadsCampanha.length,
+    enriched: 0,
+    notes: [
+      `Leads por campanha: ${leadsCampanha.length} formulários. Não altera atendimentos, visitas, agendamentos nem sucessos.`,
+    ],
+  };
+  return finishImport(
+    {
+      ...base,
+      leadsCampanha,
     },
     meta
   );

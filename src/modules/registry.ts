@@ -36,6 +36,7 @@ export const MODULES: AppModule[] = [
       { to: "/campanhas", label: "Dashboard", end: true },
       { to: "/campanhas/atendentes", label: "Atendentes" },
       { to: "/campanhas/comparar", label: "Comparar" },
+      { to: "/campanhas/formularios", label: "Leads por formulário" },
       { to: "/campanhas/admin", label: "Gestão", adminOnly: true },
     ],
   },

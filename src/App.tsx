@@ -6,6 +6,7 @@ import { Admin } from "./pages/Admin";
 import { Attendants } from "./pages/Attendants";
 import { Compare } from "./pages/Compare";
 import { Dashboard } from "./pages/Dashboard";
+import { FormLeads } from "./pages/FormLeads";
 import { SchedulingAdmin } from "./pages/agendamentos/SchedulingAdmin";
 import { SchedulingDetalhe } from "./pages/agendamentos/SchedulingDetalhe";
 import { SchedulingInsucessos } from "./pages/agendamentos/SchedulingInsucessos";
@@ -47,6 +48,7 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="atendentes" element={<Attendants />} />
           <Route path="comparar" element={<Compare />} />
+          <Route path="formularios" element={<FormLeads />} />
           <Route path="admin" element={<Admin />} />
         </Route>
 

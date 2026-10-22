@@ -243,7 +243,8 @@ export function IndiceGestao() {
           <h2>Enviar planilhas</h2>
           <p className="muted">
             Escolha um ou vários arquivos de uma vez. LEADS, agendamentos, realizados, sucessos e
-            insucessos atualizam Campanhas e Agendamentos. Negociações e avaliações atualizam a loja.
+            insucessos atualizam Campanhas e Agendamentos. LEADS POR CAMPANHA alimenta só a aba
+            Leads por formulário. Negociações e avaliações atualizam a loja.
             O que repetir entra pelo ID, ou pelo número da negociação, e o arquivo novo fica no lugar
             do antigo.
           </p>

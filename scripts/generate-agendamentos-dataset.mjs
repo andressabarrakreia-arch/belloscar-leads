@@ -50,7 +50,9 @@ function pickFile(files, predicate, label, optional = false) {
 async function main() {
   const {
     parseSchedulingArrayBuffer,
+    parseLeadsCampanhaArrayBuffer,
     applySchedulingImport,
+    applyLeadsCampanhaImport,
     emptySchedulingDataset,
   } = await loadModules();
 
@@ -106,6 +108,7 @@ async function main() {
           leadsAtendimentos: [],
           realizados: [],
           sucessosEventos: [],
+          leadsCampanha: prev.leadsCampanha || [],
           imports: [],
           updatedAt: prev.updatedAt,
         };
@@ -124,6 +127,14 @@ async function main() {
   if (realizadosPath) steps.push(["REALIZADOS (Atendido em / Visita em)", realizadosPath]);
   if (sucessosPath) steps.push(["SUCESSOS (Finalizado em)", sucessosPath]);
 
+  const campanhaPath = pickFile(
+    files,
+    (f) => /leads\s*por\s*campanha/i.test(f),
+    "LEADS POR CAMPANHA",
+    true
+  );
+  console.log("6)", campanhaPath || "(ausente)");
+
   for (const [label, filePath] of steps) {
     const buf = readFileSync(filePath);
     const ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
@@ -134,6 +145,18 @@ async function main() {
     console.log(
       `→ ${label} [${kind}]: recebidos=${result.meta.received} novos=${result.meta.kept} enriquecidos=${result.meta.enriched} ignorados=${result.meta.removed} ag=${dataset.items.length} realizados=${(dataset.realizados || []).length} sucessos=${(dataset.sucessosEventos || []).length}`
     );
+  }
+
+  if (campanhaPath) {
+    const buf = readFileSync(campanhaPath);
+    const ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+    const rows = parseLeadsCampanhaArrayBuffer(ab);
+    const fileName = campanhaPath.split(/[/\\]/).pop() || campanhaPath;
+    if (rows && rows.length > 0) {
+      const result = applyLeadsCampanhaImport(dataset, rows, fileName, "LEADS POR CAMPANHA");
+      dataset = result.dataset;
+      console.log(`→ LEADS POR CAMPANHA: ${result.meta.kept} formulários`);
+    }
   }
 
   // Política: Insucesso sem motivo cruzado não entra na base publicada
@@ -157,6 +180,7 @@ async function main() {
     leadsAtendimentos: (dataset.leadsAtendimentos || []).length,
     realizados: (dataset.realizados || []).length,
     sucessosEventos: (dataset.sucessosEventos || []).length,
+    leadsCampanha: (dataset.leadsCampanha || []).length,
     visitasComData: (dataset.realizados || []).filter((r) => r.teveVisita && r.dataVisita)
       .length,
     sucessos: dataset.items.filter((i) => i.status === "Sucesso").length,

@@ -35,6 +35,7 @@ export type SchedulingSheetKind =
   | "leads"
   | "realizados"
   | "sucessos"
+  | "leadsCampanha"
   | "desconhecido";
 
 export type SchedulingImportMeta = {
@@ -76,6 +77,24 @@ export type RealizadoItem = {
   celular: string;
 };
 
+/**
+ * Export do Meta "LEADS POR CAMPANHA".
+ * A campanha é a coluna Formulário. O cruzamento com a operação é pelo telefone.
+ */
+export type LeadCampanhaItem = {
+  /** Criado em — ISO YYYY-MM-DD */
+  criadoEm: string;
+  nome: string;
+  /** Telefone principal formatado, para exibição */
+  telefone: string;
+  /** Coluna Formulário — nome da campanha / anúncio */
+  formulario: string;
+  /** Primeiro telefone válido. Mantido para a base já gravada. */
+  phoneKey: string;
+  /** Telefone, WhatsApp e secundário, na ordem da planilha */
+  phoneKeys: string[];
+};
+
 /** Planilha SUCESSOS — Finalizado em. */
 export type SucessoItem = {
   id: string;
@@ -99,6 +118,8 @@ export type SchedulingDataset = {
   realizados?: RealizadoItem[];
   /** Planilha SUCESSOS — sucessos por Finalizado em. */
   sucessosEventos?: SucessoItem[];
+  /** LEADS POR CAMPANHA — formulários do Meta. Não entra nas outras abas. */
+  leadsCampanha?: LeadCampanhaItem[];
 };
 
 export type SchedulingFilters = {

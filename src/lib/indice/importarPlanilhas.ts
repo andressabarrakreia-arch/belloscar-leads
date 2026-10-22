@@ -1,4 +1,5 @@
-import { applySchedulingImport } from "../scheduling/mergeById";
+import { parseLeadsCampanhaArrayBuffer } from "../campanhas/parseLeadsCampanha";
+import { applyLeadsCampanhaImport, applySchedulingImport } from "../scheduling/mergeById";
 import { parseSchedulingArrayBuffer } from "../scheduling/parseSchedulingExcel";
 import type { SchedulingDataset, SchedulingSheetKind } from "../scheduling/types";
 import {
@@ -27,6 +28,7 @@ const SCHEDULING_LABEL: Record<Exclude<SchedulingSheetKind, "desconhecido">, str
   leads: "LEADS GERAL",
   realizados: "Realizados",
   sucessos: "Sucessos",
+  leadsCampanha: "Leads por campanha",
 };
 
 /**
@@ -110,6 +112,21 @@ function applyOne(
   }
 
   try {
+    const campanha = parseLeadsCampanhaArrayBuffer(buffer);
+    if (campanha && campanha.length > 0) {
+      const result = applyLeadsCampanhaImport(scheduling, campanha, fileName, fileName);
+      return {
+        ok: true,
+        base: "agendamentos",
+        scheduling: result.dataset,
+        message: `Leads por campanha: ${result.meta.kept} formulários. Atualiza só a aba Leads por formulário.`,
+      };
+    }
+  } catch {
+    /* não é a planilha de formulários */
+  }
+
+  try {
     const parsed = parseSchedulingArrayBuffer(buffer);
     if (parsed.kind !== "desconhecido" && parsed.rows.length > 0) {
       const result = applySchedulingImport(scheduling, parsed.rows, parsed.kind, fileName, fileName);
@@ -144,6 +161,6 @@ function applyOne(
     ok: false,
     base: null,
     message:
-      "Não reconheci esta planilha. Use LEADS, agendamentos, realizados, sucessos, insucessos, negociações ou avaliações.",
+      "Não reconheci esta planilha. Use LEADS, agendamentos, realizados, sucessos, insucessos, leads por campanha, negociações ou avaliações.",
   };
 }
