@@ -26,6 +26,24 @@ export function periodKeyFromDate(d: Date): string {
   return `${y}-${m}-${q}`;
 }
 
+/** Mês corrente no calendário local, YYYY-MM. */
+export function currentMonthKey(date = new Date()): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  return `${y}-${m}`;
+}
+
+/** Dia 1 ao último dia do mês YYYY-MM. */
+export function monthRange(ym: string): { from: string; to: string } {
+  const [y, m] = ym.split("-").map(Number);
+  const last = new Date(y, m, 0).getDate();
+  return { from: `${ym}-01`, to: `${ym}-${String(last).padStart(2, "0")}` };
+}
+
+export function currentMonthRange(date = new Date()): { from: string; to: string } {
+  return monthRange(currentMonthKey(date));
+}
+
 export function formatPeriodLabel(periodKey: string): string {
   const match = periodKey.match(/^(\d{4})-(\d{2})-Q([12])$/);
   if (!match) return periodKey;

@@ -105,6 +105,10 @@ select {
     0 2px 8px rgba(192, 32, 38, 0.14);
 }
 
+.topbar.topbar--filters {
+  padding-right: 84px;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -393,7 +397,7 @@ select {
 .filters-float {
   position: fixed;
   right: 18px;
-  bottom: 22px;
+  top: 18px;
   z-index: 30;
   margin: 0;
   display: flex;
@@ -402,17 +406,17 @@ select {
 }
 
 .filters-float + .filters-float {
-  bottom: 74px;
+  top: 93px;
 }
 
 .filters-float__toggle {
-  width: 42px;
-  height: 42px;
+  width: 63px;
+  height: 63px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  border-radius: 14px;
+  border-radius: 21px;
   border: 1px solid var(--border);
   background: #fff;
   color: var(--brand-charcoal);
@@ -421,8 +425,8 @@ select {
 }
 
 .filters-float__toggle svg {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 .filters-float__toggle.is-active {
@@ -440,7 +444,7 @@ select {
 .filters-float__panel {
   position: absolute;
   right: 0;
-  bottom: 52px;
+  top: calc(100% + 10px);
   width: min(720px, calc(100vw - 36px));
   max-height: min(70vh, 520px);
   overflow: auto;

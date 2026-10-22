@@ -28,7 +28,7 @@ export function ModuleLayout({ module, showAdminNav = true }: Props) {
   return (
     <ModuleTickerProvider>
       <div className="app-shell">
-        <header className="topbar">
+        <header className="topbar topbar--filters">
           <div className="brand">
             <img className="brand-logo" src={brandLogo} alt="Andressa Car Metrics" />
             <div className="brand-text">

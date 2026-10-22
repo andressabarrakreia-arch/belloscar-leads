@@ -7,27 +7,41 @@ import {
   type CampanhaFilters,
 } from "../lib/campanhas/analytics";
 import { META_CANAIS, type MetaCanal } from "../lib/campanhas/metaOrigem";
+import { currentMonthKey, currentMonthRange } from "../lib/dates";
 
 type Props = {
   filters: CampanhaFilters;
   sdrs: string[];
   months?: string[];
+  /** A comparação usa outra barra para os dois períodos. */
+  showPeriod?: boolean;
   onChange: (next: CampanhaFilters) => void;
 };
 
-export function CampanhasFilters({ filters, sdrs, months = [], onChange }: Props) {
+export function CampanhasFilters({
+  filters,
+  sdrs,
+  months = [],
+  showPeriod = true,
+  onChange,
+}: Props) {
   const selectedMonth = monthKeyFromRange(filters.from, filters.to);
+  const padrao = currentMonthRange();
+  const monthPadrao = currentMonthKey();
+  const periodFora =
+    showPeriod && (filters.from !== padrao.from || filters.to !== padrao.to);
+  const monthChoices = months.includes(monthPadrao) ? months : [monthPadrao, ...months];
 
-  const active = Boolean(filters.from || filters.to || filters.canal || filters.sdr);
+  const active = Boolean(filters.canal || filters.sdr || periodFora);
 
   return (
     <FiltersPanel active={active} label="filtros">
     <div className="filters">
-      {months.length > 0 && (
+      {showPeriod && (
         <label>
           Mês
           <select
-            className={filterActiveClass(Boolean(selectedMonth))}
+            className={filterActiveClass(selectedMonth !== monthPadrao)}
             value={selectedMonth}
             aria-label="Mês"
             onChange={(e) => {
@@ -41,7 +55,7 @@ export function CampanhasFilters({ filters, sdrs, months = [], onChange }: Props
             }}
           >
             <option value="">Todos</option>
-            {months.map((ym) => (
+            {monthChoices.map((ym) => (
               <option key={ym} value={ym}>
                 {formatMonthLabel(ym)}
               </option>
@@ -49,24 +63,28 @@ export function CampanhasFilters({ filters, sdrs, months = [], onChange }: Props
           </select>
         </label>
       )}
+      {showPeriod && (
       <label>
         De
         <input
-          className={filterActiveClass(Boolean(filters.from))}
+          className={filterActiveClass(filters.from !== padrao.from)}
           type="date"
           value={filters.from || ""}
           onChange={(e) => onChange({ ...filters, from: e.target.value || undefined })}
         />
       </label>
+      )}
+      {showPeriod && (
       <label>
         Até
         <input
-          className={filterActiveClass(Boolean(filters.to))}
+          className={filterActiveClass(filters.to !== padrao.to)}
           type="date"
           value={filters.to || ""}
           onChange={(e) => onChange({ ...filters, to: e.target.value || undefined })}
         />
       </label>
+      )}
       <label>
         Canal Meta
         <select
@@ -99,7 +117,9 @@ export function CampanhasFilters({ filters, sdrs, months = [], onChange }: Props
           ))}
         </select>
       </label>
-      <ClearFiltersButton onClick={() => onChange({})} />
+      <ClearFiltersButton
+        onClick={() => onChange(showPeriod ? { ...currentMonthRange() } : {})}
+      />
     </div>
     </FiltersPanel>
   );

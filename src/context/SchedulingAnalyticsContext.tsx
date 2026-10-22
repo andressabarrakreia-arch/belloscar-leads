@@ -3,6 +3,7 @@ import {
   useSchedulingAnalytics,
   useSchedulingStore,
 } from "../hooks/useSchedulingStore";
+import { currentMonthRange } from "../lib/dates";
 import type { SchedulingDataset, SchedulingFilters } from "../lib/scheduling/types";
 
 type Analytics = NonNullable<ReturnType<typeof useSchedulingAnalytics>>;
@@ -22,7 +23,7 @@ const SchedulingAnalyticsContext = createContext<SchedulingAnalyticsContextValue
 
 export function SchedulingAnalyticsProvider({ children }: { children: ReactNode }) {
   const { dataset, loading, error } = useSchedulingStore();
-  const [filters, setFilters] = useState<SchedulingFilters>({});
+  const [filters, setFilters] = useState<SchedulingFilters>(() => currentMonthRange());
   const analytics = useSchedulingAnalytics(dataset, filters);
 
   const value = useMemo(

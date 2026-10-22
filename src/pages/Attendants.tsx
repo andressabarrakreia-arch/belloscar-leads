@@ -10,10 +10,11 @@ import {
   sliceCampanhas,
   type CampanhaFilters,
 } from "../lib/campanhas/analytics";
+import { currentMonthRange } from "../lib/dates";
 
 export function Attendants() {
   const { rows, loading, error } = useCampanhas();
-  const [filters, setFilters] = useState<CampanhaFilters>({});
+  const [filters, setFilters] = useState<CampanhaFilters>(() => currentMonthRange());
   const sdrs = useMemo(() => listSdrOptions(rows), [rows]);
   const months = useMemo(() => listMonthOptions(rows), [rows]);
   const slice = useMemo(() => sliceCampanhas(rows, filters), [rows, filters]);

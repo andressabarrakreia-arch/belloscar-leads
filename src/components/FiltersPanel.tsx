@@ -12,7 +12,7 @@ function isTextField(target: EventTarget | null): target is HTMLInputElement {
   return target instanceof HTMLInputElement && (target.type === "search" || target.type === "text");
 }
 
-/** Ícone flutuante, visível enquanto a página rola. A barra abre no clique e recolhe ao filtrar ou limpar. */
+/** Ícone flutuante no topo da página. A barra abre no clique e recolhe ao filtrar ou limpar. */
 export function FiltersPanel({ active = false, label, children }: Props) {
   const [open, setOpen] = useState(false);
   const skipBlur = useRef(false);

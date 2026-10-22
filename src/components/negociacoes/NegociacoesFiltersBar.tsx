@@ -1,15 +1,8 @@
 import { ClearFiltersButton, filterActiveClass } from "../ClearFiltersButton";
 import { FiltersPanel } from "../FiltersPanel";
+import { defaultNegociacoesFilters } from "../../context/NegociacoesAnalyticsContext";
+import { currentMonthKey } from "../../lib/dates";
 import type { NegociacoesFilters } from "../../lib/negociacoes/types";
-
-const CLEARED_FILTERS: NegociacoesFilters = {
-  month: "all",
-  period: "all",
-  vendedor: "all",
-  tipo: "all",
-  status: "all",
-  tipoVenda: "all",
-};
 
 type Options = {
   months: string[];
@@ -31,7 +24,17 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
     onChange({ ...filters, [key]: value });
   }
 
-  const active = Object.values(filters).some((value) => value !== "all");
+  const monthPadrao = currentMonthKey();
+  const months = options.months.includes(monthPadrao)
+    ? options.months
+    : [monthPadrao, ...options.months];
+  const active =
+    filters.month !== monthPadrao ||
+    filters.period !== "all" ||
+    filters.vendedor !== "all" ||
+    filters.tipo !== "all" ||
+    filters.status !== "all" ||
+    filters.tipoVenda !== "all";
 
   return (
     <FiltersPanel active={active} label="filtros">
@@ -39,12 +42,12 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
         <label>
           Mês
           <select
-            className={filterActiveClass(filters.month !== "all")}
+            className={filterActiveClass(filters.month !== monthPadrao)}
             value={filters.month}
             onChange={(e) => set("month", e.target.value)}
           >
             <option value="all">Todos</option>
-            {options.months.map((m) => (
+            {months.map((m) => (
               <option key={m} value={m}>
                 {m}
               </option>
@@ -126,7 +129,7 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
             ))}
           </select>
         </label>
-        <ClearFiltersButton onClick={() => onChange(CLEARED_FILTERS)} />
+        <ClearFiltersButton onClick={() => onChange(defaultNegociacoesFilters())} />
     </div>
     </FiltersPanel>
   );

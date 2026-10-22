@@ -1,5 +1,6 @@
 import { ClearFiltersButton, filterActiveClass } from "../ClearFiltersButton";
 import { FiltersPanel } from "../FiltersPanel";
+import { currentMonthKey, currentMonthRange, monthRange } from "../../lib/dates";
 import type { SchedulingFilters, TipoProposta } from "../../lib/scheduling/types";
 
 type Options = {
@@ -34,21 +35,9 @@ function isoDaysAgo(days: number): string {
   return `${y}-${m}-${day}`;
 }
 
-function isoMonthStart(): string {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  return `${y}-${m}-01`;
-}
-
 /** Primeiro e último dia do mês YYYY-MM. */
 export function closedMonthBounds(ym: string): { from: string; to: string } {
-  const [y, m] = ym.split("-").map(Number);
-  const lastDay = new Date(y, m, 0).getDate();
-  return {
-    from: `${ym}-01`,
-    to: `${ym}-${String(lastDay).padStart(2, "0")}`,
-  };
+  return monthRange(ym);
 }
 
 /** Se from/to cobrem exatamente um mês fechado, devolve YYYY-MM; senão "". */
@@ -81,12 +70,22 @@ export function SchedulingFiltersBar({
 }: Props) {
   const selectedMonth = closedMonthFromFilters(filters);
   const today = isoToday();
-  const monthStart = isoMonthStart();
   const weekStart = isoDaysAgo(6);
   const fortnightStart = isoDaysAgo(14);
+  const padrao = currentMonthRange();
+  const monthPadrao = currentMonthKey();
+  const monthChoices = monthOptions.includes(monthPadrao)
+    ? monthOptions
+    : [monthPadrao, ...monthOptions];
 
   const active = Boolean(
-    filters.from || filters.to || filters.origem || filters.sdr || filters.tipoProposta || filters.vendedor || filters.q
+    filters.from !== padrao.from ||
+      filters.to !== padrao.to ||
+      filters.origem ||
+      filters.sdr ||
+      filters.tipoProposta ||
+      filters.vendedor ||
+      filters.q
   );
 
   return (
@@ -95,8 +94,8 @@ export function SchedulingFiltersBar({
       <div className="filters__presets" role="group" aria-label="Atalhos de período">
         <button
           type="button"
-          className={`btn secondary${filters.from === monthStart && filters.to === today ? " is-active" : ""}`}
-          onClick={() => onChange({ ...filters, from: monthStart, to: today })}
+          className="btn secondary"
+          onClick={() => onChange({ ...filters, from: padrao.from, to: padrao.to })}
         >
           Mês atual
         </button>
@@ -118,7 +117,7 @@ export function SchedulingFiltersBar({
       <label>
         Mês
         <select
-          className={filterActiveClass(Boolean(selectedMonth))}
+          className={filterActiveClass(selectedMonth !== monthPadrao)}
           value={selectedMonth}
           onChange={(e) => {
             const ym = e.target.value;
@@ -132,7 +131,7 @@ export function SchedulingFiltersBar({
           aria-label="Mês fechado"
         >
           <option value="">Personalizado / todos</option>
-          {monthOptions.map((ym) => (
+          {monthChoices.map((ym) => (
             <option key={ym} value={ym}>
               {formatMonthLabel(ym)}
             </option>
@@ -142,7 +141,7 @@ export function SchedulingFiltersBar({
       <label>
         De
         <input
-          className={filterActiveClass(Boolean(filters.from))}
+          className={filterActiveClass(filters.from !== padrao.from)}
           type="date"
           value={filters.from || ""}
           onChange={(e) => onChange({ ...filters, from: e.target.value || undefined })}
@@ -151,7 +150,7 @@ export function SchedulingFiltersBar({
       <label>
         Até
         <input
-          className={filterActiveClass(Boolean(filters.to))}
+          className={filterActiveClass(filters.to !== padrao.to)}
           type="date"
           value={filters.to || ""}
           onChange={(e) => onChange({ ...filters, to: e.target.value || undefined })}
@@ -232,7 +231,7 @@ export function SchedulingFiltersBar({
           onChange={(e) => onChange({ ...filters, q: e.target.value || undefined })}
         />
       </label>
-      <ClearFiltersButton onClick={() => onChange({})} />
+      <ClearFiltersButton onClick={() => onChange(currentMonthRange())} />
     </div>
     </FiltersPanel>
   );

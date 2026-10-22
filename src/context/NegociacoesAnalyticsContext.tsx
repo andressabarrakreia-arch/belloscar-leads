@@ -11,16 +11,19 @@ import {
   useNegociacoesAnalytics,
   useNegociacoesStore,
 } from "../hooks/useNegociacoesStore";
+import { currentMonthKey } from "../lib/dates";
 import type { NegociacoesDataset, NegociacoesFilters } from "../lib/negociacoes/types";
 
-const DEFAULT_FILTERS: NegociacoesFilters = {
-  month: "all",
-  period: "all",
-  vendedor: "all",
-  tipo: "all",
-  status: "all",
-  tipoVenda: "all",
-};
+export function defaultNegociacoesFilters(): NegociacoesFilters {
+  return {
+    month: currentMonthKey(),
+    period: "all",
+    vendedor: "all",
+    tipo: "all",
+    status: "all",
+    tipoVenda: "all",
+  };
+}
 
 type Analytics = NonNullable<ReturnType<typeof useNegociacoesAnalytics>>;
 
@@ -37,7 +40,7 @@ const NegociacoesAnalyticsContext = createContext<Ctx | null>(null);
 
 export function NegociacoesAnalyticsProvider({ children }: { children: ReactNode }) {
   const { dataset, loading, error } = useNegociacoesStore();
-  const [filters, setFilters] = useState<NegociacoesFilters>(DEFAULT_FILTERS);
+  const [filters, setFilters] = useState<NegociacoesFilters>(defaultNegociacoesFilters);
   const analytics = useNegociacoesAnalytics(dataset, filters);
 
   const value = useMemo(

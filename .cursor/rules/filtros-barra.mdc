@@ -9,15 +9,22 @@ Toda página com filtros (atual ou nova) usa `FiltersPanel` (`src/components/Fil
 
 ## Ícone
 
-- A barra começa recolhida. O ícone flutua sobre a página e acompanha a rolagem, visível ao descer.
-- Clique no ícone abre a barra. Clique de novo recolhe.
+- A barra começa recolhida. O ícone flutua no topo direito da página (63px, 50% acima do tamanho antigo) e acompanha a rolagem.
+- Clique no ícone abre a barra para baixo. Clique de novo recolhe.
+- Na comparação de Campanhas, as datas dos dois períodos ficam visíveis na página. O ícone dessa aba fica só para canal e SDR.
 - Select, data e botão de atalho recolhem ao mudar. Campo de texto recolhe no Enter ou ao sair do campo. Limpar filtros também recolhe.
-- Com algum campo fora do padrão, o ícone recebe `is-active`.
+- Com algum campo fora do padrão, o ícone recebe `is-active`. O mês vigente é o padrão: o ícone fica sem `is-active` enquanto o período é o mês corrente.
+
+## Mês vigente
+
+- Campanhas, Agendamentos e Negociações abrem no mês corrente, do dia 1 ao último dia. A base inteira continua guardada.
+- "Todos" no mês mostra o histórico e marca o filtro em uso.
+- A comparação de períodos começa sem mês nos dois lados. Limpar nessa barra esvazia os dois períodos.
 
 ## Limpar filtros
 
 - Incluir `ClearFiltersButton` em cada barra `.filters`.
-- O clique volta todos os campos ao valor padrão (vazio, "Todos" ou `"all"`).
+- O clique volta ao mês vigente e zera os outros campos (vazio, "Todos" ou `"all"`).
 - Não recriar o botão com `.btn`. O tamanho e o alinhamento vêm de `.filters__clear` e `.filters__clear-btn`.
 
 ## Fundo do filtro em uso

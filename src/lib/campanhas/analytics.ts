@@ -1,3 +1,4 @@
+import { monthRange } from "../dates";
 import { displaySdrName, round2 } from "../scheduling/metrics";
 import type { SchedulingDataset } from "../scheduling/types";
 import { META_CANAIS, metaTokensInOrigem, type MetaCanal } from "./metaOrigem";
@@ -277,9 +278,7 @@ export function listMonthOptions(rows: CampanhaRecord[]): string[] {
 }
 
 export function monthBounds(ym: string): { from: string; to: string } {
-  const [y, m] = ym.split("-").map(Number);
-  const last = new Date(y, m, 0).getDate();
-  return { from: `${ym}-01`, to: `${ym}-${String(last).padStart(2, "0")}` };
+  return monthRange(ym);
 }
 
 /** YYYY-MM quando o intervalo cobre o mês inteiro; senão vazio. */
