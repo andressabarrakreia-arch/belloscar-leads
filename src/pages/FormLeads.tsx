@@ -10,6 +10,7 @@ import {
   type FormularioFilters,
 } from "../lib/campanhas/leadsFormulario";
 import { formatMonthLabel, monthBounds, monthKeyFromRange } from "../lib/campanhas/analytics";
+import { currentMonthKey, currentMonthRange } from "../lib/dates";
 
 function formatIso(iso: string | null): string {
   if (!iso || iso.length < 10) return "—";
@@ -24,7 +25,7 @@ function simNao(value: boolean) {
 
 export function FormLeads() {
   const { dataset, loading, error } = useCampanhas();
-  const [filters, setFilters] = useState<FormularioFilters>({});
+  const [filters, setFilters] = useState<FormularioFilters>(() => currentMonthRange());
   const [openMissing, setOpenMissing] = useState(false);
   const leads = dataset?.leadsCampanha || [];
   const formularios = useMemo(() => listFormularioOptions(leads), [leads]);
@@ -41,7 +42,11 @@ export function FormLeads() {
     [leads, dataset, filters]
   );
   const selectedMonth = monthKeyFromRange(filters.from, filters.to);
-  const active = Boolean(filters.from || filters.to || filters.formulario);
+  const padrao = currentMonthRange();
+  const monthPadrao = currentMonthKey();
+  const monthChoices = months.includes(monthPadrao) ? months : [monthPadrao, ...months];
+  const periodFora = filters.from !== padrao.from || filters.to !== padrao.to;
+  const active = Boolean(filters.formulario || periodFora);
 
   if (loading) return <p className="muted">Carregando campanhas…</p>;
   if (error) return <p className="error">{error}</p>;
@@ -70,7 +75,7 @@ export function FormLeads() {
               <label>
                 Mês
                 <select
-                  className={filterActiveClass(Boolean(selectedMonth))}
+                  className={filterActiveClass(selectedMonth !== monthPadrao)}
                   value={selectedMonth}
                   aria-label="Mês"
                   onChange={(event) => {
@@ -84,7 +89,7 @@ export function FormLeads() {
                   }}
                 >
                   <option value="">Todos</option>
-                  {months.map((ym) => (
+                  {monthChoices.map((ym) => (
                     <option key={ym} value={ym}>
                       {formatMonthLabel(ym)}
                     </option>
@@ -94,7 +99,7 @@ export function FormLeads() {
               <label>
                 De
                 <input
-                  className={filterActiveClass(Boolean(filters.from))}
+                  className={filterActiveClass(filters.from !== padrao.from)}
                   type="date"
                   value={filters.from || ""}
                   onChange={(event) =>
@@ -105,7 +110,7 @@ export function FormLeads() {
               <label>
                 Até
                 <input
-                  className={filterActiveClass(Boolean(filters.to))}
+                  className={filterActiveClass(filters.to !== padrao.to)}
                   type="date"
                   value={filters.to || ""}
                   onChange={(event) =>
@@ -130,7 +135,7 @@ export function FormLeads() {
                   ))}
                 </select>
               </label>
-              <ClearFiltersButton onClick={() => setFilters({})} />
+              <ClearFiltersButton onClick={() => setFilters({ ...currentMonthRange() })} />
             </div>
           </FiltersPanel>
 
