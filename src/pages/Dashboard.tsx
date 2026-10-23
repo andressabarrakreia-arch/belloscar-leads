@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { CampanhasFilters } from "../components/CampanhasFilters";
 import { InfoTip } from "../components/InfoTip";
+import { Card } from "../components/ui/card";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
   buildCanalRows,
@@ -57,31 +58,31 @@ export function Dashboard() {
 
       <CampanhasFilters filters={filters} sdrs={sdrs} months={months} onChange={setFilters} />
 
-      <div className="kpi-grid">
-        <div className="kpi-card">
-          <h3>Atendimentos</h3>
-          <p>{kpis.atendimentos.toLocaleString("pt-BR")}</p>
-        </div>
-        <div className="kpi-card">
-          <h3>Visitas</h3>
-          <p>{kpis.visitas.toLocaleString("pt-BR")}</p>
-        </div>
-        <div className="kpi-card">
-          <h3>Visita / atendimento</h3>
-          <p>{kpis.taxaVisita}%</p>
-        </div>
-        <div className="kpi-card accent">
-          <h3>Agendamentos</h3>
-          <p>{kpis.agendamentos.toLocaleString("pt-BR")}</p>
-        </div>
-        <div className="kpi-card success">
-          <h3>Sucessos</h3>
-          <p>{kpis.sucessos.toLocaleString("pt-BR")}</p>
-        </div>
-        <div className="kpi-card success">
-          <h3>Sucesso / visita</h3>
-          <p>{kpis.taxaVisitaParaSucesso}%</p>
-        </div>
+      <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+        <Card className="border-l-4 border-l-foreground px-4 py-3 shadow-none">
+          <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Atendimentos</h3>
+          <p className="font-display text-2xl font-extrabold">{kpis.atendimentos.toLocaleString("pt-BR")}</p>
+        </Card>
+        <Card className="border-l-4 border-l-accent-foreground px-4 py-3 shadow-none">
+          <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Visitas</h3>
+          <p className="font-display text-2xl font-extrabold">{kpis.visitas.toLocaleString("pt-BR")}</p>
+        </Card>
+        <Card className="px-4 py-3 shadow-none">
+          <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Visita / atendimento</h3>
+          <p className="font-display text-2xl font-extrabold">{kpis.taxaVisita}%</p>
+        </Card>
+        <Card className="border-l-4 border-l-primary px-4 py-3 shadow-none">
+          <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Agendamentos</h3>
+          <p className="font-display text-2xl font-extrabold">{kpis.agendamentos.toLocaleString("pt-BR")}</p>
+        </Card>
+        <Card className="border-l-4 border-l-success px-4 py-3 shadow-none">
+          <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Sucessos</h3>
+          <p className="font-display text-2xl font-extrabold text-success">{kpis.sucessos.toLocaleString("pt-BR")}</p>
+        </Card>
+        <Card className="border-l-4 border-l-success px-4 py-3 shadow-none">
+          <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Sucesso / visita</h3>
+          <p className="font-display text-2xl font-extrabold text-success">{kpis.taxaVisitaParaSucesso}%</p>
+        </Card>
       </div>
 
       <div className="card">
@@ -114,7 +115,7 @@ export function Dashboard() {
                   <td>{row.atendimentos}</td>
                   <td className={row.visitas ? "positive" : "zero"}>{row.visitas}</td>
                   <td>{row.agendamentos}</td>
-                  <td className={row.sucessos ? "positive" : "zero"}>{row.sucessos}</td>
+                  <td className="num-ok">{row.sucessos}</td>
                   <td>{row.taxaVisita}%</td>
                   <td>{row.taxaVisitaParaSucesso}%</td>
                 </tr>
@@ -137,7 +138,7 @@ export function Dashboard() {
               <Bar dataKey="atendimentos" fill="#404041" name="Atendimentos" radius={4} />
               <Bar dataKey="visitas" fill="#2563eb" name="Visitas" radius={4} />
               <Bar dataKey="agendamentos" fill="#929497" name="Agendamentos" radius={4} />
-              <Bar dataKey="sucessos" fill="#c02026" name="Sucessos" radius={4} />
+              <Bar dataKey="sucessos" fill="#16a34a" name="Sucessos" radius={4} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -152,7 +153,7 @@ export function Dashboard() {
               <Legend />
               <Bar dataKey="atendimentos" fill="#404041" name="Atendimentos" radius={4} />
               <Bar dataKey="visitas" fill="#2563eb" name="Visitas" radius={4} />
-              <Bar dataKey="sucessos" fill="#c02026" name="Sucessos" radius={4} />
+              <Bar dataKey="sucessos" fill="#16a34a" name="Sucessos" radius={4} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -181,7 +182,7 @@ export function Dashboard() {
                   <td>{row.atendimentos}</td>
                   <td className={row.visitas ? "positive" : "zero"}>{row.visitas}</td>
                   <td>{row.agendamentos}</td>
-                  <td className={row.sucessos ? "positive" : "zero"}>{row.sucessos}</td>
+                  <td className="num-ok">{row.sucessos}</td>
                   <td>{row.taxaVisita}%</td>
                 </tr>
               ))}

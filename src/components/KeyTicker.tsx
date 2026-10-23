@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useModuleTicker } from "../context/ModuleTickerContext";
 import { indexCampanhas, sliceCampanhas } from "../lib/campanhas/analytics";
+import { currentMonthRange } from "../lib/dates";
 import { normalizeSchedulingDataset } from "../lib/scheduling/mergeById";
 import { SCHEDULING_DATA_URL } from "../lib/scheduling/storage";
 import type { SchedulingDataset } from "../lib/scheduling/types";
@@ -98,7 +99,7 @@ export function KeyTicker({ moduleId }: Props) {
             buildCampanhasTickerItems(
               campanhaRows,
               published.updatedAt,
-              sliceCampanhas(campanhaRows, {}).kpis
+              sliceCampanhas(campanhaRows, currentMonthRange()).kpis
             )
           );
         }

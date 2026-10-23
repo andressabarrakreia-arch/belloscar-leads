@@ -185,10 +185,10 @@ export function PortaisDashboard({ data }: Props) {
                     <td>{g.total}</td>
                     <td>{g.taxaAgendamento}%</td>
                     <td>{g.visitas}</td>
-                    <td>{g.sucessos}</td>
-                    <td>{g.insucessos}</td>
+                    <td className="num-ok">{g.sucessos}</td>
+                    <td className="num-bad">{g.insucessos}</td>
                     <td>{g.taxaVisita}%</td>
-                    <td>{g.taxaSucesso}%</td>
+                    <td className="num-ok">{g.taxaSucesso}%</td>
                   </tr>
 
                   {expandedGroups[g.id] &&
@@ -214,10 +214,10 @@ export function PortaisDashboard({ data }: Props) {
                             <td>{o.total}</td>
                             <td>{o.taxaAgendamento}%</td>
                             <td>{o.visitas}</td>
-                            <td>{o.sucessos}</td>
-                            <td>{o.insucessos}</td>
+                            <td className="num-ok">{o.sucessos}</td>
+                            <td className="num-bad">{o.insucessos}</td>
                             <td>{o.taxaVisita}%</td>
-                            <td>{o.taxaSucesso}%</td>
+                            <td className="num-ok">{o.taxaSucesso}%</td>
                           </tr>
 
                           {originOpen &&
@@ -243,10 +243,10 @@ export function PortaisDashboard({ data }: Props) {
                                         : "0%"}
                                     </td>
                                     <td>{c.visitas}</td>
-                                    <td>{c.sucessos}</td>
-                                    <td>{c.insucessos}</td>
+                                    <td className="num-ok">{c.sucessos}</td>
+                                    <td className="num-bad">{c.insucessos}</td>
                                     <td>{c.taxaVisita}%</td>
-                                    <td>{c.taxaSucesso}%</td>
+                                    <td className="num-ok">{c.taxaSucesso}%</td>
                                   </tr>
 
                                   {chOpen &&
@@ -264,10 +264,10 @@ export function PortaisDashboard({ data }: Props) {
                                             : "0%"}
                                         </td>
                                         <td>{p.visitas}</td>
-                                        <td>{p.sucessos}</td>
-                                        <td>{p.insucessos}</td>
+                                        <td className="num-ok">{p.sucessos}</td>
+                                        <td className="num-bad">{p.insucessos}</td>
                                         <td>{p.taxaVisita}%</td>
-                                        <td>{p.taxaSucesso}%</td>
+                                        <td className="num-ok">{p.taxaSucesso}%</td>
                                       </tr>
                                     ))}
                                 </Fragment>
@@ -317,7 +317,7 @@ export function PortaisDashboard({ data }: Props) {
               <button
                 key={o.origin}
                 type="button"
-                className={`kpi-card success ${selected === o.origin ? "accent" : ""}`}
+                className={`kpi-card success num-ok ${selected === o.origin ? "accent" : ""}`}
                 style={{ textAlign: "left", cursor: "pointer", border: "none", width: "100%" }}
                 onClick={() => setSelected(o.origin)}
               >

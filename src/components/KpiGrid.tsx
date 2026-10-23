@@ -15,15 +15,15 @@ export function KpiGrid({ kpis }: { kpis: Kpis }) {
         <h3>Taxa Visita</h3>
         <p>{kpis.taxaVisita}%</p>
       </div>
-      <div className="kpi-card accent">
+      <div className="kpi-card success num-ok">
         <h3>Sucessos</h3>
         <p>{kpis.sucessos}</p>
       </div>
-      <div className="kpi-card success">
+      <div className="kpi-card success num-ok">
         <h3>Taxa Sucesso</h3>
         <p>{kpis.taxaSucesso}%</p>
       </div>
-      <div className="kpi-card success">
+      <div className="kpi-card success num-ok">
         <h3>Visita → Sucesso</h3>
         <p>{kpis.taxaVisitaParaSucesso}%</p>
       </div>

@@ -31,15 +31,8 @@ const PRE_VENDA_SDR_PRIORITY_KEYS = [
   "thayna pre vendas",
   "lais narima ferreira vieira",
   "matheus imbroinise",
-  "liriane larissa ribeiro",
-  "bruno prospeccao",
+  "liriane ribeiro",
 ] as const;
-
-/**
- * SDRs exibidos em Conversão por tipo de proposta e Top 3 vendedores.
- * (Desempenho Pré-Vendas continua listando todos.)
- */
-const PRE_VENDA_FEATURED_SDR_KEYS = new Set<string>(PRE_VENDA_SDR_PRIORITY_KEYS);
 
 function normalizePersonKey(name: string): string {
   return name
@@ -51,9 +44,18 @@ function normalizePersonKey(name: string): string {
     .replace(/\s+/g, " ");
 }
 
-/** True se o SDR entra nas tabelas Conv. proposta / Top 3. */
+function personTokens(name: string): string[] {
+  return normalizePersonKey(name).split(" ").filter(Boolean);
+}
+
+function matchesPreVendaSdr(name: string, member: string): boolean {
+  const tokens = personTokens(name);
+  return member.split(" ").every((part) => tokens.includes(part));
+}
+
+/** True se o SDR entra nos rankings de Pré-Venda. */
 export function isFeaturedPreVendaSdr(name: string): boolean {
-  return PRE_VENDA_FEATURED_SDR_KEYS.has(normalizePersonKey(name));
+  return PRE_VENDA_SDR_PRIORITY_KEYS.some((member) => matchesPreVendaSdr(name, member));
 }
 
 /** Nome exibido: Gabriela (e similares) → Recepção. */
@@ -63,8 +65,7 @@ export function displaySdrName(sdr: string): string {
 
 /** Índice de prioridade (0…n-1); quem não está na lista vai para o fim. */
 export function preVendaSdrPriority(name: string): number {
-  const key = normalizePersonKey(name);
-  const idx = PRE_VENDA_SDR_PRIORITY_KEYS.findIndex((k) => k === key);
+  const idx = PRE_VENDA_SDR_PRIORITY_KEYS.findIndex((member) => matchesPreVendaSdr(name, member));
   return idx === -1 ? PRE_VENDA_SDR_PRIORITY_KEYS.length : idx;
 }
 
@@ -828,6 +829,7 @@ export function buildSdrVendedorProposalRows(items: AgendamentoItem[]): SdrVende
   for (const item of items) {
     if (!item.vendedor || item.vendedor === "(sem vendedor)") continue;
     if (!item.sdr || item.sdr === "(sem SDR)") continue;
+    if (!isFeaturedPreVendaSdr(item.sdr)) continue;
     const key = `${item.sdr}::${item.vendedor}`;
     const list = groups.get(key) || [];
     list.push(item);

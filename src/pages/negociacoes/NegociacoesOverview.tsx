@@ -32,7 +32,7 @@ export function NegociacoesOverview() {
             <h3>Total negócios</h3>
             <p>{kpis.total}</p>
           </div>
-          <div className="kpi-card">
+          <div className="kpi-card success num-ok">
             <h3>Vendas</h3>
             <p>{kpis.vendas}</p>
           </div>
@@ -64,10 +64,10 @@ export function NegociacoesOverview() {
                 <YAxis allowDecimals={false} />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="vendas" stackId="a" fill="#c02026" name="Vendas" />
+                <Bar dataKey="vendas" stackId="a" fill="#16a34a" name="Vendas" />
                 <Bar dataKey="trocas" stackId="a" fill="#2563eb" name="Trocas" />
                 <Bar dataKey="compras" stackId="a" fill="#404041" name="Compras" />
-                <Bar dataKey="consignacoes" stackId="a" fill="#16a34a" name="Consignações" />
+                <Bar dataKey="consignacoes" stackId="a" fill="#0f766e" name="Consignações" />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -13,7 +13,7 @@ export function SdrVendedorProposalTable({ rows }: Props) {
         <InfoTip>
           Pré-Venda — cada linha é um par SDR × Vendedor: quantos agendamentos o SDR fez para
           aquele vendedor, por tipo de proposta, visitas, sucessos e insucessos (com %). Ordem SDR:
-          Allan Junior → Thayna PRE-VENDAS → Lais Narimã → Matheus → demais. Role a tabela na caixa
+          Allan Junior → Thayna → Lais → Matheus → Liriane. Role a tabela na caixa
           abaixo — o cabeçalho das colunas permanece no topo.
         </InfoTip>
       </h2>
@@ -50,10 +50,10 @@ export function SdrVendedorProposalTable({ rows }: Props) {
                 <td>{r.financiamento}</td>
                 <td>{r.naoInformado}</td>
                 <td>{r.visitas}</td>
-                <td>{r.sucessos}</td>
-                <td>{r.insucessos}</td>
+                <td className="num-ok">{r.sucessos}</td>
+                <td className="num-bad">{r.insucessos}</td>
                 <td>{r.taxaVisita}%</td>
-                <td>{r.taxaSucesso}%</td>
+                <td className="num-ok">{r.taxaSucesso}%</td>
               </tr>
             ))}
             {rows.length === 0 && (

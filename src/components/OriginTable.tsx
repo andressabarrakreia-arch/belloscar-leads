@@ -32,9 +32,9 @@ export function OriginTable({ rows }: { rows: Row[] }) {
                 </td>
                 <td className={row.visitas ? "positive" : "zero"}>{row.visitas}</td>
                 <td className={row.taxaVisita ? "positive" : "zero"}>{row.taxaVisita}%</td>
-                <td className={row.sucessos ? "positive" : "zero"}>{row.sucessos}</td>
-                <td className={row.taxaSucesso ? "positive" : "zero"}>{row.taxaSucesso}%</td>
-                <td className={row.taxaVisitaParaSucesso ? "positive" : "zero"}>
+                <td className="num-ok">{row.sucessos}</td>
+                <td className="num-ok">{row.taxaSucesso}%</td>
+                <td className="num-ok">
                   {row.taxaVisitaParaSucesso}%
                 </td>
               </tr>

@@ -61,9 +61,9 @@ export function SDRPerformanceTable({
                 <td>{r.propostasBreakdown.Financiamento}</td>
                 <td>{r.propostasBreakdown["não informado(celulas em branco)"]}</td>
                 <td>{r.totalVisitas}</td>
-                <td>{r.totalSucesso}</td>
+                <td className="num-ok">{r.totalSucesso}</td>
                 <td>{r.taxaConversaoVisita}%</td>
-                <td>{r.taxaConversaoSucesso}%</td>
+                <td className="num-ok">{r.taxaConversaoSucesso}%</td>
               </tr>
             ))}
             {rows.length === 0 && (

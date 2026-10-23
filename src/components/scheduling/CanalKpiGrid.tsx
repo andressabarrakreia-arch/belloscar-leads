@@ -30,12 +30,12 @@ export function CanalKpiGrid({ kpis, title, subtitle, accent }: Props) {
           <p>{kpis.visitas}</p>
           <small className="muted">show-up {kpis.taxaVisita}% · Vi/Ag</small>
         </div>
-        <div className="kpi-card success">
+        <div className="kpi-card success num-ok">
           <h3>Sucessos</h3>
           <p>{kpis.sucessos}</p>
           <small className="muted">conv. {kpis.taxaSucesso}% · Su/Ag</small>
         </div>
-        <div className="kpi-card">
+        <div className="kpi-card num-bad">
           <h3>Insucessos</h3>
           <p>{kpis.insucessos}</p>
           <small className="muted">{pctInsucesso}% · Ins/Ag</small>

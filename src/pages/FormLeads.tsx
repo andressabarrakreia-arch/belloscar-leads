@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { ClearFiltersButton, filterActiveClass } from "../components/ClearFiltersButton";
 import { FiltersPanel } from "../components/FiltersPanel";
 import { InfoTip } from "../components/InfoTip";
+import { Card } from "../components/ui/card";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
   buildFormularioReport,
@@ -144,7 +145,7 @@ export function FormLeads() {
               <h2>Campanha com mais resultado</h2>
               <p className="form-winner">{report.destaque.formulario}</p>
               <p className="muted">
-                {report.destaque.sucessos.toLocaleString("pt-BR")} sucessos ·{" "}
+                <span className="num-ok">{report.destaque.sucessos.toLocaleString("pt-BR")} sucessos</span> ·{" "}
                 {report.destaque.visitas.toLocaleString("pt-BR")} visitas ·{" "}
                 {report.destaque.agendados.toLocaleString("pt-BR")} agendados ·{" "}
                 {report.destaque.leads.toLocaleString("pt-BR")} leads do formulário
@@ -152,27 +153,27 @@ export function FormLeads() {
             </div>
           )}
 
-          <div className="kpi-grid">
-            <div className="kpi-card">
-              <h3>Leads do formulário</h3>
-              <p>{report.total.toLocaleString("pt-BR")}</p>
-            </div>
-            <div className="kpi-card accent">
-              <h3>Cruzados</h3>
-              <p>{report.cruzados.length.toLocaleString("pt-BR")}</p>
-            </div>
-            <div className="kpi-card">
-              <h3>Agendados</h3>
-              <p>{report.agendados.toLocaleString("pt-BR")}</p>
-            </div>
-            <div className="kpi-card">
-              <h3>Visitas</h3>
-              <p>{report.visitas.toLocaleString("pt-BR")}</p>
-            </div>
-            <div className="kpi-card success">
-              <h3>Sucessos</h3>
-              <p>{report.sucessos.toLocaleString("pt-BR")}</p>
-            </div>
+          <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-5">
+            <Card className="px-4 py-3 shadow-none">
+              <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Leads do formulário</h3>
+              <p className="font-display text-2xl font-extrabold">{report.total.toLocaleString("pt-BR")}</p>
+            </Card>
+            <Card className="border-l-4 border-l-primary px-4 py-3 shadow-none">
+              <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Cruzados</h3>
+              <p className="font-display text-2xl font-extrabold">{report.cruzados.length.toLocaleString("pt-BR")}</p>
+            </Card>
+            <Card className="px-4 py-3 shadow-none">
+              <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Agendados</h3>
+              <p className="font-display text-2xl font-extrabold">{report.agendados.toLocaleString("pt-BR")}</p>
+            </Card>
+            <Card className="border-l-4 border-l-accent-foreground px-4 py-3 shadow-none">
+              <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Visitas</h3>
+              <p className="font-display text-2xl font-extrabold">{report.visitas.toLocaleString("pt-BR")}</p>
+            </Card>
+            <Card className="border-l-4 border-l-success px-4 py-3 shadow-none">
+              <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Sucessos</h3>
+              <p className="font-display text-2xl font-extrabold text-success">{report.sucessos.toLocaleString("pt-BR")}</p>
+            </Card>
           </div>
 
           <div className="card">

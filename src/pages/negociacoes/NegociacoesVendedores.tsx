@@ -31,7 +31,7 @@ export function NegociacoesVendedores() {
               {vendedores.map((r) => (
                 <tr key={r.vendedor}>
                   <td>{r.vendedor}</td>
-                  <td>{r.vendas}</td>
+                  <td className="num-ok">{r.vendas}</td>
                   <td>{r.trocas}</td>
                   <td>{r.vendasMaisTrocas}</td>
                   <td>{r.consignacoes}</td>

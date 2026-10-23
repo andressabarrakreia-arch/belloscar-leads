@@ -26,12 +26,12 @@ export function SchedulingInsucessos() {
             <p>{insucessoKpis.agendamentos}</p>
             <small className="muted">denominador</small>
           </div>
-          <div className="kpi-card accent">
+          <div className="kpi-card num-bad">
             <h3>Insucessos</h3>
             <p>{insucessoKpis.insucessos}</p>
             <small className="muted">status Insucesso</small>
           </div>
-          <div className="kpi-card">
+          <div className="kpi-card num-bad">
             <h3>% Insucesso</h3>
             <p>{insucessoKpis.percentualInsucesso}%</p>
             <small className="muted">Insucessos / Agendamentos</small>

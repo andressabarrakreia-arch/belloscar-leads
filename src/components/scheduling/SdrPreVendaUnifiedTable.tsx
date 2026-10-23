@@ -18,7 +18,7 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
       <h2>
         Desempenho Pré-Vendas
         <InfoTip>
-          Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno). Outros SDRs só aparecem se
+          Equipe web (Allan, Thayna, Lais, Matheus e Liriane). Outros SDRs só aparecem se
           selecionados no filtro. Atendimentos = REALIZADOS (Atendido em) · Agend. = Agendado em ·
           Visitas = Visita em · Sucessos = Finalizado em · % Agend. = Ag/Atend · Conv. visita =
           Vis/Ag · Conv. = Suc/Vis. Recepção não entra neste bloco.
@@ -53,10 +53,10 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
                 <td>{r.totalAgendamentos}</td>
                 <td>{r.taxaAgendamento}%</td>
                 <td>{r.totalVisitas}</td>
-                <td>{r.totalSucesso}</td>
-                <td>{r.totalInsucesso}</td>
+                <td className="num-ok">{r.totalSucesso}</td>
+                <td className="num-bad">{r.totalInsucesso}</td>
                 <td>{r.taxaConversaoVisita}%</td>
-                <td>{r.taxaConversaoSucesso}%</td>
+                <td className="num-ok">{r.taxaConversaoSucesso}%</td>
                 <td>{r.propostasBreakdown.Compra}</td>
                 <td>{r.propostasBreakdown.Venda}</td>
                 <td>{r.propostasBreakdown.Troca}</td>
@@ -86,7 +86,7 @@ export function SdrPreVendaConvPropostaTable({ rows }: Props) {
       <h2>
         Conversão por tipo de proposta
         <InfoTip>
-          Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno) — % = Sucessos do tipo /
+          Equipe web (Allan, Thayna, Lais, Matheus e Liriane) — % = Sucessos do tipo /
           Agendamentos daquele tipo (Su/Ag). Tipos sem volume aparecem como —.
         </InfoTip>
       </h2>
@@ -136,7 +136,7 @@ export function SdrPreVendaTopParceirosTable({ rows }: Props) {
       <h2>
         Top 3 vendedores por SDR
         <InfoTip>
-          Equipe web (Allan, Thayna, Lais, Matheus, Liriane, Bruno) — os 3 vendedores com mais
+          Equipe web (Allan, Thayna, Lais, Matheus e Liriane) — os 3 vendedores com mais
           agendamentos de cada SDR (volume e % Su/Ag). Detalhe completo na aba Agendamentos.
         </InfoTip>
       </h2>

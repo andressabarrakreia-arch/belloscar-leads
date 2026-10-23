@@ -6,14 +6,17 @@ import { useCampanhas } from "../hooks/useCampanhas";
 import { useNegociacoesAnalytics, useNegociacoesStore } from "../hooks/useNegociacoesStore";
 import { useSchedulingAnalytics, useSchedulingStore } from "../hooks/useSchedulingStore";
 import { sliceCampanhas } from "../lib/campanhas/analytics";
+import { currentMonthKey, currentMonthRange } from "../lib/dates";
 import { agendaPeople, campanhaPeople, lojaPeople, topFaturamento, type SectorPeople } from "../lib/indice/destaques";
 import type { NegociacoesFilters } from "../lib/negociacoes/types";
 
 const brandLogo = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
 const fundo = `${import.meta.env.BASE_URL}brand/indice-fundo.jpg`;
 
-const NEGOCIACOES_TODOS: NegociacoesFilters = {
-  month: "all",
+const MES_ATUAL = currentMonthRange();
+
+const NEGOCIACOES_MES: NegociacoesFilters = {
+  month: currentMonthKey(),
   period: "all",
   vendedor: "all",
   tipo: "all",
@@ -56,7 +59,7 @@ function baseLabel(iso?: string | null): string {
   return `Base de ${date.toLocaleDateString("pt-BR")}`;
 }
 
-type Fact = { label: string; value: string; highlight?: boolean };
+type Fact = { label: string; value: string; tone?: "ok" | "bad" };
 
 function PersonRow({
   tone,
@@ -84,12 +87,14 @@ export function IndiceGeral() {
   const campanhas = useCampanhas();
   const agendamentos = useSchedulingStore();
   const negociacoes = useNegociacoesStore();
-  const agenda = useSchedulingAnalytics(agendamentos.dataset, {});
-  const loja = useNegociacoesAnalytics(negociacoes.dataset, NEGOCIACOES_TODOS);
+  const agenda = useSchedulingAnalytics(agendamentos.dataset, MES_ATUAL);
+  const loja = useNegociacoesAnalytics(negociacoes.dataset, NEGOCIACOES_MES);
   const campanhaKpis = useMemo(
-    () => sliceCampanhas(campanhas.rows, {}).kpis,
+    () => sliceCampanhas(campanhas.rows, MES_ATUAL).kpis,
     [campanhas.rows]
   );
+  const mesLabel = new Date().toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+  const mesTitulo = mesLabel.charAt(0).toUpperCase() + mesLabel.slice(1);
   const people = useMemo(
     () => ({
       campanhas: campanhas.rows.length ? campanhaPeople(campanhas.rows) : null,
@@ -119,7 +124,7 @@ export function IndiceGeral() {
         { label: "Atendimentos", value: campanhas.loading ? "…" : campanhas.error ? "—" : n(campanhaKpis.atendimentos) },
         { label: "Visitas", value: campanhas.loading ? "…" : campanhas.error ? "—" : n(campanhaKpis.visitas) },
         { label: "Agendamentos", value: campanhas.loading ? "…" : campanhas.error ? "—" : n(campanhaKpis.agendamentos) },
-        { label: "Sucessos", value: campanhas.loading ? "…" : campanhas.error ? "—" : n(campanhaKpis.sucessos), highlight: true },
+        { label: "Sucessos", value: campanhas.loading ? "…" : campanhas.error ? "—" : n(campanhaKpis.sucessos), tone: "ok" },
       ],
       people: people.campanhas,
     },
@@ -130,8 +135,8 @@ export function IndiceGeral() {
       facts: [
         { label: "Agend. pré-venda", value: agendamentos.loading ? "…" : agenda ? n(agenda.kpisPreVenda.total) : "—" },
         { label: "Visitas", value: agendamentos.loading ? "…" : agenda ? n(agenda.kpisPreVenda.visitas) : "—" },
-        { label: "Insucessos", value: agendamentos.loading ? "…" : agenda ? n(agenda.kpisPreVenda.insucessos) : "—" },
-        { label: "Sucessos", value: agendamentos.loading ? "…" : agenda ? n(agenda.kpisPreVenda.sucessos) : "—", highlight: true },
+        { label: "Insucessos", value: agendamentos.loading ? "…" : agenda ? n(agenda.kpisPreVenda.insucessos) : "—", tone: "bad" },
+        { label: "Sucessos", value: agendamentos.loading ? "…" : agenda ? n(agenda.kpisPreVenda.sucessos) : "—", tone: "ok" },
       ],
       people: people.agendamentos,
     },
@@ -143,7 +148,7 @@ export function IndiceGeral() {
         { label: "Negócios", value: negociacoes.loading ? "…" : loja ? n(loja.kpis.total) : "—" },
         { label: "Trocas", value: negociacoes.loading ? "…" : loja ? n(loja.kpis.trocas) : "—" },
         { label: "Consignações", value: negociacoes.loading ? "…" : loja ? n(loja.kpis.consignacoes) : "—" },
-        { label: "Vendas", value: negociacoes.loading ? "…" : loja ? n(loja.kpis.vendas) : "—", highlight: true },
+        { label: "Vendas", value: negociacoes.loading ? "…" : loja ? n(loja.kpis.vendas) : "—", tone: "ok" },
       ],
       people: people.negociacoes,
     },
@@ -158,15 +163,15 @@ export function IndiceGeral() {
           <h1>
             Bellos<span>Car</span>
           </h1>
-          <p>Índice Geral</p>
+          <p>Índice Geral · {mesTitulo}</p>
         </header>
 
         <nav className="indice-doors" aria-label="Páginas principais">
           {DOORS.map((door) => (
             <Link key={door.to} to={door.to} className="indice-door">
-              <strong>{door.label}</strong>
-              <small>{door.line}</small>
+              {door.label}
               <span className="indice-door-tip" role="tooltip">
+                <strong>{door.line}</strong>
                 {door.summary}
               </span>
             </Link>
@@ -184,7 +189,10 @@ export function IndiceGeral() {
               </header>
               <dl className="indice-facts">
                 {card.facts.map((fact) => (
-                  <div key={fact.label} className={fact.highlight ? "is-highlight" : undefined}>
+                  <div
+                    key={fact.label}
+                    className={fact.tone === "ok" ? "is-highlight" : fact.tone === "bad" ? "is-negative" : undefined}
+                  >
                     <dt>{fact.label}</dt>
                     <dd>{fact.value}</dd>
                   </div>
@@ -203,7 +211,7 @@ export function IndiceGeral() {
         <section className="indice-rank indice-card" aria-label="Quem mais faturou no mês">
           <header className="indice-rank-head">
             <h2>Faturamento do mês</h2>
-            <p>Valor de venda · passe o mouse para ver os negócios</p>
+            <p>Valor de venda. Passe o mouse para ver os negócios.</p>
           </header>
           {negociacoes.loading ? (
             <p className="indice-rank-empty">Carregando…</p>

@@ -1,6 +1,7 @@
 import { buildSdrRows, sliceCampanhas } from "../campanhas/analytics";
 import { buildVendedorRows, dealsFromLines, filterDeals } from "../negociacoes/metrics";
 import type { NegociacaoLine } from "../negociacoes/types";
+import { isFeaturedPreVendaSdr } from "../scheduling/metrics";
 import { isRecepcaoName } from "../scheduling/normalize";
 import type { AgendamentoItem } from "../scheduling/types";
 
@@ -55,20 +56,15 @@ export function campanhaPeople(rows: Parameters<typeof sliceCampanhas>[0]): Sect
   const ym = monthKey();
   const today = new Date();
   const to = `${ym}-${String(today.getDate()).padStart(2, "0")}`;
-  const monthRows = buildSdrRows(sliceCampanhas(rows, { from: `${ym}-01`, to })).filter((row) =>
-    usable(row.sdr)
+  const monthRows = buildSdrRows(sliceCampanhas(rows, { from: `${ym}-01`, to })).filter(
+    (row) => usable(row.sdr) && isFeaturedPreVendaSdr(row.sdr)
   );
   const history = new Map(
     buildSdrRows(sliceCampanhas(rows, {}))
-      .filter((row) => usable(row.sdr))
+      .filter((row) => usable(row.sdr) && isFeaturedPreVendaSdr(row.sdr))
       .map((row) => [row.sdr, row])
   );
-  let floor = 15;
-  let pool = monthRows.filter((row) => row.atendimentos >= floor);
-  while (pool.length < 2 && floor > 5) {
-    floor = Math.max(5, Math.floor(floor / 2));
-    pool = monthRows.filter((row) => row.atendimentos >= floor);
-  }
+  const pool = monthRows.filter((row) => row.atendimentos > 0);
   if (pool.length === 0) return { positive: null, negative: null };
   const ranked = [...pool].sort(
     (a, b) => b.taxaSucesso - a.taxaSucesso || b.sucessos - a.sucessos
@@ -91,7 +87,13 @@ export function campanhaPeople(rows: Parameters<typeof sliceCampanhas>[0]): Sect
 
 export function agendaPeople(items: AgendamentoItem[]): SectorPeople {
   const ym = monthKey();
-  const pre = items.filter((item) => item.canal !== "Recepção" && !isRecepcaoName(item.sdr) && usable(item.sdr));
+  const pre = items.filter(
+    (item) =>
+      item.canal !== "Recepção" &&
+      !isRecepcaoName(item.sdr) &&
+      usable(item.sdr) &&
+      isFeaturedPreVendaSdr(item.sdr)
+  );
   const tally = (list: AgendamentoItem[]) => {
     const map = new Map<string, { sucessos: number; insucessos: number; total: number }>();
     for (const item of list) {
@@ -105,7 +107,7 @@ export function agendaPeople(items: AgendamentoItem[]): SectorPeople {
   };
   const month = tally(pre.filter((item) => item.monthKey === ym));
   const history = tally(pre);
-  const rows = [...month.entries()].filter(([, row]) => row.total >= 5);
+  const rows = [...month.entries()].filter(([, row]) => row.total > 0);
   if (rows.length === 0) return { positive: null, negative: null };
   const high = [...rows].sort((a, b) => b[1].sucessos - a[1].sucessos || a[1].insucessos - b[1].insucessos)[0];
   const low = [...rows].sort((a, b) => b[1].insucessos - a[1].insucessos || a[1].sucessos - b[1].sucessos).find(

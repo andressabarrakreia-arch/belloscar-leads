@@ -12,6 +12,11 @@ import {
   type CampanhaFilters,
   type CampanhaKpis,
 } from "../lib/campanhas/analytics";
+import { currentMonthKey, monthRange } from "../lib/dates";
+
+function previousMonthKey(date = new Date()): string {
+  return currentMonthKey(new Date(date.getFullYear(), date.getMonth() - 1, 1));
+}
 
 function delta(a: number, b: number) {
   const n = b - a;
@@ -53,8 +58,8 @@ function KpiCompare({
                 <td>
                   <strong>{row.name}</strong>
                 </td>
-                <td>{row.va.toLocaleString("pt-BR")}</td>
-                <td>{row.vb.toLocaleString("pt-BR")}</td>
+                <td className={row.name === "Sucessos" ? "num-ok" : undefined}>{row.va.toLocaleString("pt-BR")}</td>
+                <td className={row.name === "Sucessos" ? "num-ok" : undefined}>{row.vb.toLocaleString("pt-BR")}</td>
                 <td className={row.vb - row.va > 0 ? "positive" : row.vb - row.va < 0 ? "delta-neg" : "zero"}>
                   {delta(row.va, row.vb)}
                 </td>
@@ -70,10 +75,12 @@ function KpiCompare({
 export function Compare() {
   const { rows, loading, error } = useCampanhas();
   const [filters, setFilters] = useState<CampanhaFilters>({});
-  const [fromA, setFromA] = useState("");
-  const [toA, setToA] = useState("");
-  const [fromB, setFromB] = useState("");
-  const [toB, setToB] = useState("");
+  const mesAnterior = monthRange(previousMonthKey());
+  const mesAtual = monthRange(currentMonthKey());
+  const [fromA, setFromA] = useState(mesAnterior.from);
+  const [toA, setToA] = useState(mesAnterior.to);
+  const [fromB, setFromB] = useState(mesAtual.from);
+  const [toB, setToB] = useState(mesAtual.to);
   const sdrs = useMemo(() => listSdrOptions(rows), [rows]);
   const months = useMemo(() => listMonthOptions(rows), [rows]);
 

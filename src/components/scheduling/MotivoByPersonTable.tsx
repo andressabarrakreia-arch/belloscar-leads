@@ -33,7 +33,7 @@ export function MotivoByPersonTable({ rows, title, subtitle, nameLabel }: Props)
               return (
                 <tr key={r.nome}>
                   <td>{r.nome}</td>
-                  <td>{r.totalInsucessos}</td>
+                  <td className="num-bad">{r.totalInsucessos}</td>
                   <td>{top?.motivo ?? "—"}</td>
                   <td>{top?.quantidade ?? "—"}</td>
                   <td>{top ? `${top.percentual}%` : "—"}</td>

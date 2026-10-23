@@ -59,7 +59,7 @@ export function Attendants() {
                   <td className={row.visitas ? "positive" : "zero"}>{row.visitas}</td>
                   <td>{row.taxaVisita}%</td>
                   <td>{row.agendamentos}</td>
-                  <td className={row.sucessos ? "positive" : "zero"}>{row.sucessos}</td>
+                  <td className="num-ok">{row.sucessos}</td>
                   <td>{row.taxaVisitaParaSucesso}%</td>
                 </tr>
               ))}
@@ -92,8 +92,8 @@ export function Attendants() {
                     <strong>{row.vendedor}</strong>
                   </td>
                   <td>{row.agendamentos}</td>
-                  <td className={row.sucessos ? "positive" : "zero"}>{row.sucessos}</td>
-                  <td>{row.taxaSucesso}%</td>
+                  <td className="num-ok">{row.sucessos}</td>
+                  <td className="num-ok">{row.taxaSucesso}%</td>
                 </tr>
               ))}
             </tbody>

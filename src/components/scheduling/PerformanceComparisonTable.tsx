@@ -51,10 +51,10 @@ export function PerformanceComparisonTable({
                 <td>{r.canal}</td>
                 <td>{r.total}</td>
                 <td>{r.visitas}</td>
-                <td>{r.sucessos}</td>
-                <td>{r.insucessos}</td>
+                <td className="num-ok">{r.sucessos}</td>
+                <td className="num-bad">{r.insucessos}</td>
                 <td>{r.taxaVisita}%</td>
-                <td>{r.taxaSucesso}%</td>
+                <td className="num-ok">{r.taxaSucesso}%</td>
                 {showCanalSplit && (
                   <td>{r.convPreVenda !== undefined ? `${r.convPreVenda}%` : "—"}</td>
                 )}

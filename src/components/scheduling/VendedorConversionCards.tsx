@@ -61,8 +61,8 @@ function OrigensTable({ rows }: { rows: OrigemStats[] }) {
               <td>{o.origem}</td>
               <td>{o.quantidade}</td>
               <td>{o.percentual}%</td>
-              <td>{o.sucessos}</td>
-              <td>{o.insucessos}</td>
+              <td className="num-ok">{o.sucessos}</td>
+              <td className="num-bad">{o.insucessos}</td>
             </tr>
           ))}
           {rows.length === 0 && (
@@ -104,15 +104,15 @@ function DetailBlock({
           <h3>Visitas</h3>
           <p>{v.totalVisitas}</p>
         </div>
-        <div className="kpi-card success">
+        <div className="kpi-card success num-ok">
           <h3>Sucessos</h3>
           <p>{v.totalSucesso}</p>
         </div>
-        <div className="kpi-card accent">
+        <div className="kpi-card num-bad">
           <h3>Insucessos</h3>
           <p>{v.totalInsucesso}</p>
         </div>
-        <div className="kpi-card success">
+        <div className="kpi-card success num-ok">
           <h3>Conv. Pré-Venda</h3>
           <p>{v.conversaoPreVenda}%</p>
           <small className="muted">Su/Recebidos PV</small>
@@ -144,11 +144,11 @@ function DetailBlock({
           <h3>Visitas</h3>
           <p>{v.visitasRecepcao}</p>
         </div>
-        <div className="kpi-card success">
+        <div className="kpi-card success num-ok">
           <h3>Sucessos</h3>
           <p>{v.sucessoRecepcao}</p>
         </div>
-        <div className="kpi-card">
+        <div className="kpi-card num-bad">
           <h3>Insucessos</h3>
           <p>{v.insucessosRecepcao}</p>
         </div>
@@ -157,7 +157,7 @@ function DetailBlock({
           <p>{v.taxaVisitaRecepcao}%</p>
           <small className="muted">Vi/Recebidos Rec</small>
         </div>
-        <div className="kpi-card success">
+        <div className="kpi-card success num-ok">
           <h3>Conv. Recepção</h3>
           <p>{v.conversaoRecepcao}%</p>
           <small className="muted">Su/Recebidos Rec</small>
