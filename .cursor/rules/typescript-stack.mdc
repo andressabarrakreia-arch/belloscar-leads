@@ -11,3 +11,29 @@ alwaysApply: true
 - **Hospedagem:** GitHub Pages (SPA / `HashRouter`)
 - Processamento de planilhas **100% no cliente** (browser-only)
 - Consultar padrões já usados no repo antes de adicionar dependências
+
+## Atualização e aprimoramento — Design System / UI (Frontend)
+
+O que está acima permanece. Esta seção acrescenta a hierarquia de interface, sem substituir a stack já definida.
+
+### Regra de Design System / UI (Frontend)
+
+**Padrão obrigatório de UI/UX:**
+
+- Quando o frontend for **React 18+**, a stack padrão de layout e componentes **deve ser**:
+  - **React**
+  - **ShadCN/UI**
+  - **Tailwind CSS**
+
+- Caso o projeto **não** seja React 18+ (ou não permita o uso de ShadCN por qualquer motivo técnico), a ordem de preferência de fallback é:
+  1. **Bootstrap** (preferencial)
+  2. **Material UI (MUI)**
+
+**Ao aplicar esta regra, o agent deve:**
+
+1. Refatorar **gráficos, cards, tabelas, modais, formulários, listas e qualquer componente visual** existente para o novo design system escolhido.
+2. Alterar o **conceito visual e a lógica de apresentação** dos componentes (não apenas “trocar a lib” superficialmente).
+3. Manter **100% da funcionalidade atual** — nenhuma quebra de comportamento, fluxo, estado, validações ou integrações é aceitável.
+4. Garantir que a refatoração seja **incremental e segura**, preservando a lógica de negócio existente.
+
+Sempre que for criar ou alterar interface, o agent deve seguir esta hierarquia de decisão antes de começar a codificar.

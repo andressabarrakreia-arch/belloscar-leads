@@ -18,3 +18,53 @@ Publicar é commit na `main` e push, para o GitHub Pages atualizar o domínio.
 ## Exemplo
 
 Task aprovada: trocar o título de um card. Ao terminar: "O título do card mudou em Campanhas. Testa em `#/campanhas`. Quer que eu publique?"
+
+## Atualização e aprimoramento — Commit e entrega
+
+O fluxo acima permanece. Esta seção acrescenta o que o agent deve dizer e fazer depois, sem apagar o pedido de teste nem a espera pela resposta dela.
+
+### Regra de Commit e Entrega (obrigatória)
+
+**Após finalizar qualquer task:**
+
+1. O Cursor (e todos os seus agents) **deve** lembrar o usuário de:
+   - Testar a alteração localmente
+   - Confirmar que está tudo funcionando corretamente
+   - Avisar quando estiver **ok para commit e publicação**
+
+2. Só depois da **aprovação explícita do usuário** o agent deve:
+   - Sugerir a mensagem de commit
+   - Preparar o commit
+   - Orientar a publicação (se aplicável)
+
+**Frase padrão que o agent deve usar ao finalizar uma task:**
+
+> “Task finalizada e testada por mim.  
+> Por favor, valide no seu ambiente e me avise quando estiver **ok para eu fazer o commit e publicar**.”
+
+Esta regra se aplica a **toda** task concluída (feature, bugfix, refatoração, ajuste visual, etc.).
+
+**[ADICIONADO PELO GROK]**  
+Além disso, o agent **deve se certificar** de que a task realmente foi commitada e publicada. Não basta apenas lembrar: após a aprovação do usuário, o agent deve:
+
+- Executar ou guiar o commit
+- Confirmar que o commit foi realizado com sucesso
+- Orientar ou executar a publicação (deploy)
+- Informar claramente ao usuário o status final: “Commit realizado e publicado com sucesso” ou “Commit realizado. Falta apenas o deploy (me avise se quiser que eu te guie)”
+
+Nunca deixar a task “no ar” sem confirmação de commit e publicação.
+
+## Atualização e aprimoramento — Qualidade e segurança de entrega
+
+### **[ADICIONADO PELO GROK]** Regra de Qualidade e Segurança de Entrega
+
+1. Antes de considerar qualquer task finalizada, o agent deve:
+   - Testar o máximo possível do que foi implementado
+   - Verificar se não quebrou nada que já existia
+   - Confirmar que a interface ficou consistente com o design system definido
+
+2. Nunca entregar código “pela metade” ou com avisos de erro aparentes.
+
+3. Se a task envolver mudanças visuais, o agent deve deixar a interface o mais polida e profissional possível, considerando que o público final são pessoas de gestão (não desenvolvedores).
+
+4. Sempre que houver dúvida sobre prioridade (beleza vs funcionamento), **funcionamento vem primeiro**. Depois melhora o visual.

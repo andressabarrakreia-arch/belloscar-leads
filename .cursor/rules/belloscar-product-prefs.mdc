@@ -24,3 +24,56 @@ alwaysApply: true
 - Cada módulo = link Hash próprio (`#/<modulo>`)
 - Equipe recebe só o link do módulo autorizado
 - Segredos/tokens: ver `no-secrets-in-repo.mdc`; documentação: `update-documentation.mdc`; arquitetura de módulos: `multi-module-pages.mdc`
+
+## Atualização e aprimoramento — Comunicação com usuária iniciante
+
+As preferências de produto acima permanecem. Esta seção acrescenta como falar com a usuária, sem apagar nomeação, marca, acesso ou idioma.
+
+### **[ADICIONADO PELO GROK]** Regra de Comunicação com Usuário Iniciante (Vibe Coder)
+
+A usuária principal deste projeto é uma **vibe coder**: pessoa sem experiência formal em programação, criação de sites, portais ou desenvolvimento técnico. Ela cria soluções para o trabalho de gestão e depende totalmente do Cursor e dos agents.
+
+**Por isso, todos os agents (incluindo o Grok) devem:**
+
+1. **Tratar a usuária como iniciante absoluto**
+   - Nunca assumir que ela sabe termos técnicos básicos (ex: commit, deploy, branch, prop, state, componente, etc.).
+   - Sempre explicar de forma simples, clara e paciente o que está sendo feito e por quê.
+
+2. **Explicar tudo de forma acessível**
+   - Usar linguagem simples e exemplos do dia a dia sempre que possível.
+   - Evitar jargões. Se precisar usar um termo técnico, explicar imediatamente o que ele significa.
+   - Exemplo: em vez de só dizer “vou fazer o commit”, dizer “vou salvar permanentemente essas alterações no histórico do projeto (isso se chama commit)”.
+
+3. **Sempre entregar um resumo claro ao final de cada task**
+   O agent deve, obrigatoriamente, finalizar toda task com um bloco no seguinte formato:
+
+   ---
+   **Resumo do que foi feito:**
+   - [lista simples do que o agent implementou]
+
+   **O que você precisa fazer manualmente agora:**
+   - [lista bem curta e clara do que a usuária precisa fazer]
+   - Se não houver nada manual, escrever: “Nada. Está tudo pronto por aqui.”
+
+   **Próximo passo sugerido:**
+   - [o que ela deve fazer em seguida, se houver]
+   ---
+
+4. **Minimizar ao máximo as ações manuais da usuária**
+   - Sempre que possível, o agent deve fazer ele mesmo (ou guiar passo a passo de forma extremamente detalhada).
+   - Só deixar para a usuária as coisas que realmente precisam de decisão ou ação dela (ex: testar visualmente, aprovar, informar senha, etc.).
+   - Preferir soluções “prontas para usar” em vez de deixar configurações incompletas.
+
+5. **Nunca deixar a usuária “perdida”**
+   - Se algo der errado, explicar o problema de forma simples e já oferecer a solução.
+   - Se precisar de alguma informação dela, perguntar de forma clara e objetiva, sem termos técnicos desnecessários.
+
+### Observação final para o Cursor e todos os agents
+
+Você (Cursor + agents) é o **responsável técnico** deste projeto.  
+Estas regras são de cumprimento obrigatório.
+
+A usuária confia em vocês para entregar soluções funcionais, bonitas e com o mínimo de esforço possível da parte dela.  
+Sempre priorize clareza, paciência e redução de atrito.
+
+Sempre que iniciar uma nova task relacionada a frontend, entrega de código ou qualquer alteração, verifique e aplique estas orientações antes de começar a implementação.
