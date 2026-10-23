@@ -142,10 +142,28 @@ function mergeItem(
   }
 
   const sdr = incoming.sdr?.trim() ? incoming.sdr : existing.sdr;
-  const dataAgendamento = incoming.dataAgendamento || existing.dataAgendamento;
+  // Só a planilha de agendamentos traz a data do agendamento.
+  // Leads (criado em) e insucessos (finalizado em) não trocam esse dia.
+  const dataAgendamento =
+    incoming.kind === "agendamentos" && incoming.dataAgendamento
+      ? incoming.dataAgendamento
+      : existing.dataAgendamento;
 
-  // Planilha de agendamentos é fonte autoritativa de status/vendedor/data
+  // A planilha mais nova deste ID manda no status, na visita e no motivo.
   const fromAgenda = incoming.kind === "agendamentos";
+  const fromInsucesso = incoming.kind === "insucessos";
+  const status = fromInsucesso
+    ? "Insucesso"
+    : fromAgenda
+      ? incoming.status || existing.status
+      : existing.status;
+  const motivoInsucesso = fromInsucesso
+    ? incoming.motivoInsucesso ?? existing.motivoInsucesso
+    : fromAgenda && status !== "Insucesso"
+      ? null
+      : incoming.motivoInsucesso !== undefined && incoming.motivoInsucesso !== null
+        ? incoming.motivoInsucesso
+        : existing.motivoInsucesso;
 
   return {
     id: existing.id,
@@ -162,18 +180,15 @@ function mergeItem(
           incoming.tipoProposta !== "não informado(celulas em branco)"
         ? incoming.tipoProposta
         : existing.tipoProposta,
-    teveVisita: fromAgenda
+    teveVisita: fromAgenda || fromInsucesso
       ? Boolean(incoming.teveVisita)
       : existing.teveVisita || Boolean(incoming.teveVisita),
-    status: fromAgenda ? incoming.status || existing.status : existing.status,
+    status,
     origem:
       incoming.origem && incoming.origem !== "Não informado"
         ? incoming.origem
         : existing.origem,
-    motivoInsucesso:
-      incoming.motivoInsucesso !== undefined && incoming.motivoInsucesso !== null
-        ? incoming.motivoInsucesso
-        : existing.motivoInsucesso,
+    motivoInsucesso,
     cliente: incoming.cliente?.trim() ? incoming.cliente : existing.cliente,
     celular: incoming.celular?.trim() ? incoming.celular : existing.celular,
     email: incoming.email?.trim() ? incoming.email : existing.email,
@@ -370,13 +385,19 @@ export function reconcileSchedulingDataset(dataset: SchedulingDataset): {
     return next;
   });
 
-  const sucessosEventos = (base.sucessosEventos || []).map((s) => {
-    if (isMissingOrigem(s.origem) && origemById.has(s.id)) {
-      filledSucessos += 1;
-      return { ...s, origem: origemById.get(s.id)! };
-    }
-    return s;
-  });
+  const insucessoIds = new Set(
+    items.filter((item) => item.status === "Insucesso").map((item) => item.id)
+  );
+  const sucessosEventos = (base.sucessosEventos || [])
+    .map((s) => {
+      if (isMissingOrigem(s.origem) && origemById.has(s.id)) {
+        filledSucessos += 1;
+        return { ...s, origem: origemById.get(s.id)! };
+      }
+      return s;
+    })
+    .filter((s) => !insucessoIds.has(s.id));
+  const removedSucessos = (base.sucessosEventos || []).filter((s) => insucessoIds.has(s.id)).length;
 
   const notes: string[] = [];
   if (filledRealizados > 0) {
@@ -396,6 +417,11 @@ export function reconcileSchedulingDataset(dataset: SchedulingDataset): {
   }
   if (filledTipos > 0) {
     notes.push(`Reconciliação: tipo de proposta preenchido em ${filledTipos} registros`);
+  }
+  if (removedSucessos > 0) {
+    notes.push(
+      `Reconciliação: ${removedSucessos} IDs saíram de sucesso porque o status mais recente é insucesso`
+    );
   }
   if (notes.length === 0) {
     notes.push("Reconciliação: coleções já alinhadas por ID");
@@ -480,6 +506,10 @@ export function applySchedulingImport(
     }
     const before = (base.realizados || []).length;
     const realizados = mergeRealizados(base.realizados || [], unique, origemById);
+    const visitaById = new Map(unique.map((row) => [row.id, Boolean(row.teveVisita)]));
+    const items = base.items.map((item) =>
+      visitaById.has(item.id) ? { ...item, teveVisita: visitaById.get(item.id)! } : item
+    );
     const kept = Math.max(0, realizados.length - before);
     const enriched = unique.length - kept;
     const meta: SchedulingImportMeta = {
@@ -500,7 +530,7 @@ export function applySchedulingImport(
       {
         updatedAt: at,
         imports: base.imports,
-        items: base.items,
+        items,
         leadsAtendimentos: base.leadsAtendimentos,
         realizados,
         sucessosEventos: base.sucessosEventos,
@@ -514,6 +544,10 @@ export function applySchedulingImport(
     const { unique, removed, notes } = dedupeCount(incoming);
     const before = (base.sucessosEventos || []).length;
     const sucessosEventos = mergeSucessosEventos(base.sucessosEventos || [], unique);
+    const sucessoIds = new Set(unique.map((row) => row.id));
+    const items = base.items.map((item) =>
+      sucessoIds.has(item.id) ? { ...item, status: "Sucesso" as const, motivoInsucesso: null } : item
+    );
     const kept = Math.max(0, sucessosEventos.length - before);
     const enriched = unique.length - kept;
     const meta: SchedulingImportMeta = {
@@ -534,7 +568,7 @@ export function applySchedulingImport(
       {
         updatedAt: at,
         imports: base.imports,
-        items: base.items,
+        items,
         leadsAtendimentos: base.leadsAtendimentos,
         realizados: base.realizados,
         sucessosEventos,
@@ -551,6 +585,19 @@ export function applySchedulingImport(
     incoming,
     { enrichOnly }
   );
+  let agendaItems = items;
+  let revived = 0;
+  if (kind === "insucessos") {
+    const { unique } = dedupeCount(incoming);
+    const present = new Set(agendaItems.map((item) => item.id));
+    const successIds = new Set((base.sucessosEventos || []).map((s) => s.id));
+    for (const row of unique) {
+      if (present.has(row.id) || !successIds.has(row.id)) continue;
+      agendaItems.push(mergeItem(undefined, row));
+      present.add(row.id);
+      revived += 1;
+    }
+  }
 
   const leadsAtendimentos =
     kind === "leads"
@@ -572,11 +619,14 @@ export function applySchedulingImport(
     at,
     received: incoming.length,
     kept,
-    removed: removed + skipped,
+    removed: removed + Math.max(0, skipped - revived),
     enriched,
     notes: [
-      ...(skipped > 0
-        ? [`${skipped} IDs sem agendamento (não criam órfãos na agenda)`]
+      ...(skipped - revived > 0
+        ? [`${skipped - revived} IDs sem agendamento (não criam órfãos na agenda)`]
+        : []),
+      ...(revived > 0
+        ? [`${revived} sucessos passaram a insucesso e entraram na agenda`]
         : []),
       ...leadNote,
       ...notes,
@@ -586,7 +636,7 @@ export function applySchedulingImport(
     {
       updatedAt: at,
       imports: base.imports,
-      items,
+      items: agendaItems,
       leadsAtendimentos,
       realizados: base.realizados,
       sucessosEventos: base.sucessosEventos,

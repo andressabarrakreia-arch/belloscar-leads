@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T12:32:34.409Z",
+  "updatedAt": "2026-10-23T14:04:36.463Z",
   "imports": [
     {
       "fileName": "LEADS GERAL ATE 22_10.csv",
@@ -459,7 +459,7 @@
     },
     {
       "id": "9530490",
-      "dataAgendamento": "2026-10-06",
+      "dataAgendamento": "2026-10-15",
       "sdr": "Lais Narimã Ferreira Vieira",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Venda",
@@ -663,7 +663,7 @@
     },
     {
       "id": "9619098",
-      "dataAgendamento": "2026-10-14",
+      "dataAgendamento": "2026-10-15",
       "sdr": "Matheus Imbroinise",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Compra",
@@ -680,7 +680,7 @@
     },
     {
       "id": "9568982",
-      "dataAgendamento": "2026-10-10",
+      "dataAgendamento": "2026-10-15",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Venda",
@@ -697,7 +697,7 @@
     },
     {
       "id": "9619269",
-      "dataAgendamento": "2026-10-14",
+      "dataAgendamento": "2026-10-15",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Troca",
@@ -731,7 +731,7 @@
     },
     {
       "id": "9553398",
-      "dataAgendamento": "2026-10-08",
+      "dataAgendamento": "2026-10-14",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Compra",
@@ -748,7 +748,7 @@
     },
     {
       "id": "9590825",
-      "dataAgendamento": "2026-10-12",
+      "dataAgendamento": "2026-10-14",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -833,7 +833,7 @@
     },
     {
       "id": "9615936",
-      "dataAgendamento": "2026-10-14",
+      "dataAgendamento": "2026-10-20",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Lais Narimã Ferreira Vieira",
       "tipoProposta": "Financiamento",
@@ -846,11 +846,11 @@
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9601330",
-      "dataAgendamento": "2026-10-13",
+      "dataAgendamento": "2026-10-14",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Márcia",
       "tipoProposta": "Compra",
@@ -884,7 +884,7 @@
     },
     {
       "id": "9594838",
-      "dataAgendamento": "2026-10-13",
+      "dataAgendamento": "2026-10-14",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Compra",
@@ -952,7 +952,7 @@
     },
     {
       "id": "9576085",
-      "dataAgendamento": "2026-10-10",
+      "dataAgendamento": "2026-10-14",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Compra",
@@ -1003,7 +1003,7 @@
     },
     {
       "id": "9606414",
-      "dataAgendamento": "2026-10-13",
+      "dataAgendamento": "2026-10-14",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Compra",
@@ -1037,7 +1037,7 @@
     },
     {
       "id": "9599036",
-      "dataAgendamento": "2026-10-13",
+      "dataAgendamento": "2026-10-14",
       "sdr": "Lais Narimã Ferreira Vieira",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Financiamento",
@@ -1122,7 +1122,7 @@
     },
     {
       "id": "9584382",
-      "dataAgendamento": "2026-10-11",
+      "dataAgendamento": "2026-10-13",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Troca",
@@ -1224,7 +1224,7 @@
     },
     {
       "id": "9555656",
-      "dataAgendamento": "2026-10-08",
+      "dataAgendamento": "2026-10-13",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -1241,7 +1241,7 @@
     },
     {
       "id": "9593780",
-      "dataAgendamento": "2026-10-12",
+      "dataAgendamento": "2026-10-13",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -1479,7 +1479,7 @@
     },
     {
       "id": "9532368",
-      "dataAgendamento": "2026-10-07",
+      "dataAgendamento": "2026-10-10",
       "sdr": "Andressa K B Kreia",
       "vendedor": "Márcia",
       "tipoProposta": "Consignação",
@@ -1530,7 +1530,7 @@
     },
     {
       "id": "9496900",
-      "dataAgendamento": "2026-10-03",
+      "dataAgendamento": "2026-10-10",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Compra",
@@ -1564,7 +1564,7 @@
     },
     {
       "id": "9562498",
-      "dataAgendamento": "2026-10-09",
+      "dataAgendamento": "2026-10-10",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Celso Fofo",
       "tipoProposta": "Venda",
@@ -1649,7 +1649,7 @@
     },
     {
       "id": "9532365",
-      "dataAgendamento": "2026-10-07",
+      "dataAgendamento": "2026-10-10",
       "sdr": "Andressa K B Kreia",
       "vendedor": "Márcia",
       "tipoProposta": "Troca",
@@ -1666,7 +1666,7 @@
     },
     {
       "id": "9462676",
-      "dataAgendamento": "2026-09-30",
+      "dataAgendamento": "2026-10-09",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Compra",
@@ -1678,8 +1678,8 @@
       "celular": "4184192710",
       "email": "",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9562587",
@@ -1785,7 +1785,7 @@
     },
     {
       "id": "9554968",
-      "dataAgendamento": "2026-10-08",
+      "dataAgendamento": "2026-10-09",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Troca",
@@ -1819,7 +1819,7 @@
     },
     {
       "id": "9549499",
-      "dataAgendamento": "2026-10-08",
+      "dataAgendamento": "2026-10-09",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Venda",
@@ -1853,7 +1853,7 @@
     },
     {
       "id": "9553972",
-      "dataAgendamento": "2026-10-08",
+      "dataAgendamento": "2026-10-09",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Lais Narimã Ferreira Vieira",
       "tipoProposta": "Financiamento",
@@ -1938,7 +1938,7 @@
     },
     {
       "id": "9532380",
-      "dataAgendamento": "2026-10-07",
+      "dataAgendamento": "2026-10-09",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Ewerton Rocha De Salles",
       "tipoProposta": "Troca",
@@ -2057,7 +2057,7 @@
     },
     {
       "id": "9541202",
-      "dataAgendamento": "2026-10-07",
+      "dataAgendamento": "2026-10-08",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Compra",
@@ -2074,7 +2074,7 @@
     },
     {
       "id": "9538640",
-      "dataAgendamento": "2026-10-07",
+      "dataAgendamento": "2026-10-08",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Márcia",
       "tipoProposta": "Compra",
@@ -2108,7 +2108,7 @@
     },
     {
       "id": "9525671",
-      "dataAgendamento": "2026-10-06",
+      "dataAgendamento": "2026-10-08",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Compra",
@@ -2176,7 +2176,7 @@
     },
     {
       "id": "9539861",
-      "dataAgendamento": "2026-10-07",
+      "dataAgendamento": "2026-10-08",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Celso Fofo",
       "tipoProposta": "não informado(celulas em branco)",
@@ -2312,7 +2312,7 @@
     },
     {
       "id": "9530065",
-      "dataAgendamento": "2026-10-06",
+      "dataAgendamento": "2026-10-07",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -2329,7 +2329,7 @@
     },
     {
       "id": "9508637",
-      "dataAgendamento": "2026-10-05",
+      "dataAgendamento": "2026-10-07",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Compra",
@@ -2448,7 +2448,7 @@
     },
     {
       "id": "9530345",
-      "dataAgendamento": "2026-10-06",
+      "dataAgendamento": "2026-10-07",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Compra",
@@ -2482,7 +2482,7 @@
     },
     {
       "id": "9531891",
-      "dataAgendamento": "2026-10-06",
+      "dataAgendamento": "2026-10-07",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Troca",
@@ -2584,7 +2584,7 @@
     },
     {
       "id": "9526595",
-      "dataAgendamento": "2026-10-06",
+      "dataAgendamento": "2026-10-07",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -2618,7 +2618,7 @@
     },
     {
       "id": "9524572",
-      "dataAgendamento": "2026-10-06",
+      "dataAgendamento": "2026-10-07",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Compra",
@@ -2839,7 +2839,7 @@
     },
     {
       "id": "9511846",
-      "dataAgendamento": "2026-10-05",
+      "dataAgendamento": "2026-10-06",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Compra",
@@ -2856,7 +2856,7 @@
     },
     {
       "id": "9518474",
-      "dataAgendamento": "2026-10-05",
+      "dataAgendamento": "2026-10-06",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Troca",
@@ -2873,7 +2873,7 @@
     },
     {
       "id": "9518068",
-      "dataAgendamento": "2026-10-05",
+      "dataAgendamento": "2026-10-06",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Compra",
@@ -2890,7 +2890,7 @@
     },
     {
       "id": "9426423",
-      "dataAgendamento": "2026-09-28",
+      "dataAgendamento": "2026-10-06",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Compra",
@@ -2902,8 +2902,8 @@
       "celular": "41988372326",
       "email": "gabriel.gmb1718@gmail.com",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9523518",
@@ -2958,7 +2958,7 @@
     },
     {
       "id": "9510756",
-      "dataAgendamento": "2026-10-05",
+      "dataAgendamento": "2026-10-06",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Compra",
@@ -2975,7 +2975,7 @@
     },
     {
       "id": "9504618",
-      "dataAgendamento": "2026-10-04",
+      "dataAgendamento": "2026-10-06",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Financiamento",
@@ -2992,7 +2992,7 @@
     },
     {
       "id": "9518434",
-      "dataAgendamento": "2026-10-05",
+      "dataAgendamento": "2026-10-06",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Celso Fofo",
       "tipoProposta": "Venda",
@@ -3060,7 +3060,7 @@
     },
     {
       "id": "9504153",
-      "dataAgendamento": "2026-10-04",
+      "dataAgendamento": "2026-10-06",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Compra",
@@ -3128,7 +3128,7 @@
     },
     {
       "id": "9436697",
-      "dataAgendamento": "2026-09-28",
+      "dataAgendamento": "2026-10-05",
       "sdr": "Lais Narimã Ferreira Vieira",
       "vendedor": "Lais Narimã Ferreira Vieira",
       "tipoProposta": "Financiamento",
@@ -3140,8 +3140,8 @@
       "celular": "42999719201",
       "email": "",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9512901",
@@ -3162,7 +3162,7 @@
     },
     {
       "id": "9493702",
-      "dataAgendamento": "2026-10-03",
+      "dataAgendamento": "2026-10-05",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Venda",
@@ -3196,7 +3196,7 @@
     },
     {
       "id": "9505015",
-      "dataAgendamento": "2026-10-04",
+      "dataAgendamento": "2026-10-05",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Venda",
@@ -3264,7 +3264,7 @@
     },
     {
       "id": "9493510",
-      "dataAgendamento": "2026-10-03",
+      "dataAgendamento": "2026-10-05",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Compra",
@@ -3349,7 +3349,7 @@
     },
     {
       "id": "9450311",
-      "dataAgendamento": "2026-09-29",
+      "dataAgendamento": "2026-10-05",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Troca",
@@ -3361,8 +3361,8 @@
       "celular": "4396445725",
       "email": "",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9510400",
@@ -3638,7 +3638,7 @@
     },
     {
       "id": "9474471",
-      "dataAgendamento": "2026-10-01",
+      "dataAgendamento": "2026-10-03",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Venda",
@@ -3944,7 +3944,7 @@
     },
     {
       "id": "9469674",
-      "dataAgendamento": "2026-10-01",
+      "dataAgendamento": "2026-10-02",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Márcia",
       "tipoProposta": "Troca",
@@ -3978,7 +3978,7 @@
     },
     {
       "id": "9477146",
-      "dataAgendamento": "2026-10-01",
+      "dataAgendamento": "2026-10-02",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Troca",
@@ -4029,7 +4029,7 @@
     },
     {
       "id": "9448015",
-      "dataAgendamento": "2026-09-29",
+      "dataAgendamento": "2026-10-02",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Troca",
@@ -4041,12 +4041,12 @@
       "celular": "4196476177",
       "email": "",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9477445",
-      "dataAgendamento": "2026-10-01",
+      "dataAgendamento": "2026-10-02",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Venda",
@@ -4063,7 +4063,7 @@
     },
     {
       "id": "9476778",
-      "dataAgendamento": "2026-10-01",
+      "dataAgendamento": "2026-10-02",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "não informado(celulas em branco)",
@@ -4114,7 +4114,7 @@
     },
     {
       "id": "9476729",
-      "dataAgendamento": "2026-10-01",
+      "dataAgendamento": "2026-10-02",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Compra",
@@ -4148,7 +4148,7 @@
     },
     {
       "id": "9476822",
-      "dataAgendamento": "2026-10-01",
+      "dataAgendamento": "2026-10-02",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Celso Fofo",
       "tipoProposta": "Troca",
@@ -4165,7 +4165,7 @@
     },
     {
       "id": "9461891",
-      "dataAgendamento": "2026-09-30",
+      "dataAgendamento": "2026-10-02",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "não informado(celulas em branco)",
@@ -4177,8 +4177,8 @@
       "celular": "41995687369",
       "email": "emanuelmarcondes06@gmail.com",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9475652",
@@ -4267,7 +4267,7 @@
     },
     {
       "id": "9464443",
-      "dataAgendamento": "2026-09-30",
+      "dataAgendamento": "2026-10-01",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "não informado(celulas em branco)",
@@ -4279,8 +4279,8 @@
       "celular": "4197806685",
       "email": "",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9472306",
@@ -4335,7 +4335,7 @@
     },
     {
       "id": "9437450",
-      "dataAgendamento": "2026-09-28",
+      "dataAgendamento": "2026-10-01",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "não informado(celulas em branco)",
@@ -4347,12 +4347,12 @@
       "celular": "4196784188",
       "email": "",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9464932",
-      "dataAgendamento": "2026-09-30",
+      "dataAgendamento": "2026-10-01",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -4364,8 +4364,8 @@
       "celular": "4195148000",
       "email": "jcarloscombate@gmail.com",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9132729",
@@ -4454,7 +4454,7 @@
     },
     {
       "id": "9426488",
-      "dataAgendamento": "2026-09-28",
+      "dataAgendamento": "2026-09-30",
       "sdr": "Matheus Imbroinise",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Compra",
@@ -4607,7 +4607,7 @@
     },
     {
       "id": "9423915",
-      "dataAgendamento": "2026-09-27",
+      "dataAgendamento": "2026-09-29",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -4811,7 +4811,7 @@
     },
     {
       "id": "9418396",
-      "dataAgendamento": "2026-09-27",
+      "dataAgendamento": "2026-09-28",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Troca",
@@ -4862,7 +4862,7 @@
     },
     {
       "id": "9418266",
-      "dataAgendamento": "2026-09-27",
+      "dataAgendamento": "2026-09-28",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Troca",
@@ -5185,7 +5185,7 @@
     },
     {
       "id": "9452341",
-      "dataAgendamento": "2026-09-29",
+      "dataAgendamento": "2026-09-30",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Venda",
@@ -5253,7 +5253,7 @@
     },
     {
       "id": "9446608",
-      "dataAgendamento": "2026-09-29",
+      "dataAgendamento": "2026-09-30",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "não informado(celulas em branco)",
@@ -5576,7 +5576,7 @@
     },
     {
       "id": "9437274",
-      "dataAgendamento": "2026-09-28",
+      "dataAgendamento": "2026-09-29",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Leonardo Kochani",
       "tipoProposta": "Venda",
@@ -75752,7 +75752,7 @@
     },
     {
       "id": "9547446",
-      "dataAgendamento": "2026-10-08",
+      "dataAgendamento": "2026-10-19",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Venda",
@@ -75765,11 +75765,11 @@
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9586077",
-      "dataAgendamento": "2026-10-12",
+      "dataAgendamento": "2026-10-19",
       "sdr": "BRUNO PROSPECÇÃO",
       "vendedor": "BRUNO PROSPECÇÃO",
       "tipoProposta": "Consignação",
@@ -75782,7 +75782,7 @@
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9674470",
@@ -75888,7 +75888,7 @@
     },
     {
       "id": "9667118",
-      "dataAgendamento": "2026-10-18",
+      "dataAgendamento": "2026-10-19",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Compra",
@@ -76024,7 +76024,7 @@
     },
     {
       "id": "9586075",
-      "dataAgendamento": "2026-10-12",
+      "dataAgendamento": "2026-10-17",
       "sdr": "Andressa K B Kreia",
       "vendedor": "Márcia",
       "tipoProposta": "Compra",
@@ -76037,7 +76037,7 @@
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9653656",
@@ -76058,7 +76058,7 @@
     },
     {
       "id": "9578172",
-      "dataAgendamento": "2026-10-11",
+      "dataAgendamento": "2026-10-17",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Compra",
@@ -76071,11 +76071,11 @@
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9646825",
-      "dataAgendamento": "2026-10-16",
+      "dataAgendamento": "2026-10-17",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Ewerton Rocha De Salles",
       "tipoProposta": "Venda",
@@ -76177,7 +76177,7 @@
     },
     {
       "id": "9571113",
-      "dataAgendamento": "2026-10-10",
+      "dataAgendamento": "2026-10-16",
       "sdr": "Liriane Larissa Ribeiro",
       "vendedor": "Liriane Larissa Ribeiro",
       "tipoProposta": "Compra",
@@ -76190,11 +76190,11 @@
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9556521",
-      "dataAgendamento": "2026-10-09",
+      "dataAgendamento": "2026-10-16",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Consignação",
@@ -76207,11 +76207,11 @@
       "email": "thiago-souza-s@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9634107",
-      "dataAgendamento": "2026-10-15",
+      "dataAgendamento": "2026-10-16",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -76224,11 +76224,11 @@
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9606736",
-      "dataAgendamento": "2026-10-13",
+      "dataAgendamento": "2026-10-16",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Troca",
@@ -76241,7 +76241,7 @@
       "email": "ZERENATOSA@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9629883",
@@ -76262,7 +76262,7 @@
     },
     {
       "id": "9574986",
-      "dataAgendamento": "2026-10-10",
+      "dataAgendamento": "2026-10-15",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Filipe Portes",
       "tipoProposta": "Venda",
@@ -76279,7 +76279,7 @@
     },
     {
       "id": "9591208",
-      "dataAgendamento": "2026-10-12",
+      "dataAgendamento": "2026-10-15",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Compra",
@@ -76296,7 +76296,7 @@
     },
     {
       "id": "9615887",
-      "dataAgendamento": "2026-10-14",
+      "dataAgendamento": "2026-10-15",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Marquinhos",
       "tipoProposta": "Compra",
@@ -76313,7 +76313,7 @@
     },
     {
       "id": "9618062",
-      "dataAgendamento": "2026-10-14",
+      "dataAgendamento": "2026-10-15",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Compra",
@@ -76330,7 +76330,7 @@
     },
     {
       "id": "9601433",
-      "dataAgendamento": "2026-10-13",
+      "dataAgendamento": "2026-10-14",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Filipe Portes",
       "tipoProposta": "Compra",
@@ -76381,7 +76381,7 @@
     },
     {
       "id": "9507104",
-      "dataAgendamento": "2026-10-05",
+      "dataAgendamento": "2026-10-09",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Compra",
@@ -76398,7 +76398,7 @@
     },
     {
       "id": "9417919",
-      "dataAgendamento": "2026-09-27",
+      "dataAgendamento": "2026-10-08",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Filipe Portes",
       "tipoProposta": "Troca",
@@ -76410,8 +76410,8 @@
       "celular": "4298088285",
       "email": "",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q1"
     },
     {
       "id": "9537446",
@@ -76483,7 +76483,7 @@
     },
     {
       "id": "9656459",
-      "dataAgendamento": "2026-10-17",
+      "dataAgendamento": "2026-10-19",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Celso Fofo",
       "tipoProposta": "Venda",
@@ -76755,7 +76755,7 @@
     },
     {
       "id": "9545602",
-      "dataAgendamento": "2026-10-08",
+      "dataAgendamento": "2026-10-16",
       "sdr": "BRUNO PROSPECÇÃO",
       "vendedor": "BRUNO PROSPECÇÃO",
       "tipoProposta": "Venda",
@@ -76768,7 +76768,7 @@
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9643400",
@@ -76789,7 +76789,7 @@
     },
     {
       "id": "9591744",
-      "dataAgendamento": "2026-10-12",
+      "dataAgendamento": "2026-10-16",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Venda",
@@ -76802,7 +76802,7 @@
       "email": "reinaldorms08@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9407922",
@@ -76942,7 +76942,7 @@
     },
     {
       "id": "9565105",
-      "dataAgendamento": "2026-10-09",
+      "dataAgendamento": "2026-10-15",
       "sdr": "Andressa K B Kreia",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Venda",
@@ -77095,7 +77095,7 @@
     },
     {
       "id": "9658371",
-      "dataAgendamento": "2026-10-17",
+      "dataAgendamento": "2026-10-19",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Troca",
@@ -77146,7 +77146,7 @@
     },
     {
       "id": "9661784",
-      "dataAgendamento": "2026-10-18",
+      "dataAgendamento": "2026-10-19",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Compra",
@@ -77265,7 +77265,7 @@
     },
     {
       "id": "9417927",
-      "dataAgendamento": "2026-09-27",
+      "dataAgendamento": "2026-10-22",
       "sdr": "Andressa K B Kreia",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Consignação",
@@ -77277,8 +77277,8 @@
       "celular": "41992553347",
       "email": "",
       "canal": "Pré-Venda",
-      "monthKey": "2026-09",
-      "periodKey": "2026-09-Q2"
+      "monthKey": "2026-10",
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9713555",
@@ -77299,7 +77299,7 @@
     },
     {
       "id": "9709853",
-      "dataAgendamento": "2026-10-21",
+      "dataAgendamento": "2026-10-22",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Celso Fofo",
       "tipoProposta": "Venda",
@@ -77384,7 +77384,7 @@
     },
     {
       "id": "9709862",
-      "dataAgendamento": "2026-10-21",
+      "dataAgendamento": "2026-10-22",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Celso Fofo",
       "tipoProposta": "Venda",
@@ -77469,7 +77469,7 @@
     },
     {
       "id": "9667761",
-      "dataAgendamento": "2026-10-18",
+      "dataAgendamento": "2026-10-21",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -77503,7 +77503,7 @@
     },
     {
       "id": "9694267",
-      "dataAgendamento": "2026-10-20",
+      "dataAgendamento": "2026-10-21",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Celso Fofo",
       "tipoProposta": "Compra",
@@ -77520,7 +77520,7 @@
     },
     {
       "id": "9668205",
-      "dataAgendamento": "2026-10-19",
+      "dataAgendamento": "2026-10-21",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Márcia",
       "tipoProposta": "Compra",
@@ -77537,7 +77537,7 @@
     },
     {
       "id": "9578174",
-      "dataAgendamento": "2026-10-11",
+      "dataAgendamento": "2026-10-21",
       "sdr": "SIBELE CRISTIANE BARANHUK DA COSTA",
       "vendedor": "SIBELE CRISTIANE BARANHUK DA COSTA",
       "tipoProposta": "não informado(celulas em branco)",
@@ -77550,7 +77550,7 @@
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9701606",
@@ -77571,7 +77571,7 @@
     },
     {
       "id": "9539674",
-      "dataAgendamento": "2026-10-07",
+      "dataAgendamento": "2026-10-21",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Venda",
@@ -77584,7 +77584,7 @@
       "email": "sandro_mila@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9701323",
@@ -77622,7 +77622,7 @@
     },
     {
       "id": "9692773",
-      "dataAgendamento": "2026-10-20",
+      "dataAgendamento": "2026-10-21",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Compra",
@@ -77656,7 +77656,7 @@
     },
     {
       "id": "9690259",
-      "dataAgendamento": "2026-10-20",
+      "dataAgendamento": "2026-10-21",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Venda",
@@ -77758,7 +77758,7 @@
     },
     {
       "id": "9676545",
-      "dataAgendamento": "2026-10-19",
+      "dataAgendamento": "2026-10-20",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Filipe Portes",
       "tipoProposta": "Venda",
@@ -77809,7 +77809,7 @@
     },
     {
       "id": "9680237",
-      "dataAgendamento": "2026-10-19",
+      "dataAgendamento": "2026-10-20",
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Venda",
@@ -77894,7 +77894,7 @@
     },
     {
       "id": "9663721",
-      "dataAgendamento": "2026-10-18",
+      "dataAgendamento": "2026-10-19",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Venda",
@@ -77911,7 +77911,7 @@
     },
     {
       "id": "9632289",
-      "dataAgendamento": "2026-10-15",
+      "dataAgendamento": "2026-10-16",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Venda",
@@ -77924,7 +77924,7 @@
       "email": "marsicanoana@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
-      "periodKey": "2026-10-Q1"
+      "periodKey": "2026-10-Q2"
     },
     {
       "id": "9480104",
@@ -510470,16 +510470,6 @@
       "celular": "(41)99982-3150"
     },
     {
-      "id": "9634107",
-      "dataFinalizado": "2026-10-17",
-      "sdr": "Allan Junior Dos Santos Ramos",
-      "vendedor": "Gabriel VENDAS",
-      "tipoProposta": "Venda",
-      "origem": "WhatsApp Site",
-      "cliente": "~LeoPanneitz~",
-      "celular": "(47)8863-9047"
-    },
-    {
       "id": "9646825",
       "dataFinalizado": "2026-10-17",
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -510588,16 +510578,6 @@
       "origem": "Facebook Ads",
       "cliente": "Ale",
       "celular": "(41)99845-4768"
-    },
-    {
-      "id": "9507104",
-      "dataFinalizado": "2026-10-15",
-      "sdr": "Thayna PRE-VENDAS",
-      "vendedor": "Gabriel VENDAS",
-      "tipoProposta": "Compra",
-      "origem": "WhatsApp Facebook Ads",
-      "cliente": "(Adilso) J.A sucatas de Ar Condicionados",
-      "celular": "(41)9780-6685"
     },
     {
       "id": "9524572",
