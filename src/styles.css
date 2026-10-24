@@ -717,6 +717,10 @@ button.kpi-card.is-on {
   min-width: 240px;
 }
 
+.erro-toolbar input[type="date"] {
+  min-width: 150px;
+}
+
 .erro-legenda {
   display: flex;
   flex-wrap: wrap;

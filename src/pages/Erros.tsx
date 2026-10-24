@@ -9,6 +9,7 @@ import { SiteCredit } from "../components/SiteCredit";
 import { InteractiveTable } from "../components/InteractiveTable";
 import { Button } from "../components/ui/button";
 import { useSchedulingStore } from "../hooks/useSchedulingStore";
+import { currentMonthRange } from "../lib/dates";
 import {
   buildErrosCruzamento,
   ERRO_CATEGORIAS,
@@ -39,6 +40,38 @@ function formatWhen(iso?: string): string {
   return date.toLocaleString("pt-BR");
 }
 
+function formatDia(iso: string): string {
+  const [ano, mes, dia] = iso.split("-");
+  if (!ano || !mes || !dia) return iso;
+  return `${dia}/${mes}/${ano}`;
+}
+
+function rotuloPeriodo(from: string, to: string): string {
+  if (!from && !to) return "todo o período";
+  if (from && to && from.slice(0, 7) === to.slice(0, 7) && from.endsWith("-01")) {
+    const [ano, mes] = from.split("-").map(Number);
+    const fim = new Date(ano, mes, 0).getDate();
+    if (to === `${from.slice(0, 7)}-${String(fim).padStart(2, "0")}`) {
+      const nome = new Date(ano, mes - 1, 1).toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric",
+      });
+      return nome.charAt(0).toUpperCase() + nome.slice(1);
+    }
+  }
+  if (from && to) return `${formatDia(from)} a ${formatDia(to)}`;
+  if (from) return `a partir de ${formatDia(from)}`;
+  return `até ${formatDia(to)}`;
+}
+
+function dataNoPeriodo(data: string, from: string, to: string): boolean {
+  if (!from && !to) return true;
+  if (!data) return false;
+  if (from && data < from) return false;
+  if (to && data > to) return false;
+  return true;
+}
+
 type PatioMotion = {
   x: (value: number) => void;
   y: (value: number) => void;
@@ -48,6 +81,7 @@ type PatioMotion = {
 export function Erros() {
   const { dataset, loading, error } = useSchedulingStore();
   const [categoria, setCategoria] = useState<ErroCategoria | "todos">("todos");
+  const [periodo, setPeriodo] = useState(() => currentMonthRange());
   const [query, setQuery] = useState("");
   const [copyNote, setCopyNote] = useState<string | null>(null);
   const cena = useRef<HTMLDivElement>(null);
@@ -89,14 +123,32 @@ export function Erros() {
     () => (dataset ? buildErrosCruzamento(dataset) : null),
     [dataset]
   );
+  const noPeriodo = useMemo(() => {
+    const linhas = report?.linhas || [];
+    const erros = report?.rows || [];
+    const categorias = new Map<string, Set<ErroCategoria>>();
+    for (const row of erros) {
+      if (!dataNoPeriodo(row.data, periodo.from, periodo.to)) continue;
+      const set = categorias.get(row.id) || new Set<ErroCategoria>();
+      set.add(row.categoria);
+      categorias.set(row.id, set);
+    }
+    return linhas
+      .filter((linha) => categorias.has(linha.id))
+      .map((linha) => ({
+        ...linha,
+        categorias: linha.categorias.filter((item) => categorias.get(linha.id)?.has(item)),
+      }));
+  }, [report, periodo]);
+
   const counts = useMemo(() => {
     const map = new Map<ErroCategoria, number>();
     for (const item of ERRO_CATEGORIAS) map.set(item.id, 0);
-    for (const row of report?.linhas || []) {
+    for (const row of noPeriodo) {
       for (const item of row.categorias) map.set(item, (map.get(item) || 0) + 1);
     }
     return map;
-  }, [report]);
+  }, [noPeriodo]);
 
   const chartData = useMemo(
     () =>
@@ -109,7 +161,7 @@ export function Erros() {
   );
 
   const visible = useMemo(() => {
-    const rows = report?.linhas || [];
+    const rows = noPeriodo;
     const q = query.trim().toLowerCase();
     return rows.filter((row) => {
       if (categoria !== "todos" && !row.categorias.includes(categoria)) return false;
@@ -117,7 +169,7 @@ export function Erros() {
       const blob = `${row.id} ${row.estaEm} ${row.faltaEm} ${row.observacao} ${row.responsavel} ${row.cliente}`.toLowerCase();
       return blob.includes(q);
     });
-  }, [report, categoria, query]);
+  }, [noPeriodo, categoria, query]);
 
   async function copyIds() {
     const ids = [...new Set(visible.map((row) => row.id))].join("\n");
@@ -150,8 +202,8 @@ export function Erros() {
             <h1>Erros</h1>
             <p>
               {report
-                ? `${report.linhas.length.toLocaleString("pt-BR")} IDs na base${
-                    formatWhen(dataset?.updatedAt) ? `, atualizada em ${formatWhen(dataset?.updatedAt)}` : ""
+                ? `${noPeriodo.length.toLocaleString("pt-BR")} IDs em ${rotuloPeriodo(periodo.from, periodo.to)}${
+                    formatWhen(dataset?.updatedAt) ? `, base atualizada em ${formatWhen(dataset?.updatedAt)}` : ""
                   }.`
                 : "Cruzamento das planilhas."}
             </p>
@@ -168,6 +220,43 @@ export function Erros() {
 
         {report ? (
           <>
+            <section className="card">
+              <h2>
+                Período
+                <InfoTip>
+                  A página abre no mês vigente. A data do erro é a do agendamento, do atendimento ou do sucesso,
+                  conforme a planilha em que ele apareceu.
+                </InfoTip>
+              </h2>
+              <div className="erro-toolbar">
+                <label>
+                  De
+                  <input
+                    type="date"
+                    value={periodo.from}
+                    max={periodo.to || undefined}
+                    onChange={(event) => setPeriodo((atual) => ({ ...atual, from: event.target.value }))}
+                  />
+                </label>
+                <label>
+                  Até
+                  <input
+                    type="date"
+                    value={periodo.to}
+                    min={periodo.from || undefined}
+                    onChange={(event) => setPeriodo((atual) => ({ ...atual, to: event.target.value }))}
+                  />
+                </label>
+                <Button type="button" variant="secondary" onClick={() => setPeriodo(currentMonthRange())}>
+                  Mês vigente
+                </Button>
+                <Button type="button" variant="secondary" onClick={() => setPeriodo({ from: "", to: "" })}>
+                  Todo o período
+                </Button>
+              </div>
+              {noPeriodo.length === 0 ? <p className="muted">Nenhum ID neste período.</p> : null}
+            </section>
+
             <section className="card patio-grafico">
               <h2>
                 IDs por tipo de falta
@@ -177,8 +266,8 @@ export function Erros() {
               </h2>
               <FaltasChart data={chartData} categoria={categoria} onPick={escolherBarra} />
               <h3 className="faltas-subtitulo">Falta em cada planilha</h3>
-              <FaltasPlanilha linhas={report.linhas} />
-              {totalFora != null && totalFora > amostra ? (
+              <FaltasPlanilha linhas={noPeriodo} />
+              {!periodo.from && !periodo.to && totalFora != null && totalFora > amostra ? (
                 <p className="muted">
                   A última planilha de insucessos deixou {totalFora.toLocaleString("pt-BR")} IDs fora da agenda. O
                   log guardou {amostra.toLocaleString("pt-BR")} números, e a tabela mostra esses.
