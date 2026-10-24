@@ -19,5 +19,10 @@ export default defineConfig(({ command }) => ({
   base: command === "build" ? "./" : "/",
   server: {
     port: 5173,
+    watch: {
+      // Skills e o mapa do código não entram na página. Vigiar essas pastas
+      // derruba o servidor local quando o Windows trava um arquivo (EBUSY).
+      ignored: ["**/.agents/**", "**/graphify-out/**"],
+    },
   },
 }));
