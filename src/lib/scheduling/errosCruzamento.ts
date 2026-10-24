@@ -23,8 +23,8 @@ export type ErroCruzamento = {
   responsavel: string;
 };
 
-/** Está na planilha, falta que é o erro, ou ausência que não é o erro deste ID. */
-export type PresencaPlanilha = "esta" | "nao" | "nao-erro";
+/** Está na planilha, falta que é o erro, ausência que não é o erro, ou planilha que não se aplica. */
+export type PresencaPlanilha = "esta" | "nao" | "nao-erro" | "nao-aplica";
 
 export type ErroIdLinha = {
   id: string;
@@ -133,7 +133,8 @@ export function buildErrosCruzamento(dataset: SchedulingDataset): ErrosCruzament
   };
 
   for (const item of items) {
-    if (item.status === "Insucesso" && !item.motivoInsucesso?.trim()) {
+    const ehSucesso = item.status === "Sucesso" || sucessoIds.has(item.id);
+    if (item.status === "Insucesso" && !ehSucesso && !item.motivoInsucesso?.trim()) {
       push({
         id: item.id,
         categoria: "insucesso-sem-motivo",
@@ -345,6 +346,7 @@ function linhasPorId(input: {
     const naPlanilhaInsucessos =
       has("insucesso-sem-agenda") ||
       Boolean(item?.status === "Insucesso" && item.motivoInsucesso?.trim());
+    const ehSucesso = Boolean(sucesso) || item?.status === "Sucesso";
 
     const presenca = {
       leads: celula(
@@ -357,7 +359,9 @@ function linhasPorId(input: {
       ),
       agenda: celula(Boolean(item), has("sucesso-sem-agenda") || has("insucesso-sem-agenda")),
       sucessos: celula(Boolean(sucesso), false),
-      insucessos: celula(naPlanilhaInsucessos, has("insucesso-sem-motivo")),
+      insucessos: ehSucesso
+        ? "nao-aplica"
+        : celula(naPlanilhaInsucessos, has("insucesso-sem-motivo")),
     };
 
     const estaEm = PLANILHAS.filter(([key]) => presenca[key] === "esta")

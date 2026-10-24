@@ -24,6 +24,7 @@ const marca = `${import.meta.env.BASE_URL}brand/belloscar-logo.png`;
 function PresencaCell({ value }: { value: PresencaPlanilha }) {
   if (value === "esta") return <span className="num-ok">Está</span>;
   if (value === "nao") return <span className="num-bad">Não está</span>;
+  if (value === "nao-aplica") return <span className="muted">—</span>;
   return <span className="muted">Não está</span>;
 }
 
@@ -284,13 +285,15 @@ export function Erros() {
                   : ERRO_CATEGORIAS.find((item) => item.id === categoria)?.label}
                 <InfoTip>
                   Verde: o ID está nessa planilha. Vermelho: não está, e essa falta é o erro. Cinza: não está, e o
-                  erro deste ID está em outra coluna.
+                  erro deste ID está em outra coluna. Sucesso fica só na planilha de sucessos: o traço em
+                  Insucessos não é erro.
                 </InfoTip>
               </h2>
               <p className="erro-legenda">
                 <span className="num-ok">Está</span>
                 <span className="num-bad">Não está</span>
                 <span className="muted">Não está, sem ser o erro</span>
+                <span className="muted">— sucesso, insucesso não se aplica</span>
               </p>
               <div className="erro-toolbar">
                 <label>
