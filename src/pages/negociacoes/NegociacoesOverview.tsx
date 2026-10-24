@@ -6,11 +6,29 @@ import { DygraphLinhas } from "../../components/viz/DygraphLinhas";
 import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
+function vendedorDeRepasse(nome: string): boolean {
+  const chave = nome
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+  return chave === "filipe portes";
+}
+
 export function NegociacoesOverview() {
   const { analytics } = useNegociacoesAnalyticsContext();
   if (!analytics) return null;
 
-  const { kpis, periodSeries, statusRows } = analytics;
+  const { kpis, periodSeries, statusRows, vendedores } = analytics;
+  const lider = (campo: "vendas" | "trocas" | "compras" | "consignacoes") => {
+    const top = vendedores
+      .filter((row) => row[campo] > 0 && !vendedorDeRepasse(row.vendedor))
+      .sort(
+        (a, b) => b[campo] - a[campo] || a.vendedor.localeCompare(b.vendedor, "pt-BR")
+      )[0];
+    return top ? `${top.vendedor} · ${top[campo]}` : "";
+  };
 
   return (
     <>
@@ -30,18 +48,22 @@ export function NegociacoesOverview() {
           <div className="kpi-card success num-ok">
             <h3>Vendas</h3>
             <p>{kpis.vendas}</p>
+            {lider("vendas") ? <small className="kpi-lider">{lider("vendas")}</small> : null}
           </div>
           <div className="kpi-card">
             <h3>Trocas</h3>
             <p>{kpis.trocas}</p>
+            {lider("trocas") ? <small className="kpi-lider">{lider("trocas")}</small> : null}
           </div>
           <div className="kpi-card">
             <h3>Compras</h3>
             <p>{kpis.compras}</p>
+            {lider("compras") ? <small className="kpi-lider">{lider("compras")}</small> : null}
           </div>
           <div className="kpi-card success">
             <h3>Consignações</h3>
             <p>{kpis.consignacoes}</p>
+            {lider("consignacoes") ? <small className="kpi-lider">{lider("consignacoes")}</small> : null}
           </div>
         </div>
       </div>

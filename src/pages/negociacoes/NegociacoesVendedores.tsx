@@ -1,9 +1,6 @@
 import { InfoTip } from "../../components/InfoTip";
 import { InteractiveTable } from "../../components/InteractiveTable";
-import { SeriesChart } from "../../components/charts/SeriesChart";
 import { ShareDonut } from "../../components/charts/ShareDonut";
-import { VegaBarras } from "../../components/viz/VegaBarras";
-import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
 export function NegociacoesVendedores() {
@@ -15,29 +12,11 @@ export function NegociacoesVendedores() {
   return (
     <>
       <div className="charts">
-        <SeriesChart
-          title="Vendas, trocas e compras"
-          data={vendedores}
-          xKey="vendedor"
-          kind="bar"
-          series={[
-            { key: "vendas", name: "Vendas", color: CHART_COLORS.green },
-            { key: "trocas", name: "Trocas", color: CHART_COLORS.blue },
-            { key: "compras", name: "Compras", color: CHART_COLORS.charcoal },
-          ]}
-        />
         <ShareDonut
           title="Total por vendedor"
           data={vendedores.map((row) => ({ label: row.vendedor, value: row.total }))}
         />
       </div>
-      <VegaBarras
-        titulo="Vendas por vendedor"
-        dica="Passe o mouse para comparar a altura de cada vendedor."
-        dados={vendedores.map((row) => ({ nome: row.vendedor, vendas: row.vendas }))}
-        nome="nome"
-        valor="vendas"
-      />
       <div className="card">
         <h2>
           Desempenho por vendedor
