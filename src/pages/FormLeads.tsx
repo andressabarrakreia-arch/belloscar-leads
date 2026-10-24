@@ -2,6 +2,10 @@ import { useMemo, useState } from "react";
 import { ClearFiltersButton, filterActiveClass } from "../components/ClearFiltersButton";
 import { FiltersPanel } from "../components/FiltersPanel";
 import { InfoTip } from "../components/InfoTip";
+import { InteractiveTable } from "../components/InteractiveTable";
+import { SeriesChart } from "../components/charts/SeriesChart";
+import { ShareDonut } from "../components/charts/ShareDonut";
+import { CHART_COLORS } from "../components/charts/chartTheme";
 import { Card } from "../components/ui/card";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
@@ -179,39 +183,47 @@ export function FormLeads() {
             </Card>
           </div>
 
+          <div className="charts">
+            <SeriesChart
+              title="Resultado por anúncio"
+              tip="Leads, agendados, visitas e sucessos já somados por formulário."
+              data={report.campanhas}
+              xKey="formulario"
+              kind="bar"
+              series={[
+                { key: "leads", name: "Leads", color: CHART_COLORS.charcoal },
+                { key: "agendados", name: "Agendados", color: CHART_COLORS.gray },
+                { key: "visitas", name: "Visitas", color: CHART_COLORS.blue },
+                { key: "sucessos", name: "Sucessos", color: CHART_COLORS.green },
+              ]}
+            />
+            <ShareDonut
+              title="Sucessos por anúncio"
+              data={report.campanhas.map((row) => ({ label: row.formulario, value: row.sucessos }))}
+            />
+          </div>
+
           <div className="card">
             <h2>Cruzados pelo telefone</h2>
+            <InteractiveTable
+              rows={report.cruzados.map((row, index) => ({ ...row, key: `${row.id}-${row.anuncio}-${index}` }))}
+              rowKey={(row) => row.key}
+              columns={[
+                { key: "id", label: "ID", sortValue: (row) => row.id, render: (row) => <strong>{row.id}</strong> },
+                { key: "atendente", label: "Atendente", sortValue: (row) => row.atendente },
+                { key: "agendado", label: "Agendado", sortValue: (row) => (row.agendado ? 1 : 0), render: (row) => simNao(row.agendado) },
+                { key: "vendedor", label: "Vendedor", sortValue: (row) => row.vendedor },
+                { key: "visita", label: "Visita", sortValue: (row) => (row.visita ? 1 : 0), render: (row) => simNao(row.visita) },
+                { key: "data", label: "Data da visita", sortValue: (row) => row.dataVisita || "", render: (row) => formatIso(row.dataVisita) },
+                { key: "sucesso", label: "Sucesso", sortValue: (row) => (row.sucesso ? 1 : 0), render: (row) => simNao(row.sucesso) },
+                { key: "anuncio", label: "Anúncio", sortValue: (row) => row.anuncio },
+              ]}
+            />
             <div className="table-scroll">
               <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Atendente</th>
-                    <th>Agendado</th>
-                    <th>Vendedor</th>
-                    <th>Visita</th>
-                    <th>Data da visita</th>
-                    <th>Sucesso</th>
-                    <th>Anúncio</th>
-                  </tr>
-                </thead>
                 <tbody>
-                  {report.cruzados.map((row, index) => (
-                    <tr key={`${row.id}-${row.anuncio}-${index}`}>
-                      <td>
-                        <strong>{row.id}</strong>
-                      </td>
-                      <td>{row.atendente}</td>
-                      <td>{simNao(row.agendado)}</td>
-                      <td>{row.vendedor}</td>
-                      <td>{simNao(row.visita)}</td>
-                      <td>{formatIso(row.dataVisita)}</td>
-                      <td>{simNao(row.sucesso)}</td>
-                      <td>{row.anuncio}</td>
-                    </tr>
-                  ))}
                   <tr>
-                    <td colSpan={8}>
+                    <td>
                       <button
                         type="button"
                         className="expand-toggle"

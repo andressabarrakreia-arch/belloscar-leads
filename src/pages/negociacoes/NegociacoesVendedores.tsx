@@ -1,4 +1,8 @@
 import { InfoTip } from "../../components/InfoTip";
+import { InteractiveTable } from "../../components/InteractiveTable";
+import { SeriesChart } from "../../components/charts/SeriesChart";
+import { ShareDonut } from "../../components/charts/ShareDonut";
+import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
 export function NegociacoesVendedores() {
@@ -9,46 +13,41 @@ export function NegociacoesVendedores() {
 
   return (
     <>
+      <div className="charts">
+        <SeriesChart
+          title="Vendas, trocas e compras"
+          data={vendedores}
+          xKey="vendedor"
+          kind="bar"
+          series={[
+            { key: "vendas", name: "Vendas", color: CHART_COLORS.green },
+            { key: "trocas", name: "Trocas", color: CHART_COLORS.blue },
+            { key: "compras", name: "Compras", color: CHART_COLORS.charcoal },
+          ]}
+        />
+        <ShareDonut
+          title="Total por vendedor"
+          data={vendedores.map((row) => ({ label: row.vendedor, value: row.total }))}
+        />
+      </div>
       <div className="card">
         <h2>
           Desempenho por vendedor
           <InfoTip>Vendas + Trocas · Consignações · Compras · Total (filtro atual).</InfoTip>
         </h2>
-        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Vendedor</th>
-                <th>Vendas</th>
-                <th>Trocas</th>
-                <th>Vendas + Trocas</th>
-                <th>Consignações</th>
-                <th>Compras</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {vendedores.map((r) => (
-                <tr key={r.vendedor}>
-                  <td>{r.vendedor}</td>
-                  <td className="num-ok">{r.vendas}</td>
-                  <td>{r.trocas}</td>
-                  <td>{r.vendasMaisTrocas}</td>
-                  <td>{r.consignacoes}</td>
-                  <td>{r.compras}</td>
-                  <td>{r.total}</td>
-                </tr>
-              ))}
-              {vendedores.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="muted">
-                    Sem vendedores no filtro atual.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <InteractiveTable
+          rows={vendedores}
+          rowKey={(row) => row.vendedor}
+          columns={[
+            { key: "vendedor", label: "Vendedor", sortValue: (row) => row.vendedor },
+            { key: "vendas", label: "Vendas", sortValue: (row) => row.vendas, render: (row) => <span className="num-ok">{row.vendas}</span> },
+            { key: "trocas", label: "Trocas", sortValue: (row) => row.trocas },
+            { key: "vt", label: "Vendas + Trocas", sortValue: (row) => row.vendasMaisTrocas },
+            { key: "consignacoes", label: "Consignações", sortValue: (row) => row.consignacoes },
+            { key: "compras", label: "Compras", sortValue: (row) => row.compras },
+            { key: "total", label: "Total", sortValue: (row) => row.total },
+          ]}
+        />
       </div>
 
       <div className="card">

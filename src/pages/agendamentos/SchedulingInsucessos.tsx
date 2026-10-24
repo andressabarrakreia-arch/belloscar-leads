@@ -1,4 +1,8 @@
 import { InfoTip } from "../../components/InfoTip";
+import { InteractiveTable } from "../../components/InteractiveTable";
+import { SeriesChart } from "../../components/charts/SeriesChart";
+import { ShareDonut } from "../../components/charts/ShareDonut";
+import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { MotivoByPersonTable } from "../../components/scheduling/MotivoByPersonTable";
 import { MotivoDistributionChart } from "../../components/scheduling/MotivoDistributionChart";
 import { MotivoLabel } from "../../components/scheduling/MotivoLabel";
@@ -45,6 +49,25 @@ export function SchedulingInsucessos() {
         </div>
       </div>
 
+      <div className="charts">
+        <ShareDonut
+          title="Participação dos motivos"
+          tip="A mesma quantidade da tabela de ranking."
+          data={motivosInsucesso.map((item) => ({ label: item.motivo, value: item.quantidade }))}
+        />
+        <SeriesChart
+          title="Recorte do resumo"
+          kind="bar"
+          xKey="nome"
+          data={[
+            { nome: "Agendamentos", valor: insucessoKpis.agendamentos },
+            { nome: "Insucessos", valor: insucessoKpis.insucessos },
+            { nome: "Com motivo", valor: insucessoKpis.comMotivo },
+          ]}
+          series={[{ key: "valor", name: "Quantidade", color: CHART_COLORS.red }]}
+        />
+      </div>
+
       <MotivoDistributionChart
         data={motivosInsucesso.map((m) => ({
           label: m.motivo,
@@ -60,35 +83,25 @@ export function SchedulingInsucessos() {
           Motivos · ranking
           <InfoTip>Todos os motivos do recorte, ordenados por volume.</InfoTip>
         </h2>
-        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Motivo</th>
-                <th>Qtd</th>
-                <th>% dos insucessos</th>
-              </tr>
-            </thead>
-            <tbody>
-              {motivosInsucesso.map((m) => (
-                <tr key={m.motivo}>
-                  <td>
-                    <MotivoLabel motivo={m.motivo} ids={m.ids} />
-                  </td>
-                  <td>{m.quantidade}</td>
-                  <td>{m.percentual}%</td>
-                </tr>
-              ))}
-              {motivosInsucesso.length === 0 && (
-                <tr>
-                  <td colSpan={3} className="muted">
-                    Nenhum insucesso no filtro atual.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <InteractiveTable
+          rows={motivosInsucesso}
+          rowKey={(row) => row.motivo}
+          columns={[
+            {
+              key: "motivo",
+              label: "Motivo",
+              sortValue: (row) => row.motivo,
+              render: (row) => <MotivoLabel motivo={row.motivo} ids={row.ids} />,
+            },
+            { key: "qtd", label: "Qtd", sortValue: (row) => row.quantidade },
+            {
+              key: "pct",
+              label: "% dos insucessos",
+              sortValue: (row) => row.percentual,
+              render: (row) => `${row.percentual}%`,
+            },
+          ]}
+        />
       </div>
 
       <MotivoByPersonTable

@@ -1,7 +1,4 @@
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from "recharts";
-import { InfoTip } from "../InfoTip";
-
-const COLORS = ["#c02026", "#2563eb", "#16a34a", "#404041", "#e21e26", "#929497", "#1e3a8a"];
+import { ShareDonut } from "../charts/ShareDonut";
 
 type Props = {
   data: { label: string; value: number }[];
@@ -14,35 +11,5 @@ export function ProposalDistributionChart({
   title = "Distribuição de propostas",
   subtitle = "Compra, Venda, Troca, Consignação, Financiamento e não informado.",
 }: Props) {
-  return (
-    <div className="card">
-      <h2>
-        {title}
-        {subtitle ? <InfoTip>{subtitle}</InfoTip> : null}
-      </h2>
-      <div style={{ width: "100%", height: 320 }}>
-        <ResponsiveContainer>
-          <PieChart>
-            <Pie
-              data={data}
-              dataKey="value"
-              nameKey="label"
-              cx="50%"
-              cy="50%"
-              outerRadius={110}
-              label={({ name, percent }) =>
-                `${name} ${((percent as number) * 100).toFixed(0)}%`
-              }
-            >
-              {data.map((_, idx) => (
-                <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
+  return <ShareDonut title={title} tip={subtitle} data={data} />;
 }

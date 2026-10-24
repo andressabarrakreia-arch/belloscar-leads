@@ -1,3 +1,6 @@
+import { SeriesChart } from "../../components/charts/SeriesChart";
+import { ShareDonut } from "../../components/charts/ShareDonut";
+import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { SDRPerformanceTable } from "../../components/scheduling/SDRPerformanceTable";
 import {
   SdrPreVendaConvPropostaTable,
@@ -51,6 +54,28 @@ export function SchedulingPreVendas() {
 
   return (
     <>
+      <div className="charts">
+        <SeriesChart
+          title="Agenda e visita por SDR"
+          tip="Números já mostrados na tabela de pré-venda."
+          data={deskRows.map((row) => ({
+            sdr: displaySdrName(row.sdr),
+            agenda: row.totalAgendamentos,
+            visitas: row.totalVisitas,
+          }))}
+          xKey="sdr"
+          kind="bar"
+          namesAside
+          series={[
+            { key: "agenda", name: "Agendamentos", color: CHART_COLORS.charcoal },
+            { key: "visitas", name: "Visitas", color: CHART_COLORS.blue },
+          ]}
+        />
+        <ShareDonut
+          title="Sucessos da pré-venda"
+          data={deskRows.map((row) => ({ label: displaySdrName(row.sdr), value: row.totalSucesso }))}
+        />
+      </div>
       <SdrPreVendaUnifiedTable rows={deskRows} onExport={exportar} />
       <SdrPreVendaConvPropostaTable rows={convRows} />
       <SdrPreVendaTopParceirosTable rows={convRows} />

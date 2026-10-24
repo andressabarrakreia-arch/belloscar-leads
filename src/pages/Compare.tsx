@@ -1,5 +1,8 @@
 import { useMemo, useState } from "react";
 import { CampanhasFilters } from "../components/CampanhasFilters";
+import { SeriesChart } from "../components/charts/SeriesChart";
+import { CHART_COLORS } from "../components/charts/chartTheme";
+import { InteractiveTable } from "../components/InteractiveTable";
 import { ClearFiltersButton, filterActiveClass } from "../components/ClearFiltersButton";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
@@ -42,32 +45,36 @@ function KpiCompare({
   return (
     <div className="card">
       <h2>{label}</h2>
-      <div className="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Período A</th>
-              <th>Período B</th>
-              <th>Δ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.name}>
-                <td>
-                  <strong>{row.name}</strong>
-                </td>
-                <td className={row.name === "Sucessos" ? "num-ok" : undefined}>{row.va.toLocaleString("pt-BR")}</td>
-                <td className={row.name === "Sucessos" ? "num-ok" : undefined}>{row.vb.toLocaleString("pt-BR")}</td>
-                <td className={row.vb - row.va > 0 ? "positive" : row.vb - row.va < 0 ? "delta-neg" : "zero"}>
-                  {delta(row.va, row.vb)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="charts">
+        <SeriesChart
+          title="Período A e B"
+          tip="Os mesmos quatro números da tabela."
+          data={rows.map((row) => ({ nome: row.name, a: row.va, b: row.vb }))}
+          xKey="nome"
+          kind="bar"
+          series={[
+            { key: "a", name: "Período A", color: CHART_COLORS.charcoal },
+            { key: "b", name: "Período B", color: CHART_COLORS.red },
+          ]}
+        />
+        <SeriesChart
+          title="Diferença B − A"
+          data={rows.map((row) => ({ nome: row.name, delta: row.vb - row.va }))}
+          xKey="nome"
+          kind="bar"
+          series={[{ key: "delta", name: "Δ", color: CHART_COLORS.blue }]}
+        />
       </div>
+      <InteractiveTable
+        rows={rows}
+        rowKey={(row) => row.name}
+        columns={[
+          { key: "name", label: "Indicador", sortValue: (row) => row.name, render: (row) => <strong>{row.name}</strong> },
+          { key: "a", label: "Período A", sortValue: (row) => row.va, render: (row) => row.va.toLocaleString("pt-BR") },
+          { key: "b", label: "Período B", sortValue: (row) => row.vb, render: (row) => row.vb.toLocaleString("pt-BR") },
+          { key: "d", label: "Δ", sortValue: (row) => row.vb - row.va, render: (row) => delta(row.va, row.vb) },
+        ]}
+      />
     </div>
   );
 }

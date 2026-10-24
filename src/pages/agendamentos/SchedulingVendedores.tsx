@@ -1,4 +1,7 @@
 import { useMemo, useState } from "react";
+import { SeriesChart } from "../../components/charts/SeriesChart";
+import { ShareDonut } from "../../components/charts/ShareDonut";
+import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { PerformanceComparisonTable } from "../../components/scheduling/PerformanceComparisonTable";
 import { VendedorConversionCards } from "../../components/scheduling/VendedorConversionCards";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
@@ -33,6 +36,24 @@ export function SchedulingVendedores() {
 
   return (
     <>
+      <div className="charts">
+        <SeriesChart
+          title="Recebidos, visitas e sucessos"
+          tip="Totais de pré-venda já usados nos cards."
+          data={analytics.vendedorMetrics}
+          xKey="vendedor"
+          kind="bar"
+          series={[
+            { key: "totalRecebidos", name: "Recebidos", color: CHART_COLORS.charcoal },
+            { key: "totalVisitas", name: "Visitas", color: CHART_COLORS.blue },
+            { key: "totalSucesso", name: "Sucessos", color: CHART_COLORS.green },
+          ]}
+        />
+        <ShareDonut
+          title="Sucessos por vendedor"
+          data={analytics.vendedorMetrics.map((row) => ({ label: row.vendedor, value: row.totalSucesso }))}
+        />
+      </div>
       <VendedorConversionCards
         rows={analytics.vendedorMetrics}
         selectedVendedor={selectedVendedor}

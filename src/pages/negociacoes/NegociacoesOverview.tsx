@@ -1,14 +1,8 @@
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import { InfoTip } from "../../components/InfoTip";
+import { InteractiveTable } from "../../components/InteractiveTable";
+import { SeriesChart } from "../../components/charts/SeriesChart";
+import { ShareDonut } from "../../components/charts/ShareDonut";
+import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
 export function NegociacoesOverview() {
@@ -51,56 +45,47 @@ export function NegociacoesOverview() {
         </div>
       </div>
 
-      <div className="card">
-        <h2>Série por quinzena</h2>
-        {periodSeries.length === 0 ? (
-          <p className="muted">Sem negócios no filtro atual.</p>
-        ) : (
-          <div style={{ width: "100%", height: 300 }}>
-            <ResponsiveContainer>
-              <BarChart data={periodSeries}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="label" tick={{ fontSize: 11 }} />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="vendas" stackId="a" fill="#16a34a" name="Vendas" />
-                <Bar dataKey="trocas" stackId="a" fill="#2563eb" name="Trocas" />
-                <Bar dataKey="compras" stackId="a" fill="#404041" name="Compras" />
-                <Bar dataKey="consignacoes" stackId="a" fill="#0f766e" name="Consignações" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        )}
+      <div className="charts">
+        <SeriesChart
+          title="Série por quinzena"
+          data={periodSeries}
+          xKey="label"
+          kind="area"
+          series={[
+            { key: "vendas", name: "Vendas", color: CHART_COLORS.green },
+            { key: "trocas", name: "Trocas", color: CHART_COLORS.blue },
+            { key: "compras", name: "Compras", color: CHART_COLORS.charcoal },
+            { key: "consignacoes", name: "Consignações", color: CHART_COLORS.teal },
+          ]}
+        />
+        <SeriesChart
+          title="Quinzena em barras"
+          data={periodSeries}
+          xKey="label"
+          kind="bar"
+          series={[
+            { key: "vendas", name: "Vendas", color: CHART_COLORS.green },
+            { key: "trocas", name: "Trocas", color: CHART_COLORS.blue },
+            { key: "compras", name: "Compras", color: CHART_COLORS.charcoal },
+            { key: "consignacoes", name: "Consignações", color: CHART_COLORS.teal },
+          ]}
+        />
+        <ShareDonut
+          title="Status"
+          data={statusRows.map((row) => ({ label: row.status, value: row.quantidade }))}
+        />
       </div>
 
       <div className="card">
         <h2>Status</h2>
-        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Status</th>
-                <th>Qtd</th>
-              </tr>
-            </thead>
-            <tbody>
-              {statusRows.map((r) => (
-                <tr key={r.status}>
-                  <td>{r.status}</td>
-                  <td>{r.quantidade}</td>
-                </tr>
-              ))}
-              {statusRows.length === 0 && (
-                <tr>
-                  <td colSpan={2} className="muted">
-                    Sem dados no filtro.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <InteractiveTable
+          rows={statusRows}
+          rowKey={(row) => row.status}
+          columns={[
+            { key: "status", label: "Status", sortValue: (row) => row.status },
+            { key: "qtd", label: "Qtd", sortValue: (row) => row.quantidade },
+          ]}
+        />
       </div>
     </>
   );

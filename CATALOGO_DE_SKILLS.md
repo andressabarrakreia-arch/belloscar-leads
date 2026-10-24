@@ -14,7 +14,7 @@ A regra `.cursor/rules/skills-catalogo.mdc` vale em toda conversa. Ela manda o a
 | Manual | Você pede, ou o agente para e espera um sim antes de enviar, publicar, salvar no histórico (commit), enviar ao GitHub (push) ou fechar um issue. |
 | Mista | A preparação é autônoma. O passo que sai do seu computador é manual. |
 
-Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o repositório da biblioteca, não para este painel. O agente segue o espírito delas e troca o alvo pelos arquivos daqui. Não publica o pacote `antd` e não cria changelog em inglês e chinês. A skill Graphify é da ferramenta de mapa do código: a leitura do código fica neste computador. A skill Humanizer reescreve texto para parecer escrito por uma pessoa, sem mudar o que o texto afirma.
+Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o repositório da biblioteca, não para este painel. O agente segue o espírito delas e troca o alvo pelos arquivos daqui. Não publica o pacote `antd` e não cria changelog em inglês e chinês. A skill Graphify é da ferramenta de mapa do código: a leitura do código fica neste computador. A skill Humanizer reescreve texto para parecer escrito por uma pessoa, sem mudar o que o texto afirma. A skill find-skills procura skills prontas na lista pública e só instala depois do sim. As skills de visual (`frontend-design`, `web-design-guidelines`, `recharts`) melhoram gráficos e tabelas sem trocar a marca BellosCar. A skill de architecture decision record grava a decisão em `decisions/` ou na pasta de ADR que o projeto já tiver. Não instala ferramenta de pull request sozinha. As skills Angular (`angular-developer`, `angular-new-app`) são do framework Angular. Este painel é React com Vite. Elas não reescrevem o painel e não rodam `ng new` aqui. Só entram quando você pedir código ou um aplicativo Angular, fora deste painel. A skill `benchmark-optimization-loop` só mede e troca um caminho quando você pedir para deixar algo mais rápido. Primeiro registra o tempo atual. Cada tentativa testa uma ideia só. Não varre o painel inteiro sozinha. A skill `blueprint` só entra em mudança grande, que cabe em vários pull requests ou sessões. Uma tarefa pequena ou um "faz logo" segue sem esse plano. O arquivo vai para `plans/`. Abrir branch e pull request continua esperando o sim.
 
 ## Lista completa
 
@@ -30,6 +30,15 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 | `antd-version-release` | Prepara versão; não publica pacote npm | Manual |
 | `graphify` | Mapa do código: responde como arquivos e funções se ligam | Mista |
 | `humanizer` | Reescreve texto para soar como uma pessoa, sem mudar o sentido | Autônoma |
+| `find-skills` | Procura uma skill pronta para a tarefa e mostra as opções | Mista |
+| `frontend-design` | Direção visual de cards, tabelas e gráficos, mantendo a marca | Mista |
+| `web-design-guidelines` | Revisa contraste, rótulos e leitura da tela | Manual |
+| `recharts` | Monta e ajusta os gráficos da biblioteca que o painel já usa | Autônoma |
+| `architecture-decision-record-skill` | Registra uma decisão de arquitetura: contexto, escolha e consequência | Autônoma |
+| `angular-developer` | Escreve código Angular no estilo atual do framework | Manual |
+| `angular-new-app` | Cria um aplicativo Angular novo com a CLI | Manual |
+| `benchmark-optimization-loop` | Mede o caminho atual e só troca pela variante mais rápida que continua correta | Mista |
+| `blueprint` | Quebra uma mudança grande em passos do tamanho de um pull request | Mista |
 
 ---
 
@@ -117,6 +126,86 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 - Não sai vasculhando telas antigas só para reescrever frase. Só entra no texto da tarefa atual.
 - Manual: nada para enviar ou publicar. Se quiser um texto solto reescrito, cole e peça.
 - Você pode dizer: "deixa esse texto mais natural" ou "humanize o texto do card".
+
+### find-skills
+
+- Arquivo: `.agents/skills/find-skills/SKILL.md`
+- Fonte: [vercel-labs/skills](https://github.com/vercel-labs/skills/tree/main/skills/find-skills)
+- Função: quando a tarefa pede uma capacidade que talvez já exista como skill, procurar em [skills.sh](https://skills.sh/) e com `npx skills find`. Mostra nome, o que faz, de onde vem e o comando de instalação.
+- Autônoma: a busca e a lista de opções. Prefere skills conhecidas e com bastante uso. Se não achar nada, segue a tarefa com o que o projeto já tem.
+- Manual: instalar. Só depois do seu sim. A instalação fica neste projeto, não no computador inteiro, e este catálogo é atualizado na mesma tarefa.
+- Você pode dizer: "existe uma skill para revisar testes?" ou "pode instalar essa".
+
+### frontend-design
+
+- Arquivo: `.agents/skills/frontend-design/SKILL.md`
+- Fonte: [anthropics/skills](https://skills.sh/anthropics/skills/frontend-design)
+- Função: escolher tipo de letra, espaço, cor e hierarquia para a tela ficar intencional. Vale para card, tabela e gráfico.
+- Autônoma: quando a tarefa já mexe em uma tela, tabela ou gráfico. A paleta continua a do BellosCar (vermelho, carvão, azul de apoio). Não inventa outra marca.
+- Manual: um retoque visual da página inteira. Você diz qual página.
+- Você pode dizer: "melhora a tabela de pré-vendas" ou "deixa o gráfico de portais mais fácil de ler".
+
+### web-design-guidelines
+
+- Arquivo: `.agents/skills/web-design-guidelines/SKILL.md`
+- Fonte: [vercel-labs/agent-skills](https://skills.sh/vercel-labs/agent-skills/web-design-guidelines)
+- Função: revisar a tela contra um guia de leitura e acessibilidade (contraste, rótulo, foco, texto pequeno demais). O resultado é uma lista do que ajustar, com arquivo e linha.
+- Manual: só quando você pedir a revisão. Se não disser o arquivo, o agente pergunta qual tela. Corrigir o que a lista apontar também espera o seu sim.
+- Você pode dizer: "revisa a leitura da Visão Geral de Agendamentos" ou "confere a tabela de formulários".
+
+### recharts
+
+- Arquivo: `.agents/skills/recharts/SKILL.md`
+- Fonte: [andy-spike/skills](https://skills.sh/andy-spike/skills/recharts)
+- Função: criar ou ajustar gráfico de linha, barra, área ou pizza com a biblioteca Recharts, que o painel já tem. Cuida de tamanho, legenda, eixo e dica ao passar o mouse.
+- Autônoma: quando a tarefa cria ou muda um gráfico. Não troca a biblioteca e não reinstala o que já está no projeto.
+- Manual: nada para publicar. Um gráfico novo só entra se a tarefa pedir esse gráfico.
+- Você pode dizer: "troca esse gráfico para barras" ou "a legenda do gráfico de motivos está ilegível".
+
+### architecture-decision-record-skill
+
+- Arquivo: `.agents/skills/architecture-decision-record-skill/SKILL.md`
+- Referência extra: `.agents/skills/architecture-decision-record-skill/reference/templates.md` e `.agents/skills/architecture-decision-record-skill/reference/writing-guide.md`
+- Fonte: [architecture-decision-record/architecture-decision-record](https://github.com/architecture-decision-record/architecture-decision-record/tree/main/skills/architecture-decision-record-skill)
+- Função: decidir se uma escolha de arquitetura merece registro, criar o arquivo, nomear, escolher o modelo e escrever contexto, decisão e consequências. O modelo padrão é o Nygard. Um arquivo, uma decisão.
+- Autônoma: quando você pedir para documentar, escrever, nomear, organizar ou substituir uma decisão de arquitetura. O agente segue a pasta que o projeto já usa. Se não houver pasta, usa `decisions/`.
+- Manual: instalar ADR Guard ou Decision Guardian no pull request. Commit e push continuam esperando o seu sim.
+- Você pode dizer: "escreve um ADR para a escolha do banco" ou "documenta essa decisão".
+
+### angular-developer
+
+- Arquivo: `.agents/skills/angular-developer/SKILL.md`
+- Referência extra: `.agents/skills/angular-developer/references/`
+- Fonte: [angular/skills](https://github.com/angular/skills)
+- Função: gerar componente, serviço, rota, formulário e teste no Angular atual (signals, injeção de dependência, acessibilidade, CLI).
+- Manual: este painel é React. A skill só começa quando você pedir trabalho em Angular. Não converte o BellosCar e não troca React por Angular.
+- Você pode dizer: "cria um componente Angular de lista" ou "qual a forma atual de fazer formulário com signals".
+
+### angular-new-app
+
+- Arquivo: `.agents/skills/angular-new-app/SKILL.md`
+- Fonte: [angular/skills](https://github.com/angular/skills)
+- Função: criar um aplicativo Angular novo com `npx ng new`, fora deste repositório.
+- Manual: só quando você pedir um app Angular novo. O agente confirma o nome antes de rodar a CLI. Instalar `@angular/cli` no computador também espera o seu sim. Não cria esse app dentro do BellosCar.
+- Você pode dizer: "cria um app Angular novo chamado oficina".
+
+### benchmark-optimization-loop
+
+- Arquivo: `.agents/skills/benchmark-optimization-loop/SKILL.md`
+- Fonte: [affaan-m/ECC](https://github.com/affaan-m/ECC/tree/main/skills/benchmark-optimization-loop)
+- Função: transformar "deixa mais rápido" num ciclo medido. Registra o tempo atual, testa uma hipótese por vez e fica com a variante mais rápida que continua correta.
+- Autônoma: quando você pedir para acelerar um script, uma leitura de planilha, um gráfico ou uma geração de dados. O agente mede o caminho de hoje antes de mudar código.
+- Manual: uma busca longa espera você dizer quantas tentativas e quanto tempo. Trocar o caminho padrão só depois da medida repetir e da checagem continuar verde. Commit e push continuam esperando o seu sim.
+- Você pode dizer: "mede a geração de agendamentos e deixa mais rápida" ou "compara essas duas formas de ler a planilha".
+
+### blueprint
+
+- Arquivo: `.agents/skills/blueprint/SKILL.md`
+- Fonte: [affaan-m/ECC](https://github.com/affaan-m/ECC/tree/main/skills/blueprint)
+- Função: transformar um objetivo de uma linha num plano de construção. Cada passo cabe num pull request e traz contexto, verificação e critério de saída, para outra sessão continuar sem reler o histórico.
+- Autônoma: quando você pedir para planejar uma função grande, uma refatoração ou um roteiro que atravessa várias sessões. O agente grava o plano em `plans/`. Não usa o comando `/blueprint` e não instala o ECC.
+- Manual: criar branch, abrir pull request, commit e push. O plano descreve esses passos. Executar cada um espera o seu sim. Tarefa pequena ou "faz logo" não gera plano.
+- Você pode dizer: "monta o plano para separar o módulo de negociações" ou "quebra essa refatoração em passos".
 
 ---
 

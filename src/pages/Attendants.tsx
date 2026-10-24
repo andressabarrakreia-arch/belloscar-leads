@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react";
 import { CampanhasFilters } from "../components/CampanhasFilters";
 import { InfoTip } from "../components/InfoTip";
+import { InteractiveTable } from "../components/InteractiveTable";
+import { SeriesChart } from "../components/charts/SeriesChart";
+import { ShareDonut } from "../components/charts/ShareDonut";
+import { CHART_COLORS } from "../components/charts/chartTheme";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
   buildSdrRows,
@@ -28,6 +32,25 @@ export function Attendants() {
     <>
       <CampanhasFilters filters={filters} sdrs={sdrs} months={months} onChange={setFilters} />
 
+      <div className="charts">
+        <SeriesChart
+          title="Atendimentos e visitas por SDR"
+          tip="Mesmos números da tabela de SDR."
+          data={sdrRows}
+          xKey="sdr"
+          kind="bar"
+          series={[
+            { key: "atendimentos", name: "Atendimentos", color: CHART_COLORS.charcoal },
+            { key: "visitas", name: "Visitas", color: CHART_COLORS.blue },
+          ]}
+        />
+        <ShareDonut
+          title="Sucessos por vendedor"
+          tip="Sucessos já contados na tabela de vendedor."
+          data={vendedores.map((row) => ({ label: row.vendedor, value: row.sucessos }))}
+        />
+      </div>
+
       <div className="card">
         <h2>
           SDR · só Facebook e Instagram
@@ -36,36 +59,19 @@ export function Attendants() {
             ID, nas datas de Agendado em e Finalizado em.
           </InfoTip>
         </h2>
-        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>SDR</th>
-                <th>Atendimentos</th>
-                <th>Visitas</th>
-                <th>Visita / atend.</th>
-                <th>Agendamentos</th>
-                <th>Sucessos</th>
-                <th>Sucesso / visita</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sdrRows.map((row) => (
-                <tr key={row.sdr}>
-                  <td>
-                    <strong>{row.sdr}</strong>
-                  </td>
-                  <td>{row.atendimentos}</td>
-                  <td className={row.visitas ? "positive" : "zero"}>{row.visitas}</td>
-                  <td>{row.taxaVisita}%</td>
-                  <td>{row.agendamentos}</td>
-                  <td className="num-ok">{row.sucessos}</td>
-                  <td>{row.taxaVisitaParaSucesso}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <InteractiveTable
+          rows={sdrRows}
+          rowKey={(row) => row.sdr}
+          columns={[
+            { key: "sdr", label: "SDR", sortValue: (row) => row.sdr, render: (row) => <strong>{row.sdr}</strong> },
+            { key: "atendimentos", label: "Atendimentos", sortValue: (row) => row.atendimentos },
+            { key: "visitas", label: "Visitas", sortValue: (row) => row.visitas },
+            { key: "taxaVisita", label: "Visita / atend.", sortValue: (row) => row.taxaVisita, render: (row) => `${row.taxaVisita}%` },
+            { key: "agendamentos", label: "Agendamentos", sortValue: (row) => row.agendamentos },
+            { key: "sucessos", label: "Sucessos", sortValue: (row) => row.sucessos, render: (row) => <span className="num-ok">{row.sucessos}</span> },
+            { key: "taxa", label: "Sucesso / visita", sortValue: (row) => row.taxaVisitaParaSucesso, render: (row) => `${row.taxaVisitaParaSucesso}%` },
+          ]}
+        />
       </div>
 
       <div className="card">
@@ -75,30 +81,16 @@ export function Attendants() {
             Só IDs Meta. Agendamentos pela data Agendado em; sucessos pela data Finalizado em.
           </InfoTip>
         </h2>
-        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Vendedor</th>
-                <th>Agendamentos</th>
-                <th>Sucessos</th>
-                <th>Sucesso / agendamento</th>
-              </tr>
-            </thead>
-            <tbody>
-              {vendedores.map((row) => (
-                <tr key={row.vendedor}>
-                  <td>
-                    <strong>{row.vendedor}</strong>
-                  </td>
-                  <td>{row.agendamentos}</td>
-                  <td className="num-ok">{row.sucessos}</td>
-                  <td className="num-ok">{row.taxaSucesso}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <InteractiveTable
+          rows={vendedores}
+          rowKey={(row) => row.vendedor}
+          columns={[
+            { key: "vendedor", label: "Vendedor", sortValue: (row) => row.vendedor, render: (row) => <strong>{row.vendedor}</strong> },
+            { key: "agendamentos", label: "Agendamentos", sortValue: (row) => row.agendamentos },
+            { key: "sucessos", label: "Sucessos", sortValue: (row) => row.sucessos, render: (row) => <span className="num-ok">{row.sucessos}</span> },
+            { key: "taxa", label: "Sucesso / agendamento", sortValue: (row) => row.taxaSucesso, render: (row) => <span className="num-ok">{row.taxaSucesso}%</span> },
+          ]}
+        />
       </div>
     </>
   );

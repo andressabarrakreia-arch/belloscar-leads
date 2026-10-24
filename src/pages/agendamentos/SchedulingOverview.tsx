@@ -1,4 +1,6 @@
 import { InfoTip } from "../../components/InfoTip";
+import { SeriesChart } from "../../components/charts/SeriesChart";
+import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { CanalKpiGrid } from "../../components/scheduling/CanalKpiGrid";
 import { ProposalDistributionChart } from "../../components/scheduling/ProposalDistributionChart";
 import { TimeSeriesChart } from "../../components/scheduling/TimeSeriesChart";
@@ -111,6 +113,35 @@ export function SchedulingOverview() {
           }))}
           title="Série por quinzena · Recepção"
           xKey="label"
+        />
+      </div>
+
+      <div className="charts">
+        <SeriesChart
+          title="Funil em barras · Pré-Venda"
+          tip="Os mesmos totais do funil acima."
+          kind="bar"
+          xKey="etapa"
+          data={[
+            { etapa: "Agendamentos", valor: kpisPreVenda.total },
+            { etapa: "Visitas", valor: kpisPreVenda.visitas },
+            { etapa: "Sucessos", valor: kpisPreVenda.sucessos },
+            { etapa: "Insucessos", valor: kpisPreVenda.insucessos },
+          ]}
+          series={[{ key: "valor", name: "Quantidade", color: CHART_COLORS.red }]}
+        />
+        <SeriesChart
+          title="Funil em barras · Recepção"
+          tip="Os mesmos totais do funil de recepção."
+          kind="bar"
+          xKey="etapa"
+          data={[
+            { etapa: "Agendamentos", valor: kpisRecepcao.total },
+            { etapa: "Visitas", valor: kpisRecepcao.visitas },
+            { etapa: "Sucessos", valor: kpisRecepcao.sucessos },
+            { etapa: "Insucessos", valor: kpisRecepcao.insucessos },
+          ]}
+          series={[{ key: "valor", name: "Quantidade", color: CHART_COLORS.charcoal }]}
         />
       </div>
     </>
