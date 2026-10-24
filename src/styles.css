@@ -631,6 +631,50 @@ select {
   margin-bottom: 20px;
 }
 
+.kpi-grid--tres {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.modelo-destaque h3 {
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--brand-charcoal);
+  line-height: 1.35;
+}
+
+.marca-mais {
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--brand-red);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.marca-mais:hover {
+  border-color: rgba(192, 32, 38, 0.45);
+}
+
+.modelos-marca th:nth-child(n + 2),
+.modelos-marca td:nth-child(n + 2) {
+  text-align: right;
+}
+
+.modelo-filho td {
+  background: #fafafa;
+}
+
+.modelo-filho td:first-child {
+  padding-left: 48px;
+}
+
 .kpi-card {
   background: #fff;
   border-radius: 12px;
@@ -1910,6 +1954,10 @@ tr:hover td {
 
 @media (max-width: 900px) {
   .charts {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-grid--tres {
     grid-template-columns: 1fr;
   }
 

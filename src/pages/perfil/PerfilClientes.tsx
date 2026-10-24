@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { InfoTip } from "../../components/InfoTip";
 import { InteractiveTable } from "../../components/InteractiveTable";
 import { ShareDonut } from "../../components/charts/ShareDonut";
-import { VegaBarras } from "../../components/viz/VegaBarras";
 import { useModuleTicker } from "../../context/ModuleTickerContext";
 import { currentMonthKey } from "../../lib/dates";
 import { dealsFromLines } from "../../lib/negociacoes/metrics";
@@ -21,6 +20,33 @@ function pct(value: number): string {
   return `${value.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`;
 }
 
+function nomeDoModelo(row: ModeloContagem): string {
+  const prefixo = `${row.marca} `;
+  return row.nome.startsWith(prefixo) ? row.nome.slice(prefixo.length) : row.nome;
+}
+
+function gruposPorMarca(rows: ModeloContagem[], total: number) {
+  const mapa = new Map<string, ModeloContagem[]>();
+  for (const row of rows) {
+    const lista = mapa.get(row.marca) ?? [];
+    lista.push(row);
+    mapa.set(row.marca, lista);
+  }
+  return [...mapa.entries()]
+    .map(([marca, modelos]) => {
+      const quantidade = modelos.reduce((soma, row) => soma + row.quantidade, 0);
+      return {
+        marca,
+        quantidade,
+        percentual: total ? Math.round((quantidade / total) * 1000) / 10 : 0,
+        modelos: [...modelos].sort(
+          (a, b) => b.quantidade - a.quantidade || nomeDoModelo(a).localeCompare(nomeDoModelo(b), "pt-BR")
+        ),
+      };
+    })
+    .sort((a, b) => b.quantidade - a.quantidade || a.marca.localeCompare(b.marca, "pt-BR"));
+}
+
 function fatias(rows: Contagem[], limite: number, resto: string): { label: string; value: number }[] {
   const topo = rows.slice(0, limite).map((row) => ({ label: row.nome, value: row.quantidade }));
   const outros = rows.slice(limite).reduce((sum, row) => sum + row.quantidade, 0);
@@ -34,6 +60,7 @@ export function PerfilClientes() {
   const { setOverrideItems } = useModuleTicker();
   const [month, setMonth] = useState(currentMonthKey);
   const [marca, setMarca] = useState("all");
+  const [marcasAbertas, setMarcasAbertas] = useState<string[]>([]);
 
   const deals = useMemo(
     () => (negociacoes.dataset ? dealsFromLines(negociacoes.dataset.lines) : []),
@@ -46,6 +73,12 @@ export function PerfilClientes() {
     () => (marca === "all" ? perfil.modelos : perfil.modelos.filter((row) => row.marca === marca)),
     [marca, perfil.modelos]
   );
+  const totalModelos = useMemo(
+    () => perfil.modelos.reduce((soma, row) => soma + row.quantidade, 0),
+    [perfil.modelos]
+  );
+  const grupos = useMemo(() => gruposPorMarca(modelos, totalModelos), [modelos, totalModelos]);
+  const destaques = modelos.slice(0, 3);
 
   useEffect(() => {
     const marcaTopo = perfil.marcas[0];
@@ -66,6 +99,16 @@ export function PerfilClientes() {
   useEffect(() => {
     if (marca !== "all" && !perfil.marcas.some((row) => row.nome === marca)) setMarca("all");
   }, [marca, perfil.marcas]);
+
+  useEffect(() => {
+    setMarcasAbertas([]);
+  }, [month, marca]);
+
+  function alternarMarca(nome: string) {
+    setMarcasAbertas((atual) =>
+      atual.includes(nome) ? atual.filter((item) => item !== nome) : [...atual, nome]
+    );
+  }
 
   const carregando = negociacoes.loading || agendamentos.loading;
 
@@ -147,51 +190,100 @@ export function PerfilClientes() {
         />
       </div>
 
-      <VegaBarras
-        titulo={marca === "all" ? "Modelos em destaque" : `Modelos · ${marca}`}
-        dica="Os doze modelos com mais negócios no recorte. O mouse mostra a quantidade."
-        dados={modelos.slice(0, 12).map((row) => ({ nome: row.nome, negocios: row.quantidade }))}
-        nome="nome"
-        valor="negocios"
-        valorLabel="Negócios"
-      />
-
       <div className="card">
-        <h2>Modelos</h2>
-        <InteractiveTable<ModeloContagem>
-          rows={modelos}
-          rowKey={(row) => row.nome}
-          columns={[
-            { key: "nome", label: "Modelo", sortValue: (row) => row.nome },
-            { key: "marca", label: "Marca", sortValue: (row) => row.marca },
-            {
-              key: "quantidade",
-              label: "Negócios",
-              align: "right",
-              sortValue: (row) => row.quantidade,
-              render: (row) => row.quantidade.toLocaleString("pt-BR"),
-            },
-            {
-              key: "percentual",
-              label: "% do recorte",
-              align: "right",
-              sortValue: (row) => row.percentual,
-              render: (row) => pct(row.percentual),
-            },
-          ]}
-        />
+        <h2>
+          {marca === "all" ? "Modelos em destaque" : `Modelos em destaque · ${marca}`}
+          <InfoTip>Os 3 modelos com mais negócios neste recorte.</InfoTip>
+        </h2>
+        {destaques.length === 0 ? (
+          <p className="muted">Sem modelos neste recorte.</p>
+        ) : (
+          <div className="kpi-grid kpi-grid--tres">
+            {destaques.map((row, index) => (
+              <div className={index === 0 ? "kpi-card modelo-destaque accent" : "kpi-card modelo-destaque"} key={row.nome}>
+                <h3>{row.nome}</h3>
+                <p>{row.quantidade.toLocaleString("pt-BR")}</p>
+                <small className="kpi-lider">{pct(row.percentual)} do recorte</small>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="charts">
+      <div className="card">
+        <h2>
+          Modelos
+          <InfoTip>Cada linha é uma marca. O + abre os modelos daquela marca.</InfoTip>
+        </h2>
+        {grupos.length === 0 ? (
+          <p className="muted">Sem modelos neste recorte.</p>
+        ) : (
+          <div className="table-scroll">
+            <table className="modelos-marca">
+              <thead>
+                <tr>
+                  <th>Marca</th>
+                  <th>Negócios</th>
+                  <th>% do recorte</th>
+                </tr>
+              </thead>
+              <tbody>
+                {grupos.map((grupo) => {
+                  const aberta = marcasAbertas.includes(grupo.marca);
+                  return (
+                    <Fragment key={grupo.marca}>
+                      <tr>
+                        <td>
+                          <button
+                            type="button"
+                            className="marca-mais"
+                            aria-expanded={aberta}
+                            aria-label={aberta ? `Fechar modelos de ${grupo.marca}` : `Abrir modelos de ${grupo.marca}`}
+                            onClick={() => alternarMarca(grupo.marca)}
+                          >
+                            {aberta ? "−" : "+"}
+                          </button>
+                          {grupo.marca}
+                        </td>
+                        <td>{grupo.quantidade.toLocaleString("pt-BR")}</td>
+                        <td>{pct(grupo.percentual)}</td>
+                      </tr>
+                      {aberta
+                        ? grupo.modelos.map((row) => (
+                            <tr className="modelo-filho" key={row.nome}>
+                              <td>{nomeDoModelo(row)}</td>
+                              <td>{row.quantidade.toLocaleString("pt-BR")}</td>
+                              <td>{pct(row.percentual)}</td>
+                            </tr>
+                          ))
+                        : null}
+                    </Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div className="charts charts--full">
         <ShareDonut
+          grande
           title="Motivos de não fechamento"
-          tip="Insucessos da agenda no mesmo mês. A porcentagem é sobre os insucessos do recorte."
+          tip="Os 8 motivos com mais insucessos aparecem separados. O restante entra junto na fatia Outros. A porcentagem aqui é arredondada. A tabela abaixo lista cada motivo, com uma casa decimal."
           data={fatias(perfil.motivos, 8, "Outros")}
         />
       </div>
 
       <div className="card">
-        <h2>Principais motivos</h2>
+        <h2>
+          Principais motivos
+          <InfoTip>
+            Cada linha é um motivo dos agendamentos com status Insucesso neste mês, pela data em que
+            foram agendados. A quantidade é quantos desses agendamentos têm aquele texto. O gráfico
+            junta os menores em Outros e não mostra essa soma como uma linha da tabela.
+          </InfoTip>
+        </h2>
         <InteractiveTable<Contagem>
           rows={perfil.motivos}
           rowKey={(row) => row.nome}

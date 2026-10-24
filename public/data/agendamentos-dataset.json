@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-24T01:41:34.468Z",
+  "updatedAt": "2026-10-24T16:26:07.268Z",
   "imports": [
     {
       "fileName": "LEADS GERAL ATE 22_10.csv",
@@ -75805,24 +75805,7 @@
       "monthKey": "2026-10",
       "periodKey": "2026-10-Q2"
     },
-    {
-      "id": "9547446",
-      "dataAgendamento": "2026-10-19",
-      "sdr": "Aniversariantes BellosCar",
-      "vendedor": "Dimas Noldin",
-      "tipoProposta": "Venda",
-      "teveVisita": true,
-      "status": "Insucesso",
-      "origem": "WhatsApp | Site",
-      "motivoInsucesso": "Atendimento sem interação da equipe web nos últimos 7 dias",
-      "cliente": "Rogério",
-      "celular": "41991374252",
-      "email": "",
-      "canal": "Pré-Venda",
-      "monthKey": "2026-10",
-      "periodKey": "2026-10-Q2"
-    },
-    {
+        {
       "id": "9586077",
       "dataAgendamento": "2026-10-19",
       "sdr": "BRUNO PROSPECÇÃO",
@@ -228702,14 +228685,7 @@
       "origem": "Telefone",
       "tipoProposta": "Venda"
     },
-    {
-      "id": "9547446",
-      "data": "2026-10-08",
-      "sdr": "Thayna PRE-VENDAS",
-      "origem": "WhatsApp | Site",
-      "tipoProposta": "Venda"
-    },
-    {
+        {
       "id": "9547376",
       "data": "2026-10-08",
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -488847,18 +488823,7 @@
       "cliente": "RudsoneCarol Dos Santos Dambroski",
       "celular": "(41)99965-0695"
     },
-    {
-      "id": "9547446",
-      "dataAtendido": "2026-10-08",
-      "dataVisita": "2026-10-19",
-      "teveVisita": true,
-      "sdr": "Thayna PRE-VENDAS",
-      "origem": "WhatsApp | Site",
-      "tipoProposta": "Venda",
-      "cliente": "Rogério",
-      "celular": "(41)99137-4252"
-    },
-    {
+        {
       "id": "9547598",
       "dataAtendido": "2026-10-08",
       "dataVisita": null,

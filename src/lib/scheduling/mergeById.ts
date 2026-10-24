@@ -336,12 +336,20 @@ export function emptySchedulingDataset(): SchedulingDataset {
   };
 }
 
+/** IDs fora da análise. Um novo upload não os recoloca. */
+const IDS_FORA_DA_BASE = new Set(["9547446"]);
+
+function semIdsFora<T extends { id: string }>(rows: T[] | undefined): T[] {
+  return (rows ?? []).filter((row) => !IDS_FORA_DA_BASE.has(row.id));
+}
+
 export function normalizeSchedulingDataset(dataset: SchedulingDataset): SchedulingDataset {
   return {
     ...dataset,
-    leadsAtendimentos: dataset.leadsAtendimentos ?? [],
-    realizados: dataset.realizados ?? [],
-    sucessosEventos: dataset.sucessosEventos ?? [],
+    items: semIdsFora(dataset.items),
+    leadsAtendimentos: semIdsFora(dataset.leadsAtendimentos),
+    realizados: semIdsFora(dataset.realizados),
+    sucessosEventos: semIdsFora(dataset.sucessosEventos),
     leadsCampanha: dataset.leadsCampanha ?? [],
   };
 }
