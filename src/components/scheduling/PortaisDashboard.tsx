@@ -139,9 +139,9 @@ export function PortaisDashboard({ data }: Props) {
         <h2>
           Portais
           <InfoTip>
-            Cascata colorida: <strong>Grupo</strong> → Origem → Canal → Proposta. Atendimentos =
-            REALIZADOS · Multi-origem pode somar além do universo. Filtro: {data.uniqueLeads}{" "}
-            atendimentos · {data.uniqueTotal} agendamentos.
+            Cascata: <strong>Grupo</strong> → Origem → Canal. Cada ID conta uma vez, na primeira
+            origem e no primeiro canal da célula. Atendimentos = REALIZADOS. Filtro:{" "}
+            {data.uniqueLeads} atendimentos · {data.uniqueTotal} agendamentos.
           </InfoTip>
         </h2>
       </div>
@@ -150,8 +150,8 @@ export function PortaisDashboard({ data }: Props) {
         <h2>
           Ranking por grupo
           <InfoTip>
-            Expanda grupo → origem → canal → proposta. Clique no nome da origem para top SDR /
-            vendedores.
+            Expanda grupo → origem → canal. A soma dos canais fecha com a origem. Clique no nome
+            da origem para top SDR / vendedores.
           </InfoTip>
         </h2>
         <div className="table-scroll table-scroll--cascade">

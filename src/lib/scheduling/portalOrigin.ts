@@ -6,7 +6,7 @@
  * - Site é dual: vira canal se já houver portal; senão vira origem (ex.: WhatsApp | Site)
  * - Demais tokens = origem/portal
  * - Só canal puro (ex.: "WhatsApp") → origem e canal iguais
- * - Multi-origem: um agendamento conta em cada portal
+ * - Cada ID conta uma vez: a primeira origem e o primeiro canal da célula
  */
 
 export type ParsedOrigem = {
@@ -102,7 +102,9 @@ export function parseOrigemRaw(raw: string): ParsedOrigem {
 
   if (portalParts.length > 0) {
     origins = portalParts.map(canonicalLabel);
-    channels = [...channelParts, ...dualParts].map(canonicalLabel);
+    channels = parts
+      .filter((p) => isChannelOnly(p) || isDual(p))
+      .map(canonicalLabel);
   } else if (dualParts.length > 0) {
     // Ex.: WhatsApp | Site → origem Site, canal WhatsApp
     origins = dualParts.map(canonicalLabel);
@@ -116,12 +118,14 @@ export function parseOrigemRaw(raw: string): ParsedOrigem {
     channels = channelParts.map(canonicalLabel);
   }
 
-  // Dedup preservando ordem
+  // Dedup preservando ordem. Um ID entra na primeira origem e no primeiro canal.
   const uniq = (list: string[]) => [...new Set(list)];
+  const originsUniq = uniq(origins);
+  const channelsUniq = uniq(channels);
   return {
     raw: cleaned,
-    origins: uniq(origins),
-    channels: uniq(channels),
+    origins: originsUniq.length > 0 ? [originsUniq[0]] : ["Não informado"],
+    channels: channelsUniq.length > 0 ? [channelsUniq[0]] : [],
   };
 }
 
