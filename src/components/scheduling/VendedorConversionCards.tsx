@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { InfoTip } from "../InfoTip";
 import { aggregateVendedorMetrics } from "../../lib/scheduling/metrics";
 import type { MotivoStats, OrigemStats, VendedorMetrics } from "../../lib/scheduling/types";
+import { MotivoLabel } from "./MotivoLabel";
 
 type Props = {
   rows: VendedorMetrics[];
@@ -24,7 +25,9 @@ function MotivosTable({ rows, emptyHint }: { rows: MotivoStats[]; emptyHint: str
         <tbody>
           {rows.slice(0, 20).map((m) => (
             <tr key={m.motivo}>
-              <td>{m.motivo}</td>
+              <td>
+                <MotivoLabel motivo={m.motivo} ids={m.ids} />
+              </td>
               <td>{m.quantidade}</td>
               <td>{m.percentual}%</td>
             </tr>

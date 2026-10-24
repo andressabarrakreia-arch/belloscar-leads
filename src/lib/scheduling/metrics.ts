@@ -258,20 +258,33 @@ function breakdownPropostas(list: AgendamentoItem[]): PropostasBreakdown {
   return b;
 }
 
+/** Rótulo quando o insucesso não tem texto de motivo na base. */
+export const MOTIVO_NAO_INFORMADO = "Motivo não informado";
+
+/** IDs de insucesso sem motivo, na mesma lista que monta o ranking. */
+export function idsSemMotivoInsucesso(list: AgendamentoItem[]): string[] {
+  return list
+    .filter((item) => item.status === "Insucesso" && !item.motivoInsucesso?.trim())
+    .sort((a, b) => a.dataAgendamento.localeCompare(b.dataAgendamento) || a.id.localeCompare(b.id))
+    .map((item) => item.id);
+}
+
 /** Motivos de insucesso; % = qtd / total de insucessos do recorte. */
 export function buildMotivosStats(list: AgendamentoItem[]): MotivoStats[] {
   const closed = list.filter((i) => i.status === "Insucesso");
   const total = closed.length || 1;
   const map = new Map<string, number>();
   for (const item of closed) {
-    const m = item.motivoInsucesso?.trim() || "Motivo não informado";
+    const m = item.motivoInsucesso?.trim() || MOTIVO_NAO_INFORMADO;
     map.set(m, (map.get(m) || 0) + 1);
   }
+  const semMotivo = idsSemMotivoInsucesso(closed);
   return [...map.entries()]
     .map(([motivo, quantidade]) => ({
       motivo,
       quantidade,
       percentual: round2((quantidade / total) * 100),
+      ...(motivo === MOTIVO_NAO_INFORMADO && semMotivo.length > 0 ? { ids: semMotivo } : {}),
     }))
     .sort((a, b) => b.quantidade - a.quantidade);
 }
@@ -622,9 +635,16 @@ export function buildVendedorMetrics(items: AgendamentoItem[]): VendedorMetrics[
 
 function mergeMotivoStats(lists: MotivoStats[][]): MotivoStats[] {
   const map = new Map<string, number>();
+  const ids = new Map<string, string[]>();
   for (const list of lists) {
     for (const m of list) {
       map.set(m.motivo, (map.get(m.motivo) || 0) + m.quantidade);
+      if (!m.ids?.length) continue;
+      const bag = ids.get(m.motivo) || [];
+      for (const id of m.ids) {
+        if (!bag.includes(id)) bag.push(id);
+      }
+      ids.set(m.motivo, bag);
     }
   }
   const total = [...map.values()].reduce((a, b) => a + b, 0) || 1;
@@ -633,6 +653,7 @@ function mergeMotivoStats(lists: MotivoStats[][]): MotivoStats[] {
       motivo,
       quantidade,
       percentual: round2((quantidade / total) * 100),
+      ...(ids.get(motivo)?.length ? { ids: ids.get(motivo) } : {}),
     }))
     .sort((a, b) => b.quantidade - a.quantidade);
 }

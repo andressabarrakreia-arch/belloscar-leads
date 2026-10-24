@@ -1,5 +1,6 @@
 import type { MotivoByPersonRow } from "../../lib/scheduling/metrics";
 import { InfoTip } from "../InfoTip";
+import { MotivoLabel } from "./MotivoLabel";
 
 type Props = {
   rows: MotivoByPersonRow[];
@@ -34,7 +35,9 @@ export function MotivoByPersonTable({ rows, title, subtitle, nameLabel }: Props)
                 <tr key={r.nome}>
                   <td>{r.nome}</td>
                   <td className="num-bad">{r.totalInsucessos}</td>
-                  <td>{top?.motivo ?? "—"}</td>
+                  <td>
+                    <MotivoLabel motivo={top?.motivo ?? "—"} ids={top?.ids} />
+                  </td>
                   <td>{top?.quantidade ?? "—"}</td>
                   <td>{top ? `${top.percentual}%` : "—"}</td>
                 </tr>

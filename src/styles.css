@@ -789,6 +789,21 @@ select {
   flex-shrink: 0;
 }
 
+.motivo-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.motivo-axis {
+  justify-content: flex-end;
+  width: 100%;
+  color: var(--brand-charcoal);
+  font-size: 11px;
+  line-height: 1.2;
+}
+
 .charts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

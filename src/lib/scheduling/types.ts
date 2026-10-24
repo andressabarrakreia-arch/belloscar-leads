@@ -178,6 +178,8 @@ export type MotivoStats = {
   motivo: string;
   quantidade: number;
   percentual: number;
+  /** IDs que entraram em "Motivo não informado" neste recorte. */
+  ids?: string[];
 };
 
 export type OrigemStats = {

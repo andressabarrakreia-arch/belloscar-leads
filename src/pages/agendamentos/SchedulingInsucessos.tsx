@@ -1,6 +1,7 @@
 import { InfoTip } from "../../components/InfoTip";
 import { MotivoByPersonTable } from "../../components/scheduling/MotivoByPersonTable";
 import { MotivoDistributionChart } from "../../components/scheduling/MotivoDistributionChart";
+import { MotivoLabel } from "../../components/scheduling/MotivoLabel";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
 
 /** Aba Análise de Insucessos. */
@@ -45,7 +46,11 @@ export function SchedulingInsucessos() {
       </div>
 
       <MotivoDistributionChart
-        data={motivosInsucesso.map((m) => ({ label: m.motivo, value: m.quantidade }))}
+        data={motivosInsucesso.map((m) => ({
+          label: m.motivo,
+          value: m.quantidade,
+          ids: m.ids,
+        }))}
         title="Motivos de insucesso"
         subtitle="% motivo = Qtd do motivo / Insucessos do filtro atual."
       />
@@ -67,7 +72,9 @@ export function SchedulingInsucessos() {
             <tbody>
               {motivosInsucesso.map((m) => (
                 <tr key={m.motivo}>
-                  <td>{m.motivo}</td>
+                  <td>
+                    <MotivoLabel motivo={m.motivo} ids={m.ids} />
+                  </td>
                   <td>{m.quantidade}</td>
                   <td>{m.percentual}%</td>
                 </tr>

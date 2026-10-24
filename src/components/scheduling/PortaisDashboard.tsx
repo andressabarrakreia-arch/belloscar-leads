@@ -1,6 +1,7 @@
 import { Fragment, useMemo, useState } from "react";
 import { InfoTip } from "../InfoTip";
 import type { PortalDashboard, PortalOriginMetrics } from "../../lib/scheduling/portalMetrics";
+import { MotivoLabel } from "./MotivoLabel";
 
 type Props = {
   data: PortalDashboard;
@@ -91,7 +92,9 @@ function OriginSummary({ origin }: { origin: PortalOriginMetrics }) {
           <tbody>
             {origin.topMotivos.map((m) => (
               <tr key={m.motivo}>
-                <td>{m.motivo}</td>
+                <td>
+                  <MotivoLabel motivo={m.motivo} ids={m.ids} />
+                </td>
                 <td>{m.quantidade}</td>
                 <td>{m.percentual}%</td>
               </tr>
