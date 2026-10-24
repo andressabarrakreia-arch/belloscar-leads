@@ -1,10 +1,10 @@
-# Catálogo de skills
+# Catálogo do agente
 
 Atualizado em 2026-10-24.
 
-Este arquivo lista todas as skills do BellosCar Analytics: para que servem aqui e se o agente as usa sozinho ou só quando você pede.
+Este arquivo reúne o que o agente usa neste projeto: skills, rules, hooks, MCP e plugins. Cada item diz para que serve aqui e se entra sozinho ou só quando você pede.
 
-A regra `.cursor/rules/skills-catalogo.mdc` vale em toda conversa. Ela manda o agente consultar este arquivo e atualizá-lo no mesmo dia em que uma skill entrar, sair ou mudar.
+A regra `.cursor/rules/skills-catalogo.mdc` vale em toda conversa. Antes de uma tarefa, o agente lê este arquivo e escolhe o que entra. Se você não citar nenhuma skill, ele escolhe. No mesmo turno em que uma skill, rule, hook, MCP ou plugin entrar, sair ou mudar, este arquivo é atualizado.
 
 ## Como ler
 
@@ -39,6 +39,59 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 | `angular-new-app` | Cria um aplicativo Angular novo com a CLI | Manual |
 | `benchmark-optimization-loop` | Mede o caminho atual e só troca pela variante mais rápida que continua correta | Mista |
 | `blueprint` | Quebra uma mudança grande em passos do tamanho de um pull request | Mista |
+| `vega-mapa-clientes` | Mapa de clientes no índice e barras Vega | Autônoma |
+| `sigma-cruzamento` | Quadro das cinco planilhas na página Erros | Autônoma |
+| `dc-cruzado` | Dois gráficos dc.js que se filtram juntos | Autônoma |
+| `d3-cruzamento` | Barras D3 de falta por planilha | Autônoma |
+| `dygraphs-series` | Série no tempo com zoom por arraste | Autônoma |
+| `echarts-erros` | Barras ECharts dos tipos de falta | Autônoma |
+| `gsap-belloscar` | Abertura do índice e inclinação do pátio de erros | Autônoma |
+| `three-abertura` | Anel 3D só na abertura do índice | Autônoma |
+| `motion-abertura` | Botão Entrar e fade do mapa com Motion | Autônoma |
+| `motion-performance` | Movimento só com transform e opacity | Autônoma |
+| `remotion-limite` | Impede instalar Remotion neste site | Autônoma |
+| `video-maker-limite` | Impede clonar o video-maker | Autônoma |
+| `hyperframes-limite` | Impede instalar HyperFrames neste site | Autônoma |
+| `higgsfield-limite` | Impede instalar o treino de GPU Higgsfield | Autônoma |
+| `agencia-indice` | Qualidade visual do índice sem clonar agency-agents | Autônoma |
+| `grill-mapa` | Decisões já fechadas do mapa de clientes | Autônoma |
+
+---
+
+## Rules
+
+Arquivos em `.cursor/rules/`. **Sempre** entra em toda conversa. **No arquivo** entra quando o arquivo aberto combina com o glob.
+
+| Rule | Quando entra | Função |
+| --- | --- | --- |
+| `skills-catalogo` | Sempre | Lê este catálogo, escolhe as skills e atualiza o arquivo |
+| `update-documentation` | Sempre | Atualiza changelog e docs ao fim da tarefa |
+| `escopo-estrito` | Sempre | Muda só o que foi pedido |
+| `reuse-before-create` | Sempre | Reutiliza página, módulo e padrão já existentes |
+| `identificar-padroes` | Sempre | Pergunta antes de virar repetição em regra ou skill |
+| `typescript-stack` | Sempre | React, TypeScript e GitHub Pages |
+| `belloscar-product-prefs` | Sempre | Nome, marca e módulos do produto |
+| `testar-e-perguntar-publicacao` | Sempre | Pede teste e o sim antes de publicar |
+| `no-secrets-in-repo` | Sempre | Não versiona token nem senha |
+| `filtros-barra` | Sempre | Filtro recolhido, limpar e vermelho no filtro ativo |
+| `painel-gestao-planilhas` | Sempre | Upload só no Painel de Gestão |
+| `module-storage-isolation` | Sempre | Storage de um módulo não vaza para outro |
+| `multi-module-pages` | Sempre | Módulos com rota e link próprios |
+| `scheduling-dedupe` | Sempre | Agendamento único por ID |
+| `graphify` | Sempre | Consulta o mapa do código antes de vasculhar arquivo |
+| `negociacoes-dedupe` | No arquivo de negociações | Contagem e dedupe da loja |
+
+## Hooks
+
+Nenhum hook neste repositório. Não há `hooks.json`. Se um hook for criado, entra nesta seção no mesmo turno, com o arquivo e o evento que dispara.
+
+## MCP
+
+Nenhum servidor MCP versionado neste repositório. O navegador usado para conferir a tela é o do Cursor, fora deste catálogo de código. Um `mcp.json` do projeto, se aparecer, entra aqui com o nome e o que ele lê.
+
+## Plugins
+
+Nenhum plugin do Cursor neste repositório. Se um plugin for adicionado, entra aqui com o nome e a função.
 
 ---
 
@@ -209,11 +262,109 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 
 ---
 
-## Quando uma skill nova chegar
+### vega-mapa-clientes
 
-Quem adicionar a skill atualiza este arquivo na mesma tarefa, com:
+- Arquivo: `.agents/skills/vega-mapa-clientes/SKILL.md`
+- Função: mapa de clientes no índice, com DDD, estado e filtros. A dica do mouse é o balão curto `.mapa-dica` (nome do estado, cidade, região e números), instalado na criação da vista. As barras soltas usam `VegaBarras`.
+- Autônoma: quando a tarefa mexe no mapa ou numa barra Vega.
+- Você pode dizer: "ajusta o mapa de clientes".
 
-1. Nome, caminho do `SKILL.md` e função em uma frase.
+### sigma-cruzamento
+
+- Arquivo: `.agents/skills/sigma-cruzamento/SKILL.md`
+- Função: o quadro das cinco planilhas na página Erros. O grafo do sigma não é desenhado nessa tela.
+- Autônoma: quando a tarefa mexe nesse quadro.
+- Você pode dizer: "muda o quadro de faltas".
+
+### dc-cruzado
+
+- Arquivo: `.agents/skills/dc-cruzado/SKILL.md`
+- Função: dois gráficos de linha do dc.js que se filtram ao clique, em Atendentes e Insucessos.
+- Autônoma: quando a tarefa mexe nesses dois gráficos.
+
+### d3-cruzamento
+
+- Arquivo: `.agents/skills/d3-cruzamento/SKILL.md`
+- Função: barras D3 de quantos IDs faltam em cada planilha.
+- Autônoma: quando a tarefa mexe nessa contagem visual.
+
+### dygraphs-series
+
+- Arquivo: `.agents/skills/dygraphs-series/SKILL.md`
+- Função: série no tempo com zoom por arraste. Não substitui os gráficos Recharts já existentes.
+- Autônoma: quando a tarefa mexe numa série dygraphs.
+
+### echarts-erros
+
+- Arquivo: `.agents/skills/echarts-erros/SKILL.md`
+- Função: barras ECharts dos tipos de falta, com zoom e clique que filtra a tabela.
+- Autônoma: quando a tarefa mexe nesse gráfico.
+
+### gsap-belloscar
+
+- Arquivo: `.agents/skills/gsap-belloscar/SKILL.md`
+- Função: linha do tempo da abertura e inclinação do fundo na página Erros. A tabela de IDs fica parada.
+- Autônoma: quando a tarefa mexe na abertura ou nesse fundo.
+
+### three-abertura
+
+- Arquivo: `.agents/skills/three-abertura/SKILL.md`
+- Função: anel vermelho em WebGL só na abertura. Some ao desmontar.
+- Autônoma: quando a tarefa mexe nesse anel.
+
+### motion-abertura
+
+- Arquivo: `.agents/skills/motion-abertura/SKILL.md`
+- Função: hover do botão Entrar e a entrada do mapa. O pacote instalado é `motion`.
+- Autônoma: quando a tarefa mexe nesse botão ou nessa entrada.
+
+### motion-performance
+
+- Arquivo: `.agents/skills/motion-performance/SKILL.md`
+- Função: animar com transform e opacity. O mapa não ganha blur contínuo.
+- Autônoma: quando a tarefa adiciona movimento.
+
+### remotion-limite
+
+- Arquivo: `.agents/skills/remotion-limite/SKILL.md`
+- Função: Remotion gera vídeo e pode exigir licença de empresa. Não entra neste site.
+- Autônoma: quando alguém pedir para instalar Remotion aqui.
+
+### video-maker-limite
+
+- Arquivo: `.agents/skills/video-maker-limite/SKILL.md`
+- Função: o video-maker não é clonado neste projeto.
+- Autônoma: quando alguém pedir esse repositório aqui.
+
+### hyperframes-limite
+
+- Arquivo: `.agents/skills/hyperframes-limite/SKILL.md`
+- Função: HyperFrames renderiza vídeo. A abertura continua ao vivo.
+- Autônoma: quando alguém pedir HyperFrames neste site.
+
+### higgsfield-limite
+
+- Arquivo: `.agents/skills/higgsfield-limite/SKILL.md`
+- Função: Higgsfield treina modelo em GPU. Os números do painel vêm das planilhas.
+- Autônoma: quando alguém pedir Higgsfield aqui.
+
+### agencia-indice
+
+- Arquivo: `.agents/skills/agencia-indice/SKILL.md`
+- Função: o índice mostra o que as planilhas têm. Não clona o repositório agency-agents.
+- Autônoma: quando a tarefa mexe no índice ou na página Erros.
+
+### grill-mapa
+
+- Arquivo: `.agents/skills/grill-mapa/SKILL.md`
+- Função: o mapa fica no índice, abre com todo o período e os filtros já definidos. Não reabre essas escolhas sem pedido novo.
+- Autônoma: quando a tarefa mexe no mapa.
+
+## Quando algo novo chegar
+
+Quem adicionar skill, rule, hook, MCP ou plugin atualiza este arquivo na mesma tarefa, com:
+
+1. Nome, caminho e função em uma frase.
 2. O que dispara sozinho.
 3. O que você diz para usar na mão.
 4. O que exige um sim (enviar, publicar, commit, push, fechar issue).

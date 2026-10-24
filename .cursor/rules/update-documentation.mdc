@@ -16,6 +16,7 @@ Ao concluir **qualquer** alteração, task, feature, correção, criação de ar
 5. **Comentários / textos na UI** — se o fluxo do usuário mudou (ex.: Admin, filtros).
 6. **`.env.example`** — se novas variáveis de ambiente forem necessárias (nunca commitar segredos reais além do que o projeto já expõe no frontend).
 7. **Regras em `.cursor/rules/`** — se novas convenções do projeto forem definidas.
+8. **[CATALOGO.md](CATALOGO.md)** — se entrou, saiu ou mudou skill, rule, hook, MCP ou plugin. A regra `skills-catalogo` detalha o que escrever.
 
 ## Critério
 

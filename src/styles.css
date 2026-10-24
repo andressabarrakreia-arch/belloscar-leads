@@ -1583,7 +1583,9 @@ tr:hover td {
 }
 
 .indice-facts dd {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   margin: 2px 0 0;
   font-family: "Montserrat", sans-serif;
   font-size: 1.14rem;
@@ -1591,7 +1593,9 @@ tr:hover td {
 }
 
 .indice-quote strong {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   margin: 2px 0 0;
   font-family: "Montserrat", sans-serif;
   font-size: 0.95rem;
@@ -1679,6 +1683,9 @@ tr:hover td {
 }
 
 .indice-person em {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
   font-style: normal;
   font-size: 0.72rem;
   font-weight: 700;
@@ -2184,7 +2191,43 @@ tr:hover td {
 }
 
 .mapa-card {
-  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.sinal-tendencia {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 0.7em;
+  height: 0.7em;
+  color: var(--brand-charcoal);
+}
+
+.sinal-tendencia svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sinal-tendencia svg path {
+  fill: currentColor;
+}
+
+.sinal-tendencia.is-boa {
+  color: var(--success);
+}
+
+.sinal-tendencia.is-ruim {
+  color: var(--brand-red);
+}
+
+.sinal-tendencia.is-neutra {
+  color: #6b6d70;
+}
+
+.sinal-tendencia.is-neutra svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
 }
 
 .mapa-presets {
@@ -2294,6 +2337,71 @@ tr:hover td {
   margin: 0;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
+}
+
+.vg-tooltip {
+  display: none !important;
+}
+
+.mapa-dica {
+  position: fixed;
+  z-index: 80;
+  width: max-content;
+  max-width: 260px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fff;
+  color: #404041;
+  box-shadow: 0 8px 22px rgba(20, 16, 16, 0.16);
+  pointer-events: none;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.mapa-dica strong {
+  display: block;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+}
+
+.mapa-dica em {
+  display: block;
+  margin-top: 1px;
+  color: #6b6d70;
+  font-style: normal;
+  font-size: 11px;
+}
+
+.mapa-dica ul {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  column-gap: 14px;
+  row-gap: 2px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mapa-dica li {
+  display: contents;
+}
+
+.mapa-dica b {
+  font-weight: 700;
+  text-align: right;
+}
+
+.mapa-dica p {
+  margin: 6px 0 0;
+}
+
+.mapa-dica p b {
+  font-weight: 700;
+}
+
+.mapa-dica p span {
+  white-space: nowrap;
 }
 
 .mapa-filtro-toggle {

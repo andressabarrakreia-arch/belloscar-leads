@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.11.4] - 2026-10-24
+
+### Changed
+- No índice, cada número do mercado, dos três cards e dos destaques ganha um sinal de alta, baixa ou estabilidade
+- O mapa de clientes fica entre os cards de campanhas, agendamentos e negociações e o faturamento do mês
+
+## [1.11.3] - 2026-10-24
+
+### Changed
+- O catálogo do agente passou a se chamar `CATALOGO.md` e agora lista skills, rules, hooks, MCP e plugins
+- A dica do mapa de clientes mostra o nome do estado, a cidade, a região e os números do ponto, num balão curto. O handler entra na criação da vista, para o mapa continuar desenhado
+
 ## [1.11.2] - 2026-10-23
 
 ### Added

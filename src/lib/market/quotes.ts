@@ -1,11 +1,17 @@
 /** Cotações lidas no navegador a cada abertura do Índice Geral. */
 
+import { tendenciaDe, type Tendencia } from "../tendencia";
+
 export type MarketQuote = {
   id: string;
   label: string;
   value: string;
   detail: string;
   source: string;
+  tendencia: Tendencia | null;
+  /** Subir o número ajuda a loja. Juros, dólar e inflação sobem contra a loja. */
+  sobeAjuda: boolean;
+  contra: string;
 };
 
 type SgsPoint = { data: string; valor: string };
@@ -47,13 +53,22 @@ function dollarWhen(createDate: string): string {
   return `${day}/${month}/${year}${hm ? `, ${hm}` : ""}`;
 }
 
-async function sgsLast(code: number): Promise<SgsPoint> {
-  const res = await fetch(`${SGS}${code}/dados/ultimos/1?formato=json`, { cache: "no-store" });
+function sgsTempo(data: string): number {
+  const [day, month, year] = data.split("/").map(Number);
+  return new Date(year, month - 1, day).getTime();
+}
+
+function valorSgs(raw: string): number {
+  return Number(raw.replace(",", "."));
+}
+
+async function sgsUltimos(code: number, quantidade: number): Promise<SgsPoint[]> {
+  const res = await fetch(`${SGS}${code}/dados/ultimos/${quantidade}?formato=json`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Série ${code} indisponível`);
-  const rows = (await res.json()) as SgsPoint[];
-  const point = rows[0];
-  if (!point?.valor) throw new Error(`Série ${code} sem valor`);
-  return point;
+  const rows = ((await res.json()) as SgsPoint[]).filter((row) => row?.valor);
+  rows.sort((a, b) => sgsTempo(a.data) - sgsTempo(b.data));
+  if (!rows.length) throw new Error(`Série ${code} sem valor`);
+  return rows;
 }
 
 async function dollarQuote(): Promise<MarketQuote> {
@@ -74,39 +89,58 @@ async function dollarQuote(): Promise<MarketQuote> {
     value: `R$ ${brNumber(usd.bid, 4)}`,
     detail: [changeText, usd.create_date ? dollarWhen(usd.create_date) : ""].filter(Boolean).join(" · "),
     source: "Dólar comercial em reais",
+    tendencia: Number.isFinite(change) ? tendenciaDe(change, 0) : null,
+    sobeAjuda: false,
+    contra: "no dia",
   };
 }
 
 async function selicQuote(): Promise<MarketQuote> {
-  const point = await sgsLast(432);
+  const rows = await sgsUltimos(432, 2);
+  const point = rows[rows.length - 1];
+  const anterior = rows.length > 1 ? rows[rows.length - 2] : point;
   return {
     id: "selic",
     label: "Selic",
     value: `${brNumber(point.valor, 2)}% a.a.`,
     detail: `Meta · ref. ${point.data}`,
     source: "Banco Central",
+    tendencia: tendenciaDe(valorSgs(point.valor), valorSgs(anterior.valor)),
+    sobeAjuda: false,
+    contra: "contra a meta anterior",
   };
 }
 
 async function ipcaQuote(): Promise<MarketQuote> {
-  const [month, year] = await Promise.all([sgsLast(433), sgsLast(13522)]);
+  const [months, yearRows] = await Promise.all([sgsUltimos(433, 2), sgsUltimos(13522, 1)]);
+  const month = months[months.length - 1];
+  const anterior = months.length > 1 ? months[months.length - 2] : month;
+  const year = yearRows[yearRows.length - 1];
   return {
     id: "ipca",
     label: "Inflação (IPCA)",
     value: `${brNumber(month.valor, 2)}%`,
     detail: `no mês · ${brNumber(year.valor, 2)}% em 12 meses · ${monthLabel(month.data)}`,
     source: "IBGE via Banco Central",
+    tendencia: tendenciaDe(valorSgs(month.valor), valorSgs(anterior.valor)),
+    sobeAjuda: false,
+    contra: "contra o mês anterior",
   };
 }
 
 async function vehicleRateQuote(): Promise<MarketQuote> {
-  const point = await sgsLast(20749);
+  const rows = await sgsUltimos(20749, 2);
+  const point = rows[rows.length - 1];
+  const anterior = rows.length > 1 ? rows[rows.length - 2] : point;
   return {
     id: "veiculos",
     label: "Juros de veículos",
     value: `${brNumber(point.valor, 2)}% a.a.`,
     detail: `Média oficial · ${monthLabel(point.data)}`,
     source: "Aquisição de veículos, bancos e financeiras",
+    tendencia: tendenciaDe(valorSgs(point.valor), valorSgs(anterior.valor)),
+    sobeAjuda: false,
+    contra: "contra a leitura anterior",
   };
 }
 
@@ -122,6 +156,9 @@ export async function loadMarketQuotes(): Promise<MarketQuote[]> {
       value: "Indisponível",
       detail: "Não foi possível atualizar agora",
       source: "",
+      tendencia: null,
+      sobeAjuda: false,
+      contra: "",
     };
   });
 }

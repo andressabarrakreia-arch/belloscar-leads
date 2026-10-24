@@ -44,6 +44,16 @@ export function currentMonthRange(date = new Date()): { from: string; to: string
   return monthRange(currentMonthKey(date));
 }
 
+/** Mesmo dia do mês anterior, para comparar o mês em curso sem o mês cheio. */
+export function previousMonthSameSpan(date = new Date()): { month: string; from: string; to: string } {
+  const day = date.getDate();
+  const prev = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+  const month = currentMonthKey(prev);
+  const last = new Date(prev.getFullYear(), prev.getMonth() + 1, 0).getDate();
+  const capped = Math.min(day, last);
+  return { month, from: `${month}-01`, to: `${month}-${String(capped).padStart(2, "0")}` };
+}
+
 export function formatPeriodLabel(periodKey: string): string {
   const match = periodKey.match(/^(\d{4})-(\d{2})-Q([12])$/);
   if (!match) return periodKey;

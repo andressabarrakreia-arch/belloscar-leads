@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { loadMarketQuotes, type MarketQuote } from "../lib/market/quotes";
+import { SinalTendencia } from "./SinalTendencia";
 
 export function MarketStrip() {
   const [quotes, setQuotes] = useState<MarketQuote[] | null>(null);
@@ -35,7 +36,10 @@ export function MarketStrip() {
         {(quotes ?? placeholders()).map((quote) => (
           <article key={quote.id} className="indice-quote">
             <span>{quote.label}</span>
-            <strong>{quote.value}</strong>
+            <strong>
+              {quote.value}
+              <SinalTendencia tendencia={quote.tendencia} sobeAjuda={quote.sobeAjuda} contra={quote.contra} />
+            </strong>
             <small>{quote.detail}</small>
             {quote.source ? <em>{quote.source}</em> : null}
           </article>
@@ -52,5 +56,8 @@ function placeholders(): MarketQuote[] {
     value: "…",
     detail: "Consultando",
     source: "",
+    tendencia: null,
+    sobeAjuda: false,
+    contra: "",
   }));
 }

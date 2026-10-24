@@ -11,7 +11,7 @@ import {
   type MapaPonto,
   type OpcoesMapa,
 } from "../../lib/geo/clientesMapa";
-import { REGIOES } from "../../lib/geo/ddd";
+import { NOME_POR_UF, REGIAO_POR_UF, REGIOES } from "../../lib/geo/ddd";
 import { SpotlightCard } from "./SpotlightCard";
 
 const GEO = `${import.meta.env.BASE_URL}geo/br-uf.geojson?v=2`;
@@ -21,6 +21,54 @@ type Escolha = { tipo: "ddd"; ddd: string } | { tipo: "uf"; uf: string } | null;
 
 function n(value: number): string {
   return value.toLocaleString("pt-BR");
+}
+
+function escapar(texto: string): string {
+  return texto.replace(/[&<>"]/g, (letra) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[letra] || letra);
+}
+
+function par(nome: string, valor: number): string {
+  return `<li><span>${nome}</span><b>${n(valor)}</b></li>`;
+}
+
+function pedaco(texto: string): string {
+  return `<span>${texto}</span>`;
+}
+
+function listaCurta(titulo: string, itens: { nome: string; qtd: number }[]): string {
+  if (itens.length === 0) return "";
+  const texto = itens.map((item) => pedaco(`${escapar(item.nome)} ${n(item.qtd)}`)).join(" · ");
+  return `<p><b>${titulo}</b> ${texto}</p>`;
+}
+
+function htmlDica(dado: Record<string, unknown>, mapa: MapaClientes): string {
+  if (typeof dado.ddd === "string") {
+    const ponto = mapa.pontos.find((item) => item.ddd === dado.ddd);
+    if (!ponto) return "";
+    const nome = NOME_POR_UF[ponto.uf] || ponto.uf;
+    const regiao = REGIAO_POR_UF[ponto.uf] || "";
+    return `<strong>DDD ${escapar(ponto.ddd)} · ${escapar(ponto.cidade)}</strong><em>${escapar(nome)} (${escapar(ponto.uf)})${regiao ? ` · ${escapar(regiao)}` : ""}</em><ul>${par("Clientes", ponto.clientes)}${par("Agendamentos", ponto.agendamentos)}${par("Visitas", ponto.visitas)}${par("Sucessos", ponto.sucessos)}${par("Insucessos", ponto.insucessos)}</ul>${listaCurta("Origens", ponto.origens)}${listaCurta("Vendedores", ponto.vendedores)}`;
+  }
+  if (typeof dado.uf !== "string") return "";
+  const uf = dado.uf;
+  const nome = NOME_POR_UF[uf] || uf;
+  const regiao = REGIAO_POR_UF[uf] || "";
+  const pontos = mapa.pontos.filter((item) => item.uf === uf);
+  const soma = (campo: "clientes" | "agendamentos" | "visitas" | "sucessos" | "insucessos") =>
+    pontos.reduce((total, ponto) => total + ponto[campo], 0);
+  const cidades = pontos.map((ponto) => pedaco(`${escapar(ponto.cidade)} (${escapar(ponto.ddd)}) ${n(ponto.clientes)}`)).join(" · ");
+  const origens = juntarTops(pontos.flatMap((ponto) => ponto.origens));
+  const vendedores = juntarTops(pontos.flatMap((ponto) => ponto.vendedores));
+  return `<strong>${escapar(nome)}</strong><em>${escapar(uf)}${regiao ? ` · ${escapar(regiao)}` : ""}</em><ul>${par("Clientes", soma("clientes"))}${par("Agendamentos", soma("agendamentos"))}${par("Visitas", soma("visitas"))}${par("Sucessos", soma("sucessos"))}${par("Insucessos", soma("insucessos"))}</ul>${cidades ? `<p><b>DDDs</b> ${cidades}</p>` : ""}${listaCurta("Origens", origens)}${listaCurta("Vendedores", vendedores)}`;
+}
+
+function juntarTops(itens: { nome: string; qtd: number }[]): { nome: string; qtd: number }[] {
+  const mapa = new Map<string, number>();
+  for (const item of itens) mapa.set(item.nome, (mapa.get(item.nome) || 0) + item.qtd);
+  return [...mapa.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "pt-BR"))
+    .slice(0, 3)
+    .map(([nome, qtd]) => ({ nome, qtd }));
 }
 
 function isoLocal(date: Date): string {
@@ -173,7 +221,36 @@ export function MapaClientes({
     };
     let fechou = false;
     let vista: { finalize: () => void } | null = null;
-    embed(el, spec, { actions: false, renderer: "canvas" })
+    const caixa = document.createElement("div");
+    caixa.className = "mapa-dica";
+    caixa.hidden = true;
+    document.body.appendChild(caixa);
+    const esconderDica = () => {
+      caixa.hidden = true;
+    };
+    el.addEventListener("pointerleave", esconderDica);
+    const mostrarDica = (_handler: unknown, event: unknown, item: unknown, value: unknown) => {
+      document.querySelectorAll(".vg-tooltip").forEach((caixaVelha) => caixaVelha.remove());
+      const dado = (item as { datum?: Record<string, unknown> } | null)?.datum;
+      const html = value != null && dado ? htmlDica(dado, mapa) : "";
+      if (!html || !event) {
+        caixa.hidden = true;
+        return;
+      }
+      caixa.innerHTML = html;
+      caixa.hidden = false;
+      const mouse = event as MouseEvent;
+      const margem = 14;
+      const largura = caixa.offsetWidth;
+      const altura = caixa.offsetHeight;
+      let x = mouse.clientX + margem;
+      let y = mouse.clientY + margem;
+      if (x + largura > window.innerWidth - 8) x = Math.max(8, mouse.clientX - largura - margem);
+      if (y + altura > window.innerHeight - 8) y = Math.max(8, mouse.clientY - altura - margem);
+      caixa.style.left = `${x}px`;
+      caixa.style.top = `${y}px`;
+    };
+    embed(el, spec, { actions: false, renderer: "canvas", tooltip: mostrarDica })
       .then((result) => {
         if (fechou) {
           result.finalize();
@@ -190,6 +267,8 @@ export function MapaClientes({
       .catch(() => undefined);
     return () => {
       fechou = true;
+      el.removeEventListener("pointerleave", esconderDica);
+      caixa.remove();
       vista?.finalize();
     };
   }, [mapa]);

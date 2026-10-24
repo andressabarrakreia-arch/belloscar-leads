@@ -1,24 +1,26 @@
 ---
-description: Encaminha cada tarefa para a skill certa e mantém o catálogo de skills atualizado.
+description: Antes de cada tarefa, consulta o catálogo, escolhe skills, rules, hooks, MCP e plugins, e atualiza o arquivo quando algo disso mudar.
 alwaysApply: true
 ---
 
-# Skills: uso automático e catálogo
+# Catálogo antes da tarefa
 
-Fonte de verdade: `CATALOGO_DE_SKILLS.md`. O passo a passo de cada skill está no `SKILL.md` dela.
+Fonte de verdade: `CATALOGO.md`. O passo a passo de cada skill continua no `SKILL.md` dela.
 
 ## Ao começar uma tarefa
 
-1. Compare o pedido com a coluna **Entra sozinha** do catálogo.
-2. Se combinar, leia o `SKILL.md` e siga esse fluxo.
-3. Passo marcado como **manual**: faça o rascunho e pare até a Andressa confirmar.
-4. Este repositório é o BellosCar Analytics. Não publique o pacote npm `antd` e não crie `CHANGELOG.en-US.md` / `CHANGELOG.zh-CN.md`. Publicar o site continua sendo commit e push, só depois do sim dela.
+1. Leia `CATALOGO.md` se a tarefa ainda não citou skill, rule, hook, MCP ou plugin.
+2. Escolha só o que combina com o pedido. Leia o `SKILL.md` desses itens e siga o fluxo.
+3. Se a Andressa citar algum, use esse. Não troque por outro.
+4. Passo marcado como **manual**: faça o rascunho e pare até ela confirmar.
+5. Este repositório é o BellosCar Analytics. Não publique o pacote npm `antd`. Publicar o site continua sendo commit e push, só depois do sim dela.
 
-## Ao adicionar, remover ou mudar uma skill
+## Ao adicionar, remover ou mudar
 
-No mesmo turno, atualize `CATALOGO_DE_SKILLS.md` (função, gatilho autônomo, uso manual, o que exige confirmação, data). Skill nova que envia mensagem, publica, faz commit, push ou fecha issue nasce **manual** nesse passo. As outras nascem **autônomas**.
+No mesmo turno, atualize `CATALOGO.md`: função, gatilho, o que é manual e a data. Vale para skill, rule, hook, MCP e plugin. Item que envia mensagem, publica, faz commit, push ou fecha issue nasce **manual**. Os outros nascem **autônomos**.
 
 ## Onde estão
 
-- `.agents/skills/<nome>/SKILL.md`
-- `.cursor/skills/<nome>/SKILL.md`
+- Skills: `.agents/skills/<nome>/SKILL.md` e `.cursor/skills/<nome>/SKILL.md`
+- Rules: `.cursor/rules/*.mdc`
+- Hooks e MCP do projeto: só se existirem no repositório, e então constam no catálogo
