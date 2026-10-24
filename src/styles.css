@@ -782,6 +782,13 @@ select {
   flex-shrink: 0;
 }
 
+.pre-venda-export {
+  margin-left: 8px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
 .charts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

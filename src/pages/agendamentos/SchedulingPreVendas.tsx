@@ -5,6 +5,7 @@ import {
   SdrPreVendaUnifiedTable,
 } from "../../components/scheduling/SdrPreVendaUnifiedTable";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
+import { downloadPreVendaExport } from "../../lib/scheduling/exportPreVenda";
 import {
   displaySdrName,
   isFeaturedPreVendaSdr,
@@ -12,7 +13,7 @@ import {
 
 /** Aba Performance Pré-Vendas (+ bloco Recepção à parte). */
 export function SchedulingPreVendas() {
-  const { analytics, filters } = useSchedulingAnalyticsContext();
+  const { analytics, filters, dataset } = useSchedulingAnalyticsContext();
   if (!analytics) return null;
 
   const { sdrPreVendaRows, sdrRecepcao } = analytics;
@@ -31,9 +32,26 @@ export function SchedulingPreVendas() {
   const featuredRows = deskRows.filter((r) => isFeaturedPreVendaSdr(r.sdr));
   const convRows = filterSdr ? deskRows : featuredRows;
 
+  const exportar = () => {
+    if (!dataset) return;
+    downloadPreVendaExport(
+      {
+        sdrs: deskRows.map((row) => row.sdr),
+        atendimentos: analytics.filteredRealizados,
+        agendamentos: analytics.preVenda,
+        visitas: analytics.filteredVisitas,
+        sucessos: analytics.filteredSucessos,
+        agenda: dataset.items,
+        realizados: dataset.realizados || [],
+      },
+      filters.from,
+      filters.to
+    );
+  };
+
   return (
     <>
-      <SdrPreVendaUnifiedTable rows={deskRows} />
+      <SdrPreVendaUnifiedTable rows={deskRows} onExport={exportar} />
       <SdrPreVendaConvPropostaTable rows={convRows} />
       <SdrPreVendaTopParceirosTable rows={convRows} />
 

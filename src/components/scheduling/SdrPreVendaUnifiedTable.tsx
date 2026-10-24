@@ -3,6 +3,7 @@ import type { PropostaConversao, SdrPreVendaRow } from "../../lib/scheduling/typ
 
 type Props = {
   rows: SdrPreVendaRow[];
+  onExport?: () => void;
 };
 
 function taxaOf(rows: PropostaConversao[], tipo: string): string {
@@ -12,7 +13,7 @@ function taxaOf(rows: PropostaConversao[], tipo: string): string {
 }
 
 /** 1) Desempenho unificado (volumes + taxas + mix em quantidade). */
-export function SdrPreVendaUnifiedTable({ rows }: Props) {
+export function SdrPreVendaUnifiedTable({ rows, onExport }: Props) {
   return (
     <div className="card">
       <h2>
@@ -23,6 +24,14 @@ export function SdrPreVendaUnifiedTable({ rows }: Props) {
           Visitas = Visita em · Sucessos = Finalizado em · % Agend. = Ag/Atend · Conv. visita =
           Vis/Ag · Conv. = Suc/Vis. Recepção não entra neste bloco.
         </InfoTip>
+        <button
+          type="button"
+          className="btn secondary pre-venda-export"
+          onClick={onExport}
+          disabled={!onExport || rows.length === 0}
+        >
+          Exportar
+        </button>
       </h2>
       <div className="table-scroll">
         <table>
