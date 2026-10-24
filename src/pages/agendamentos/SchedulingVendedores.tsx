@@ -4,6 +4,7 @@ import { ShareDonut } from "../../components/charts/ShareDonut";
 import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { PerformanceComparisonTable } from "../../components/scheduling/PerformanceComparisonTable";
 import { VendedorConversionCards } from "../../components/scheduling/VendedorConversionCards";
+import { VegaBarras } from "../../components/viz/VegaBarras";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
 
 /** Aba Performance Vendedores. */
@@ -54,6 +55,13 @@ export function SchedulingVendedores() {
           data={analytics.vendedorMetrics.map((row) => ({ label: row.vendedor, value: row.totalSucesso }))}
         />
       </div>
+      <VegaBarras
+        titulo="Sucessos por vendedor"
+        dica="O mesmo sucesso da rosca, em barra, para comparar a altura."
+        dados={analytics.vendedorMetrics.map((row) => ({ nome: row.vendedor, sucessos: row.totalSucesso }))}
+        nome="nome"
+        valor="sucessos"
+      />
       <VendedorConversionCards
         rows={analytics.vendedorMetrics}
         selectedVendedor={selectedVendedor}

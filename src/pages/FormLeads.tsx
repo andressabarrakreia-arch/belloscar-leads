@@ -5,6 +5,8 @@ import { InfoTip } from "../components/InfoTip";
 import { InteractiveTable } from "../components/InteractiveTable";
 import { SeriesChart } from "../components/charts/SeriesChart";
 import { ShareDonut } from "../components/charts/ShareDonut";
+import { VegaBarras } from "../components/viz/VegaBarras";
+import { phoneKey } from "../lib/campanhas/phoneMatch";
 import { CHART_COLORS } from "../components/charts/chartTheme";
 import { Card } from "../components/ui/card";
 import { useCampanhas } from "../hooks/useCampanhas";
@@ -46,6 +48,22 @@ export function FormLeads() {
       ),
     [leads, dataset, filters]
   );
+  const ddds = useMemo(() => {
+    const mapa = new Map<string, number>();
+    for (const row of leads) {
+      if (filters.from && row.criadoEm < filters.from) continue;
+      if (filters.to && row.criadoEm > filters.to) continue;
+      if (filters.formulario && row.formulario !== filters.formulario) continue;
+      const chaves = row.phoneKeys?.length ? row.phoneKeys : [row.phoneKey || row.telefone];
+      const ddd = phoneKey(chaves[0] || "").slice(0, 2);
+      if (ddd.length !== 2) continue;
+      mapa.set(ddd, (mapa.get(ddd) || 0) + 1);
+    }
+    return [...mapa.entries()]
+      .map(([ddd, total]) => ({ ddd, leads: total }))
+      .sort((a, b) => b.leads - a.leads)
+      .slice(0, 12);
+  }, [leads, filters]);
   const selectedMonth = monthKeyFromRange(filters.from, filters.to);
   const padrao = currentMonthRange();
   const monthPadrao = currentMonthKey();
@@ -202,6 +220,15 @@ export function FormLeads() {
               data={report.campanhas.map((row) => ({ label: row.formulario, value: row.sucessos }))}
             />
           </div>
+
+          <VegaBarras
+            titulo="DDD dos formulários cruzados"
+            dica="Os 12 DDDs com mais leads que acharam telefone na operação."
+            dados={ddds}
+            nome="ddd"
+            valor="leads"
+            valorLabel="Leads"
+          />
 
           <div className="card">
             <h2>Cruzados pelo telefone</h2>

@@ -4,6 +4,7 @@ import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { CanalKpiGrid } from "../../components/scheduling/CanalKpiGrid";
 import { ProposalDistributionChart } from "../../components/scheduling/ProposalDistributionChart";
 import { TimeSeriesChart } from "../../components/scheduling/TimeSeriesChart";
+import { DygraphLinhas } from "../../components/viz/DygraphLinhas";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
 
 /** Aba Visão Geral — KPIs e séries (Pré-Venda e Recepção separados). */
@@ -96,6 +97,19 @@ export function SchedulingOverview() {
           xKey="label"
         />
       </div>
+
+      <DygraphLinhas
+        titulo="Quinzenas da pré-venda"
+        dica="Arraste para aproximar uma quinzena. Clique duplo mostra o período todo."
+        linhas={periodSeriesPreVenda}
+        x="periodKey"
+        series={[
+          { key: "total", name: "Agendamentos", color: "#404041" },
+          { key: "visitas", name: "Visitas", color: "#2f6f9f" },
+          { key: "sucessos", name: "Sucessos", color: "#2e7d4f" },
+          { key: "insucessos", name: "Insucessos", color: "#c02026" },
+        ]}
+      />
 
       <div className="charts">
         <ProposalDistributionChart

@@ -2,6 +2,7 @@ import { InfoTip } from "../../components/InfoTip";
 import { InteractiveTable } from "../../components/InteractiveTable";
 import { SeriesChart } from "../../components/charts/SeriesChart";
 import { ShareDonut } from "../../components/charts/ShareDonut";
+import { VegaBarras } from "../../components/viz/VegaBarras";
 import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
@@ -30,6 +31,13 @@ export function NegociacoesVendedores() {
           data={vendedores.map((row) => ({ label: row.vendedor, value: row.total }))}
         />
       </div>
+      <VegaBarras
+        titulo="Vendas por vendedor"
+        dica="Passe o mouse para comparar a altura de cada vendedor."
+        dados={vendedores.map((row) => ({ nome: row.vendedor, vendas: row.vendas }))}
+        nome="nome"
+        valor="vendas"
+      />
       <div className="card">
         <h2>
           Desempenho por vendedor

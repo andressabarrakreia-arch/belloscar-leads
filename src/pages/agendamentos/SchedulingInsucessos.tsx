@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { InfoTip } from "../../components/InfoTip";
 import { InteractiveTable } from "../../components/InteractiveTable";
 import { SeriesChart } from "../../components/charts/SeriesChart";
@@ -6,17 +7,37 @@ import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { MotivoByPersonTable } from "../../components/scheduling/MotivoByPersonTable";
 import { MotivoDistributionChart } from "../../components/scheduling/MotivoDistributionChart";
 import { MotivoLabel } from "../../components/scheduling/MotivoLabel";
+import { DcCruzado } from "../../components/viz/DcCruzado";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
 
 /** Aba Análise de Insucessos. */
 export function SchedulingInsucessos() {
-  const { analytics } = useSchedulingAnalyticsContext();
+  const { analytics, dataset } = useSchedulingAnalyticsContext();
+  const linhasDc = useMemo(
+    () =>
+      (dataset?.items || [])
+        .filter((item) => item.status === "Insucesso")
+        .map((item) => ({
+          motivo: item.motivoInsucesso?.trim() || "Sem motivo",
+          vendedor: item.vendedor || "Sem vendedor",
+        })),
+    [dataset]
+  );
   if (!analytics) return null;
 
   const { insucessoKpis, motivosInsucesso, motivosBySdr, motivosByVendedor } = analytics;
 
   return (
     <>
+      <DcCruzado
+        titulo="Motivo e vendedor, ligados"
+        dica="Clique num motivo para ver quais vendedores ficam nesse recorte. Clique de novo para soltar."
+        linhas={linhasDc}
+        chaveA="motivo"
+        tituloA="Motivo"
+        chaveB="vendedor"
+        tituloB="Vendedor"
+      />
       <div className="card">
         <h2>
           Insucessos · resumo

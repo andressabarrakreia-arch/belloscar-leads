@@ -1,7 +1,7 @@
 import { HashRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ModuleLayout } from "./components/ModuleLayout";
 import { ParticleField } from "./components/ParticleField";
-import { AGENDAMENTOS, CAMPANHAS, NEGOCIACOES } from "./modules/registry";
+import { AGENDAMENTOS, CAMPANHAS, NEGOCIACOES, PERFIL } from "./modules/registry";
 import { Admin } from "./pages/Admin";
 import { Attendants } from "./pages/Attendants";
 import { Compare } from "./pages/Compare";
@@ -9,7 +9,6 @@ import { Dashboard } from "./pages/Dashboard";
 import { FormLeads } from "./pages/FormLeads";
 import { SchedulingAdmin } from "./pages/agendamentos/SchedulingAdmin";
 import { SchedulingDetalhe } from "./pages/agendamentos/SchedulingDetalhe";
-import { SchedulingErros } from "./pages/agendamentos/SchedulingErros";
 import { SchedulingInsucessos } from "./pages/agendamentos/SchedulingInsucessos";
 import { SchedulingOverview } from "./pages/agendamentos/SchedulingOverview";
 import { SchedulingPortais } from "./pages/agendamentos/SchedulingPortais";
@@ -21,6 +20,8 @@ import { NegociacoesLancamentos } from "./pages/negociacoes/NegociacoesLancament
 import { NegociacoesOverview } from "./pages/negociacoes/NegociacoesOverview";
 import { NegociacoesShell } from "./pages/negociacoes/NegociacoesShell";
 import { NegociacoesVendedores } from "./pages/negociacoes/NegociacoesVendedores";
+import { PerfilClientes } from "./pages/perfil/PerfilClientes";
+import { Erros } from "./pages/Erros";
 import { IndiceGeral } from "./pages/IndiceGeral";
 import { IndiceGestao } from "./pages/IndiceGestao";
 
@@ -29,10 +30,11 @@ import { IndiceGestao } from "./pages/IndiceGestao";
  * Análise de Campanhas: #/campanhas
  * Análise de Agendamentos: #/agendamentos
  * Análise de Negociações: #/negociacoes
+ * Perfil de Clientes: #/perfil
  */
 function Ambient() {
   const { pathname } = useLocation();
-  if (pathname === "/" || pathname === "/indice") return null;
+  if (pathname === "/" || pathname === "/indice" || pathname === "/erros") return null;
   return <ParticleField />;
 }
 
@@ -44,6 +46,8 @@ export default function App() {
         <Route index element={<IndiceGeral />} />
         <Route path="indice" element={<IndiceGeral />} />
         <Route path="indice/gestao" element={<IndiceGestao />} />
+        <Route path="erros" element={<Erros />} />
+        <Route path="agendamentos/erros" element={<Navigate to="/erros" replace />} />
 
         <Route path="campanhas" element={<ModuleLayout module={CAMPANHAS} />}>
           <Route index element={<Dashboard />} />
@@ -62,8 +66,11 @@ export default function App() {
             <Route path="portais" element={<SchedulingPortais />} />
             <Route path="insucessos" element={<SchedulingInsucessos />} />
           </Route>
-          <Route path="erros" element={<SchedulingErros />} />
           <Route path="admin" element={<SchedulingAdmin />} />
+        </Route>
+
+        <Route path="perfil" element={<ModuleLayout module={PERFIL} />}>
+          <Route index element={<PerfilClientes />} />
         </Route>
 
         <Route path="negociacoes" element={<ModuleLayout module={NEGOCIACOES} />}>

@@ -170,6 +170,28 @@ export type RevenueSpot = {
   detail: string;
 };
 
+export type RevenueBoard = {
+  people: RevenueSpot[];
+  web: RevenueSpot | null;
+};
+
+const EMPTY_BOARD: RevenueBoard = { people: [], web: null };
+
+/** Pré-venda da equipe, ou o nome na negociação marca Vendas / Prospecção. */
+function isWebVendas(name: string): boolean {
+  if (isFeaturedPreVendaSdr(name)) return true;
+  const key = name
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase();
+  return key.includes("vendas") || key.includes("prospec");
+}
+
+function joinNames(names: string[]): string {
+  if (names.length <= 1) return names[0] ?? "";
+  return `${names.slice(0, -1).join(", ")} e ${names[names.length - 1]}`;
+}
+
 function money(value: number): string {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
 }
@@ -181,8 +203,8 @@ function saleValue(lines: NegociacaoLine[]): number {
   return pool.reduce((sum, line) => sum + (line.valorVenda ?? 0), 0);
 }
 
-/** Top 3 do mês corrente pelo Valor Venda. Só Negociações tem preço. */
-export function topFaturamento(lines: NegociacaoLine[]): RevenueSpot[] {
+/** Faturamento do mês, todos os colaboradores, mais o total do setor Web Vendas. */
+export function topFaturamento(lines: NegociacaoLine[]): RevenueBoard {
   const ym = monthKey();
   const deals = filterDeals(dealsFromLines(lines), {
     month: ym,
@@ -202,14 +224,35 @@ export function topFaturamento(lines: NegociacaoLine[]): RevenueSpot[] {
     current.deals += 1;
     totals.set(deal.vendedor, current);
   }
+  const ranked = [...totals.entries()].sort((a, b) => b[1].total - a[1].total || b[1].deals - a[1].deals);
+  if (ranked.length === 0) return EMPTY_BOARD;
   const title = monthTitle(ym);
-  return [...totals.entries()]
-    .sort((a, b) => b[1].total - a[1].total || b[1].deals - a[1].deals)
-    .slice(0, 3)
-    .map(([name, row], index) => ({
-      place: `${index + 1}º`,
+  const faturamento = ranked.reduce((sum, [, row]) => sum + row.total, 0);
+  const spot = (name: string, row: { total: number; deals: number }, place: string, detail: string): RevenueSpot => ({
+    place,
+    name,
+    value: pct(row.total, faturamento),
+    detail,
+  });
+  const people = ranked.map(([name, row], index) =>
+    spot(
       name,
-      value: money(row.total),
-      detail: `${title}: ${money(row.total)} em ${num(row.deals)} ${row.deals === 1 ? "negócio" : "negócios"}.`,
-    }));
+      row,
+      `${index + 1}º`,
+      `${money(row.total)} · ${title}, ${num(row.deals)} ${row.deals === 1 ? "negócio" : "negócios"}.`
+    )
+  );
+  const webRows = ranked.filter(([name]) => isWebVendas(name));
+  const webTotal = webRows.reduce((sum, [, row]) => sum + row.total, 0);
+  const webDeals = webRows.reduce((sum, [, row]) => sum + row.deals, 0);
+  const web =
+    webTotal > 0
+      ? spot(
+          "Web Vendas",
+          { total: webTotal, deals: webDeals },
+          "Total",
+          `${money(webTotal)} · ${title}, soma de ${joinNames(webRows.map(([name]) => name))}, ${num(webDeals)} ${webDeals === 1 ? "negócio" : "negócios"}.`
+        )
+      : null;
+  return { people, web };
 }

@@ -2,6 +2,7 @@ import { SeriesChart } from "../../components/charts/SeriesChart";
 import { ShareDonut } from "../../components/charts/ShareDonut";
 import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { PortaisDashboard } from "../../components/scheduling/PortaisDashboard";
+import { VegaBarras } from "../../components/viz/VegaBarras";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
 
 /** Aba Portais — resultados e conversão por origem/portal. */
@@ -32,6 +33,13 @@ export function SchedulingPortais() {
           data={topByVolume.map((item) => ({ label: item.origin, value: item.total }))}
         />
       </div>
+      <VegaBarras
+        titulo="Atendimentos por grupo de portal"
+        dica="Passe o mouse para ver o volume de cada grupo."
+        dados={groups.map((row) => ({ nome: row.label, atendimentos: row.atendimentos }))}
+        nome="nome"
+        valor="atendimentos"
+      />
       <PortaisDashboard data={analytics.portais} />
     </>
   );

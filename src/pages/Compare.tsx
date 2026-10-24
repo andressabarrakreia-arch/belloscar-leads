@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { CampanhasFilters } from "../components/CampanhasFilters";
 import { SeriesChart } from "../components/charts/SeriesChart";
+import { DygraphLinhas } from "../components/viz/DygraphLinhas";
 import { CHART_COLORS } from "../components/charts/chartTheme";
 import { InteractiveTable } from "../components/InteractiveTable";
 import { ClearFiltersButton, filterActiveClass } from "../components/ClearFiltersButton";
@@ -213,6 +214,22 @@ export function Compare() {
 
       {!result && <p className="muted">Escolha o mês ou as datas de cada período.</p>}
       {result && <KpiCompare label="Período A × período B" a={result.a} b={result.b} />}
+      {result && fromA && fromB ? (
+        <DygraphLinhas
+          titulo="Os dois períodos"
+          dica="Cada ponto é o início do período. Arraste para ler o valor de perto."
+          linhas={[
+            { data: fromA, atendimentos: result.a.atendimentos, visitas: result.a.visitas, sucessos: result.a.sucessos },
+            { data: fromB, atendimentos: result.b.atendimentos, visitas: result.b.visitas, sucessos: result.b.sucessos },
+          ]}
+          x="data"
+          series={[
+            { key: "atendimentos", name: "Atendimentos", color: "#404041" },
+            { key: "visitas", name: "Visitas", color: "#2f6f9f" },
+            { key: "sucessos", name: "Sucessos", color: "#2e7d4f" },
+          ]}
+        />
+      ) : null}
     </>
   );
 }

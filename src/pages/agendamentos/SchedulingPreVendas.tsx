@@ -7,6 +7,7 @@ import {
   SdrPreVendaTopParceirosTable,
   SdrPreVendaUnifiedTable,
 } from "../../components/scheduling/SdrPreVendaUnifiedTable";
+import { VegaBarras } from "../../components/viz/VegaBarras";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
 import { downloadPreVendaExport } from "../../lib/scheduling/exportPreVenda";
 import {
@@ -77,6 +78,13 @@ export function SchedulingPreVendas() {
         />
       </div>
       <SdrPreVendaUnifiedTable rows={deskRows} onExport={exportar} />
+      <VegaBarras
+        titulo="Agendamentos por pré-venda"
+        dica="Passe o mouse na barra para ler o total."
+        dados={deskRows.map((row) => ({ nome: displaySdrName(row.sdr), agendamentos: row.totalAgendamentos }))}
+        nome="nome"
+        valor="agendamentos"
+      />
       <SdrPreVendaConvPropostaTable rows={convRows} />
       <SdrPreVendaTopParceirosTable rows={convRows} />
 

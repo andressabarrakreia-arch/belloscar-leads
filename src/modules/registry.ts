@@ -53,7 +53,6 @@ export const MODULES: AppModule[] = [
       { to: "/agendamentos/detalhe", label: "Agendamentos" },
       { to: "/agendamentos/portais", label: "Portais" },
       { to: "/agendamentos/insucessos", label: "Insucessos" },
-      { to: "/agendamentos/erros", label: "Erros" },
       { to: "/agendamentos/admin", label: "Gestão", adminOnly: true },
     ],
   },
@@ -70,6 +69,14 @@ export const MODULES: AppModule[] = [
       { to: "/negociacoes/admin", label: "Gestão", adminOnly: true },
     ],
   },
+  {
+    id: "perfil",
+    name: "Perfil de Clientes",
+    basePath: "/perfil",
+    tagline: "Marcas, modelos, gênero dos clientes e motivos de não fechamento",
+    publicPath: "/perfil",
+    nav: [{ to: "/perfil", label: "Visão Geral", end: true }],
+  },
 ];
 
 export function getModuleById(id: string): AppModule | undefined {
@@ -79,3 +86,4 @@ export function getModuleById(id: string): AppModule | undefined {
 export const CAMPANHAS = getModuleById("campanhas")!;
 export const AGENDAMENTOS = getModuleById("agendamentos")!;
 export const NEGOCIACOES = getModuleById("negociacoes")!;
+export const PERFIL = getModuleById("perfil")!;

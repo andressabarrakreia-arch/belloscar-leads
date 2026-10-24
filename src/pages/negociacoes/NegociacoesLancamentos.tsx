@@ -2,6 +2,7 @@ import { InfoTip } from "../../components/InfoTip";
 import { InteractiveTable } from "../../components/InteractiveTable";
 import { SeriesChart } from "../../components/charts/SeriesChart";
 import { ShareDonut } from "../../components/charts/ShareDonut";
+import { VegaBarras } from "../../components/viz/VegaBarras";
 import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
@@ -33,6 +34,13 @@ export function NegociacoesLancamentos() {
         />
         <ShareDonut title="Lançamentos por status" data={porStatus.map((row) => ({ label: row.nome, value: row.qtd }))} />
       </div>
+      <VegaBarras
+        titulo="Tipos de lançamento"
+        dica="A mesma contagem da barra acima, com o valor no mouse."
+        dados={porTipo}
+        nome="nome"
+        valor="qtd"
+      />
     <div className="card">
       <h2>
         Lançamentos

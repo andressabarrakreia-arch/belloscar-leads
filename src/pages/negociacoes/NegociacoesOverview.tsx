@@ -2,6 +2,7 @@ import { InfoTip } from "../../components/InfoTip";
 import { InteractiveTable } from "../../components/InteractiveTable";
 import { SeriesChart } from "../../components/charts/SeriesChart";
 import { ShareDonut } from "../../components/charts/ShareDonut";
+import { DygraphLinhas } from "../../components/viz/DygraphLinhas";
 import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
@@ -75,6 +76,18 @@ export function NegociacoesOverview() {
           data={statusRows.map((row) => ({ label: row.status, value: row.quantidade }))}
         />
       </div>
+
+      <DygraphLinhas
+        titulo="Negócios por quinzena"
+        dica="Arraste para aproximar. Clique duplo volta ao período inteiro."
+        linhas={periodSeries}
+        x="periodKey"
+        series={[
+          { key: "vendas", name: "Vendas", color: "#2e7d4f" },
+          { key: "trocas", name: "Trocas", color: "#2f6f9f" },
+          { key: "compras", name: "Compras", color: "#404041" },
+        ]}
+      />
 
       <div className="card">
         <h2>Status</h2>

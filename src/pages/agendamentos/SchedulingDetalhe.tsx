@@ -2,6 +2,7 @@ import { SeriesChart } from "../../components/charts/SeriesChart";
 import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { ProposalDistributionChart } from "../../components/scheduling/ProposalDistributionChart";
 import { SdrVendedorProposalTable } from "../../components/scheduling/SdrVendedorProposalTable";
+import { VegaBarras } from "../../components/viz/VegaBarras";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
 
 /** Aba Análise de Agendamentos — cruzamentos SDR × Vendedor e propostas. */
@@ -14,6 +15,13 @@ export function SchedulingDetalhe() {
   return (
     <>
       <SdrVendedorProposalTable rows={sdrVendedorPairs} />
+      <VegaBarras
+        titulo="Propostas da pré-venda"
+        dica="Passe o mouse para ler a quantidade de cada tipo."
+        dados={proposalsPreVenda.map((row) => ({ nome: row.label, quantidade: row.value }))}
+        nome="nome"
+        valor="quantidade"
+      />
 
       <div className="charts">
         <ProposalDistributionChart

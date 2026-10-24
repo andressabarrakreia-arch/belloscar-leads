@@ -4,6 +4,7 @@ import { InfoTip } from "../components/InfoTip";
 import { InteractiveTable } from "../components/InteractiveTable";
 import { SeriesChart } from "../components/charts/SeriesChart";
 import { ShareDonut } from "../components/charts/ShareDonut";
+import { DygraphLinhas } from "../components/viz/DygraphLinhas";
 import { CHART_COLORS } from "../components/charts/chartTheme";
 import { Card } from "../components/ui/card";
 import { useCampanhas } from "../hooks/useCampanhas";
@@ -144,6 +145,18 @@ export function Dashboard() {
           ]}
         />
       </div>
+
+      <DygraphLinhas
+        titulo="Série dos meses"
+        dica="Arraste um trecho para aproximar. Clique duplo volta a série inteira."
+        linhas={monthChart}
+        x="month"
+        series={[
+          { key: "atendimentos", name: "Atendimentos", color: "#404041" },
+          { key: "visitas", name: "Visitas", color: "#2f6f9f" },
+          { key: "sucessos", name: "Sucessos", color: "#2e7d4f" },
+        ]}
+      />
 
       <div className="card">
         <h2>Por SDR</h2>

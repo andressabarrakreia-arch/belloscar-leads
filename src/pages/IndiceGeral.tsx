@@ -1,5 +1,7 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { IndiceAbertura } from "../components/IndiceAbertura";
+import { MapaClientes } from "../components/viz/MapaClientes";
 import { MarketStrip } from "../components/MarketStrip";
 import { SiteCredit } from "../components/SiteCredit";
 import { useCampanhas } from "../hooks/useCampanhas";
@@ -7,6 +9,7 @@ import { useNegociacoesAnalytics, useNegociacoesStore } from "../hooks/useNegoci
 import { useSchedulingAnalytics, useSchedulingStore } from "../hooks/useSchedulingStore";
 import { sliceCampanhas } from "../lib/campanhas/analytics";
 import { currentMonthKey, currentMonthRange } from "../lib/dates";
+import { FILTRO_MAPA_INICIAL, buildMapaClientes, indiceVeiculos, opcoesMapa, type FiltroMapa } from "../lib/geo/clientesMapa";
 import { agendaPeople, campanhaPeople, lojaPeople, topFaturamento, type SectorPeople } from "../lib/indice/destaques";
 import type { NegociacoesFilters } from "../lib/negociacoes/types";
 
@@ -24,7 +27,13 @@ const NEGOCIACOES_MES: NegociacoesFilters = {
   tipoVenda: "all",
 };
 
-const DOORS = [
+const DOORS: {
+  to: string;
+  label: string;
+  line: string;
+  summary: string;
+  tone?: "red";
+}[] = [
   {
     to: "/campanhas",
     label: "Campanhas",
@@ -44,6 +53,19 @@ const DOORS = [
     label: "Negociações",
     line: "Loja",
     summary: "Vendas, trocas, compras e consignações, com lançamentos e resultado por vendedor.",
+  },
+  {
+    to: "/perfil",
+    label: "Perfil",
+    line: "Marcas e clientes",
+    summary: "Marcas, modelos, gênero dos clientes e os principais motivos de não fechar o negócio.",
+  },
+  {
+    to: "/erros",
+    label: "Erros",
+    line: "Cruzamento",
+    summary: "ID que está numa planilha e falta na outra, com a base e o número.",
+    tone: "red",
   },
 ];
 
@@ -84,6 +106,7 @@ function PersonRow({
 }
 
 export function IndiceGeral() {
+  const [filtroMapa, setFiltroMapa] = useState<FiltroMapa>(FILTRO_MAPA_INICIAL);
   const campanhas = useCampanhas();
   const agendamentos = useSchedulingStore();
   const negociacoes = useNegociacoesStore();
@@ -104,8 +127,17 @@ export function IndiceGeral() {
     [agendamentos.dataset, campanhas.rows, negociacoes.dataset]
   );
   const ranking = useMemo(
-    () => (negociacoes.dataset ? topFaturamento(negociacoes.dataset.lines) : []),
+    () => (negociacoes.dataset ? topFaturamento(negociacoes.dataset.lines) : { people: [], web: null }),
     [negociacoes.dataset]
+  );
+  const veiculos = useMemo(() => indiceVeiculos(negociacoes.dataset?.lines || []), [negociacoes.dataset]);
+  const opcoesDoMapa = useMemo(
+    () => opcoesMapa(agendamentos.dataset, negociacoes.dataset?.lines || []),
+    [agendamentos.dataset, negociacoes.dataset]
+  );
+  const mapa = useMemo(
+    () => (agendamentos.dataset ? buildMapaClientes(agendamentos.dataset, filtroMapa, veiculos) : null),
+    [agendamentos.dataset, filtroMapa, veiculos]
   );
 
   useEffect(() => {
@@ -156,6 +188,7 @@ export function IndiceGeral() {
 
   return (
     <div className="indice">
+      <IndiceAbertura />
       <div className="indice-bg" style={{ backgroundImage: `url("${fundo}")` }} aria-hidden="true" />
       <div className="indice-content">
         <header className="indice-hero">
@@ -168,7 +201,11 @@ export function IndiceGeral() {
 
         <nav className="indice-doors" aria-label="Páginas principais">
           {DOORS.map((door) => (
-            <Link key={door.to} to={door.to} className="indice-door">
+            <Link
+              key={door.to}
+              to={door.to}
+              className={door.tone === "red" ? "indice-door indice-door--erros" : "indice-door"}
+            >
               {door.label}
               <span className="indice-door-tip" role="tooltip">
                 <strong>{door.line}</strong>
@@ -177,6 +214,8 @@ export function IndiceGeral() {
             </Link>
           ))}
         </nav>
+
+        {mapa ? <MapaClientes mapa={mapa} filtro={filtroMapa} opcoes={opcoesDoMapa} onFiltro={setFiltroMapa} /> : null}
 
         <MarketStrip />
 
@@ -211,27 +250,39 @@ export function IndiceGeral() {
         <section className="indice-rank indice-card" aria-label="Quem mais faturou no mês">
           <header className="indice-rank-head">
             <h2>Faturamento do mês</h2>
-            <p>Valor de venda. Passe o mouse para ver os negócios.</p>
+            <p>Participação no faturamento. Passe o mouse para ver o valor.</p>
           </header>
           {negociacoes.loading ? (
             <p className="indice-rank-empty">Carregando…</p>
-          ) : ranking.length === 0 ? (
+          ) : ranking.people.length === 0 ? (
             <p className="indice-rank-empty">Sem vendas com valor neste mês.</p>
           ) : (
-            <ol>
-              {ranking.map((spot) => (
-                <li key={spot.place}>
-                  <button type="button" className="indice-rank-item">
-                    <span>{spot.place}</span>
-                    <strong>{spot.name}</strong>
-                    <em>{spot.value}</em>
-                    <span className="indice-person-tip" role="tooltip">
-                      {spot.detail}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ol>
+            <>
+              <ol>
+                {ranking.people.map((spot) => (
+                  <li key={spot.name}>
+                    <button type="button" className="indice-rank-item">
+                      <span>{spot.place}</span>
+                      <strong>{spot.name}</strong>
+                      <em>{spot.value}</em>
+                      <span className="indice-person-tip" role="tooltip">
+                        {spot.detail}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+              {ranking.web ? (
+                <button type="button" className="indice-rank-item indice-rank-total">
+                  <span>{ranking.web.place}</span>
+                  <strong>{ranking.web.name}</strong>
+                  <em>{ranking.web.value}</em>
+                  <span className="indice-person-tip" role="tooltip">
+                    {ranking.web.detail}
+                  </span>
+                </button>
+              ) : null}
+            </>
           )}
         </section>
 
