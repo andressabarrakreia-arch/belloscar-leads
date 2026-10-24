@@ -41,6 +41,45 @@ function mergeLeadsAtendimentos(
   return [...map.values()];
 }
 
+function statusForaDoAtendimento(value: string | undefined): boolean {
+  const text = (value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "");
+  return text === "pendente" || text === "descartado";
+}
+
+/** Recebido que não está em realizados vira atendimento na data de Criado em. Pendente e Descartado ficam de fora. */
+function atendimentosFromLeads(
+  realizados: RealizadoItem[],
+  incoming: ParsedSchedulingRow[]
+): { realizados: RealizadoItem[]; added: number } {
+  const { unique } = dedupeCount(incoming);
+  const present = new Set(realizados.map((row) => row.id));
+  const next = [...realizados];
+  let added = 0;
+  for (const row of unique) {
+    if (!row.id || present.has(row.id) || statusForaDoAtendimento(row.statusTexto)) continue;
+    const dataAtendido = row.dataAgendamento || row.dataAtendido;
+    if (!dataAtendido) continue;
+    next.push({
+      id: row.id,
+      dataAtendido,
+      dataVisita: null,
+      teveVisita: false,
+      sdr: row.sdr?.trim() || "(sem SDR)",
+      origem: row.origem?.trim() || "Não informado",
+      tipoProposta: row.tipoProposta || "não informado(celulas em branco)",
+      cliente: row.cliente?.trim() || "",
+      celular: row.celular?.trim() || "",
+    });
+    present.add(row.id);
+    added += 1;
+  }
+  return { realizados: next, added };
+}
+
 function mergeRealizados(
   current: RealizadoItem[],
   incoming: ParsedSchedulingRow[],
@@ -141,7 +180,14 @@ function mergeItem(
     };
   }
 
-  const sdr = incoming.sdr?.trim() ? incoming.sdr : existing.sdr;
+  // LEADS traz o responsável do lead. Não troca o "Atendido por" já definido
+  // na agenda, no insucesso ou no realizado.
+  const sdr =
+    incoming.kind === "leads"
+      ? existing.sdr
+      : incoming.sdr?.trim()
+        ? incoming.sdr
+        : existing.sdr;
   // Só a planilha de agendamentos traz a data do agendamento.
   // Leads (criado em) e insucessos (finalizado em) não trocam esse dia.
   const dataAgendamento =
@@ -604,10 +650,18 @@ export function applySchedulingImport(
       ? mergeLeadsAtendimentos(base.leadsAtendimentos || [], incoming)
       : base.leadsAtendimentos || [];
 
+  const fromLeads =
+    kind === "leads"
+      ? atendimentosFromLeads(base.realizados || [], incoming)
+      : { realizados: base.realizados || [], added: 0 };
+
   const leadNote =
     kind === "leads"
       ? [
           `LEADS GERAL: ${leadsAtendimentos.length} leads únicos na base`,
+          fromLeads.added > 0
+            ? `${fromLeads.added} recebidos sem realizado entraram como atendimento na data de Criado em. Pendente e Descartado não entram.`
+            : "Nenhum recebido novo virou atendimento. Pendente e Descartado não entram, e quem já está em realizados permanece.",
           "Após o import, origem/tipo são recruzados por ID em REALIZADOS/agenda/SUCESSOS",
         ]
       : [];
@@ -638,7 +692,7 @@ export function applySchedulingImport(
       imports: base.imports,
       items: agendaItems,
       leadsAtendimentos,
-      realizados: base.realizados,
+      realizados: fromLeads.realizados,
       sucessosEventos: base.sucessosEventos,
       leadsCampanha: base.leadsCampanha,
     },

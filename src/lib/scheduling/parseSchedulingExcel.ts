@@ -22,6 +22,8 @@ export type ParsedSchedulingRow = Partial<AgendamentoItem> & {
   dataVisita?: string | null;
   /** SUCESSOS: Finalizado em */
   dataFinalizado?: string;
+  /** Texto original da coluna Status, antes de normalizar. */
+  statusTexto?: string;
 };
 
 const AGENDAMENTOS_ALIASES: Record<string, string> = {
@@ -396,6 +398,7 @@ export function parseSchedulingArrayBuffer(buffer: ArrayBuffer): {
       kind,
       dataAgendamento: dataAgendamento || undefined,
       sdr: sdr || undefined,
+      statusTexto: String(cell(row, headers.status) ?? "").trim(),
       vendedor: undefined,
       tipoProposta,
       status,
