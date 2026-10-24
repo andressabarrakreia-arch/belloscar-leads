@@ -70,18 +70,6 @@ export function NegociacoesOverview() {
 
       <div className="charts">
         <SeriesChart
-          title="Série por quinzena"
-          data={periodSeries}
-          xKey="label"
-          kind="area"
-          series={[
-            { key: "vendas", name: "Vendas", color: CHART_COLORS.green },
-            { key: "trocas", name: "Trocas", color: CHART_COLORS.blue },
-            { key: "compras", name: "Compras", color: CHART_COLORS.charcoal },
-            { key: "consignacoes", name: "Consignações", color: CHART_COLORS.teal },
-          ]}
-        />
-        <SeriesChart
           title="Quinzena em barras"
           data={periodSeries}
           xKey="label"

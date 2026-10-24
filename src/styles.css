@@ -803,6 +803,10 @@ button.kpi-card.is-on {
   gap: 16px;
 }
 
+.charts--full {
+  grid-template-columns: 1fr;
+}
+
 table {
   width: 100%;
   border-collapse: separate;
@@ -903,6 +907,25 @@ th {
   gap: 6px;
   max-height: 260px;
   overflow: auto;
+}
+
+.chart-card--grande .chart-donut-list {
+  max-height: 420px;
+}
+
+.chart-card--grande h2 {
+  font-size: 1.35rem;
+}
+
+.chart-card--grande .chart-donut-list button {
+  font-size: 1.05rem;
+  padding: 8px 14px;
+  gap: 10px;
+}
+
+.chart-card--grande .chart-donut-list button span {
+  width: 12px;
+  height: 12px;
 }
 
 .chart-donut-list button {

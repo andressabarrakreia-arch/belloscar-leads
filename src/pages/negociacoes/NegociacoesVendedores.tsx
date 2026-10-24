@@ -11,9 +11,10 @@ export function NegociacoesVendedores() {
 
   return (
     <>
-      <div className="charts">
+      <div className="charts charts--full">
         <ShareDonut
           title="Total por vendedor"
+          grande
           data={vendedores.map((row) => ({ label: row.vendedor, value: row.total }))}
         />
       </div>

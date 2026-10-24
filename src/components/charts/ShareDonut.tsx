@@ -9,15 +9,17 @@ type Props = {
   title: string;
   tip?: string;
   data: Slice[];
+  /** Rosca e nomes maiores. A lista continua com rolagem. */
+  grande?: boolean;
 };
 
-export function ShareDonut({ title, tip, data }: Props) {
+export function ShareDonut({ title, tip, data, grande = false }: Props) {
   const [active, setActive] = useState<string | null>(null);
   const slices = data.filter((item) => item.value > 0);
   const total = slices.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="card chart-card">
+    <div className={grande ? "card chart-card chart-card--grande" : "card chart-card"}>
       <h2>
         {title}
         {tip ? <InfoTip>{tip}</InfoTip> : null}
@@ -26,14 +28,14 @@ export function ShareDonut({ title, tip, data }: Props) {
         <p className="muted">Sem pontos neste recorte.</p>
       ) : (
         <div className="chart-frame chart-frame--donut">
-          <ResponsiveContainer width="100%" height={280}>
+          <ResponsiveContainer width="100%" height={grande ? 420 : 280}>
             <PieChart>
               <Pie
                 data={slices}
                 dataKey="value"
                 nameKey="label"
-                innerRadius={68}
-                outerRadius={104}
+                innerRadius={grande ? 102 : 68}
+                outerRadius={grande ? 156 : 104}
                 paddingAngle={2}
                 onClick={(_, index) => {
                   const label = slices[index]?.label ?? "";
