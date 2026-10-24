@@ -36,6 +36,12 @@
       "sourceType": "github",
       "skillPath": ".agents/skills/changelog-collect/SKILL.md",
       "computedHash": "181354f6b8d7825db94339e230b6638c0f98dc9d7fe0402786cd0bd628d6b995"
+    },
+    "humanizer": {
+      "source": "blader/humanizer",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "4c7af5b1efdd897dcad56390d3c5f8708f6ddc11431fbf668e13ceb12ff583ce"
     }
   }
 }

@@ -1,6 +1,6 @@
 # Catálogo de skills
 
-Atualizado em 2026-10-23.
+Atualizado em 2026-10-24.
 
 Este arquivo lista todas as skills do BellosCar Analytics: para que servem aqui e se o agente as usa sozinho ou só quando você pede.
 
@@ -14,7 +14,7 @@ A regra `.cursor/rules/skills-catalogo.mdc` vale em toda conversa. Ela manda o a
 | Manual | Você pede, ou o agente para e espera um sim antes de enviar, publicar, salvar no histórico (commit), enviar ao GitHub (push) ou fechar um issue. |
 | Mista | A preparação é autônoma. O passo que sai do seu computador é manual. |
 
-Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o repositório da biblioteca, não para este painel. O agente segue o espírito delas e troca o alvo pelos arquivos daqui. Não publica o pacote `antd` e não cria changelog em inglês e chinês. A skill Graphify é da ferramenta de mapa do código: a leitura do código fica neste computador.
+Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o repositório da biblioteca, não para este painel. O agente segue o espírito delas e troca o alvo pelos arquivos daqui. Não publica o pacote `antd` e não cria changelog em inglês e chinês. A skill Graphify é da ferramenta de mapa do código: a leitura do código fica neste computador. A skill Humanizer reescreve texto para parecer escrito por uma pessoa, sem mudar o que o texto afirma.
 
 ## Lista completa
 
@@ -29,6 +29,7 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 | `antd-issue-reply` | Prepara resposta a issue no GitHub | Manual |
 | `antd-version-release` | Prepara versão; não publica pacote npm | Manual |
 | `graphify` | Mapa do código: responde como arquivos e funções se ligam | Mista |
+| `humanizer` | Reescreve texto para soar como uma pessoa, sem mudar o sentido | Autônoma |
 
 ---
 
@@ -106,6 +107,16 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 - Manual: clonar outro repositório, mandar o mapa para Neo4j ou FalkorDB, vigiar a pasta em tempo real (`watch`), extrair PDF ou imagem com modelo externo, ou apagar o mapa. Isso só com o seu pedido.
 - O programa `graphify` está instalado neste computador (pacote `graphifyy` 0.9.95). Se uma janela nova disser que o comando não existe, o Windows ainda não procura sozinho na pasta de scripts do Python do usuário.
 - Você pode dizer: "como o módulo de agendamentos se liga ao resto?" ou "atualiza o mapa do código".
+
+### humanizer
+
+- Arquivo: `.agents/skills/humanizer/SKILL.md`
+- Função: tirar o tom de texto gerado por máquina. O sentido, os números, os nomes e os caminhos de arquivo ficam iguais. Não serve para enganar detector de texto automático.
+- Autônoma: quando a tarefa escreve ou revisa texto que uma pessoa lê. Isso inclui frases da tela, explicações, changelog e este catálogo. O agente lê a skill e reescreve só esse texto. Código, comandos e dados ficam como estão.
+- O bloco de resumo no fim da tarefa continua obrigatório, no formato que a regra de comunicação já pede.
+- Não sai vasculhando telas antigas só para reescrever frase. Só entra no texto da tarefa atual.
+- Manual: nada para enviar ou publicar. Se quiser um texto solto reescrito, cole e peça.
+- Você pode dizer: "deixa esse texto mais natural" ou "humanize o texto do card".
 
 ---
 
