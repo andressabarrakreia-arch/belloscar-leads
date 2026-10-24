@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.2] - 2026-10-23
+
+### Added
+- Skills do repositório Ant Design em `.agents/skills/`: mensagem de commit, pull request, resposta a issues, revisão de testes, changelog e publicação de versão. São instruções para o agente, sem mudança nas telas
+
 ## [1.11.1] - 2026-10-21
 
 ### Added

@@ -12,6 +12,7 @@ import {
   buildSdrVendedorProposalRows,
   buildVendedorComparisonRows,
   buildVendedorMetrics,
+  eventMatchesCanal,
   filterAgendamentos,
   filterLeadsAtendimentos,
   filterRealizadosAtendimentos,
@@ -128,7 +129,11 @@ export function useSchedulingAnalytics(
             []
           );
 
-    const vendedorMetrics = buildVendedorMetrics(filtered);
+    const vendedorMetrics = buildVendedorMetrics(filtered, {
+      visitas: filteredVisitas,
+      sucessos: filteredSucessos,
+      agenda: dataset.items,
+    });
 
     const leadsForPortal: LeadAtendimentoItem[] =
       realizados.length > 0
@@ -141,6 +146,16 @@ export function useSchedulingAnalytics(
           }))
         : legacyLeads;
 
+    const agendaById = new Map(dataset.items.map((item) => [item.id, item]));
+    const visitasDoCanal = (canal: "Pré-Venda" | "Recepção") =>
+      filteredVisitas.filter((row) => eventMatchesCanal(row.id, row.sdr, canal, agendaById));
+    const sucessosDoCanal = (canal: "Pré-Venda" | "Recepção") =>
+      filteredSucessos.filter((row) => eventMatchesCanal(row.id, row.sdr, canal, agendaById));
+    const visitasPreVenda = visitasDoCanal("Pré-Venda");
+    const visitasRecepcaoCanal = visitasDoCanal("Recepção");
+    const sucessosPreVenda = sucessosDoCanal("Pré-Venda");
+    const sucessosRecepcaoCanal = sucessosDoCanal("Recepção");
+
     return {
       filtered,
       filteredLeads: leadsForPortal,
@@ -150,18 +165,34 @@ export function useSchedulingAnalytics(
       preVenda,
       recepcao,
       options: getSchedulingFilterOptions(dataset.items),
-      kpisPreVenda: buildCanalKpis(preVenda, "Pré-Venda"),
-      kpisRecepcao: buildCanalKpis(recepcao, "Recepção"),
+      kpisPreVenda: buildCanalKpis(preVenda, "Pré-Venda", {
+        visitas: visitasPreVenda.length,
+        sucessos: sucessosPreVenda.length,
+      }),
+      kpisRecepcao: buildCanalKpis(recepcao, "Recepção", {
+        visitas: visitasRecepcaoCanal.length,
+        sucessos: sucessosRecepcaoCanal.length,
+      }),
       sdrPreVendaRows,
       sdrRecepcao,
       vendedorMetrics,
       comparisonVendedoresPreVenda: buildVendedorComparisonRows(vendedorMetrics, "Pré-Venda"),
       comparisonVendedoresRecepcao: buildVendedorComparisonRows(vendedorMetrics, "Recepção"),
-      sdrVendedorPairs: buildSdrVendedorProposalRows(preVenda),
+      sdrVendedorPairs: buildSdrVendedorProposalRows(preVenda, {
+        visitas: filteredVisitas,
+        sucessos: filteredSucessos,
+        agenda: dataset.items,
+      }),
       proposalsPreVenda: buildProposalDistribution(preVenda),
       proposalsRecepcao: buildProposalDistribution(recepcao),
-      periodSeriesPreVenda: buildPeriodSeries(preVenda),
-      periodSeriesRecepcao: buildPeriodSeries(recepcao),
+      periodSeriesPreVenda: buildPeriodSeries(preVenda, {
+        visitas: visitasPreVenda,
+        sucessos: sucessosPreVenda,
+      }),
+      periodSeriesRecepcao: buildPeriodSeries(recepcao, {
+        visitas: visitasRecepcaoCanal,
+        sucessos: sucessosRecepcaoCanal,
+      }),
       insucessoKpis: buildInsucessoKpis(filtered),
       motivosInsucesso: buildMotivosStats(filtered),
       motivosBySdr: buildMotivosBySdr(filtered),
@@ -169,6 +200,7 @@ export function useSchedulingAnalytics(
       portais: buildPortalDashboard(filtered, leadsForPortal, {
         visitas: filteredVisitas,
         sucessos: filteredSucessos,
+        agenda: dataset.items,
       }),
       atendSourceCount: atendSource.length,
     };

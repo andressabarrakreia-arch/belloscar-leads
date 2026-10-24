@@ -58,9 +58,10 @@ export function FormLeads() {
         <h2>
           Leads por formulário
           <InfoTip>
-            Só entram as linhas da planilha LEADS POR CAMPANHA. O anúncio é a coluna Formulário. O
-            ID, o atendente, o agendamento, a visita e o sucesso vêm das mesmas bases das outras
-            abas, cruzados pelo telefone. Quem não achou telefone fica em Leads sem cruzamento.
+            Só entram as linhas da planilha LEADS POR CAMPANHA. O anúncio é a coluna Formulário.
+            O cruzamento com a operação é pelo telefone. O lead conta pelo Criado em. O agendamento
+            conta pelo Agendado em, a visita pelo Visita em e o sucesso pelo Finalizado em. O mesmo
+            ID pode entrar em meses diferentes. Quem não achou telefone fica em Leads sem cruzamento.
           </InfoTip>
         </h2>
       </div>
@@ -160,7 +161,9 @@ export function FormLeads() {
             </Card>
             <Card className="border-l-4 border-l-primary px-4 py-3 shadow-none">
               <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Cruzados</h3>
-              <p className="font-display text-2xl font-extrabold">{report.cruzados.length.toLocaleString("pt-BR")}</p>
+              <p className="font-display text-2xl font-extrabold">
+                {report.cruzados.filter((row) => row.leadNoPeriodo).length.toLocaleString("pt-BR")}
+              </p>
             </Card>
             <Card className="px-4 py-3 shadow-none">
               <h3 className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Agendados</h3>

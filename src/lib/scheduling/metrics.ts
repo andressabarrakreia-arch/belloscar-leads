@@ -1,4 +1,5 @@
 import { formatPeriodLabel } from "../dates";
+import { isoToPeriodKey } from "./dates";
 import { emptyPropostasBreakdown, isRecepcaoName } from "./normalize";
 import type {
   AgendamentoItem,
@@ -457,7 +458,10 @@ export function buildRecepcaoConsolidatedMetrics(
   };
 }
 
-function conversaoPorTipoProposta(list: AgendamentoItem[]): PropostaConversao[] {
+function conversaoPorTipoProposta(
+  list: AgendamentoItem[],
+  sucessos?: SucessoItem[]
+): PropostaConversao[] {
   const tipos: TipoProposta[] = [
     "Compra",
     "Venda",
@@ -470,15 +474,18 @@ function conversaoPorTipoProposta(list: AgendamentoItem[]): PropostaConversao[] 
     .map((tipo) => {
       const ofTipo = list.filter((i) => i.tipoProposta === tipo);
       const agendamentos = ofTipo.length;
-      const sucessos = ofTipo.filter((i) => i.status === "Sucesso").length;
+      const sucessoCount =
+        sucessos !== undefined
+          ? sucessos.filter((s) => s.tipoProposta === tipo).length
+          : ofTipo.filter((i) => i.status === "Sucesso").length;
       return {
         tipo,
         agendamentos,
-        sucessos,
-        taxa: round2(agendamentos ? (sucessos / agendamentos) * 100 : 0),
+        sucessos: sucessoCount,
+        taxa: round2(agendamentos ? (sucessoCount / agendamentos) * 100 : 0),
       };
     })
-    .filter((r) => r.agendamentos > 0);
+    .filter((r) => r.agendamentos > 0 || r.sucessos > 0);
 }
 
 function isExcludedTopParceiro(vendedor: string): boolean {
@@ -487,7 +494,11 @@ function isExcludedTopParceiro(vendedor: string): boolean {
   return key === "espaco bellos" || key.startsWith("espaco bellos ");
 }
 
-function topParceirosDoSdr(list: AgendamentoItem[], limit = 3): SdrVendedorTop[] {
+function topParceirosDoSdr(
+  list: AgendamentoItem[],
+  limit = 3,
+  sucessos?: SucessoItem[]
+): SdrVendedorTop[] {
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of list) {
     if (!item.vendedor || item.vendedor === "(sem vendedor)") continue;
@@ -496,15 +507,25 @@ function topParceirosDoSdr(list: AgendamentoItem[], limit = 3): SdrVendedorTop[]
     cur.push(item);
     groups.set(item.vendedor, cur);
   }
+  const sucessoByVendedor = new Map<string, number>();
+  if (sucessos) {
+    for (const row of sucessos) {
+      if (!row.vendedor || row.vendedor === "(sem vendedor)") continue;
+      if (isExcludedTopParceiro(row.vendedor)) continue;
+      sucessoByVendedor.set(row.vendedor, (sucessoByVendedor.get(row.vendedor) || 0) + 1);
+    }
+  }
   return [...groups.entries()]
     .map(([vendedor, rows]) => {
       const total = rows.length;
-      const sucessos = rows.filter((i) => i.status === "Sucesso").length;
+      const sucessoCount = sucessos
+        ? sucessoByVendedor.get(vendedor) || 0
+        : rows.filter((i) => i.status === "Sucesso").length;
       return {
         vendedor,
         total,
-        sucessos,
-        taxaSucesso: round2(total ? (sucessos / total) * 100 : 0),
+        sucessos: sucessoCount,
+        taxaSucesso: round2(total ? (sucessoCount / total) * 100 : 0),
       };
     })
     .sort((a, b) => b.total - a.total || b.taxaSucesso - a.taxaSucesso)
@@ -556,6 +577,9 @@ export function buildSdrPreVendaRows(
       const totalAtendimentos = atendBySdr.get(sdr) || 0;
       const totalVisitas = visitasBySdr.get(sdr) || 0;
       const totalSucesso = sucessosBySdr.get(sdr) || 0;
+      const sucessosDoSdr = sucessos.filter(
+        (row) => !isRecepcaoName(row.sdr) && displaySdrName(row.sdr) === sdr
+      );
       return {
         ...base,
         totalVisitas,
@@ -575,8 +599,8 @@ export function buildSdrPreVendaRows(
             ? (base.totalInsucesso / base.totalAgendamentos) * 100
             : 0
         ),
-        conversaoPorProposta: conversaoPorTipoProposta(list),
-        topParceiros: topParceirosDoSdr(list, 3),
+        conversaoPorProposta: conversaoPorTipoProposta(list, sucessosDoSdr),
+        topParceiros: topParceirosDoSdr(list, 3, sucessosDoSdr),
       };
     })
     .sort((a, b) =>
@@ -584,7 +608,14 @@ export function buildSdrPreVendaRows(
     );
 }
 
-export function buildVendedorMetrics(items: AgendamentoItem[]): VendedorMetrics[] {
+export function buildVendedorMetrics(
+  items: AgendamentoItem[],
+  dated?: {
+    visitas: RealizadoItem[];
+    sucessos: SucessoItem[];
+    agenda: AgendamentoItem[];
+  }
+): VendedorMetrics[] {
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of items) {
     if (!item.vendedor || item.vendedor === "(sem vendedor)") continue;
@@ -593,18 +624,53 @@ export function buildVendedorMetrics(items: AgendamentoItem[]): VendedorMetrics[
     groups.set(item.vendedor, list);
   }
 
+  const visitasPre = new Map<string, number>();
+  const visitasRec = new Map<string, number>();
+  const sucessoPre = new Map<string, number>();
+  const sucessoRec = new Map<string, number>();
+  if (dated) {
+    const agendaById = new Map(dated.agenda.map((item) => [item.id, item]));
+    for (const row of dated.visitas) {
+      const agenda = agendaById.get(row.id);
+      const vendedor = agenda?.vendedor;
+      if (!vendedor || vendedor === "(sem vendedor)") continue;
+      const recepcao = agenda ? agenda.canal === "Recepção" : isRecepcaoName(row.sdr);
+      const map = recepcao ? visitasRec : visitasPre;
+      map.set(vendedor, (map.get(vendedor) || 0) + 1);
+      if (!groups.has(vendedor)) groups.set(vendedor, []);
+    }
+    for (const row of dated.sucessos) {
+      const agenda = agendaById.get(row.id);
+      const vendedor =
+        row.vendedor && row.vendedor !== "(sem vendedor)" ? row.vendedor : agenda?.vendedor;
+      if (!vendedor || vendedor === "(sem vendedor)") continue;
+      const recepcao = agenda ? agenda.canal === "Recepção" : isRecepcaoName(row.sdr);
+      const map = recepcao ? sucessoRec : sucessoPre;
+      map.set(vendedor, (map.get(vendedor) || 0) + 1);
+      if (!groups.has(vendedor)) groups.set(vendedor, []);
+    }
+  }
+
   return [...groups.entries()]
     .map(([vendedor, list]) => {
       const pre = list.filter((i) => i.canal === "Pré-Venda");
       const rec = list.filter((i) => i.canal === "Recepção");
       // "Geral" do vendedor = só Pré-Venda (Recepção é braço à parte)
       const totalRecebidos = pre.length;
-      const totalVisitas = pre.filter((i) => i.teveVisita).length;
-      const totalSucesso = pre.filter((i) => i.status === "Sucesso").length;
+      const totalVisitas = dated
+        ? visitasPre.get(vendedor) || 0
+        : pre.filter((i) => i.teveVisita).length;
+      const totalSucesso = dated
+        ? sucessoPre.get(vendedor) || 0
+        : pre.filter((i) => i.status === "Sucesso").length;
       const totalInsucesso = pre.filter((i) => i.status === "Insucesso").length;
       const sucessoPreVenda = totalSucesso;
-      const sucessoRecepcao = rec.filter((i) => i.status === "Sucesso").length;
-      const visitasRecepcao = rec.filter((i) => i.teveVisita).length;
+      const sucessoRecepcao = dated
+        ? sucessoRec.get(vendedor) || 0
+        : rec.filter((i) => i.status === "Sucesso").length;
+      const visitasRecepcao = dated
+        ? visitasRec.get(vendedor) || 0
+        : rec.filter((i) => i.teveVisita).length;
       const insucessosRecepcao = rec.filter((i) => i.status === "Insucesso").length;
       return {
         vendedor,
@@ -845,7 +911,14 @@ export type SdrVendedorPairRow = {
  * Uma linha por par SDR × Vendedor (Pré-Venda).
  * Omite pares com 0 agendamentos; ordena por SDR (pré-venda) em sequência, depois vendedor.
  */
-export function buildSdrVendedorProposalRows(items: AgendamentoItem[]): SdrVendedorPairRow[] {
+export function buildSdrVendedorProposalRows(
+  items: AgendamentoItem[],
+  dated?: {
+    visitas: RealizadoItem[];
+    sucessos: SucessoItem[];
+    agenda: AgendamentoItem[];
+  }
+): SdrVendedorPairRow[] {
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of items) {
     if (!item.vendedor || item.vendedor === "(sem vendedor)") continue;
@@ -857,14 +930,37 @@ export function buildSdrVendedorProposalRows(items: AgendamentoItem[]): SdrVende
     groups.set(key, list);
   }
 
+  const visitasByPair = new Map<string, number>();
+  const sucessosByPair = new Map<string, number>();
+  if (dated) {
+    const agendaById = new Map(dated.agenda.map((item) => [item.id, item]));
+    const addPair = (sdr: string, vendedor: string, map: Map<string, number>) => {
+      if (!sdr || !vendedor || vendedor === "(sem vendedor)") return;
+      if (!isFeaturedPreVendaSdr(sdr)) return;
+      const key = `${sdr}::${vendedor}`;
+      map.set(key, (map.get(key) || 0) + 1);
+      if (!groups.has(key)) groups.set(key, []);
+    };
+    for (const row of dated.visitas) {
+      const agenda = agendaById.get(row.id);
+      addPair(agenda?.sdr || row.sdr, agenda?.vendedor || "", visitasByPair);
+    }
+    for (const row of dated.sucessos) {
+      const agenda = agendaById.get(row.id);
+      addPair(agenda?.sdr || row.sdr, agenda?.vendedor || row.vendedor, sucessosByPair);
+    }
+  }
+
   const rows: SdrVendedorPairRow[] = [];
   for (const [key, list] of groups) {
-    if (list.length === 0) continue;
     const [sdr, vendedor] = key.split("::");
     const total = list.length;
-    const visitas = list.filter((i) => i.teveVisita).length;
-    const sucessos = list.filter((i) => i.status === "Sucesso").length;
+    const visitas = dated ? visitasByPair.get(key) || 0 : list.filter((i) => i.teveVisita).length;
+    const sucessos = dated
+      ? sucessosByPair.get(key) || 0
+      : list.filter((i) => i.status === "Sucesso").length;
     const insucessos = list.filter((i) => i.status === "Insucesso").length;
+    if (total === 0 && visitas === 0 && sucessos === 0 && insucessos === 0) continue;
     const b = breakdownPropostas(list);
     rows.push({
       sdr: sdr || "",
@@ -938,22 +1034,45 @@ export function buildTimeSeries(items: AgendamentoItem[]) {
     }));
 }
 
-export function buildPeriodSeries(items: AgendamentoItem[]) {
-  const byPeriod = new Map<string, AgendamentoItem[]>();
+export function buildPeriodSeries(
+  items: AgendamentoItem[],
+  dated?: { visitas: { dataVisita: string | null }[]; sucessos: { dataFinalizado: string }[] }
+) {
+  const byPeriod = new Map<
+    string,
+    { total: number; visitas: number; sucessos: number; insucessos: number }
+  >();
+  const bump = (key: string) => {
+    const cur = byPeriod.get(key) || { total: 0, visitas: 0, sucessos: 0, insucessos: 0 };
+    byPeriod.set(key, cur);
+    return cur;
+  };
   for (const item of items) {
-    const list = byPeriod.get(item.periodKey) || [];
-    list.push(item);
-    byPeriod.set(item.periodKey, list);
+    const cur = bump(item.periodKey);
+    cur.total += 1;
+    if (item.status === "Insucesso") cur.insucessos += 1;
+    if (!dated && item.teveVisita) cur.visitas += 1;
+    if (!dated && item.status === "Sucesso") cur.sucessos += 1;
+  }
+  if (dated) {
+    for (const row of dated.visitas) {
+      if (!row.dataVisita) continue;
+      bump(isoToPeriodKey(row.dataVisita)).visitas += 1;
+    }
+    for (const row of dated.sucessos) {
+      if (!row.dataFinalizado) continue;
+      bump(isoToPeriodKey(row.dataFinalizado)).sucessos += 1;
+    }
   }
   return [...byPeriod.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([periodKey, list]) => ({
+    .map(([periodKey, row]) => ({
       periodKey,
       label: formatPeriodLabel(periodKey),
-      total: list.length,
-      visitas: list.filter((i) => i.teveVisita).length,
-      sucessos: list.filter((i) => i.status === "Sucesso").length,
-      insucessos: list.filter((i) => i.status === "Insucesso").length,
+      total: row.total,
+      visitas: row.visitas,
+      sucessos: row.sucessos,
+      insucessos: row.insucessos,
     }));
 }
 
@@ -967,14 +1086,27 @@ export type CanalKpis = {
   taxaSucesso: number;
 };
 
+/** Canal do ID pela agenda. Sem agenda, o nome do atendente separa Recepção. */
+export function eventMatchesCanal(
+  id: string,
+  sdr: string,
+  canal: CanalAtendimento,
+  agendaById: Map<string, AgendamentoItem>
+): boolean {
+  const item = agendaById.get(id);
+  if (item) return item.canal === canal;
+  return canal === "Recepção" ? isRecepcaoName(sdr) : !isRecepcaoName(sdr);
+}
+
 /** KPIs de um único canal (Pré-Venda ou Recepção) — sem misturar. */
 export function buildCanalKpis(
   items: AgendamentoItem[],
-  canal: CanalAtendimento
+  canal: CanalAtendimento,
+  dated?: { visitas: number; sucessos: number }
 ): CanalKpis {
   const total = items.length;
-  const visitas = items.filter((i) => i.teveVisita).length;
-  const sucessos = items.filter((i) => i.status === "Sucesso").length;
+  const visitas = dated ? dated.visitas : items.filter((i) => i.teveVisita).length;
+  const sucessos = dated ? dated.sucessos : items.filter((i) => i.status === "Sucesso").length;
   const insucessos = items.filter((i) => i.status === "Insucesso").length;
   return {
     canal,

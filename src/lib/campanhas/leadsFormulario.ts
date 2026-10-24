@@ -22,6 +22,8 @@ export type CrossedFormLead = {
   dataVisita: string | null;
   sucesso: boolean;
   anuncio: string;
+  /** O Criado em do formulário cai no filtro. */
+  leadNoPeriodo: boolean;
 };
 
 export type UnmatchedFormLead = {
@@ -106,8 +108,8 @@ function pickSnap(ids: Set<string>, byId: Map<string, IdSnap>): IdSnap | null {
   return best;
 }
 
-function inRange(date: string, filters: FormularioFilters): boolean {
-  if (!date) return !filters.from && !filters.to;
+function eventInRange(date: string | null, filters: FormularioFilters): boolean {
+  if (!date) return false;
   if (filters.from && date < filters.from) return false;
   if (filters.to && date > filters.to) return false;
   return true;
@@ -169,14 +171,14 @@ export function buildFormularioReport(
     rememberPhone(phones, phoneKey(sucesso.celular), sucesso.id);
   }
 
-  const base = leads.filter((lead) => {
-    if (filters.formulario && lead.formulario !== filters.formulario) return false;
-    return inRange(lead.criadoEm, filters);
-  });
+  const pool = leads.filter((lead) => !filters.formulario || lead.formulario === filters.formulario);
 
   const cruzados: CrossedFormLead[] = [];
   const semCruzamento: UnmatchedFormLead[] = [];
   const campanhas = new Map<string, FormularioScore>();
+  let total = 0;
+  const countedEvent = new Set<string>();
+  const extraShown = new Set<string>();
 
   const scoreOf = (formulario: string) => {
     const prev = campanhas.get(formulario);
@@ -193,9 +195,8 @@ export function buildFormularioReport(
     return created;
   };
 
-  for (const lead of base) {
-    const bucket = scoreOf(lead.formulario);
-    bucket.leads += 1;
+  for (const lead of pool) {
+    const criadoAqui = eventInRange(lead.criadoEm, filters);
     const keys = lead.phoneKeys?.length ? lead.phoneKeys : lead.phoneKey ? [lead.phoneKey] : [];
     let snap: IdSnap | null = null;
     for (const key of keys) {
@@ -205,28 +206,50 @@ export function buildFormularioReport(
         snap = found;
       }
     }
-    if (!snap) {
-      semCruzamento.push({
-        data: lead.criadoEm,
-        nome: lead.nome || "—",
-        telefone: lead.telefone || "—",
-        campanha: lead.formulario,
-      });
-      continue;
+    if (criadoAqui) {
+      total += 1;
+      const bucket = scoreOf(lead.formulario);
+      bucket.leads += 1;
+      if (!snap) {
+        semCruzamento.push({
+          data: lead.criadoEm,
+          nome: lead.nome || "—",
+          telefone: lead.telefone || "—",
+          campanha: lead.formulario,
+        });
+        continue;
+      }
+      bucket.cruzados += 1;
     }
-    bucket.cruzados += 1;
-    if (snap.agendado) bucket.agendados += 1;
-    if (snap.visita) bucket.visitas += 1;
-    if (snap.sucesso) bucket.sucessos += 1;
+    if (!snap) continue;
+    const agendado = eventInRange(snap.dataAgendamento, filters);
+    const visita = Boolean(snap.visita && eventInRange(snap.dataVisita, filters));
+    const sucesso = eventInRange(snap.dataSucesso, filters);
+    if (!criadoAqui && !agendado && !visita && !sucesso) continue;
+    if (!criadoAqui) {
+      const extraKey = `${lead.formulario}|${snap.id}`;
+      if (extraShown.has(extraKey)) continue;
+      extraShown.add(extraKey);
+    }
+    const countEvent = (kind: string) => {
+      const key = `${lead.formulario}|${snap!.id}|${kind}`;
+      if (countedEvent.has(key)) return false;
+      countedEvent.add(key);
+      return true;
+    };
+    if (agendado && countEvent("agendado")) scoreOf(lead.formulario).agendados += 1;
+    if (visita && countEvent("visita")) scoreOf(lead.formulario).visitas += 1;
+    if (sucesso && countEvent("sucesso")) scoreOf(lead.formulario).sucessos += 1;
     cruzados.push({
       id: snap.id,
       atendente: named(snap.sdr, "(sem SDR)"),
-      agendado: snap.agendado,
+      agendado,
       vendedor: named(snap.vendedor, "(sem vendedor)"),
-      visita: snap.visita,
-      dataVisita: snap.visita ? snap.dataVisita : null,
-      sucesso: snap.sucesso,
+      visita,
+      dataVisita: visita ? snap.dataVisita : null,
+      sucesso,
       anuncio: lead.formulario,
+      leadNoPeriodo: criadoAqui,
     });
   }
 
@@ -242,13 +265,15 @@ export function buildFormularioReport(
   semCruzamento.sort((a, b) => b.data.localeCompare(a.data) || a.nome.localeCompare(b.nome, "pt-BR"));
 
   const ranked = [...campanhas.values()].sort(compareCampanhas);
+  const soma = (key: "agendados" | "visitas" | "sucessos") =>
+    ranked.reduce((sum, row) => sum + row[key], 0);
   return {
-    total: base.length,
+    total,
     cruzados,
     semCruzamento,
-    agendados: cruzados.filter((row) => row.agendado).length,
-    visitas: cruzados.filter((row) => row.visita).length,
-    sucessos: cruzados.filter((row) => row.sucesso).length,
+    agendados: soma("agendados"),
+    visitas: soma("visitas"),
+    sucessos: soma("sucessos"),
     campanhas: ranked,
     destaque: ranked[0] || null,
   };

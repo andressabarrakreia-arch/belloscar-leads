@@ -37,8 +37,8 @@ export function SchedulingOverview() {
         <h2>
           Funil · Pré-Venda
           <InfoTip>
-            Agendamentos → Visitas → Sucessos · Insucessos como saída lateral (mesmo universo
-            filtrado).
+            Agendamentos pelo Agendado em. Visitas pelo Visita em. Sucessos pelo Finalizado em.
+            O mesmo ID pode contar em meses diferentes. Insucessos seguem o mês do agendamento.
           </InfoTip>
         </h2>
         <div className="funnel-row" aria-label="Funil Pré-Venda">

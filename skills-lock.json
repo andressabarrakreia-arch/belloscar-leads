@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "skills": {
+    "antd-commit-msg": {
+      "source": "ant-design/ant-design",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/commit-msg/SKILL.md",
+      "computedHash": "c67d2bede6f303e17af9ae3411095eac37d9dc369058f91bef7029dad3422a3d"
+    },
+    "antd-create-pr": {
+      "source": "ant-design/ant-design",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/create-pr/SKILL.md",
+      "computedHash": "e27226eced14a052356b76158f0cfa2d8b948782e098d1c702307886b7602ada"
+    },
+    "antd-issue-reply": {
+      "source": "ant-design/ant-design",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/issue-reply/SKILL.md",
+      "computedHash": "5ef8cb902cc14cc124348fd87d6d30309db9e1136ff35f58b45ebffff7d0a356"
+    },
+    "antd-test-review": {
+      "source": "ant-design/ant-design",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/test-review/SKILL.md",
+      "computedHash": "a313e3dd855bc44ce572bf65921d993b5b7327b192eb4e5bde0aef8698579b14"
+    },
+    "antd-version-release": {
+      "source": "ant-design/ant-design",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/version-release/SKILL.md",
+      "computedHash": "e769912365ad7e0e0227e718ec14512e544e0d77f2c1c16da6cf950ee9a7b64d"
+    },
+    "changelog-collect": {
+      "source": "ant-design/ant-design",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/changelog-collect/SKILL.md",
+      "computedHash": "181354f6b8d7825db94339e230b6638c0f98dc9d7fe0402786cd0bd628d6b995"
+    }
+  }
+}

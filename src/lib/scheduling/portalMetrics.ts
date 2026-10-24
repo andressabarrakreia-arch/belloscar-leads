@@ -18,6 +18,8 @@ import type {
 export type PortalExtraCounts = {
   visitas?: RealizadoItem[];
   sucessos?: SucessoItem[];
+  /** Agenda inteira, só para achar a origem de uma visita ou sucesso de outro mês. */
+  agenda?: AgendamentoItem[];
 };
 
 export type ProposalBreakdownRow = {
@@ -325,7 +327,7 @@ export function buildPortalDashboard(
   extra: PortalExtraCounts = {}
 ): PortalDashboard {
   const byOrigin = new Map<string, Acc>();
-  const useExtra = Boolean(extra.visitas?.length || extra.sucessos?.length);
+  const useExtra = extra.visitas !== undefined || extra.sucessos !== undefined;
 
   // Fallback de origem por ID (agenda e leads/realizados)
   const origemById = new Map<string, string>();
@@ -337,6 +339,11 @@ export function buildPortalDashboard(
   for (const lead of leads) {
     if (lead.origem && lead.origem !== "Não informado" && !origemById.has(lead.id)) {
       origemById.set(lead.id, lead.origem);
+    }
+  }
+  for (const item of extra.agenda || []) {
+    if (item.origem && item.origem !== "Não informado" && !origemById.has(item.id)) {
+      origemById.set(item.id, item.origem);
     }
   }
 
