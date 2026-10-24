@@ -1,13 +1,52 @@
+import { useEffect, useMemo, useRef, useState } from "react";
 import { InfoTip } from "../../components/InfoTip";
 import { InteractiveTable } from "../../components/InteractiveTable";
 import { ShareDonut } from "../../components/charts/ShareDonut";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
+import { currentMonthKey } from "../../lib/dates";
+
+function mesLabel(ym: string): string {
+  const [year, month] = ym.split("-").map(Number);
+  if (!year || !month) return ym;
+  const label = new Date(year, month - 1, 1).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+function mesAnterior(): string {
+  const hoje = new Date();
+  return currentMonthKey(new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1));
+}
 
 export function NegociacoesVendedores() {
-  const { analytics } = useNegociacoesAnalyticsContext();
+  const { analytics, dataset } = useNegociacoesAnalyticsContext();
+  const mesPadrao = useMemo(() => mesAnterior(), []);
+  const [mesAvaliacao, setMesAvaliacao] = useState(mesPadrao);
+  const [mesesAberto, setMesesAberto] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const mesesAvaliacao = useMemo(() => {
+    const meses = new Set<string>([mesPadrao]);
+    for (const row of dataset?.avaliacoes ?? []) if (row.monthKey) meses.add(row.monthKey);
+    return [...meses].sort((a, b) => b.localeCompare(a));
+  }, [dataset, mesPadrao]);
+
+  const avaliacoesMes = useMemo(
+    () => (dataset?.avaliacoes ?? []).filter((row) => row.monthKey === mesAvaliacao),
+    [dataset, mesAvaliacao]
+  );
+
+  useEffect(() => {
+    if (!mesesAberto) return;
+    function fechar(event: MouseEvent) {
+      if (!menuRef.current?.contains(event.target as Node)) setMesesAberto(false);
+    }
+    document.addEventListener("mousedown", fechar);
+    return () => document.removeEventListener("mousedown", fechar);
+  }, [mesesAberto]);
+
   if (!analytics) return null;
 
-  const { vendedores, rankings, avaliacoes } = analytics;
+  const { vendedores, rankings } = analytics;
 
   return (
     <>
@@ -88,9 +127,44 @@ export function NegociacoesVendedores() {
       </div>
 
       <div className="card">
-        <h2>
-          Conversão de avaliações
-          <InfoTip>Solicitações por vendedor (filtro de mês). % = Aprovadas / Realizadas.</InfoTip>
+        <h2 className="avaliacao-titulo">
+          <span>
+            Conversão de avaliações
+            <InfoTip>
+              Mês fechado, separado do filtro da página. Abre no mês anterior. % = Aprovadas / Realizadas.
+            </InfoTip>
+          </span>
+          <div className="mes-mini" ref={menuRef}>
+            <button
+              type="button"
+              className="btn secondary mes-mini__btn"
+              aria-expanded={mesesAberto}
+              aria-haspopup="listbox"
+              onClick={() => setMesesAberto((aberto) => !aberto)}
+            >
+              {mesLabel(mesAvaliacao)}
+            </button>
+            {mesesAberto ? (
+              <ul className="mes-mini__lista" role="listbox" aria-label="Mês da conversão">
+                {mesesAvaliacao.map((mes) => (
+                  <li key={mes}>
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={mes === mesAvaliacao}
+                      className={mes === mesAvaliacao ? "is-on" : ""}
+                      onClick={() => {
+                        setMesAvaliacao(mes);
+                        setMesesAberto(false);
+                      }}
+                    >
+                      {mesLabel(mes)}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
         </h2>
         <div className="table-scroll">
           <table>
@@ -103,7 +177,7 @@ export function NegociacoesVendedores() {
               </tr>
             </thead>
             <tbody>
-              {[...avaliacoes]
+              {[...avaliacoesMes]
                 .sort(
                   (a, b) =>
                     b.percentual - a.percentual ||
@@ -118,10 +192,10 @@ export function NegociacoesVendedores() {
                     <td>{r.percentual}%</td>
                   </tr>
                 ))}
-              {avaliacoes.length === 0 && (
+              {avaliacoesMes.length === 0 && (
                 <tr>
                   <td colSpan={4} className="muted">
-                    Sem dados de avaliação no filtro. Envie a planilha pela Gestão.
+                    Sem avaliações em {mesLabel(mesAvaliacao)}.
                   </td>
                 </tr>
               )}

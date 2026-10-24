@@ -819,6 +819,61 @@ button.kpi-card.is-on {
   vertical-align: -0.12em;
 }
 
+.avaliacao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.avaliacao-titulo > span {
+  margin-right: auto;
+}
+
+.mes-mini {
+  position: relative;
+}
+
+.mes-mini__btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.mes-mini__lista {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 6;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  min-width: 190px;
+  max-height: 240px;
+  overflow: auto;
+  box-shadow: 0 8px 24px rgba(64, 64, 65, 0.12);
+}
+
+.mes-mini__lista button {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--brand-charcoal);
+}
+
+.mes-mini__lista button.is-on,
+.mes-mini__lista button:hover {
+  background: rgba(192, 32, 38, 0.08);
+  color: var(--brand-red);
+}
+
 .pre-venda-export {
   margin-left: 8px;
   padding: 6px 12px;

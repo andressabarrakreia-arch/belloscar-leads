@@ -15,6 +15,7 @@ function parsePercent(value: unknown, aprovadas: number, realizadas: number): nu
   return realizadas ? Math.round((aprovadas / realizadas) * 10000) / 100 : 0;
 }
 
+/** Data solta, ou período "01/10/2026 a 15/10/2026". Vale o mês da primeira data. */
 function monthKeyFromCell(value: unknown): string | null {
   const iso = toIsoDate(value);
   if (iso) return isoToMonthKey(iso);

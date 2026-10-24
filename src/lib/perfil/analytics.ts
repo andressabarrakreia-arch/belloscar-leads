@@ -11,6 +11,9 @@ export type Contagem = {
 
 export type ModeloContagem = Contagem & {
   marca: string;
+  vendidos: number;
+  comprados: number;
+  consignados: number;
 };
 
 export type PerfilRecorte = {
@@ -84,6 +87,27 @@ function ranking(map: Map<string, number>, total: number): Contagem[] {
     .map(([nome, quantidade]) => ({ nome, quantidade, percentual: pct(quantidade, total) }));
 }
 
+function ladoMovimento(mov: string): "entrada" | "saida" | "" {
+  const key = mov.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+  if (key.includes("entrada")) return "entrada";
+  if (key.includes("saida")) return "saida";
+  return "";
+}
+
+/** Venda e saída da troca contam como vendido. Compra e entrada da troca contam como comprado. */
+function classeDoVeiculo(deal: NegociacaoDeal, line: NegociacaoLine): "vendidos" | "comprados" | "consignados" | null {
+  if (deal.tipo === "Troca") {
+    const lado = ladoMovimento(line.movimentacao);
+    if (lado === "entrada") return "comprados";
+    if (lado === "saida") return "vendidos";
+    return null;
+  }
+  if (deal.tipo === "Venda") return "vendidos";
+  if (deal.tipo === "Compra") return "comprados";
+  if (deal.tipo === "Consignação") return "consignados";
+  return null;
+}
+
 /** Veículo que saiu. Na troca, a entrada não entra na marca. */
 function veiculo(lines: NegociacaoLine[]): { marca: string; modelo: string } | null {
   const saidas = lines.filter((line) => line.movimentacao.toLowerCase().includes("sa"));
@@ -104,16 +128,21 @@ const ORDEM_GENERO: GeneroCliente[] = ["Feminino", "Masculino", "Não identifica
 export function perfilDoMes(deals: NegociacaoDeal[], itens: AgendamentoItem[], month: string): PerfilRecorte {
   const negocios = deals.filter((deal) => month === "all" || deal.monthKey === month);
   const marcasMap = new Map<string, number>();
-  const modelosMap = new Map<string, { marca: string; quantidade: number }>();
+  const modelosMap = new Map<string, { marca: string; vendidos: number; comprados: number; consignados: number }>();
   const clientes = new Map<string, GeneroCliente>();
 
   for (const deal of negocios) {
     const carro = veiculo(deal.lines);
-    if (carro) {
-      marcasMap.set(carro.marca, (marcasMap.get(carro.marca) ?? 0) + 1);
-      const modeloChave = `${carro.marca}\u0000${carro.modelo}`;
-      const atual = modelosMap.get(modeloChave) ?? { marca: carro.marca, quantidade: 0 };
-      atual.quantidade += 1;
+    if (carro) marcasMap.set(carro.marca, (marcasMap.get(carro.marca) ?? 0) + 1);
+    for (const line of deal.lines) {
+      const classe = classeDoVeiculo(deal, line);
+      if (!classe) continue;
+      const marca = marcaNome(line.marca);
+      const modelo = modeloNome(line.modelo);
+      if (marca === "Sem marca" && (modelo === "Sem modelo" || !line.modelo.trim())) continue;
+      const modeloChave = `${marca}\u0000${modelo}`;
+      const atual = modelosMap.get(modeloChave) ?? { marca, vendidos: 0, comprados: 0, consignados: 0 };
+      atual[classe] += 1;
       modelosMap.set(modeloChave, atual);
     }
     const nome = deal.cliente.trim();
@@ -135,16 +164,21 @@ export function perfilDoMes(deals: NegociacaoDeal[], itens: AgendamentoItem[], m
   }
 
   const comMarca = [...marcasMap.values()].reduce((sum, value) => sum + value, 0);
-  const modelos = [...modelosMap.entries()]
-    .map(([key, row]) => {
-      const modelo = key.split("\u0000")[1] || "Sem modelo";
-      return {
-        marca: row.marca,
-        nome: `${row.marca} ${modelo}`,
-        quantidade: row.quantidade,
-        percentual: pct(row.quantidade, comMarca),
-      };
-    })
+  const modelosBase = [...modelosMap.entries()].map(([key, row]) => {
+    const modelo = key.split("\u0000")[1] || "Sem modelo";
+    const quantidade = row.vendidos + row.comprados + row.consignados;
+    return {
+      marca: row.marca,
+      nome: `${row.marca} ${modelo}`,
+      quantidade,
+      vendidos: row.vendidos,
+      comprados: row.comprados,
+      consignados: row.consignados,
+    };
+  });
+  const totalModelos = modelosBase.reduce((sum, row) => sum + row.quantidade, 0);
+  const modelos = modelosBase
+    .map((row) => ({ ...row, percentual: pct(row.quantidade, totalModelos) }))
     .sort((a, b) => b.quantidade - a.quantidade || a.nome.localeCompare(b.nome, "pt-BR"));
 
   return {

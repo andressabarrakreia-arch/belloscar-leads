@@ -20,6 +20,10 @@ function pct(value: number): string {
   return `${value.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`;
 }
 
+function conta(n: number, um: string, varios: string): string {
+  return `${n.toLocaleString("pt-BR")} ${n === 1 ? um : varios}`;
+}
+
 function nomeDoModelo(row: ModeloContagem): string {
   const prefixo = `${row.marca} `;
   return row.nome.startsWith(prefixo) ? row.nome.slice(prefixo.length) : row.nome;
@@ -35,9 +39,15 @@ function gruposPorMarca(rows: ModeloContagem[], total: number) {
   return [...mapa.entries()]
     .map(([marca, modelos]) => {
       const quantidade = modelos.reduce((soma, row) => soma + row.quantidade, 0);
+      const vendidos = modelos.reduce((soma, row) => soma + row.vendidos, 0);
+      const comprados = modelos.reduce((soma, row) => soma + row.comprados, 0);
+      const consignados = modelos.reduce((soma, row) => soma + row.consignados, 0);
       return {
         marca,
         quantidade,
+        vendidos,
+        comprados,
+        consignados,
         percentual: total ? Math.round((quantidade / total) * 1000) / 10 : 0,
         modelos: [...modelos].sort(
           (a, b) => b.quantidade - a.quantidade || nomeDoModelo(a).localeCompare(nomeDoModelo(b), "pt-BR")
@@ -193,7 +203,10 @@ export function PerfilClientes() {
       <div className="card">
         <h2>
           {marca === "all" ? "Modelos em destaque" : `Modelos em destaque · ${marca}`}
-          <InfoTip>Os 3 modelos com mais negócios neste recorte.</InfoTip>
+          <InfoTip>
+            O número é a soma de vendidos, comprados e consignados desse modelo. Na troca, o carro de
+            entrada conta como compra e o de saída como venda.
+          </InfoTip>
         </h2>
         {destaques.length === 0 ? (
           <p className="muted">Sem modelos neste recorte.</p>
@@ -203,7 +216,10 @@ export function PerfilClientes() {
               <div className={index === 0 ? "kpi-card modelo-destaque accent" : "kpi-card modelo-destaque"} key={row.nome}>
                 <h3>{row.nome}</h3>
                 <p>{row.quantidade.toLocaleString("pt-BR")}</p>
-                <small className="kpi-lider">{pct(row.percentual)} do recorte</small>
+                <small className="kpi-lider">
+                  {conta(row.vendidos, "vendido", "vendidos")} · {conta(row.comprados, "comprado", "comprados")} ·{" "}
+                  {conta(row.consignados, "consignado", "consignados")}
+                </small>
               </div>
             ))}
           </div>
@@ -213,7 +229,10 @@ export function PerfilClientes() {
       <div className="card">
         <h2>
           Modelos
-          <InfoTip>Cada linha é uma marca. O + abre os modelos daquela marca.</InfoTip>
+          <InfoTip>
+            O + abre os modelos. Comprados, consignados e vendidos são de cada modelo. Na troca, a entrada
+            entra em comprados e a saída em vendidos.
+          </InfoTip>
         </h2>
         {grupos.length === 0 ? (
           <p className="muted">Sem modelos neste recorte.</p>
@@ -223,7 +242,10 @@ export function PerfilClientes() {
               <thead>
                 <tr>
                   <th>Marca</th>
-                  <th>Negócios</th>
+                  <th>Comprados</th>
+                  <th>Consignados</th>
+                  <th>Vendidos</th>
+                  <th>Total</th>
                   <th>% do recorte</th>
                 </tr>
               </thead>
@@ -245,6 +267,9 @@ export function PerfilClientes() {
                           </button>
                           {grupo.marca}
                         </td>
+                        <td>{grupo.comprados.toLocaleString("pt-BR")}</td>
+                        <td>{grupo.consignados.toLocaleString("pt-BR")}</td>
+                        <td>{grupo.vendidos.toLocaleString("pt-BR")}</td>
                         <td>{grupo.quantidade.toLocaleString("pt-BR")}</td>
                         <td>{pct(grupo.percentual)}</td>
                       </tr>
@@ -252,6 +277,9 @@ export function PerfilClientes() {
                         ? grupo.modelos.map((row) => (
                             <tr className="modelo-filho" key={row.nome}>
                               <td>{nomeDoModelo(row)}</td>
+                              <td>{row.comprados.toLocaleString("pt-BR")}</td>
+                              <td>{row.consignados.toLocaleString("pt-BR")}</td>
+                              <td>{row.vendidos.toLocaleString("pt-BR")}</td>
                               <td>{row.quantidade.toLocaleString("pt-BR")}</td>
                               <td>{pct(row.percentual)}</td>
                             </tr>
