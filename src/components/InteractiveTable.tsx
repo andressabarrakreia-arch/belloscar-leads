@@ -3,7 +3,7 @@ import { useMemo, useState, type ReactNode } from "react";
 export type TableColumn<T> = {
   key: string;
   label: string;
-  align?: "left" | "right";
+  align?: "left" | "right" | "center";
   sortValue: (row: T) => string | number;
   render?: (row: T) => ReactNode;
 };
@@ -49,7 +49,11 @@ export function InteractiveTable<T>({ rows, columns, rowKey }: Props<T>) {
             {columns.map((column) => {
               const on = sortKey === column.key;
               return (
-                <th key={column.key} aria-sort={on ? (direction === "asc" ? "ascending" : "descending") : "none"}>
+                <th
+                  key={column.key}
+                  aria-sort={on ? (direction === "asc" ? "ascending" : "descending") : "none"}
+                  style={{ textAlign: column.align }}
+                >
                   <button type="button" className="th-sort" onClick={() => onSort(column.key)}>
                     {column.label}
                     <span aria-hidden="true">{on ? (direction === "asc" ? " ↑" : " ↓") : ""}</span>

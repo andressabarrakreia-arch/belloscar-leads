@@ -53,6 +53,7 @@ export const MODULES: AppModule[] = [
       { to: "/agendamentos/detalhe", label: "Agendamentos" },
       { to: "/agendamentos/portais", label: "Portais" },
       { to: "/agendamentos/insucessos", label: "Insucessos" },
+      { to: "/agendamentos/erros", label: "Erros" },
       { to: "/agendamentos/admin", label: "Gestão", adminOnly: true },
     ],
   },

@@ -9,6 +9,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { FormLeads } from "./pages/FormLeads";
 import { SchedulingAdmin } from "./pages/agendamentos/SchedulingAdmin";
 import { SchedulingDetalhe } from "./pages/agendamentos/SchedulingDetalhe";
+import { SchedulingErros } from "./pages/agendamentos/SchedulingErros";
 import { SchedulingInsucessos } from "./pages/agendamentos/SchedulingInsucessos";
 import { SchedulingOverview } from "./pages/agendamentos/SchedulingOverview";
 import { SchedulingPortais } from "./pages/agendamentos/SchedulingPortais";
@@ -61,6 +62,7 @@ export default function App() {
             <Route path="portais" element={<SchedulingPortais />} />
             <Route path="insucessos" element={<SchedulingInsucessos />} />
           </Route>
+          <Route path="erros" element={<SchedulingErros />} />
           <Route path="admin" element={<SchedulingAdmin />} />
         </Route>
 

@@ -681,6 +681,50 @@ select {
   color: var(--brand-red);
 }
 
+button.kpi-card {
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  width: 100%;
+}
+
+button.kpi-card.is-on {
+  outline: 2px solid var(--brand-red);
+  outline-offset: 2px;
+}
+
+.erro-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.erro-toolbar label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.erro-toolbar input {
+  min-width: 240px;
+}
+
+.erro-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: -8px 0 16px;
+  font-size: 0.85rem;
+}
+
 .kpi-card h3 {
   margin: 0;
   font-size: 0.72rem;
