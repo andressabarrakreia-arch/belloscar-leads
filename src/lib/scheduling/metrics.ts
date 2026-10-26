@@ -1084,6 +1084,8 @@ export type CanalKpis = {
   insucessos: number;
   taxaVisita: number;
   taxaSucesso: number;
+  /** REALIZADOS (Atendido em) do canal. 0 quando a chamada não informa. */
+  atendimentos: number;
 };
 
 /** Canal do ID pela agenda. Sem agenda, o nome do atendente separa Recepção. */
@@ -1102,7 +1104,7 @@ export function eventMatchesCanal(
 export function buildCanalKpis(
   items: AgendamentoItem[],
   canal: CanalAtendimento,
-  dated?: { visitas: number; sucessos: number }
+  dated?: { visitas: number; sucessos: number; atendimentos?: number }
 ): CanalKpis {
   const total = items.length;
   const visitas = dated ? dated.visitas : items.filter((i) => i.teveVisita).length;
@@ -1116,6 +1118,7 @@ export function buildCanalKpis(
     insucessos,
     taxaVisita: round2(total ? (visitas / total) * 100 : 0),
     taxaSucesso: round2(total ? (sucessos / total) * 100 : 0),
+    atendimentos: dated?.atendimentos ?? 0,
   };
 }
 

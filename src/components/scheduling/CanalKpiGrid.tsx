@@ -21,6 +21,11 @@ export function CanalKpiGrid({ kpis, title, subtitle, accent }: Props) {
       </h2>
       <div className="kpi-grid">
         <div className={`kpi-card ${accent ? "accent" : ""}`}>
+          <h3>Atendimentos</h3>
+          <p>{kpis.atendimentos}</p>
+          <small className="muted">realizados no período</small>
+        </div>
+        <div className="kpi-card">
           <h3>Agendamentos</h3>
           <p>{kpis.total}</p>
           <small className="muted">universo do canal</small>

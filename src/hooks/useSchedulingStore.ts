@@ -155,6 +155,9 @@ export function useSchedulingAnalytics(
     const visitasRecepcaoCanal = visitasDoCanal("Recepção");
     const sucessosPreVenda = sucessosDoCanal("Pré-Venda");
     const sucessosRecepcaoCanal = sucessosDoCanal("Recepção");
+    const fonteAtendimentos = realizados.length > 0 ? filteredRealizados : legacyLeads;
+    const atendimentosDoCanal = (canal: "Pré-Venda" | "Recepção") =>
+      fonteAtendimentos.filter((row) => eventMatchesCanal(row.id, row.sdr, canal, agendaById));
 
     return {
       filtered,
@@ -168,10 +171,12 @@ export function useSchedulingAnalytics(
       kpisPreVenda: buildCanalKpis(preVenda, "Pré-Venda", {
         visitas: visitasPreVenda.length,
         sucessos: sucessosPreVenda.length,
+        atendimentos: atendimentosDoCanal("Pré-Venda").length,
       }),
       kpisRecepcao: buildCanalKpis(recepcao, "Recepção", {
         visitas: visitasRecepcaoCanal.length,
         sucessos: sucessosRecepcaoCanal.length,
+        atendimentos: atendimentosDoCanal("Recepção").length,
       }),
       sdrPreVendaRows,
       sdrRecepcao,
