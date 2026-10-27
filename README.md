@@ -31,13 +31,11 @@ A página lê o JSON publicado de Agendamentos e aplica esse recorte no navegado
 | Dashboard | `#/campanhas` |
 | Atendentes | `#/campanhas/atendentes` |
 | Comparar períodos | `#/campanhas/comparar` |
-| Gestão | `#/campanhas/admin` |
+| Leads por formulário | `#/campanhas/formularios` |
 
 ### Atualizar os números de Campanhas
 
-Publique a base em **Gestão de Agendamentos** (`#/agendamentos/admin`): LEADS GERAL (origem), LEADS REALIZADOS, AGENDAMENTOS e SUCESSOS. A página de Campanhas acompanha esse arquivo.
-
-O envio em `#/campanhas/admin` ainda atualiza só o histórico antigo `dataset.json` e não muda o dashboard da equipe.  
+Publique a base no **Painel de Gestão do Índice** (`#/indice/gestao`): LEADS GERAL (origem), LEADS REALIZADOS, AGENDAMENTOS e SUCESSOS. A página de Campanhas acompanha o JSON de Agendamentos. O histórico legado `dataset.json` não alimenta o dashboard vivo.
 
 ## Análise de Agendamentos
 
@@ -54,7 +52,6 @@ https://andressacarmetrics.com.br/#/agendamentos
 | Agendamentos (detalhe) | `#/agendamentos/detalhe` |
 | Portais | `#/agendamentos/portais` |
 | Insucessos | `#/agendamentos/insucessos` |
-| Gestão | `#/agendamentos/admin` |
 
 Dataset isolado: [`public/data/agendamentos-dataset.json`](public/data/agendamentos-dataset.json)  
 Storage local: `agendamentos_dataset`, `agendamentos_admin_config`
@@ -84,12 +81,12 @@ Regenerar localmente (pasta `EXEMPLO ARQUIVO DE DADOS` ao lado do repo):
 npm run generate:agendamentos
 ```
 
-### Atualizar dados daqui pra frente (admin)
+### Atualizar dados daqui pra frente
 
-1. Abra `#/agendamentos/admin` (mesmo PIN unificado)  
+1. Abra `#/indice/gestao` (PIN unificado de gestão)  
 2. Envie novas planilhas de **AGENDAMENTOS** (agrega por ID)  
 3. Opcional: INSUCESSOS / LEADS GERAL só **enriquecem** IDs existentes  
-4. Opcional: exportar CSV de clientes (nome, email, telefone)  
+4. Opcional: no card **Exportar**, baixar CSV de clientes (Campanhas / Agendamentos / Negociações)  
 
 ## Análise de Negociações
 
@@ -101,7 +98,6 @@ https://andressacarmetrics.com.br/#/negociacoes
 | Visão Geral | `#/negociacoes` |
 | Lançamentos | `#/negociacoes/lancamentos` |
 | Vendedores | `#/negociacoes/vendedores` |
-| Gestão | `#/negociacoes/admin` |
 
 Dataset isolado: [`public/data/negociacoes-dataset.json`](public/data/negociacoes-dataset.json)
 
@@ -109,8 +105,17 @@ Dataset isolado: [`public/data/negociacoes-dataset.json`](public/data/negociacoe
 
 - Sem **Cancelado** nos totais · **Compra de Consignado** não entra  
 - **Troca** (2 linhas) = 1 negócio · **Venda/Compra** multi-linha = 1 por linha  
-- Gestão: merge acumulativo pelo **nº da Negociação** (arquivo novo atualiza o grupo)  
+- Merge acumulativo pelo **nº da Negociação** no Painel de Gestão (arquivo novo atualiza o grupo)  
 - Também aceita planilha de **conversão de avaliações** (Aprovadas/Realizadas) — ranking na aba Vendedores  
+
+## Gestão do Índice
+
+**Painel único (PIN):** https://andressacarmetrics.com.br/#/indice/gestao  
+
+- Importar planilhas (vários arquivos de uma vez) e publicar nos JSON de `public/data/`  
+- Exportar clientes com seleção (Campanhas · Agendamentos · Negociações)  
+- Rotas antigas `#/…/admin` redirecionam para este painel  
+
 
 ```bash
 node scripts/generate-negociacoes-dataset.mjs

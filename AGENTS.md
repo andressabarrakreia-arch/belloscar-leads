@@ -45,9 +45,10 @@ Quando o pedido incluir documentação, ou depois de confirmação explícita, a
 - Registro: `src/modules/registry.ts`
 - **Análise de Campanhas** → `#/campanhas`
 - **Análise de Agendamentos** → `#/agendamentos` (Vendas Web · Andressa Barra)
-  - Abas: Visão Geral · Pré-Vendas · Vendedores · Detalhe · Portais · Insucessos (+ Gestão)
+  - Abas: Visão Geral · Pré-Vendas · Vendedores · Detalhe · Portais · Insucessos
 - **Análise de Negociações** → `#/negociacoes` (loja)
-  - Abas: Visão Geral · Lançamentos · Vendedores (+ Gestão)
+  - Abas: Visão Geral · Lançamentos · Vendedores
+- **Gestão do Índice** → `#/indice/gestao` (PIN) — único lugar de import e export; sem abas Gestão nos módulos
 - Novos módulos: rota `#/<modulo>/...`, layout próprio, link de equipe separado
 - Regras: `multi-module-pages.mdc`, `belloscar-product-prefs.mdc` (alwaysApply)
 - Depois de task aprovada: pedir teste e perguntar se publica — `testar-e-perguntar-publicacao.mdc`

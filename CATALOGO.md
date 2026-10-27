@@ -91,7 +91,7 @@ Arquivos em `.cursor/rules/`. **Sempre** entra em toda conversa. **No arquivo** 
 | `testar-e-perguntar-publicacao` | Sempre | Pede teste e o sim antes de publicar |
 | `no-secrets-in-repo` | Sempre | Não versiona token nem senha |
 | `filtros-barra` | Sempre | Filtro recolhido, limpar e vermelho no filtro ativo |
-| `painel-gestao-planilhas` | Sempre | Upload só no Painel de Gestão |
+| `painel-gestao-planilhas` | Sempre | Upload e export só no Painel de Gestão do Índice |
 | `module-storage-isolation` | Sempre | Storage de um módulo não vaza para outro |
 | `multi-module-pages` | Sempre | Módulos com rota e link próprios |
 | `scheduling-dedupe` | Sempre | Agendamento único por ID |

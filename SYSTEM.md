@@ -17,34 +17,36 @@ Painel estático (React/Vite/GitHub Pages) que analisa campanhas Meta, agendamen
 | Erros | Cruzamento de IDs; página standalone `#/erros` |
 | Mapa do Site | Atlas do produto `#/mapa`; mesmo gate PIN que Erros |
 | Gestão | PIN `adminAuth` — não misturar com gate Erros/Mapa |
-| Upload | Só `#/indice/gestao` e admins de módulo |
+| Upload e export | Só `#/indice/gestao` (rotas `#/…/admin` redirecionam) |
 
 ## Structures
 
 ### Hub (Índice)
 
 - Rota `#/` / `#/indice` → `IndiceGeral.tsx`
-- Portas: campanhas, agendamentos, negociações, perfil, erros, mapa
+- Portas: campanhas, agendamentos, negociações, perfil, erros, mapa, apresentação
 - Contém mapa geográfico de clientes (Vega) e ranking
+- Link Gestão no rodapé → `#/indice/gestao`
 
 ### Módulos de análise
 
-- **Campanhas** `#/campanhas` — dashboard / atendentes / comparar / formulários / admin
-- **Agendamentos** `#/agendamentos` — visão geral, pré-vendas, vendedores, detalhe, portais, insucessos / admin
-- **Negociações** `#/negociacoes` — visão geral, lançamentos, vendedores / admin
+- **Campanhas** `#/campanhas` — dashboard / atendentes / comparar / formulários
+- **Agendamentos** `#/agendamentos` — visão geral, pré-vendas, vendedores, detalhe, portais, insucessos
+- **Negociações** `#/negociacoes` — visão geral, lançamentos, vendedores
 - **Perfil** `#/perfil` — marcas, modelos, gênero, motivos
 
 ### Gate + Gestão
 
-- Gate PIN compartilhado Erros + Mapa (`gateAuth`)
-- Admin PIN Gestão (`adminAuth`)
+- Gate PIN compartilhado Erros + Mapa + Apresentação (`gateAuth`)
+- Admin PIN Gestão (`adminAuth`) — painel único `#/indice/gestao` (import + export)
 
 ## Flows
 
-1. **Publicar base:** Gestão → importar planilhas → JSON em `public/data/` (+ opcional publish GitHub) → módulos leem store/JSON.
-2. **Ver equipe:** Índice → porta do módulo → abas do `registry.ts` (sem gestão).
-3. **Cruzar faltas:** Índice → Erros (PIN) → cruzamento entre planilhas do dataset de agendamentos.
-4. **Orientar agente/humano:** Índice → Mapa do Site (PIN) → atlas de rotas e fontes de dados.
+1. **Publicar base:** `#/indice/gestao` → importar planilhas → JSON em `public/data/` (+ publish GitHub) → módulos leem store/JSON.
+2. **Exportar clientes:** mesmo painel → checkboxes Campanhas / Agendamentos / Negociações → CSV.
+3. **Ver equipe:** Índice → porta do módulo → abas do `registry.ts` (sem aba Gestão).
+4. **Cruzar faltas:** Índice → Erros (PIN) → cruzamento entre planilhas do dataset de agendamentos.
+5. **Orientar agente/humano:** Índice → Mapa do Site (PIN) → atlas de rotas e fontes de dados.
 
 ## Open questions
 

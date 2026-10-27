@@ -5,7 +5,7 @@ Modo `site-ia` (codebase-learner). Hierarquia **do produto** como está (HashRou
 ## Audiência
 
 - Equipe (somente leitura): links públicos dos módulos
-- Andressa / gestão: PIN admin + gate Erros/Mapa
+- Andressa / gestão: PIN admin (`#/indice/gestao`) + gate Erros/Mapa/Apresentação
 
 ## Árvore
 
@@ -15,27 +15,26 @@ Modo `site-ia` (codebase-learner). Hierarquia **do produto** como está (HashRou
 │   ├── (dashboard)
 │   ├── atendentes
 │   ├── comparar
-│   ├── formularios
-│   └── admin          [PIN gestão]
+│   └── formularios
 ├── agendamentos/
 │   ├── (visão geral)
 │   ├── pre-vendas
 │   ├── vendedores
 │   ├── detalhe
 │   ├── portais
-│   ├── insucessos
-│   └── admin          [PIN gestão]
+│   └── insucessos
 ├── negociacoes/
 │   ├── (visão geral)
 │   ├── lancamentos
-│   ├── vendedores
-│   └── admin          [PIN gestão]
+│   └── vendedores
 ├── perfil/
-├── erros/             [PIN gate 2640]
-├── mapa/              [PIN gate 2640]  ← Mapa do Site (atlas + grafo)
-├── apresentacao/      [PIN gate 2640]  ← sala de resultados + WhatsApp (texto/PNG)
-└── indice/gestao/     [PIN gestão]
+├── erros/             [PIN gate]
+├── mapa/              [PIN gate]  ← Mapa do Site (atlas + grafo)
+├── apresentacao/      [PIN gate]  ← sala de resultados + WhatsApp (texto/PNG)
+└── indice/gestao/     [PIN gestão]  ← importar planilhas + exportar clientes
 ```
+
+Rotas antigas `…/admin` redirecionam para `indice/gestao`.
 
 ## Nav do hub (portas)
 

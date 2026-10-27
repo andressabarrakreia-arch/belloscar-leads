@@ -11,7 +11,7 @@ SPA React + Vite + HashRouter em GitHub Pages. Hub: **Análise de Resultados**. 
 | Hash | Página / módulo | Arquivo principal |
 | --- | --- | --- |
 | `#/` `#/indice` | Índice Geral | `src/pages/IndiceGeral.tsx` |
-| `#/indice/gestao` | Gestão do Índice (upload) | `src/pages/IndiceGestao.tsx` |
+| `#/indice/gestao` | Gestão do Índice (import + export) | `src/pages/IndiceGestao.tsx` |
 | `#/erros` | Cruzamento de IDs (PIN gate) | `src/pages/Erros.tsx` |
 | `#/mapa` | Mapa do Site (PIN gate) + grafo D3 | `src/pages/MapaDoSite.tsx` |
 | `#/apresentacao` | Apresentação (PIN): destaque + trilho, widgets de período, compartilhar texto/PNG WhatsApp | `src/pages/ApresentacaoResultados.tsx` + `src/components/apresentacao/*` |
@@ -28,7 +28,7 @@ Portas do índice (`DOORS` em `IndiceGeral.tsx`): Campanhas, Agendamentos, Negoc
 | --- | --- | --- |
 | `public/data/agendamentos-dataset.json` | Agendamentos **e** analytics de campanhas + Erros | — |
 | `public/data/negociacoes-dataset.json` | Negociações / ranking no índice | — |
-| `public/data/dataset.json` | **Legado** — histórico campanhas no admin | Não é a fonte do dashboard vivo de campanhas |
+| `public/data/dataset.json` | **Legado** — histórico antigo de campanhas | Não é a fonte do dashboard vivo de campanhas |
 
 ### Storage (isolamento por módulo)
 
@@ -42,7 +42,7 @@ Portas do índice (`DOORS` em `IndiceGeral.tsx`): Campanhas, Agendamentos, Negoc
 
 - Mapa **geográfico de clientes** fica no **índice** (`grill-mapa`). Não volta para Erros nem para Mapa do Site.
 - Erros = cruzamento de IDs entre planilhas (`lib/scheduling/errosCruzamento.ts`).
-- Upload de planilhas só no Painel de Gestão.
+- Upload e export de clientes só no Painel de Gestão (`#/indice/gestao`). Sem abas Gestão nos módulos; `#/…/admin` redireciona.
 - Dedupe agendamentos por `id`; negociações por nº da Negociação.
 
 ## Pastas-chave

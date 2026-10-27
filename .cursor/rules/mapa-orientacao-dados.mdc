@@ -29,7 +29,7 @@ alwaysApply: true
 - Erros = cruzamento de IDs entre planilhas.
 - Mapa do Site = atlas de rotas/módulos/dados do **produto** (`#/mapa`).
 - Isolamento de storage por módulo — `module-storage-isolation.mdc`.
-- Upload só no Painel de Gestão.
+- Upload e export de clientes só no Painel de Gestão (`#/indice/gestao`).
 
 ## Proibido
 

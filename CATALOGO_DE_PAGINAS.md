@@ -20,7 +20,7 @@ Análise de Negociações=https://andressacarmetrics.com.br/#/negociacoes
 Perfil de Clientes=https://andressacarmetrics.com.br/#/perfil
 ```
 
-## Gate PIN (Erros + Mapa do Site — não enviar como link da equipe)
+## Gate PIN (Erros + Mapa + Apresentação — não enviar como link da equipe)
 
 Mesmo PIN de gate (`VITE_GATE_PIN`, separado da Gestão).
 
@@ -32,11 +32,10 @@ Apresentação de resultados=https://andressacarmetrics.com.br/#/apresentacao
 
 ## Gestão (PIN — não enviar como link da equipe)
 
+Upload de planilhas e export de clientes ficam **só** neste painel. As rotas antigas `#/campanhas/admin`, `#/agendamentos/admin` e `#/negociacoes/admin` redirecionam para cá.
+
 ```
-Gestão do Índice (upload das planilhas)=https://andressacarmetrics.com.br/#/indice/gestao
-Gestão Campanhas (baixar clientes)=https://andressacarmetrics.com.br/#/campanhas/admin
-Gestão Agendamentos (baixar clientes)=https://andressacarmetrics.com.br/#/agendamentos/admin
-Gestão Negociações (baixar clientes)=https://andressacarmetrics.com.br/#/negociacoes/admin
+Gestão do Índice (importar e exportar)=https://andressacarmetrics.com.br/#/indice/gestao
 ```
 
 ## Subpáginas — Análise de Campanhas
@@ -45,9 +44,10 @@ Gestão Negociações (baixar clientes)=https://andressacarmetrics.com.br/#/nego
 Campanhas Dashboard=https://andressacarmetrics.com.br/#/campanhas
 Campanhas Atendentes=https://andressacarmetrics.com.br/#/campanhas/atendentes
 Campanhas Comparar=https://andressacarmetrics.com.br/#/campanhas/comparar
+Campanhas Leads por formulário=https://andressacarmetrics.com.br/#/campanhas/formularios
 ```
 
-## Subpáginas — Análise de Agendamentos (abas Fase 1)
+## Subpáginas — Análise de Agendamentos
 
 ```
 Agendamentos Visão Geral=https://andressacarmetrics.com.br/#/agendamentos
@@ -56,7 +56,6 @@ Agendamentos Vendedores=https://andressacarmetrics.com.br/#/agendamentos/vendedo
 Agendamentos Detalhe=https://andressacarmetrics.com.br/#/agendamentos/detalhe
 Agendamentos Portais=https://andressacarmetrics.com.br/#/agendamentos/portais
 Agendamentos Insucessos=https://andressacarmetrics.com.br/#/agendamentos/insucessos
-Agendamentos Gestão=https://andressacarmetrics.com.br/#/agendamentos/admin
 ```
 
 ## Subpáginas — Análise de Negociações
@@ -65,10 +64,9 @@ Agendamentos Gestão=https://andressacarmetrics.com.br/#/agendamentos/admin
 Negociações Visão Geral=https://andressacarmetrics.com.br/#/negociacoes
 Negociações Lançamentos=https://andressacarmetrics.com.br/#/negociacoes/lancamentos
 Negociações Vendedores=https://andressacarmetrics.com.br/#/negociacoes/vendedores
-Negociações Gestão=https://andressacarmetrics.com.br/#/negociacoes/admin
 ```
 
-Spec: [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md).
+Spec histórica (abas): [`docs/REESTRUTURACAO_ABAS.md`](docs/REESTRUTURACAO_ABAS.md).
 
 Fonte de verdade das rotas: `src/modules/registry.ts`.
 Manter este arquivo sincronizado ao criar ou renomear módulos.

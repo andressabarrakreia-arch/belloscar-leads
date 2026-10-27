@@ -13,11 +13,13 @@ Este projeto é um hub BellosCar com **vários módulos**. Pessoas diferentes po
 2. **Rota base própria:** `#/<modulo>/...` — nunca misturar páginas de módulos diferentes no mesmo prefixo.
 3. **Layout por módulo:** usar `ModuleLayout` (ou equivalente) com o `AppModule` correspondente; não reutilizar menu de outro módulo.
 4. **Link da equipe:** o link compartilhado aponta só para o `publicPath` daquele módulo (ex.: `#/campanhas`). Não enviar o hub inteiro se a pessoa só deve ver um módulo.
-5. **Gestão/Admin:** rotas `.../admin` ficam sob o módulo (`#/campanhas/admin`) e marcadas `adminOnly` no nav quando aplicável.
+5. **Gestão:** só `#/indice/gestao` (import + export). Não criar aba Gestão no nav dos módulos. Rotas legadas `.../admin` redirecionam para o painel do Índice.
 6. **Hub:** **Análise de Resultados** (título principal do produto).
 7. **Módulos publicados:**
-   - **Análise de Campanhas** = `#/campanhas` (dashboard, atendentes, comparar, admin)
-   - **Análise de Agendamentos** = `#/agendamentos` (dashboard, admin)
+   - **Análise de Campanhas** = `#/campanhas` (dashboard, atendentes, comparar, formulários)
+   - **Análise de Agendamentos** = `#/agendamentos` (visão geral, pré-vendas, vendedores, detalhe, portais, insucessos)
+   - **Análise de Negociações** = `#/negociacoes` (visão geral, lançamentos, vendedores)
+   - **Perfil de Clientes** = `#/perfil`
 8. **Catálogo:** manter [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md) no formato `nome=link`.
 9. **Ao criar novo módulo:**
    - adicionar em `MODULES`

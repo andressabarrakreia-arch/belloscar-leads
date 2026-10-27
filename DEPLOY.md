@@ -6,33 +6,36 @@ Hub: **BellosCar · Análise de Resultados**. Páginas separadas abaixo.
 
 Catálogo: [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md)
 
+- **Índice Geral:** https://andressacarmetrics.com.br/  
 - **Análise de Campanhas (equipe):** https://andressacarmetrics.com.br/#/campanhas  
-- **Gestão Campanhas:** https://andressacarmetrics.com.br/#/campanhas/admin  
 - **Análise de Agendamentos (equipe):** https://andressacarmetrics.com.br/#/agendamentos  
-- **Gestão Agendamentos:** https://andressacarmetrics.com.br/#/agendamentos/admin  
+- **Análise de Negociações (equipe):** https://andressacarmetrics.com.br/#/negociacoes  
+- **Gestão do Índice (PIN — importar e exportar):** https://andressacarmetrics.com.br/#/indice/gestao  
 - Repo: https://github.com/andressabarrakreia-arch/belloscar-leads  
 
-Rotas em hash (`#/…`) para não gerar 404 no Pages.
+Rotas em hash (`#/…`) para não gerar 404 no Pages.  
+Rotas antigas `#/…/admin` redirecionam para `#/indice/gestao`.
 
-## Atualizar dados — Campanhas
+## Atualizar dados (único painel)
 
-1. Abra `#/campanhas/admin` e entre com o PIN  
+Tudo sobe e baixa em **Gestão do Índice** (`#/indice/gestao`), com o mesmo PIN de `adminAuth`.
+
+1. Abra `#/indice/gestao` e entre com o PIN  
 2. Uma vez: cole o Fine-grained PAT → **Salvar neste computador**  
-3. Envie a planilha `.xlsx` → publica em `public/data/dataset.json`  
-4. Aguarde o Actions (1–2 min)  
+3. Envie uma ou várias planilhas (`.xlsx` / `.xls` / `.csv`) — o painel reconhece o tipo e atualiza a base certa  
+4. Aguarde o Actions (1–2 min) no site no ar  
 
-## Atualizar dados — Agendamentos
+O que cada tipo atualiza:
 
-A **base inicial** (ano até 15/10/2026) já está em `public/data/agendamentos-dataset.json` no Pages.
+- LEADS, agendamentos, realizados, sucessos e insucessos → `public/data/agendamentos-dataset.json` (Campanhas lê essa mesma base)  
+- LEADS POR CAMPANHA → alimenta a aba Leads por formulário  
+- Negociações e avaliações → `public/data/negociacoes-dataset.json`  
 
-Para **próximas** cargas:
+### Exportar clientes
 
-1. Abra `#/agendamentos/admin` (mesmo PIN)  
-2. Token GitHub já salvo no navegador é reutilizado  
-3. Envie novas planilhas de AGENDAMENTOS (agrega); INSUCESSOS/LEADS só enriquecem IDs existentes  
-4. Publica em `public/data/agendamentos-dataset.json` (isolado do dataset de campanhas)  
+No mesmo painel, card **Exportar**: marque Campanhas / Agendamentos / Negociações e **Baixar selecionados** (CSV).
 
-Regenerar a base completa a partir das planilhas locais: `npm run generate:agendamentos` + commit.
+Regenerar a base completa a partir das planilhas locais: `npm run generate:agendamentos` + commit (ou o script de negociações).
 
 **Nunca** commit o PAT. Ver `.cursor/rules/no-secrets-in-repo.mdc`.
 

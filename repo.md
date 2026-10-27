@@ -21,7 +21,7 @@ BellosCar Analytics (`belloscar-leads`) is a TypeScript React 19 + Vite 6 single
 
 ### Summary
 
-The app is organized as a hub (`IndiceGeral`) plus four analysis modules under HashRouter paths. Campanhas analytics share the agendamentos published dataset for live views; negociacoes use their own JSON. Admin screens share `adminAuth` PIN; Erros and Mapa do Site share a separate `gateAuth` PIN. Visualization libraries are page-specific (ECharts on Erros, Vega map on index, Recharts on module overviews). Publishing updates `public/data/*.json` via Gestão flows and optional GitHub token in browser storage. Cursor agents must consult `.nexus-map/INDEX.md` before inventing storage keys or relocating the client map.
+The app is organized as a hub (`IndiceGeral`) plus four analysis modules under HashRouter paths. Campanhas analytics share the agendamentos published dataset for live views; negociacoes use their own JSON. Gestão is a single panel at `#/indice/gestao` (`adminAuth` PIN) for import and client export; legacy `#/…/admin` routes redirect there. Erros, Mapa do Site and Apresentação share a separate `gateAuth` PIN. Visualization libraries are page-specific (ECharts on Erros, Vega map on index, Recharts on module overviews). Publishing updates `public/data/*.json` via Gestão flows and optional GitHub token in browser storage. Cursor agents must consult `.nexus-map/INDEX.md` before inventing storage keys or relocating the client map.
 
 ### Sensitive Data Types
 

@@ -1,6 +1,7 @@
 # Reestruturação em abas — Análise de Resultados (BellosCar)
 
-Documento de especificação validado para implementação futura.  
+Documento de especificação (histórico da Fase 1).  
+**Status 2026-10-27:** abas de Agendamentos implementadas. **Gestão** não fica mais no nav do módulo — upload e export estão só em `#/indice/gestao` (rotas `#/…/admin` redirecionam).  
 **Não fundir** os módulos atuais numa única página.
 
 | Hub | Páginas (módulos separados) |
@@ -38,10 +39,11 @@ Documento de especificação validado para implementação futura.
 #/agendamentos/vendedores      → Performance Vendedores
 #/agendamentos/detalhe         → Análise de Agendamentos (cruzamentos)
 #/agendamentos/insucessos      → Análise de Insucessos
-#/agendamentos/admin           → Gestão (PIN) — já existe
+#/agendamentos/portais         → Portais
+#/indice/gestao                → Gestão (PIN) — import + export (único painel)
 ```
 
-Nav do módulo = abas (ou tabs no topo) + Gestão `adminOnly`.
+Nav do módulo = abas (ou tabs no topo). Gestão fica só no Índice.
 
 ---
 
@@ -221,7 +223,8 @@ Hub = "Análise de Resultados". NÃO fundir módulos.
   #/agendamentos/vendedores
   #/agendamentos/detalhe
   #/agendamentos/insucessos
-  (#/agendamentos/admin permanece)
+  #/agendamentos/portais
+  (Gestão: #/indice/gestao — não criar aba admin no módulo)
 - Fase 2 (depois): Portais/UTMs em #/campanhas.
 
 OBRIGATÓRIO reutilizar:

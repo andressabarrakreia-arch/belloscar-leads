@@ -5,6 +5,11 @@
 ### Changed
 - `ROADMAP.md`: teste das cópias `#/v2` (Remotion / filme / 2D HD) agendado para **30 out 2026 após 13h**, após o reset da cota semanal do Cursor; páginas oficiais permanecem intactas até lá
 
+## [1.13.19] - 2026-10-27
+
+### Changed
+- Documentação alinhada à Gestão unificada: `CATALOGO_DE_PAGINAS`, `DEPLOY`, `README`, `ROADMAP`, `SYSTEM`, `AGENTS`, `CATALOGO`, `repo`, `.nexus-map/*`, regras `multi-module-pages` / `mapa-orientacao-dados` / `painel-gestao-planilhas`, nota em `docs/REESTRUTURACAO_ABAS.md`
+
 ## [1.13.18] - 2026-10-27
 
 ### Changed
