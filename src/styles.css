@@ -18,6 +18,21 @@
   --shadow-hover: 0 14px 32px rgba(192, 32, 38, 0.14);
   --radius: 14px;
   --radius-sm: 10px;
+  --chart-ink: #404041;
+  --chart-blue: #2563eb;
+  --chart-dy-blue: #2f6f9f;
+  --chart-green: #16a34a;
+  --chart-dy-green: #2e7d4f;
+  --chart-red: #c02026;
+  --chart-gray: #929497;
+  --chart-teal: #0f766e;
+  --chart-navy: #1e3a8a;
+  --chart-grid: #e4e5e8;
+  --chart-muted: #6b6e73;
+  --chart-tip-bg: #ffffff;
+  --chart-tip-ink: #404041;
+  --chart-tip-line: #e4e5e8;
+  --chart-cursor: rgba(64, 64, 65, 0.08);
   font-family: "DM Sans", "Montserrat", system-ui, sans-serif;
   color: var(--text);
   background: var(--bg);
@@ -1497,12 +1512,19 @@ tr:hover td {
 
 .indice-bg {
   position: fixed;
-  inset: -28px;
+  inset: -56px;
   pointer-events: none;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  filter: blur(8px);
+  filter: blur(22px) saturate(0.85);
+}
+
+.indice-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.32);
 }
 
 .indice-content {
@@ -1567,7 +1589,7 @@ tr:hover td {
   border-radius: 999px;
   text-align: center;
   color: var(--brand-charcoal);
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.52);
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 12px 28px rgba(20, 16, 16, 0.14);
   backdrop-filter: blur(12px);
@@ -1622,7 +1644,7 @@ tr:hover td {
 
 .indice-market,
 .indice-card {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.58);
   border: 1px solid rgba(255, 255, 255, 0.48);
   border-radius: 18px;
   box-shadow: 0 12px 28px rgba(20, 16, 16, 0.12);
@@ -1689,13 +1711,13 @@ tr:hover td {
 }
 
 .indice-facts div {
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.62);
   border-radius: 12px;
   padding: 7px 10px;
 }
 
 .indice-quote {
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.62);
   border-radius: 12px;
   padding: 6px 8px;
 }
@@ -1796,7 +1818,7 @@ tr:hover td {
   padding: 7px 8px;
   border: 0;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.62);
   color: var(--brand-charcoal);
   font: inherit;
   text-align: left;
@@ -1909,7 +1931,7 @@ tr:hover td {
   align-items: flex-start;
   gap: 2px;
   text-align: left;
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.62);
   border: 0;
   border-radius: 12px;
   padding: 8px 10px;
@@ -2702,4 +2724,292 @@ tr:hover td {
   .patio-mesa {
     width: min(1180px, calc(100% - 20px));
   }
+}
+
+html[data-theme="dark"] {
+  --brand-charcoal: #f2f2f3;
+  --brand-gray: #b4b4b4;
+  --brand-blue: #8a8c92;
+  --brand-blue-soft: #b4b4b4;
+  --success: #5fc39c;
+  --bg: #171719;
+  --card: #131217;
+  --text: #ffffff;
+  --muted: #b4b4b4;
+  --border: #222224;
+  --shadow: none;
+  --chart-ink: #f2f2f3;
+  --chart-blue: #8a8c92;
+  --chart-dy-blue: #8a8c92;
+  --chart-green: #5fc39c;
+  --chart-dy-green: #5fc39c;
+  --chart-red: #e5566f;
+  --chart-gray: #6e7076;
+  --chart-teal: #8a8c92;
+  --chart-navy: #b4b4b4;
+  --chart-grid: #2b2b2e;
+  --chart-muted: #b4b4b4;
+  --chart-tip-bg: #212023;
+  --chart-tip-ink: #ffffff;
+  --chart-tip-line: #222224;
+  --chart-cursor: rgba(255, 255, 255, 0.08);
+  color-scheme: dark;
+  background: var(--bg);
+  color: var(--text);
+}
+
+html[data-theme="dark"] body {
+  background: #171719;
+  color: #ffffff;
+}
+
+.tema-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 90;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .tema-toggle {
+  box-shadow: inset 0 -1px 0 #c02026;
+}
+
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .info-tip-btn,
+html[data-theme="dark"] .filters select,
+html[data-theme="dark"] .filters input,
+html[data-theme="dark"] .login-card input,
+html[data-theme="dark"] .card input,
+html[data-theme="dark"] .card select,
+html[data-theme="dark"] .marca-mais,
+html[data-theme="dark"] .kpi-card,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .mes-mini__lista,
+html[data-theme="dark"] .chart-legend__btn,
+html[data-theme="dark"] .chart-donut-list button,
+html[data-theme="dark"] .btn.secondary,
+html[data-theme="dark"] .table-scroll--cascade,
+html[data-theme="dark"] .table-scroll--sticky-head,
+html[data-theme="dark"] .mapa-dica,
+html[data-theme="dark"] .quadro-id,
+html[data-theme="dark"] .modelo-filho td,
+html[data-theme="dark"] .login-card,
+html[data-theme="dark"] .patio-topo,
+html[data-theme="dark"] .nav a:hover,
+html[data-theme="dark"] .nav button.linkish:hover {
+  background: #131217;
+  color: #f2f2f3;
+  border-color: #222224;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] th {
+  background: #212023;
+  color: #f2f2f3;
+}
+
+html[data-theme="dark"] .portal-cascade-table thead th,
+html[data-theme="dark"] .table-scroll--sticky-head thead th,
+html[data-theme="dark"] .table-sticky-head thead th {
+  background: #212023;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .filters-float__peek,
+html[data-theme="dark"] .filters.filters--sticky {
+  background: #212023;
+  color: #ff8d90;
+  border-color: #3a3a3e;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .nav a.active,
+html[data-theme="dark"] .nav a.active:hover {
+  background: transparent;
+  color: #ffffff;
+  border-radius: 0;
+  box-shadow: inset 0 -1px 0 #c02026;
+}
+
+html[data-theme="dark"] .info-tip-bubble {
+  background: #0e0e10;
+  color: #f2f2f3;
+}
+
+html[data-theme="dark"] .key-ticker {
+  background: #131217;
+  border-color: #222224;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .error {
+  color: #ffb4b6;
+  background: #2c1a20;
+  border-color: rgba(229, 86, 111, 0.4);
+}
+
+html[data-theme="dark"] .success-box {
+  color: #5fc39c;
+  background: #1b2828;
+  border-color: rgba(95, 195, 156, 0.35);
+}
+
+html[data-theme="dark"] .indice-bg::after {
+  background: rgba(23, 23, 25, 0.62);
+}
+
+html[data-theme="dark"] .indice-door,
+html[data-theme="dark"] .indice-market,
+html[data-theme="dark"] .indice-card,
+html[data-theme="dark"] .indice-facts div,
+html[data-theme="dark"] .indice-quote,
+html[data-theme="dark"] .indice-person,
+html[data-theme="dark"] .indice-rank-item {
+  background: rgba(19, 18, 23, 0.92);
+  border-color: #222224;
+  color: #f2f2f3;
+}
+
+html[data-theme="dark"] .patio-foto::after {
+  background: rgba(23, 23, 25, 0.72);
+}
+
+html[data-theme="dark"] .bg-card,
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-white\/95 {
+  background-color: #131217;
+  color: #f2f2f3;
+}
+
+html[data-theme="dark"] .text-foreground,
+html[data-theme="dark"] .text-card-foreground {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .text-muted-foreground {
+  color: #b4b4b4;
+}
+
+html[data-theme="dark"] .text-primary {
+  color: #ff8d90;
+}
+
+html[data-theme="dark"] .border-border {
+  border-color: #222224;
+}
+
+html[data-theme="dark"] .bg-secondary {
+  background-color: #212023;
+}
+
+html[data-theme="dark"] .dygraph-axis-label,
+html[data-theme="dark"] .dygraph-legend {
+  color: #b4b4b4 !important;
+  background: transparent !important;
+}
+
+html[data-theme="dark"] .funnel-step {
+  background: #212023;
+  border-color: #2e2e32;
+}
+
+html[data-theme="dark"] .funnel-step strong {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .funnel-step span {
+  color: #b4b4b4;
+}
+
+html[data-theme="dark"] .funnel-step--success {
+  background: #172a1d;
+  border-color: rgba(95, 195, 156, 0.4);
+}
+
+html[data-theme="dark"] .funnel-step--success strong,
+html[data-theme="dark"] .funnel-step--success span {
+  color: #5fc39c;
+}
+
+html[data-theme="dark"] .funnel-step--exit {
+  background: #2c1a20;
+  border-color: rgba(229, 86, 111, 0.4);
+}
+
+html[data-theme="dark"] .funnel-step--exit strong,
+html[data-theme="dark"] .funnel-step--exit span {
+  color: #ff8d90;
+}
+
+html[data-theme="dark"] .filters__clear-btn,
+html[data-theme="dark"] .filters__clear-btn:hover,
+html[data-theme="dark"] .mapa-presets button,
+html[data-theme="dark"] .mapa-filtro-toggle {
+  background: #131217;
+  color: #ffffff;
+  border-color: #3a3a3e;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .filters:has(.is-active) .filters__clear-btn,
+html[data-theme="dark"] .filters:has(.is-active) .filters__clear-btn:hover,
+html[data-theme="dark"] .mapa-presets button.is-active,
+html[data-theme="dark"] .mapa-filtro-toggle.is-active,
+html[data-theme="dark"] .filters .btn.secondary.is-active,
+html[data-theme="dark"] .filters .btn.secondary.is-active:hover,
+html[data-theme="dark"] .filters select.is-active,
+html[data-theme="dark"] .filters input.is-active {
+  color: #ff8d90;
+  border-color: rgba(229, 86, 111, 0.55);
+  background: #131217;
+}
+
+html[data-theme="dark"] .recharts-default-tooltip,
+html[data-theme="dark"] .recharts-tooltip-item,
+html[data-theme="dark"] .recharts-tooltip-label {
+  background-color: #212023 !important;
+  color: #ffffff !important;
+  border-color: #222224 !important;
+}
+
+html[data-theme="dark"] .recharts-tooltip-cursor {
+  fill: rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] #vg-tooltip-element.vg-tooltip,
+html[data-theme="dark"] #vg-tooltip-element.vg-tooltip td.key,
+html[data-theme="dark"] #vg-tooltip-element.vg-tooltip td.value {
+  background: #212023 !important;
+  color: #f2f2f3 !important;
+  border-color: #2e2e32 !important;
+}
+
+html[data-theme="dark"] .dc-cruzado .dc-chart text,
+html[data-theme="dark"] .dc-chart g.axis text {
+  fill: #f2f2f3;
+}
+
+html[data-theme="dark"] .indice-logo,
+html[data-theme="dark"] .brand-logo,
+html[data-theme="dark"] .patio-topo img,
+html[data-theme="dark"] .indice-abertura-placa img {
+  background: radial-gradient(ellipse at center, rgba(23, 23, 25, 0.94) 46%, rgba(23, 23, 25, 0) 74%);
+}
+
+html[data-theme="dark"] .indice-abertura-miolo {
+  background: rgba(19, 18, 23, 0.96);
+}
+
+html[data-theme="dark"] .indice-abertura-giro {
+  background: conic-gradient(from 0deg, transparent 0 72%, #c02026 88%, #e5566f 100%);
 }

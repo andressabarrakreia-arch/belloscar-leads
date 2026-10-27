@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import crossfilter from "crossfilter2";
 import { deregisterChart, rowChart } from "dc";
 import "dc/dist/style/dc.css";
+import { tinta, useTema } from "../../theme";
 
 type Linha = Record<string, string>;
 
@@ -19,6 +20,7 @@ type Props = {
 export function DcCruzado({ titulo, dica, linhas, chaveA, tituloA, chaveB, tituloB }: Props) {
   const refA = useRef<HTMLDivElement>(null);
   const refB = useRef<HTMLDivElement>(null);
+  const { tema } = useTema();
 
   useEffect(() => {
     const elA = refA.current;
@@ -47,7 +49,7 @@ export function DcCruzado({ titulo, dica, linhas, chaveA, tituloA, chaveB, titul
       .group(dimB.group())
       .elasticX(true)
       .cap(12)
-      .ordinalColors(["#404041"])
+      .ordinalColors([tinta("var(--chart-ink)")])
       .renderLabel(true);
     chartA.render();
     chartB.render();
@@ -57,7 +59,7 @@ export function DcCruzado({ titulo, dica, linhas, chaveA, tituloA, chaveB, titul
       elA.replaceChildren();
       elB.replaceChildren();
     };
-  }, [linhas, chaveA, chaveB]);
+  }, [linhas, chaveA, chaveB, tema]);
 
   if (linhas.length === 0) return null;
 

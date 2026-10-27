@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { tinta, useTema } from "../../theme";
 import gsap from "gsap";
 import { motion } from "motion/react";
 import embed from "vega-embed";
@@ -107,7 +108,11 @@ function moverCena(cena: HTMLDivElement) {
   };
 }
 
-/** Mapa do Brasil: o estado pinta pelo volume, o ponto é o DDD. */
+function filtroAplicado(filtro: FiltroMapa) {
+  return (Object.keys(FILTRO_MAPA_INICIAL) as (keyof FiltroMapa)[]).some(
+    (chave) => filtro[chave] !== FILTRO_MAPA_INICIAL[chave],
+  );
+}
 export function MapaClientes({
   mapa,
   filtro = FILTRO_MAPA_INICIAL,
@@ -125,6 +130,7 @@ export function MapaClientes({
   const [filtrosAbertos, setFiltrosAbertos] = useState(false);
   const escolher = useRef(setEscolha);
   escolher.current = setEscolha;
+  const { tema } = useTema();
 
   const ponto = useMemo(
     () => (escolha?.tipo === "ddd" ? mapa.pontos.find((item) => item.ddd === escolha.ddd) : undefined),
@@ -199,7 +205,7 @@ export function MapaClientes({
         },
         {
           data: { values: mapa.pontos },
-          mark: { type: "circle", color: "#404041", stroke: "rgba(255,255,255,0.9)", strokeWidth: 1, cursor: "pointer" },
+          mark: { type: "circle", color: tinta("var(--chart-ink)"), stroke: "rgba(255,255,255,0.9)", strokeWidth: 1, cursor: "pointer" },
           encoding: {
             longitude: { field: "lon", type: "quantitative" },
             latitude: { field: "lat", type: "quantitative" },
@@ -271,7 +277,7 @@ export function MapaClientes({
       caixa.remove();
       vista?.finalize();
     };
-  }, [mapa]);
+  }, [mapa, tema]);
 
   const periodoTodo = !filtro.from && !filtro.to;
   const pedeVeiculo = filtro.tipoVeiculo !== "all" || filtro.marca !== "all";
@@ -288,7 +294,7 @@ export function MapaClientes({
         {onFiltro && opcoes ? (
           <button
             type="button"
-            className="mapa-filtro-toggle"
+            className={`mapa-filtro-toggle${filtroAplicado(filtro) ? " is-active" : ""}`}
             aria-expanded={filtrosAbertos}
             onClick={() => setFiltrosAbertos((aberto) => !aberto)}
           >
@@ -332,6 +338,8 @@ function Filtros({
     onFiltro({ ...filtro, ...parcial });
   }
 
+  const aplicado = filtroAplicado(filtro);
+
   function periodo(tipo: "tudo" | "mes" | "ano" | "90") {
     if (tipo === "tudo") {
       mudar({ from: "", to: "" });
@@ -367,7 +375,7 @@ function Filtros({
         <button type="button" onClick={() => periodo("90")}>
           90 dias
         </button>
-        <button type="button" onClick={() => onFiltro(FILTRO_MAPA_INICIAL)}>
+        <button type="button" className={aplicado ? "is-active" : ""} onClick={() => onFiltro(FILTRO_MAPA_INICIAL)}>
           Limpar
         </button>
       </div>

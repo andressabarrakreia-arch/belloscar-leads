@@ -56,7 +56,7 @@ export function FaltasPlanilha({ linhas }: { linhas: ErroIdLinha[] }) {
       .attr("x", (row) => x(row.qtd) + 6)
       .attr("y", (row) => (y(row.nome) ?? 0) + y.bandwidth() / 2)
       .attr("dominant-baseline", "middle")
-      .attr("fill", "#404041")
+      .attr("fill", "var(--chart-ink)")
       .attr("font-size", 13)
       .text((row) => row.qtd.toLocaleString("pt-BR"));
     g.selectAll("text.nome")
@@ -67,7 +67,7 @@ export function FaltasPlanilha({ linhas }: { linhas: ErroIdLinha[] }) {
       .attr("y", (row) => (y(row.nome) ?? 0) + y.bandwidth() / 2)
       .attr("text-anchor", "end")
       .attr("dominant-baseline", "middle")
-      .attr("fill", "#404041")
+      .attr("fill", "var(--chart-ink)")
       .attr("font-size", 13)
       .text((row) => row.nome);
   }, [data]);

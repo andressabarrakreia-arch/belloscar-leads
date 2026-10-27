@@ -1,6 +1,7 @@
 import { HashRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ModuleLayout } from "./components/ModuleLayout";
 import { ParticleField } from "./components/ParticleField";
+import { TemaProvider, TemaToggle } from "./theme";
 import { AGENDAMENTOS, CAMPANHAS, NEGOCIACOES, PERFIL } from "./modules/registry";
 import { Admin } from "./pages/Admin";
 import { Attendants } from "./pages/Attendants";
@@ -40,7 +41,9 @@ function Ambient() {
 
 export default function App() {
   return (
-    <HashRouter>
+    <TemaProvider>
+      <TemaToggle />
+      <HashRouter>
       <Ambient />
       <Routes>
         <Route index element={<IndiceGeral />} />
@@ -90,5 +93,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/campanhas" replace />} />
       </Routes>
     </HashRouter>
+    </TemaProvider>
   );
 }

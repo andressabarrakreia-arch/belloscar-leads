@@ -7,6 +7,13 @@
     <link rel="icon" type="image/png" href="/brand/bc-icon.png" />
     <link rel="apple-touch-icon" href="/brand/bc-icon.png" />
     <title>BellosCar · Análise de Resultados</title>
+    <script>
+      try {
+        if (localStorage.getItem("belloscar-tema") === "dark") {
+          document.documentElement.dataset.theme = "dark";
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

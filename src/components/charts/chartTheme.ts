@@ -1,11 +1,11 @@
 export const CHART_COLORS = {
-  charcoal: "#404041",
-  blue: "#2563eb",
-  green: "#16a34a",
-  red: "#c02026",
-  gray: "#929497",
-  teal: "#0f766e",
-  navy: "#1e3a8a",
+  charcoal: "var(--chart-ink)",
+  blue: "var(--chart-blue)",
+  green: "var(--chart-green)",
+  red: "var(--chart-red)",
+  gray: "var(--chart-gray)",
+  teal: "var(--chart-teal)",
+  navy: "var(--chart-navy)",
 } as const;
 
 export const CHART_PALETTE = [
@@ -19,9 +19,11 @@ export const CHART_PALETTE = [
 ];
 
 export const chartTooltipStyle = {
-  background: "#fff",
-  border: "1px solid #e4e5e8",
+  background: "var(--chart-tip-bg)",
+  border: "1px solid var(--chart-tip-line)",
   borderRadius: 10,
   fontSize: 12,
-  color: "#404041",
+  color: "var(--chart-tip-ink)",
 };
+
+export const chartCursor = { fill: "var(--chart-cursor)" };

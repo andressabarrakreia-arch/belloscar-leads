@@ -8,9 +8,10 @@ import {
   YAxis,
 } from "recharts";
 import { InfoTip } from "../InfoTip";
+import { chartCursor, chartTooltipStyle } from "../charts/chartTheme";
 import { MOTIVO_NAO_INFORMADO } from "../../lib/scheduling/metrics";
 
-const BAR_COLOR = "#c02026";
+const BAR_COLOR = "var(--chart-red)";
 
 function MotivoTick({
   x = 0,
@@ -39,7 +40,7 @@ function MotivoTick({
     );
   }
   return (
-    <text x={px} y={py} dy={4} textAnchor="end" fill="#404041" fontSize={11}>
+    <text x={px} y={py} dy={4} textAnchor="end" fill="var(--chart-ink)" fontSize={11}>
       {label}
     </text>
   );
@@ -82,8 +83,8 @@ export function MotivoDistributionChart({
               layout="vertical"
               margin={{ top: 8, right: 24, left: 8, bottom: 8 }}
             >
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-              <XAxis type="number" allowDecimals={false} />
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--chart-grid)" />
+              <XAxis type="number" allowDecimals={false} tick={{ fontSize: 11, fill: "var(--chart-ink)" }} />
               <YAxis
                 type="category"
                 dataKey="label"
@@ -99,6 +100,8 @@ export function MotivoDistributionChart({
                 )}
               />
               <Tooltip
+                contentStyle={chartTooltipStyle}
+                cursor={chartCursor}
                 formatter={(value: number, _name, item) => {
                   const pct = (item?.payload as { percentual?: number } | undefined)?.percentual;
                   return [`${value} (${pct ?? 0}%)`, "Qtd"];

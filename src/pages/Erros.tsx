@@ -19,7 +19,7 @@ import {
 } from "../lib/scheduling/errosCruzamento";
 const fundo = `${import.meta.env.BASE_URL}brand/indice-fundo.jpg`;
 const luz = `${import.meta.env.BASE_URL}brand/bc-particle.png`;
-const marca = `${import.meta.env.BASE_URL}brand/belloscar-logo.png`;
+const marca = `${import.meta.env.BASE_URL}brand/belloscar-mark.png`;
 
 function PresencaCell({ value }: { value: PresencaPlanilha }) {
   if (value === "esta") return <span className="num-ok">Está</span>;

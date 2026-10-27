@@ -116,10 +116,10 @@ export function SchedulingOverview() {
         linhas={periodSeriesPreVenda}
         x="periodKey"
         series={[
-          { key: "total", name: "Agendamentos", color: "#404041" },
-          { key: "visitas", name: "Visitas", color: "#2f6f9f" },
-          { key: "sucessos", name: "Sucessos", color: "#2e7d4f" },
-          { key: "insucessos", name: "Insucessos", color: "#c02026" },
+          { key: "total", name: "Agendamentos", color: "var(--chart-ink)" },
+          { key: "visitas", name: "Visitas", color: "var(--chart-dy-blue)" },
+          { key: "sucessos", name: "Sucessos", color: "var(--chart-dy-green)" },
+          { key: "insucessos", name: "Insucessos", color: "var(--chart-red)" },
         ]}
       />
 

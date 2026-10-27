@@ -224,9 +224,9 @@ export function Compare() {
           ]}
           x="data"
           series={[
-            { key: "atendimentos", name: "Atendimentos", color: "#404041" },
-            { key: "visitas", name: "Visitas", color: "#2f6f9f" },
-            { key: "sucessos", name: "Sucessos", color: "#2e7d4f" },
+            { key: "atendimentos", name: "Atendimentos", color: "var(--chart-ink)" },
+            { key: "visitas", name: "Visitas", color: "var(--chart-dy-blue)" },
+            { key: "sucessos", name: "Sucessos", color: "var(--chart-dy-green)" },
           ]}
         />
       ) : null}

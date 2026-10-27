@@ -93,9 +93,9 @@ export function NegociacoesOverview() {
         linhas={periodSeries}
         x="periodKey"
         series={[
-          { key: "vendas", name: "Vendas", color: "#2e7d4f" },
-          { key: "trocas", name: "Trocas", color: "#2f6f9f" },
-          { key: "compras", name: "Compras", color: "#404041" },
+          { key: "vendas", name: "Vendas", color: "var(--chart-dy-green)" },
+          { key: "trocas", name: "Trocas", color: "var(--chart-dy-blue)" },
+          { key: "compras", name: "Compras", color: "var(--chart-ink)" },
         ]}
       />
 

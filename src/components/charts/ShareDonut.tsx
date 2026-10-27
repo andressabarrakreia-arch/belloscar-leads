@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { InfoTip } from "../InfoTip";
-import { CHART_PALETTE, chartTooltipStyle } from "./chartTheme";
+import { CHART_PALETTE, chartCursor, chartTooltipStyle } from "./chartTheme";
 
 type Slice = { label: string; value: number };
 
@@ -51,7 +51,7 @@ export function ShareDonut({ title, tip, data, grande = false }: Props) {
                   />
                 ))}
               </Pie>
-              <Tooltip contentStyle={chartTooltipStyle} />
+              <Tooltip contentStyle={chartTooltipStyle} cursor={chartCursor} />
             </PieChart>
           </ResponsiveContainer>
           <ul className="chart-donut-list">

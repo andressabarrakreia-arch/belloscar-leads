@@ -13,7 +13,7 @@ import {
   YAxis,
 } from "recharts";
 import { InfoTip } from "../InfoTip";
-import { chartTooltipStyle } from "./chartTheme";
+import { chartCursor, chartTooltipStyle } from "./chartTheme";
 
 function NameTick({
   x = 0,
@@ -36,7 +36,7 @@ function NameTick({
   const lineHeight = 13;
   const start = -((lines.length - 1) * lineHeight) / 2;
   return (
-    <text x={x} y={y} textAnchor="end" fill="#404041" fontSize={11}>
+    <text x={x} y={y} textAnchor="end" fill="var(--chart-ink)" fontSize={11}>
       {lines.map((line, index) => (
         <tspan key={`${line}-${index}`} x={x} dy={index === 0 ? start : lineHeight}>
           {line}
@@ -85,10 +85,10 @@ export function SeriesChart({ title, tip, data, xKey, series, kind = "area", nam
 
   const axes = (
     <>
-      <CartesianGrid strokeDasharray="3 3" stroke="#e4e5e8" vertical={false} />
-      <XAxis dataKey={xKey} tick={{ fontSize: 11, fill: "#404041" }} />
-      <YAxis tick={{ fontSize: 11, fill: "#404041" }} allowDecimals={false} width={36} />
-      <Tooltip contentStyle={chartTooltipStyle} />
+      <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
+      <XAxis dataKey={xKey} tick={{ fontSize: 11, fill: "var(--chart-ink)" }} />
+      <YAxis tick={{ fontSize: 11, fill: "var(--chart-ink)" }} allowDecimals={false} width={36} />
+      <Tooltip contentStyle={chartTooltipStyle} cursor={chartCursor} />
     </>
   );
 
@@ -122,8 +122,8 @@ export function SeriesChart({ title, tip, data, xKey, series, kind = "area", nam
           <ResponsiveContainer width="100%" height={frameHeight}>
             {kind === "bar" && aside ? (
               <BarChart data={data} layout="vertical" margin={{ left: 4, right: 12, top: 8, bottom: 8 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e4e5e8" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 11, fill: "#404041" }} allowDecimals={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
+                <XAxis type="number" tick={{ fontSize: 11, fill: "var(--chart-ink)" }} allowDecimals={false} />
                 <YAxis
                   type="category"
                   dataKey={xKey}
@@ -131,7 +131,7 @@ export function SeriesChart({ title, tip, data, xKey, series, kind = "area", nam
                   interval={0}
                   tick={NameTick}
                 />
-                <Tooltip contentStyle={chartTooltipStyle} />
+                <Tooltip contentStyle={chartTooltipStyle} cursor={chartCursor} />
                 {visible.map((item) => (
                   <Bar key={item.key} dataKey={item.key} name={item.name} fill={item.color} radius={[0, 6, 6, 0]} />
                 ))}

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import Dygraph from "dygraphs";
 import "dygraphs/dist/dygraph.css";
+import { tinta, useTema } from "../../theme";
 
 type Linha = Record<string, string | number>;
 
@@ -27,8 +28,9 @@ function comoData(value: string): Date {
 /** Série no tempo com zoom: arraste para aproximar, clique duplo para voltar. */
 export function DygraphLinhas({ titulo, dica, linhas, x, series }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const { tema } = useTema();
 
-  const assinatura = JSON.stringify({ linhas, series, x });
+  const assinatura = JSON.stringify({ linhas, series, x, tema });
 
   useEffect(() => {
     const el = ref.current;
@@ -40,13 +42,15 @@ export function DygraphLinhas({ titulo, dica, linhas, x, series }: Props) {
     ]);
     const grafico = new Dygraph(el, data, {
       labels: ["Data", ...pacote.series.map((serie) => serie.name)],
-      colors: pacote.series.map((serie) => serie.color),
+      colors: pacote.series.map((serie) => tinta(serie.color)),
       legend: "always",
       ylabel: "Quantidade",
       strokeWidth: 2,
       fillAlpha: 0.15,
       animatedZooms: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
       axisLabelFontSize: 12,
+      axisLabelColor: tinta("var(--chart-muted)"),
+      axisLineColor: tinta("var(--chart-grid)"),
       highlightCircleSize: 4,
     });
     const onResize = () => grafico.resize();
