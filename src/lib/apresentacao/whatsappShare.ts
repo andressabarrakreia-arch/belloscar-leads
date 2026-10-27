@@ -53,8 +53,12 @@ export function buildWhatsappPayload(
   return `${msg}\n\n${card}`;
 }
 
-export function whatsappShareUrl(text: string): string {
-  return `https://wa.me/?text=${encodeURIComponent(text)}`;
+/** Com phoneDigits → chat direto; sem → escolhe contato no app. */
+export function whatsappShareUrl(text: string, phoneDigits?: string | null): string {
+  const q = encodeURIComponent(text);
+  const digits = phoneDigits?.replace(/\D/g, "") || "";
+  if (digits) return `https://wa.me/${digits}?text=${q}`;
+  return `https://wa.me/?text=${q}`;
 }
 
 export const DEFAULT_SHARE_MESSAGE =

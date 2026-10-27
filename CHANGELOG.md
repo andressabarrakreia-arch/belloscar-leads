@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.13.9] - 2026-10-27
+
+### Added
+- Lista rápida de WhatsApp e **PM fixo por colaborador** no compartilhar da Apresentação (localStorage), com número avulso e desvincular
+
 ## [1.13.8] - 2026-10-27
 
 ### Added
