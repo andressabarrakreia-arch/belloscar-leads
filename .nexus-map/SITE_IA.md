@@ -32,13 +32,14 @@ Modo `site-ia` (codebase-learner). Hierarquia **do produto** como está (HashRou
 │   └── admin          [PIN gestão]
 ├── perfil/
 ├── erros/             [PIN gate 2640]
-├── mapa/              [PIN gate 2640]  ← Mapa do Site (atlas)
+├── mapa/              [PIN gate 2640]  ← Mapa do Site (atlas + grafo)
+├── apresentacao/      [PIN gate 2640]  ← cards resultados equipe
 └── indice/gestao/     [PIN gestão]
 ```
 
 ## Nav do hub (portas)
 
-Campanhas · Agendamentos · Negociações · Perfil · Erros · Mapa do Site  
+Campanhas · Agendamentos · Negociações · Perfil · Erros · Mapa do Site · Apresentação  
 (Gestão no rodapé, não na grade de portas.)
 
 ## URL pattern

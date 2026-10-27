@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.0] - 2026-10-26
+
+### Added
+- Mapa gráfico D3 interativo ao final de **Mapa do Site** (arrastar nós, clique seleciona)
+- Página **Apresentação** (`#/apresentacao`): cards coletivos e individuais com números vivos e avatares por iniciais; PIN gate 2640; teclas ← → espaço / ↑ ↓
+- Porta **Apresentação** no Índice
+- Skills `d3-visualization`, `cinematic-web`, `presentation-building`
+
 ## [1.12.0] - 2026-10-26
 
 ### Added

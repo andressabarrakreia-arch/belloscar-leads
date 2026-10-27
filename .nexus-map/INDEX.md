@@ -13,13 +13,14 @@ SPA React + Vite + HashRouter em GitHub Pages. Hub: **Análise de Resultados**. 
 | `#/` `#/indice` | Índice Geral | `src/pages/IndiceGeral.tsx` |
 | `#/indice/gestao` | Gestão do Índice (upload) | `src/pages/IndiceGestao.tsx` |
 | `#/erros` | Cruzamento de IDs (PIN gate) | `src/pages/Erros.tsx` |
-| `#/mapa` | Mapa do Site (PIN gate) | `src/pages/MapaDoSite.tsx` |
+| `#/mapa` | Mapa do Site (PIN gate) + grafo D3 | `src/pages/MapaDoSite.tsx` |
+| `#/apresentacao` | Apresentação de resultados (PIN gate) | `src/pages/ApresentacaoResultados.tsx` |
 | `#/campanhas/*` | Análise de Campanhas | `src/pages/Dashboard.tsx` + … |
 | `#/agendamentos/*` | Análise de Agendamentos | `src/pages/agendamentos/*` |
 | `#/negociacoes/*` | Análise de Negociações | `src/pages/negociacoes/*` |
 | `#/perfil` | Perfil de Clientes | `src/pages/perfil/PerfilClientes.tsx` |
 
-Portas do índice (`DOORS` em `IndiceGeral.tsx`): Campanhas, Agendamentos, Negociações, Perfil, Erros, Mapa do Site. Gestão fica no rodapé (`#/indice/gestao`).
+Portas do índice (`DOORS` em `IndiceGeral.tsx`): Campanhas, Agendamentos, Negociações, Perfil, Erros, Mapa do Site, Apresentação. Gestão fica no rodapé (`#/indice/gestao`).
 
 ## Dados — não recriar
 

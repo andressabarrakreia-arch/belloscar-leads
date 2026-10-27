@@ -27,6 +27,7 @@ Mesmo PIN de gate (`VITE_GATE_PIN`, separado da Gestão).
 ```
 Erros (cruzamento de IDs)=https://andressacarmetrics.com.br/#/erros
 Mapa do Site (atlas de rotas e dados)=https://andressacarmetrics.com.br/#/mapa
+Apresentação de resultados=https://andressacarmetrics.com.br/#/apresentacao
 ```
 
 ## Gestão (PIN — não enviar como link da equipe)
