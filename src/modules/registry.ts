@@ -37,7 +37,6 @@ export const MODULES: AppModule[] = [
       { to: "/campanhas/atendentes", label: "Atendentes" },
       { to: "/campanhas/comparar", label: "Comparar" },
       { to: "/campanhas/formularios", label: "Leads por formulário" },
-      { to: "/campanhas/admin", label: "Gestão", adminOnly: true },
     ],
   },
   {
@@ -53,7 +52,6 @@ export const MODULES: AppModule[] = [
       { to: "/agendamentos/detalhe", label: "Agendamentos" },
       { to: "/agendamentos/portais", label: "Portais" },
       { to: "/agendamentos/insucessos", label: "Insucessos" },
-      { to: "/agendamentos/admin", label: "Gestão", adminOnly: true },
     ],
   },
   {
@@ -66,7 +64,6 @@ export const MODULES: AppModule[] = [
       { to: "/negociacoes", label: "Visão Geral", end: true },
       { to: "/negociacoes/lancamentos", label: "Lançamentos" },
       { to: "/negociacoes/vendedores", label: "Vendedores" },
-      { to: "/negociacoes/admin", label: "Gestão", adminOnly: true },
     ],
   },
   {

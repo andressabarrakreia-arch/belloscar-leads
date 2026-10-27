@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.13.18] - 2026-10-27
+
+### Changed
+- Gestão unificada só em `#/indice/gestao`: abas Gestão removidas dos módulos; import intacto; export de clientes com seleção (Campanhas / Agendamentos / Negociações)
+- Rotas antigas `#/…/admin` redirecionam para o painel do Índice
+
 ## [1.13.17] - 2026-10-27
 
 ### Changed

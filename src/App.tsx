@@ -3,12 +3,10 @@ import { ModuleLayout } from "./components/ModuleLayout";
 import { ParticleField } from "./components/ParticleField";
 import { TemaProvider, TemaToggle } from "./theme";
 import { AGENDAMENTOS, CAMPANHAS, NEGOCIACOES, PERFIL } from "./modules/registry";
-import { Admin } from "./pages/Admin";
 import { Attendants } from "./pages/Attendants";
 import { Compare } from "./pages/Compare";
 import { Dashboard } from "./pages/Dashboard";
 import { FormLeads } from "./pages/FormLeads";
-import { SchedulingAdmin } from "./pages/agendamentos/SchedulingAdmin";
 import { SchedulingDetalhe } from "./pages/agendamentos/SchedulingDetalhe";
 import { SchedulingInsucessos } from "./pages/agendamentos/SchedulingInsucessos";
 import { SchedulingOverview } from "./pages/agendamentos/SchedulingOverview";
@@ -16,7 +14,6 @@ import { SchedulingPortais } from "./pages/agendamentos/SchedulingPortais";
 import { SchedulingPreVendas } from "./pages/agendamentos/SchedulingPreVendas";
 import { SchedulingShell } from "./pages/agendamentos/SchedulingShell";
 import { SchedulingVendedores } from "./pages/agendamentos/SchedulingVendedores";
-import { NegociacoesAdmin } from "./pages/negociacoes/NegociacoesAdmin";
 import { NegociacoesLancamentos } from "./pages/negociacoes/NegociacoesLancamentos";
 import { NegociacoesOverview } from "./pages/negociacoes/NegociacoesOverview";
 import { NegociacoesShell } from "./pages/negociacoes/NegociacoesShell";
@@ -76,7 +73,7 @@ export default function App() {
           <Route path="atendentes" element={<Attendants />} />
           <Route path="comparar" element={<Compare />} />
           <Route path="formularios" element={<FormLeads />} />
-          <Route path="admin" element={<Admin />} />
+          <Route path="admin" element={<Navigate to="/indice/gestao" replace />} />
         </Route>
 
         <Route path="agendamentos" element={<ModuleLayout module={AGENDAMENTOS} />}>
@@ -88,7 +85,7 @@ export default function App() {
             <Route path="portais" element={<SchedulingPortais />} />
             <Route path="insucessos" element={<SchedulingInsucessos />} />
           </Route>
-          <Route path="admin" element={<SchedulingAdmin />} />
+          <Route path="admin" element={<Navigate to="/indice/gestao" replace />} />
         </Route>
 
         <Route path="perfil" element={<ModuleLayout module={PERFIL} />}>
@@ -101,13 +98,13 @@ export default function App() {
             <Route path="lancamentos" element={<NegociacoesLancamentos />} />
             <Route path="vendedores" element={<NegociacoesVendedores />} />
           </Route>
-          <Route path="admin" element={<NegociacoesAdmin />} />
+          <Route path="admin" element={<Navigate to="/indice/gestao" replace />} />
         </Route>
 
         {/* Compatibilidade com links antigos */}
         <Route path="atendentes" element={<Navigate to="/campanhas/atendentes" replace />} />
         <Route path="comparar" element={<Navigate to="/campanhas/comparar" replace />} />
-        <Route path="admin" element={<Navigate to="/campanhas/admin" replace />} />
+        <Route path="admin" element={<Navigate to="/indice/gestao" replace />} />
 
         <Route path="*" element={<Navigate to="/campanhas" replace />} />
       </Routes>

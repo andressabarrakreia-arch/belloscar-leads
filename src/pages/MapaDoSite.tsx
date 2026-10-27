@@ -46,7 +46,7 @@ const EXTRA: AtlasNode[] = [
     hash: "/indice/gestao",
     label: "Gestão do Índice",
     kind: "admin",
-    line: "Upload e publicação das planilhas",
+    line: "Importar planilhas e exportar clientes",
     data: "Planilhas publicadas na gestão",
   },
   {
