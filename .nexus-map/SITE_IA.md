@@ -33,7 +33,7 @@ Modo `site-ia` (codebase-learner). Hierarquia **do produto** como está (HashRou
 ├── perfil/
 ├── erros/             [PIN gate 2640]
 ├── mapa/              [PIN gate 2640]  ← Mapa do Site (atlas + grafo)
-├── apresentacao/      [PIN gate 2640]  ← cards resultados equipe
+├── apresentacao/      [PIN gate 2640]  ← sala de resultados + WhatsApp (texto/PNG)
 └── indice/gestao/     [PIN gestão]
 ```
 
