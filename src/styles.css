@@ -3445,3 +3445,226 @@ html[data-theme="dark"] .indice-abertura-giro {
 .atlas-graph-node.is-active circle {
   filter: drop-shadow(0 0 8px rgba(61, 154, 173, 0.65));
 }
+
+.indice-door--show {
+  color: #fff4e6;
+  background: rgba(224, 162, 74, 0.4);
+  border-color: rgba(255, 244, 230, 0.55);
+}
+
+.indice-door--show:hover,
+.indice-door--show:focus-visible {
+  background: rgba(224, 162, 74, 0.62);
+}
+
+/* —— Apresentação de resultados (palco) —— */
+.show-page {
+  --show-bg: #0c0d10;
+  --show-ink: #f4efe6;
+  --show-mute: #a39e94;
+  --show-line: rgba(244, 239, 230, 0.14);
+  min-height: 100vh;
+  padding: 1.1rem clamp(1rem, 3vw, 2.25rem) 2rem;
+  color: var(--show-ink);
+  background:
+    radial-gradient(90% 70% at 80% -10%, rgba(224, 162, 74, 0.16), transparent 55%),
+    radial-gradient(70% 50% at 0% 100%, rgba(192, 32, 38, 0.14), transparent 50%),
+    var(--show-bg);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+}
+
+.show-top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.25rem;
+}
+
+.show-back {
+  color: #e0a24a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.show-back:hover,
+.show-back:focus-visible {
+  color: #fff;
+  outline: none;
+}
+
+.show-brand p {
+  margin: 0;
+  color: var(--show-mute);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.show-brand h1 {
+  margin: 0.15rem 0 0;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.show-hint {
+  margin: 0;
+  color: var(--show-mute);
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.show-status {
+  margin: 1rem 0;
+  color: var(--show-mute);
+}
+
+.show-status--err {
+  color: #f07178;
+}
+
+.show-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.show-tabs button {
+  border: 1px solid var(--show-line);
+  background: transparent;
+  color: var(--show-mute);
+  padding: 0.4rem 0.75rem;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.show-tabs button.is-active,
+.show-tabs button:hover,
+.show-tabs button:focus-visible {
+  color: var(--show-ink);
+  border-color: rgba(224, 162, 74, 0.7);
+  background: rgba(224, 162, 74, 0.12);
+  outline: none;
+}
+
+.show-sector-head h2 {
+  margin: 0 0 0.35rem;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700;
+}
+
+.show-sector-head p {
+  margin: 0 0 1rem;
+  color: var(--show-mute);
+  max-width: 42ch;
+}
+
+.show-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.85rem;
+}
+
+.show-card {
+  --show-accent: #e0a24a;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0.75rem;
+  padding: 0.9rem 0.85rem;
+  border: 1px solid var(--show-line);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.show-card.is-focused {
+  border-color: var(--show-accent);
+  box-shadow: 0 0 0 1px var(--show-accent), 0 18px 40px rgba(0, 0, 0, 0.35);
+  transform: translateY(-3px);
+}
+
+.show-avatar {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--show-accent) 28%, #1a1b20);
+  color: #fff;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.show-role {
+  margin: 0;
+  color: var(--show-mute);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.show-name {
+  margin: 0.15rem 0 0.55rem;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.show-kpis {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.5rem;
+}
+
+.show-kpis div {
+  min-width: 0;
+}
+
+.show-kpis dt {
+  margin: 0;
+  color: var(--show-mute);
+  font-size: 0.68rem;
+}
+
+.show-kpis dd {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.show-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--show-line);
+  color: var(--show-mute);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 720px) {
+  .show-top {
+    grid-template-columns: 1fr;
+  }
+
+  .show-hint {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .show-card {
+    transition: none;
+  }
+}

@@ -36,7 +36,7 @@ const DOORS: {
   label: string;
   line: string;
   summary: string;
-  tone?: "red" | "atlas";
+  tone?: "red" | "atlas" | "show";
 }[] = [
   {
     to: "/campanhas",
@@ -77,6 +77,13 @@ const DOORS: {
     line: "Atlas",
     summary: "Rotas, módulos e fontes de dados do painel — PIN igual ao de Erros.",
     tone: "atlas",
+  },
+  {
+    to: "/apresentacao",
+    label: "Apresentação",
+    line: "Resultados",
+    summary: "Cards individuais e coletivos da equipe, com números vivos — PIN do gate.",
+    tone: "show",
   },
 ];
 
@@ -317,7 +324,9 @@ export function IndiceGeral() {
                   ? "indice-door indice-door--erros"
                   : door.tone === "atlas"
                     ? "indice-door indice-door--atlas"
-                    : "indice-door"
+                    : door.tone === "show"
+                      ? "indice-door indice-door--show"
+                      : "indice-door"
               }
             >
               {door.label}

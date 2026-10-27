@@ -26,6 +26,7 @@ import { Erros } from "./pages/Erros";
 import { IndiceGeral } from "./pages/IndiceGeral";
 import { IndiceGestao } from "./pages/IndiceGestao";
 import { MapaDoSite } from "./pages/MapaDoSite";
+import { ApresentacaoResultados } from "./pages/ApresentacaoResultados";
 
 /**
  * Módulos com rotas e links distintos.
@@ -40,7 +41,8 @@ function Ambient() {
     pathname === "/" ||
     pathname === "/indice" ||
     pathname === "/erros" ||
-    pathname === "/mapa"
+    pathname === "/mapa" ||
+    pathname === "/apresentacao"
   ) {
     return null;
   }
@@ -59,6 +61,7 @@ export default function App() {
         <Route path="indice/gestao" element={<IndiceGestao />} />
         <Route path="erros" element={<Erros />} />
         <Route path="mapa" element={<MapaDoSite />} />
+        <Route path="apresentacao" element={<ApresentacaoResultados />} />
         <Route path="agendamentos/erros" element={<Navigate to="/erros" replace />} />
 
         <Route path="campanhas" element={<ModuleLayout module={CAMPANHAS} />}>
