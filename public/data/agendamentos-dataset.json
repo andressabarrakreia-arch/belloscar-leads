@@ -1,6 +1,20 @@
 {
-  "updatedAt": "2026-10-27T00:53:21.330Z",
+  "updatedAt": "2026-10-27T01:10:40.975Z",
   "imports": [
+    {
+      "fileName": "sucessos ate 26_10.xlsx",
+      "label": "sucessos ate 26_10.xlsx",
+      "kind": "sucessos",
+      "at": "2026-10-27T01:10:40.975Z",
+      "received": 14,
+      "kept": 10,
+      "removed": 0,
+      "enriched": 4,
+      "notes": [
+        "SUCESSOS: 820 eventos únicos (Finalizado em)",
+        "Reconciliação: coleções já alinhadas por ID"
+      ]
+    },
     {
       "fileName": "recebidoss ate 26_10.csv",
       "label": "recebidoss ate 26_10.csv",
@@ -78026,7 +78040,7 @@
       "vendedor": "Márcia",
       "tipoProposta": "Venda",
       "teveVisita": true,
-      "status": "Agendado",
+      "status": "Sucesso",
       "origem": "Telefone",
       "motivoInsucesso": null,
       "cliente": "Otávio",
@@ -519175,7 +519189,7 @@
       "vendedor": "Gabriel Willyan Santana da Silva",
       "tipoProposta": "Venda",
       "origem": "Chaves na Mão WhatsApp",
-      "cliente": "Nilson Eduardo",
+      "cliente": "NILSON",
       "celular": "(41)99963-8644"
     },
     {
@@ -519197,6 +519211,106 @@
       "origem": "Google Site",
       "cliente": "Ana Paula da Fonseca dos Santos",
       "celular": "(41)99679-1210"
+    },
+    {
+      "id": "9764735",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "vendedor": "Celso Fofo",
+      "tipoProposta": "Venda",
+      "origem": "Carteira",
+      "cliente": "CELIO GILBERTO DE SOUZA",
+      "celular": "(41)99702-1112"
+    },
+    {
+      "id": "9764947",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "vendedor": "Lais Narimã Ferreira Vieira",
+      "tipoProposta": "Troca",
+      "origem": "Carteira",
+      "cliente": "MARCO",
+      "celular": "(41)99723-8170"
+    },
+    {
+      "id": "9764888",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "vendedor": "Lais Narimã Ferreira Vieira",
+      "tipoProposta": "Troca",
+      "origem": "Carteira",
+      "cliente": "HANNA",
+      "celular": "(41)98890-2690"
+    },
+    {
+      "id": "9764840",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "vendedor": "Lais Narimã Ferreira Vieira",
+      "tipoProposta": "Troca",
+      "origem": "Carteira",
+      "cliente": "GILNEI",
+      "celular": "(41)99802-6057"
+    },
+    {
+      "id": "9764802",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "vendedor": "Lais Narimã Ferreira Vieira",
+      "tipoProposta": "Troca",
+      "origem": "Carteira",
+      "cliente": "JEAN CARLOS",
+      "celular": "(41)99129-3046"
+    },
+    {
+      "id": "9764768",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "vendedor": "Lais Narimã Ferreira Vieira",
+      "tipoProposta": "Troca",
+      "origem": "Carteira",
+      "cliente": "VITOR",
+      "celular": "(41)99832-8059"
+    },
+    {
+      "id": "9764680",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "vendedor": "Lais Narimã Ferreira Vieira",
+      "tipoProposta": "Financiamento",
+      "origem": "Carteira",
+      "cliente": "NILSON",
+      "celular": "(41)99963-8644"
+    },
+    {
+      "id": "9764580",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "Recepção",
+      "vendedor": "Dimas Noldin",
+      "tipoProposta": "Venda",
+      "origem": "Indicação",
+      "cliente": "VINICIUS ANTONIO JERONIMO ALVES DA SILVA",
+      "celular": "(11)98725-8280"
+    },
+    {
+      "id": "9690014",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "vendedor": "Márcia",
+      "tipoProposta": "Venda",
+      "origem": "Telefone",
+      "cliente": "Otávio",
+      "celular": "(65)98435-0286"
+    },
+    {
+      "id": "9745736",
+      "dataFinalizado": "2026-10-26",
+      "sdr": "BRUNO PROSPECÇÃO",
+      "vendedor": "BRUNO PROSPECÇÃO",
+      "tipoProposta": "Troca",
+      "origem": "Facebook",
+      "cliente": "Jamile",
+      "celular": "(41)99656-1903"
     }
   ],
   "leadsCampanha": [
