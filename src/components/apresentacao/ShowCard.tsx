@@ -1,5 +1,6 @@
-import { avatarIniciais, corSetor, fotoEquipe, type SetorId } from "../../lib/apresentacao/avatar";
+import { corSetor, type SetorId } from "../../lib/apresentacao/avatar";
 import type { ShowPerson } from "../../lib/apresentacao/types";
+import { ShowAvatar } from "./ShowAvatar";
 
 type ShowCardProps = {
   person: ShowPerson;
@@ -11,7 +12,6 @@ type ShowCardProps = {
 export function ShowCard({ person, focused, variant = "rail", onOpen }: ShowCardProps) {
   const hue = corSetor(person.setor as SetorId);
   const featured = variant === "featured";
-  const foto = fotoEquipe(person.nome);
   return (
     <article
       className={`show-card show-card--${variant}${focused ? " is-focused" : ""}`}
@@ -27,9 +27,7 @@ export function ShowCard({ person, focused, variant = "rail", onOpen }: ShowCard
         }
       }}
     >
-      <div className={`show-avatar${featured ? " show-avatar--lg" : ""}`} aria-hidden="true">
-        {foto ? <img src={foto} alt="" /> : avatarIniciais(person.nome)}
-      </div>
+      <ShowAvatar nome={person.nome} size={featured ? "lg" : "sm"} />
       <div className="show-card-body">
         <p className="show-role">{person.cargo}</p>
         <h3 className="show-name">{person.nome}</h3>

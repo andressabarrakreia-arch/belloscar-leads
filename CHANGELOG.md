@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.4] - 2026-10-27
+
+### Added
+- Fotos da equipe na **Apresentação** (pré-venda, vendas, loja) + logos para lead sem interesse e Espaço Bellos
+- Reflexo de vidro nos avatares: brilho no hover e segundo nível no clique / abertura do modal
+- Skills `gsap-core` e `awwwards-animations` no catálogo
+
 ## [1.13.3] - 2026-10-27
 
 ### Changed

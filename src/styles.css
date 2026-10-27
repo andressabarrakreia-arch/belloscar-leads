@@ -3917,12 +3917,16 @@ html[data-theme="dark"] .indice-abertura-giro {
 }
 
 .show-avatar {
+  --shine-x: 50%;
+  --shine-y: 40%;
+  position: relative;
   display: grid;
   place-items: center;
   width: 64px;
   height: 64px;
   border-radius: 0;
   overflow: hidden;
+  isolation: isolate;
   background: color-mix(in srgb, var(--show-accent) 22%, #14151a);
   color: #fff;
   font-family: "Barlow Condensed", sans-serif;
@@ -3930,6 +3934,8 @@ html[data-theme="dark"] .indice-abertura-giro {
   font-weight: 700;
   letter-spacing: 0.06em;
   clip-path: polygon(8% 0, 100% 0, 100% 92%, 92% 100%, 0 100%, 0 8%);
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
 .show-avatar img {
@@ -3937,6 +3943,55 @@ html[data-theme="dark"] .indice-abertura-giro {
   height: 100%;
   object-fit: cover;
   display: block;
+  grid-area: 1 / 1;
+}
+
+.show-avatar--logo img {
+  object-fit: contain;
+  padding: 12%;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.show-avatar__shine {
+  grid-area: 1 / 1;
+  position: absolute;
+  inset: -40%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0.08) 42%,
+    rgba(255, 255, 255, 0.55) calc(var(--shine-x) * 0.35 + 38%),
+    rgba(255, 255, 255, 0.12) 58%,
+    transparent 68%
+  );
+  mix-blend-mode: soft-light;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+}
+
+.show-avatar:hover .show-avatar__shine,
+.show-avatar:focus-visible .show-avatar__shine {
+  opacity: 0.75;
+}
+
+.show-avatar.is-struck {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.show-avatar.is-struck .show-avatar__shine {
+  opacity: 1;
+  mix-blend-mode: screen;
+  background: linear-gradient(
+    118deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.15) 38%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(255, 255, 255, 0.2) 62%,
+    transparent 80%
+  );
 }
 
 .show-avatar--lg {
@@ -3949,6 +4004,16 @@ html[data-theme="dark"] .indice-abertura-giro {
   width: 112px;
   height: 112px;
   font-size: 2.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .show-avatar__shine {
+    display: none;
+  }
+
+  .show-avatar.is-struck {
+    box-shadow: none;
+  }
 }
 
 .show-card-body {

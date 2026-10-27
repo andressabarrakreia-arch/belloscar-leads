@@ -19,9 +19,32 @@ function chaveNome(nome: string): string {
     .trim();
 }
 
-/** Mapa de trechos do nome → arquivo em public/brand/equipe/. */
+/**
+ * Mapa de trechos do nome → arquivo em public/brand/equipe/.
+ * Ordem: mais específico primeiro (ex. gabriel willyan antes de gabriel).
+ */
 const FOTOS_EQUIPE: { match: RegExp; file: string }[] = [
+  { match: /\bsem interesse\b/, file: "lead-sem-interesse.png" },
+  { match: /\bespaco bellos\b/, file: "espaco-bellos.png" },
   { match: /\bthayna\b/, file: "thayna.png" },
+  { match: /\bmatheus\b.*\bimbroinise\b|\bimbroinise\b/, file: "matheus-imbroinise.png" },
+  { match: /\ballan\b/, file: "allan-junior.png" },
+  { match: /\blais\b/, file: "lais-narima.png" },
+  { match: /\bliriane\b/, file: "liriane-larissa.png" },
+  { match: /\bgabriel\b.*\bwillyan\b|\bwillyan\b/, file: "gabriel-willyan.png" },
+  { match: /\bgabriel\b.*\bvendas\b|\bgabriel vendas\b/, file: "gabriel-vendas.png" },
+  { match: /\bfilipe\b/, file: "filipe-portes.png" },
+  { match: /\banderson\b/, file: "anderson-pires.png" },
+  { match: /\bmarcia\b/, file: "marcia.png" },
+  { match: /\bdimas\b/, file: "dimas-noldin.png" },
+  { match: /\bewerton\b/, file: "ewerton-rocha.png" },
+  { match: /\bandressa\b/, file: "andressa-kreia.png" },
+  { match: /\bcelso\b/, file: "celso-fofo.png" },
+  { match: /\bbruno\b/, file: "bruno-prospeccao.png" },
+  { match: /\bana dal\b|\bana\b.*\bdal bello\b/, file: "ana-dal-bello.png" },
+  { match: /\bsilvan\b/, file: "silvan-dal-bello.png" },
+  { match: /\bmarquinhos\b/, file: "marquinhos.png" },
+  { match: /\bsibele\b/, file: "sibele-baranhuk.png" },
 ];
 
 /** URL da foto da pessoa, se houver arquivo mapeado. */
@@ -30,6 +53,12 @@ export function fotoEquipe(nome: string): string | null {
   const hit = FOTOS_EQUIPE.find((item) => item.match.test(key));
   if (!hit) return null;
   return `${import.meta.env.BASE_URL}brand/equipe/${hit.file}`;
+}
+
+/** Logos (lead / espaço) usam contain em vez de cover. */
+export function isLogoEquipe(nome: string): boolean {
+  const key = chaveNome(nome);
+  return /\bsem interesse\b/.test(key) || /\bespaco bellos\b/.test(key);
 }
 
 export type SetorId = "coletivo" | "prevenda" | "campanhas" | "vendedores" | "loja";
