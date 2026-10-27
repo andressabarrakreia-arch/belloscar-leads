@@ -23,7 +23,7 @@ const EXTRA: AtlasNode[] = [
     label: "Índice Geral",
     kind: "hub",
     line: "Hub Análise de Resultados · mapa de clientes · portas",
-    data: "negociacoes-dataset (ranking) + mapa no índice",
+    data: "Ranking e mapa no Índice",
   },
   {
     id: "erros",
@@ -31,7 +31,7 @@ const EXTRA: AtlasNode[] = [
     label: "Erros",
     kind: "gate",
     line: "Cruzamento de IDs entre planilhas",
-    data: "agendamentos-dataset.json",
+    data: "Base compartilhada de agendamentos",
   },
   {
     id: "mapa",
@@ -39,7 +39,7 @@ const EXTRA: AtlasNode[] = [
     label: "Mapa do Site",
     kind: "gate",
     line: "Atlas de rotas e fontes (esta página)",
-    data: ".nexus-map · SYSTEM.md · repo.md",
+    data: "Orientação do painel",
   },
   {
     id: "gestao",
@@ -47,26 +47,26 @@ const EXTRA: AtlasNode[] = [
     label: "Gestão do Índice",
     kind: "admin",
     line: "Upload e publicação das planilhas",
-    data: "public/data/*.json",
+    data: "Planilhas publicadas na gestão",
   },
   {
     id: "data-ag",
     hash: "#",
-    label: "agendamentos-dataset.json",
+    label: "Base de agendamentos",
     kind: "data",
     line: "Campanhas vivo · Agendamentos · Erros",
   },
   {
     id: "data-neg",
     hash: "#",
-    label: "negociacoes-dataset.json",
+    label: "Base de negociações",
     kind: "data",
     line: "Negociações · ranking do índice",
   },
   {
     id: "data-leg",
     hash: "#",
-    label: "dataset.json (legado)",
+    label: "Histórico legado (campanhas)",
     kind: "data",
     line: "Só histórico admin campanhas — não é o dashboard vivo",
   },
@@ -99,10 +99,10 @@ function MapaDoSiteConteudo() {
       line: mod.tagline,
       data:
         mod.id === "negociacoes"
-          ? "negociacoes-dataset.json"
+          ? "Base de negociações"
           : mod.id === "perfil"
-            ? "derivado de negociações + filtros"
-            : "agendamentos-dataset.json",
+            ? "Derivado de negociações e filtros"
+            : "Base compartilhada de agendamentos",
       children: mod.nav.map((item) => ({
         hash: item.to,
         label: item.label,
@@ -113,6 +113,15 @@ function MapaDoSiteConteudo() {
   }, []);
 
   const selected = nodes.find((n) => n.id === active) ?? nodes[0];
+
+  useEffect(() => {
+    const prev = document.documentElement.dataset.theme;
+    document.documentElement.dataset.theme = "dark";
+    return () => {
+      if (prev) document.documentElement.dataset.theme = prev;
+      else delete document.documentElement.dataset.theme;
+    };
+  }, []);
 
   useEffect(() => {
     document.title = "BellosCar · Mapa do Site";
@@ -142,8 +151,8 @@ function MapaDoSiteConteudo() {
             <span>do Site</span>
           </h1>
           <p className="atlas-lede">
-            Rotas, módulos e arquivos de dados — para não recriar o que já existe. O mapa de clientes
-            continua no Índice; aqui é o esquema do painel.
+            Rotas, módulos e fontes do painel — para não recriar o que já existe. O mapa de clientes
+            continua no Índice; aqui é o esquema do produto.
           </p>
         </div>
 
@@ -199,21 +208,18 @@ function MapaDoSiteConteudo() {
         <h3>Fontes de verdade</h3>
         <div className="atlas-legend-row">
           <div>
-            <strong>agendamentos-dataset.json</strong>
+            <strong>Base de agendamentos</strong>
             <span>Campanhas vivo · Agendamentos · Erros</span>
           </div>
           <div>
-            <strong>negociacoes-dataset.json</strong>
+            <strong>Base de negociações</strong>
             <span>Negociações · ranking do Índice</span>
           </div>
           <div>
-            <strong>dataset.json</strong>
+            <strong>Histórico legado (campanhas)</strong>
             <span>Legado — não usar como dashboard vivo</span>
           </div>
         </div>
-        <p className="atlas-refs">
-          Agentes: <code>.nexus-map/INDEX.md</code> · <code>SYSTEM.md</code> · <code>repo.md</code>
-        </p>
       </section>
 
       <AtlasGraph
@@ -246,7 +252,7 @@ function rotuloKind(kind: AtlasNode["kind"]): string {
     case "admin":
       return "PIN gestão";
     case "data":
-      return "Arquivo";
+      return "Fonte";
     default:
       return kind;
   }

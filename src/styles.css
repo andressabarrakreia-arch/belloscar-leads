@@ -1524,7 +1524,9 @@ tr:hover td {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.32);
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 28%, rgba(255, 255, 255, 0.1), transparent 62%),
+    rgba(18, 14, 16, 0.32);
 }
 
 .indice-content {
@@ -1561,7 +1563,7 @@ tr:hover td {
 }
 
 .indice-hero h1 span {
-  color: #ffd0d2;
+  color: #c02026;
 }
 
 .indice-hero p {
@@ -1584,26 +1586,62 @@ tr:hover td {
 
 .indice-door {
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
   min-width: 168px;
   padding: 14px 22px;
   border-radius: 999px;
   text-align: center;
   color: var(--brand-charcoal);
-  background: rgba(255, 255, 255, 0.52);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 12px 28px rgba(20, 16, 16, 0.14);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow:
+    0 14px 32px rgba(20, 16, 16, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px) saturate(1.05);
+  -webkit-backdrop-filter: blur(16px) saturate(1.05);
   font-family: "Montserrat", sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.indice-door::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 34%,
+    rgba(255, 255, 255, 0.12) 44%,
+    rgba(255, 255, 255, 0.42) 50%,
+    rgba(255, 255, 255, 0.1) 56%,
+    transparent 68%
+  );
+  transform: translate3d(-30%, 0, 0);
+  transition: opacity 0.35s ease, transform 0.55s ease;
 }
 
 .indice-door:hover,
 .indice-door:focus-visible {
   transform: translateY(-2px);
-  box-shadow: 0 16px 28px rgba(20, 16, 16, 0.2);
+  box-shadow:
+    0 18px 36px rgba(20, 16, 16, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.indice-door:hover::before,
+.indice-door:focus-visible::before {
+  opacity: 0.85;
+  transform: translate3d(30%, 0, 0);
+}
+
+.indice-door > * {
+  position: relative;
+  z-index: 1;
 }
 
 .indice-door-tip {
@@ -1644,12 +1682,24 @@ tr:hover td {
 
 .indice-market,
 .indice-card {
-  background: rgba(255, 255, 255, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.48);
+  background: rgba(255, 255, 255, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 18px;
-  box-shadow: 0 12px 28px rgba(20, 16, 16, 0.12);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 14px 34px rgba(20, 16, 16, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(16px) saturate(1.05);
+  -webkit-backdrop-filter: blur(16px) saturate(1.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.indice-card:hover,
+.indice-market:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 18px 40px rgba(20, 16, 16, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .indice-market {
@@ -2013,7 +2063,7 @@ tr:hover td {
 }
 
 .indice-gestao-link:hover {
-  color: #ffd0d2;
+  color: #c02026;
 }
 
 .indice-foot .site-credit {
@@ -2232,12 +2282,13 @@ tr:hover td {
   opacity: 0;
 }
 
-.indice-abertura-placa img:first-of-type {
+.indice-abertura-marca {
   width: min(280px, 100%);
   height: auto;
+  background: transparent;
 }
 
-.indice-abertura-placa img:nth-of-type(2) {
+.indice-abertura-placa img:not(.indice-abertura-bc-img):not(.indice-abertura-marca) {
   width: min(180px, 100%);
   height: auto;
 }
@@ -3102,7 +3153,7 @@ html[data-theme="dark"] .indice-bg::after {
   background: rgba(23, 23, 25, 0.62);
 }
 
-html[data-theme="dark"] .indice-door,
+html[data-theme="dark"] .indice-door:not(.indice-door--erros):not(.indice-door--atlas):not(.indice-door--show),
 html[data-theme="dark"] .indice-market,
 html[data-theme="dark"] .indice-card,
 html[data-theme="dark"] .indice-facts div,
@@ -3112,6 +3163,48 @@ html[data-theme="dark"] .indice-rank-item {
   background: rgba(19, 18, 23, 0.92);
   border-color: #222224;
   color: #f2f2f3;
+}
+
+html[data-theme="dark"] .indice-door--erros {
+  color: #fff;
+  background: rgba(192, 32, 38, 0.55);
+  border-color: rgba(255, 180, 184, 0.45);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+html[data-theme="dark"] .indice-door--erros:hover,
+html[data-theme="dark"] .indice-door--erros:focus-visible {
+  background: rgba(192, 32, 38, 0.72);
+}
+
+html[data-theme="dark"] .indice-door--atlas {
+  color: #e8f4f6;
+  background: rgba(61, 154, 173, 0.5);
+  border-color: rgba(180, 230, 238, 0.4);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+html[data-theme="dark"] .indice-door--atlas:hover,
+html[data-theme="dark"] .indice-door--atlas:focus-visible {
+  background: rgba(61, 154, 173, 0.68);
+}
+
+html[data-theme="dark"] .indice-door--show {
+  color: #fff4e6;
+  background: rgba(224, 162, 74, 0.52);
+  border-color: rgba(255, 230, 190, 0.4);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+html[data-theme="dark"] .indice-door--show:hover,
+html[data-theme="dark"] .indice-door--show:focus-visible {
+  background: rgba(224, 162, 74, 0.7);
 }
 
 html[data-theme="dark"] .bg-card,
@@ -3230,9 +3323,12 @@ html[data-theme="dark"] .dc-chart g.axis text {
 }
 
 html[data-theme="dark"] .indice-logo,
-html[data-theme="dark"] .brand-logo,
-html[data-theme="dark"] .indice-abertura-placa img {
+html[data-theme="dark"] .brand-logo {
   background: radial-gradient(ellipse at center, rgba(23, 23, 25, 0.94) 46%, rgba(23, 23, 25, 0) 74%);
+}
+
+html[data-theme="dark"] .indice-abertura-marca {
+  background: transparent;
 }
 
 html[data-theme="dark"] .indice-abertura-miolo {
@@ -4936,5 +5032,26 @@ html[data-theme="dark"] .indice-abertura-giro {
 @media (prefers-reduced-motion: reduce) {
   .show-card--rail {
     transition: none;
+  }
+
+  .indice-door,
+  .indice-card,
+  .indice-market {
+    transition: none;
+  }
+
+  .indice-door::before,
+  .indice-door:hover::before,
+  .indice-door:focus-visible::before {
+    opacity: 0;
+    transform: none;
+    transition: none;
+  }
+
+  .indice-card:hover,
+  .indice-market:hover,
+  .indice-door:hover,
+  .indice-door:focus-visible {
+    transform: none;
   }
 }

@@ -1,9 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
+import { useTema } from "../theme";
 
 const fundo = `${import.meta.env.BASE_URL}brand/indice-fundo.jpg`;
-const marca = `${import.meta.env.BASE_URL}brand/belloscar-logo.png`;
+const marcaClara = `${import.meta.env.BASE_URL}brand/belloscar-logo-clear.png`;
+const marcaEscura = `${import.meta.env.BASE_URL}brand/belloscar-logo-dark.png`;
 const metrics = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
 const bcLogo = `${import.meta.env.BASE_URL}brand/bc-logo-red.jpg`;
 
@@ -68,9 +70,11 @@ function BcLogoSpin() {
 
 /** Abertura do pátio: sempre monta; só fecha no clique (ou Escape). */
 export function IndiceAbertura() {
+  const { tema } = useTema();
   const [ativa, setAtiva] = useState(true);
   const root = useRef<HTMLDivElement>(null);
   const [luz, setLuz] = useState({ x: -200, y: -200 });
+  const marca = tema === "dark" ? marcaEscura : marcaClara;
 
   function fechar() {
     setAtiva(false);
@@ -130,7 +134,11 @@ export function IndiceAbertura() {
         <div className="indice-abertura-miolo" onPointerMove={moverLuz}>
           <div className="spotlight-luz" style={{ left: luz.x, top: luz.y }} />
           <BcLogoSpin />
-          <img src={marca} alt="BellosCar, veículos seminovos e usados" />
+          <img
+            className="indice-abertura-marca"
+            src={marca}
+            alt="BellosCar, veículos seminovos e usados"
+          />
           <img src={metrics} alt="Andressa Car Metrics" />
           <motion.button
             type="button"

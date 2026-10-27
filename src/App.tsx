@@ -49,10 +49,10 @@ function Ambient() {
   return <ParticleField />;
 }
 
-/** Apresentação e Erros ficam só escuros — sem botão de tema nessas rotas. */
+/** Apresentação, Erros e Mapa ficam só escuros — sem botão de tema nessas rotas. */
 function TemaToggleNaRota() {
   const { pathname } = useLocation();
-  if (pathname === "/apresentacao" || pathname === "/erros") return null;
+  if (pathname === "/apresentacao" || pathname === "/erros" || pathname === "/mapa") return null;
   return <TemaToggle />;
 }
 

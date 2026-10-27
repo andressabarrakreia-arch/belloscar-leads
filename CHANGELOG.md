@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.13.17] - 2026-10-27
+
+### Changed
+- Índice: “Car” do título BellosCar com vermelho de marca `#c02026` (menos rosado)
+
+## [1.13.16] - 2026-10-27
+
+### Fixed
+- **Mapa do Site** só em tema escuro (sem botão de tema), como Erros e Apresentação
+- Abertura do índice no tema claro: logo BellosCar sem caixa branca (PNG transparente)
+
+## [1.13.15] - 2026-10-27
+
+### Fixed
+- Abertura do índice no tema escuro: logo BellosCar sem caixa branca (variante transparente com texto claro)
+
+## [1.13.14] - 2026-10-27
+
+### Fixed
+- **Mapa do Site**: grafo, painel e legenda sem nomes de arquivo `.json` nem caminhos técnicos — só rótulos humanos das fontes
+
+## [1.13.13] - 2026-10-27
+
+### Fixed
+- Tema escuro do **Índice**: portas Erros / Atlas / Apresentação mantêm vermelho, teal e âmbar (não ficam cinza)
+
+### Changed
+- Tema claro do Índice: véu do fundo um pouco mais escuro para contraste com menus e cards
+- Glass, shine no hover das portas e profundidade leve nos cards do Índice
+
 ## [1.13.12] - 2026-10-27
 
 ### Added
