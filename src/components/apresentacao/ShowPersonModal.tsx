@@ -20,8 +20,8 @@ export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
     if (panel && !reduce) {
       gsap.fromTo(
         panel,
-        { opacity: 0, scale: 0.92, y: 24 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: "power2.out" }
+        { opacity: 0, y: 28 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
       );
     }
     function onKey(event: KeyboardEvent) {
@@ -48,56 +48,70 @@ export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
         style={{ ["--show-accent" as string]: hue }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button type="button" className="show-modal-close" onClick={onClose} aria-label="Fechar">
-          ×
-        </button>
-        <div className="show-modal-hero">
-          <div className="show-avatar show-avatar--lg" aria-hidden="true">
-            {avatarIniciais(person.nome)}
-          </div>
-          <div>
-            <p className="show-role">{person.cargo}</p>
-            <h2 id="show-modal-title">{person.nome}</h2>
-            <p className="show-modal-period">{periodoLabel}</p>
-          </div>
-        </div>
+        <aside className="show-modal-rail" aria-hidden="true">
+          <span>Briefing</span>
+          <strong>{person.setor}</strong>
+        </aside>
+        <div className="show-modal-main">
+          <button type="button" className="show-modal-close" onClick={onClose} aria-label="Fechar">
+            Fechar
+          </button>
+          <header className="show-modal-hero">
+            <div className="show-avatar show-avatar--xl" aria-hidden="true">
+              {avatarIniciais(person.nome)}
+            </div>
+            <div>
+              <p className="show-role">{person.cargo}</p>
+              <h2 id="show-modal-title">{person.nome}</h2>
+              <p className="show-modal-period">{periodoLabel}</p>
+            </div>
+          </header>
 
-        <div className="show-modal-cols">
-          <section className="show-modal-block show-modal-block--ok">
-            <h3>Performance positiva</h3>
-            <dl>
-              {detalhe.positivos.map((kpi) => (
-                <div key={`ok-${kpi.label}`}>
-                  <dt>{kpi.label}</dt>
-                  <dd>{kpi.value}</dd>
-                </div>
-              ))}
-            </dl>
-            {detalhe.positivos.length === 0 ? <p className="muted">Sem destaques neste período.</p> : null}
-          </section>
-          <section className="show-modal-block show-modal-block--bad">
-            <h3>Atenção / negativo</h3>
-            <dl>
-              {detalhe.negativos.map((kpi) => (
-                <div key={`bad-${kpi.label}`}>
-                  <dt>{kpi.label}</dt>
-                  <dd>{kpi.value}</dd>
-                </div>
-              ))}
-            </dl>
-            {detalhe.negativos.length === 0 ? (
-              <p className="muted">Nenhum alerta forte neste período.</p>
-            ) : null}
-          </section>
-        </div>
+          <div className="show-modal-cols">
+            <section className="show-modal-block">
+              <h3>
+                <span className="show-modal-mark show-modal-mark--ok" />
+                Performance positiva
+              </h3>
+              <dl>
+                {detalhe.positivos.map((kpi) => (
+                  <div key={`ok-${kpi.label}`}>
+                    <dt>{kpi.label}</dt>
+                    <dd>{kpi.value}</dd>
+                  </div>
+                ))}
+              </dl>
+              {detalhe.positivos.length === 0 ? (
+                <p className="show-modal-empty">Sem destaques neste período.</p>
+              ) : null}
+            </section>
+            <section className="show-modal-block">
+              <h3>
+                <span className="show-modal-mark show-modal-mark--bad" />
+                Atenção
+              </h3>
+              <dl>
+                {detalhe.negativos.map((kpi) => (
+                  <div key={`bad-${kpi.label}`}>
+                    <dt>{kpi.label}</dt>
+                    <dd>{kpi.value}</dd>
+                  </div>
+                ))}
+              </dl>
+              {detalhe.negativos.length === 0 ? (
+                <p className="show-modal-empty">Nenhum alerta forte neste período.</p>
+              ) : null}
+            </section>
+          </div>
 
-        {detalhe.notas && detalhe.notas.length > 0 ? (
-          <ul className="show-modal-notes">
-            {detalhe.notas.map((nota) => (
-              <li key={nota}>{nota}</li>
-            ))}
-          </ul>
-        ) : null}
+          {detalhe.notas && detalhe.notas.length > 0 ? (
+            <ul className="show-modal-notes">
+              {detalhe.notas.map((nota) => (
+                <li key={nota}>{nota}</li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
       </div>
     </div>
   );

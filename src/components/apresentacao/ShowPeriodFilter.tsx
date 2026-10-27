@@ -22,41 +22,33 @@ export function ShowPeriodFilter({ period, onChange }: Props) {
   const is = (a: ShowPeriod) => a.from === period.from && a.to === period.to;
 
   return (
-    <div className="show-filter" role="search" aria-label="Filtro de período">
-      <div className="show-filter-presets" role="group" aria-label="Atalhos">
-        <button
-          type="button"
-          className={`btn secondary${is(mtd) ? " is-active" : ""}`}
-          onClick={() => onChange(mtd)}
-        >
+    <div className="show-toolbar" role="search" aria-label="Filtro de período">
+      <div className="show-toolbar-presets" role="group" aria-label="Atalhos">
+        <button type="button" className={is(mtd) ? "is-active" : undefined} onClick={() => onChange(mtd)}>
           Mês vigente
         </button>
         <button
           type="button"
-          className={`btn secondary${is(closed) ? " is-active" : ""}`}
+          className={is(closed) ? "is-active" : undefined}
           onClick={() => onChange(closed)}
         >
           Mês fechado
         </button>
-        <button
-          type="button"
-          className={`btn secondary${is(week) ? " is-active" : ""}`}
-          onClick={() => onChange(week)}
-        >
+        <button type="button" className={is(week) ? "is-active" : undefined} onClick={() => onChange(week)}>
           7 dias
         </button>
         <button
           type="button"
-          className={`btn secondary${is(fortnight) ? " is-active" : ""}`}
+          className={is(fortnight) ? "is-active" : undefined}
           onClick={() => onChange(fortnight)}
         >
           Quinzena
         </button>
-        <button type="button" className="btn secondary" onClick={() => onChange(mtd)}>
+        <button type="button" onClick={() => onChange(mtd)}>
           Limpar
         </button>
       </div>
-      <div className="show-filter-dates">
+      <div className="show-toolbar-dates">
         <label>
           De
           <input
@@ -73,8 +65,8 @@ export function ShowPeriodFilter({ period, onChange }: Props) {
             onChange={(e) => onChange({ ...period, to: e.target.value || mtd.to })}
           />
         </label>
-        <p className="show-filter-label">{formatDateRangeLabel(period.from, period.to)}</p>
       </div>
+      <p className="show-toolbar-score">{formatDateRangeLabel(period.from, period.to)}</p>
     </div>
   );
 }

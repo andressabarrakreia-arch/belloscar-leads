@@ -486,18 +486,25 @@ function ApresentacaoConteudo() {
   }, [sections, sectionIx, cardIx]);
 
   const current = sections[sectionIx];
+  const featured = current?.people[cardIx] ?? current?.people[0] ?? null;
 
   return (
     <div className="show-page">
-      <header className="show-top">
-        <Link className="show-back" to="/indice">
-          Índice
-        </Link>
-        <div className="show-brand">
-          <p>BellosCar</p>
-          <h1>Apresentação de resultados</h1>
+      <header className="show-masthead">
+        <div className="show-masthead-left">
+          <Link className="show-back" to="/indice">
+            Índice
+          </Link>
+          <div className="show-brand">
+            <p>Sala de resultados</p>
+            <h1>Apresentação</h1>
+          </div>
         </div>
-        <p className="show-hint">← → espaço · Enter abre · Esc fecha</p>
+        <div className="show-masthead-score" aria-label="Período ativo">
+          <span>Período</span>
+          <strong>{periodoLabel}</strong>
+        </div>
+        <p className="show-hint">← → navega · Enter abre · Esc fecha</p>
       </header>
 
       <ShowPeriodFilter period={period} onChange={setPeriod} />
@@ -505,9 +512,9 @@ function ApresentacaoConteudo() {
       {loading ? <p className="show-status">Carregando números vivos…</p> : null}
       {error ? <p className="show-status show-status--err">{error}</p> : null}
 
-      {!loading && !error && current ? (
+      {!loading && !error && current && featured ? (
         <>
-          <nav className="show-tabs" aria-label="Setores">
+          <nav className="show-sectors" aria-label="Setores">
             {sections.map((sec, ix) => (
               <button
                 key={sec.id}
@@ -520,16 +527,25 @@ function ApresentacaoConteudo() {
             ))}
           </nav>
 
-          <section className="show-sector" ref={stageRef}>
-            <header className="show-sector-head">
+          <section className="show-stage" ref={stageRef}>
+            <header className="show-stage-head">
               <h2>{current.title}</h2>
               <p>{current.blurb}</p>
             </header>
-            <div className="show-grid">
+
+            <ShowCard
+              person={featured}
+              variant="featured"
+              focused
+              onOpen={() => setModalPerson(featured)}
+            />
+
+            <div className="show-rail" aria-label="Equipe do setor">
               {current.people.map((person, ix) => (
                 <ShowCard
                   key={person.id}
                   person={person}
+                  variant="rail"
                   focused={ix === cardIx}
                   onOpen={() => {
                     setCardIx(ix);

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.2] - 2026-10-26
+
+### Changed
+- **Apresentação** redesenhada em layout de sala de resultados (destaque + trilho), toolbar de período e modal tipo briefing — menos cara de grade genérica
+
+### Added
+- Skills `design-taste-frontend` e `design-distinctive-ui` no catálogo
+
 ## [1.13.1] - 2026-10-26
 
 ### Changed

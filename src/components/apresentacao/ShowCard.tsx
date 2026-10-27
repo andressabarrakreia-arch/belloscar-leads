@@ -4,14 +4,16 @@ import type { ShowPerson } from "../../lib/apresentacao/types";
 type ShowCardProps = {
   person: ShowPerson;
   focused?: boolean;
+  variant?: "featured" | "rail";
   onOpen: () => void;
 };
 
-export function ShowCard({ person, focused, onOpen }: ShowCardProps) {
+export function ShowCard({ person, focused, variant = "rail", onOpen }: ShowCardProps) {
   const hue = corSetor(person.setor as SetorId);
+  const featured = variant === "featured";
   return (
     <article
-      className={`show-card${focused ? " is-focused" : ""}`}
+      className={`show-card show-card--${variant}${focused ? " is-focused" : ""}`}
       style={{ ["--show-accent" as string]: hue }}
       data-person-id={person.id}
       role="button"
@@ -24,13 +26,13 @@ export function ShowCard({ person, focused, onOpen }: ShowCardProps) {
         }
       }}
     >
-      <div className="show-avatar" aria-hidden="true">
+      <div className={`show-avatar${featured ? " show-avatar--lg" : ""}`} aria-hidden="true">
         {avatarIniciais(person.nome)}
       </div>
       <div className="show-card-body">
         <p className="show-role">{person.cargo}</p>
         <h3 className="show-name">{person.nome}</h3>
-        <dl className="show-kpis">
+        <dl className="show-kpis show-kpis--score">
           {person.kpis.map((kpi) => (
             <div key={kpi.label}>
               <dt>{kpi.label}</dt>
@@ -38,6 +40,7 @@ export function ShowCard({ person, focused, onOpen }: ShowCardProps) {
             </div>
           ))}
         </dl>
+        {featured ? <span className="show-card-cta">Abrir briefing</span> : null}
       </div>
     </article>
   );
