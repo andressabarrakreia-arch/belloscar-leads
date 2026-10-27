@@ -1,6 +1,48 @@
 {
-  "updatedAt": "2026-10-26T16:04:48.541Z",
+  "updatedAt": "2026-10-27T00:48:28.473Z",
   "imports": [
+    {
+      "fileName": "recebidos ate 26_10.csv",
+      "label": "recebidos ate 26_10.csv",
+      "kind": "leads",
+      "at": "2026-10-27T00:48:28.473Z",
+      "received": 7825,
+      "kept": 0,
+      "removed": 6415,
+      "enriched": 1410,
+      "notes": [
+        "6415 IDs sem agendamento (não criam órfãos na agenda)",
+        "LEADS GERAL: 25767 leads únicos na base",
+        "37 recebidos sem realizado entraram como atendimento na data de Criado em. Pendente e Descartado não entram.",
+        "Após o import, origem/tipo são recruzados por ID em REALIZADOS/agenda/SUCESSOS",
+        "ID 9758181 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9758060 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9757998 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9757990 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9757895 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9757778 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9757480 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9757052 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9756878 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9756704 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9756242 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9756195 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9756142 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9755282 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9755252 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9755225 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9754776 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9754733 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9754576 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9754554 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9754478 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9754328 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9754257 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9754246 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9754160 ignorado (enrich-only: não existe na base de agendamentos)",
+        "Reconciliação: tipo de proposta preenchido em 1 registros"
+      ]
+    },
     {
       "fileName": "RECEBIDOS ATE 25_10.csv",
       "label": "RECEBIDOS ATE 25_10.csv",
@@ -680,7 +722,7 @@
       "status": "Sucesso",
       "origem": "Busca Ativa",
       "motivoInsucesso": null,
-      "cliente": "vitor",
+      "cliente": "VITOR",
       "celular": "41998328059",
       "email": "",
       "canal": "Recepção",
@@ -1700,7 +1742,7 @@
       "status": "Sucesso",
       "origem": "WhatsApp | Site | Carteira",
       "motivoInsucesso": null,
-      "cliente": "Marco",
+      "cliente": "MARCO",
       "celular": "41997238170",
       "email": "marcopaes17@gmail.com",
       "canal": "Pré-Venda",
@@ -1802,7 +1844,7 @@
       "status": "Sucesso",
       "origem": "Telefone",
       "motivoInsucesso": null,
-      "cliente": "Hanna",
+      "cliente": "HANNA",
       "celular": "41988902690",
       "email": "",
       "canal": "Pré-Venda",
@@ -1836,7 +1878,7 @@
       "status": "Sucesso",
       "origem": "WhatsApp",
       "motivoInsucesso": null,
-      "cliente": "Jean Carlos Santos",
+      "cliente": "JEAN CARLOS",
       "celular": "41991293046",
       "email": "contato@drjeansantos.com.br",
       "canal": "Pré-Venda",
@@ -2789,7 +2831,7 @@
       "origem": "Google | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Sandrey Santos",
-      "celular": "(31)99872-0256",
+      "celular": "31998720256",
       "email": "sandreysantos17@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
@@ -2822,7 +2864,7 @@
       "status": "Sucesso",
       "origem": "Indicação",
       "motivoInsucesso": null,
-      "cliente": "Marquinhos",
+      "cliente": "Pedro Antônio",
       "celular": "41996870816",
       "email": "",
       "canal": "Pré-Venda",
@@ -2953,12 +2995,12 @@
       "dataAgendamento": "2026-10-06",
       "sdr": "BRUNO PROSPECÇÃO",
       "vendedor": "BRUNO PROSPECÇÃO",
-      "tipoProposta": "Compra",
+      "tipoProposta": "Troca",
       "teveVisita": true,
       "status": "Sucesso",
       "origem": "Carteira",
       "motivoInsucesso": null,
-      "cliente": "Gilnei",
+      "cliente": "GILNEI",
       "celular": "41998026057",
       "email": "",
       "canal": "Pré-Venda",
@@ -4267,7 +4309,7 @@
       "status": "Insucesso",
       "origem": "WhatsApp",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 7 dias após a data de agendamento",
-      "cliente": "Jean Carlos Santos",
+      "cliente": "JEAN CARLOS",
       "celular": "41991293046",
       "email": "contato@drjeansantos.com.br",
       "canal": "Pré-Venda",
@@ -4711,7 +4753,7 @@
       "motivoInsucesso": "Atendimento sem posicionamento no período de 7 dias após a data de agendamento",
       "cliente": "Kle",
       "celular": "4198777763",
-      "email": "",
+      "email": "kleianekadri@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
       "periodKey": "2026-09-Q2"
@@ -6987,8 +7029,8 @@
       "status": "Insucesso",
       "origem": "Carteira",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
-      "cliente": "Marquinhos",
-      "celular": "(41)99687-0816",
+      "cliente": "Pedro Antônio",
+      "celular": "41996870816",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -8722,7 +8764,7 @@
       "origem": "WhatsApp | Site",
       "motivoInsucesso": "Cliente estava apenas pesquisando",
       "cliente": "Jorge",
-      "celular": "(41)99253-8089",
+      "celular": "41992538089",
       "email": "jorgepereira140682@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -8909,7 +8951,7 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": null,
       "cliente": "Diogo França",
-      "celular": "(41)99738-7788",
+      "celular": "41997387788",
       "email": "diogovfranca@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -10269,7 +10311,7 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Reginaldo Silva Rodrigues",
-      "celular": "(41)98746-4487",
+      "celular": "41987464487",
       "email": "reginaldosilvarodrigues38@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -11000,7 +11042,7 @@
       "origem": "Carteira",
       "motivoInsucesso": null,
       "cliente": "ronaldo",
-      "celular": "(41)99105-3000",
+      "celular": "41991053000",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -11663,7 +11705,7 @@
       "origem": "WhatsApp | Prospecção",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Lucas",
-      "celular": "(41)99836-4030",
+      "celular": "41998364030",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -12802,7 +12844,7 @@
       "origem": "WhatsApp | Instagram Ads",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Thiago B",
-      "celular": "(41)9730-0416",
+      "celular": "4197300416",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -12938,7 +12980,7 @@
       "origem": "Carteira",
       "motivoInsucesso": "Cliente desistiu da negociação",
       "cliente": "Silvia",
-      "celular": "(41)99740-0222",
+      "celular": "41997400222",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -13431,7 +13473,7 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": null,
       "cliente": "Carlos Procopio",
-      "celular": "(41)99793-5675",
+      "celular": "41997935675",
       "email": "carlinhos220710@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -13499,7 +13541,7 @@
       "origem": "Mercado Livre | WhatsApp",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Humberto",
-      "celular": "(48)99193-3049",
+      "celular": "48991933049",
       "email": "humberto-ph@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -13516,7 +13558,7 @@
       "origem": "Google | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Fabiano cruz",
-      "celular": "(41)99910-1746",
+      "celular": "41999101746",
       "email": "tabe_n4@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -13669,7 +13711,7 @@
       "origem": "Site",
       "motivoInsucesso": null,
       "cliente": "Anderson",
-      "celular": "(41)99159-9145",
+      "celular": "41991599145",
       "email": "torresrochaesilva@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -13873,7 +13915,7 @@
       "origem": "WhatsApp | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Fer",
-      "celular": "(41)9631-3451",
+      "celular": "4196313451",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -13890,7 +13932,7 @@
       "origem": "WhatsApp | Instagram Ads",
       "motivoInsucesso": "Sem veículo de interesse do cliente em estoque",
       "cliente": "Marili Silveira",
-      "celular": "(41)9861-2023",
+      "celular": "4198612023",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -13924,7 +13966,7 @@
       "origem": "WhatsApp",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "leonardo Soares",
-      "celular": "(64)9971-3113",
+      "celular": "6499713113",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -13941,7 +13983,7 @@
       "origem": "WhatsApp | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Patricia",
-      "celular": "(41)99985-5567",
+      "celular": "41999855567",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -13958,7 +14000,7 @@
       "origem": "WhatsApp | Instagram Ads",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Adilson ferreira",
-      "celular": "(41)99933-6105",
+      "celular": "41999336105",
       "email": "adi.40@hotmail.com",
       "canal": "Recepção",
       "monthKey": "2026-09",
@@ -14077,7 +14119,7 @@
       "origem": "Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Messias",
-      "celular": "(41)98444-6484",
+      "celular": "41984446484",
       "email": "msilmarjose@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -14094,7 +14136,7 @@
       "origem": "Olx",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "André",
-      "celular": "(16)99207-3486",
+      "celular": "16992073486",
       "email": "andre.masi@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-09",
@@ -14145,7 +14187,7 @@
       "origem": "Busca Ativa",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Anderson",
-      "celular": "(41)98778-0032",
+      "celular": "41987780032",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14162,7 +14204,7 @@
       "origem": "Google | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Rafael Oliveira",
-      "celular": "(41)99984-1190",
+      "celular": "41999841190",
       "email": "rgoliveira@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14179,7 +14221,7 @@
       "origem": "WhatsApp | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Fabio Schiavon",
-      "celular": "(41)9657-2051",
+      "celular": "4196572051",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14196,7 +14238,7 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Carlos José",
-      "celular": "(41)98731-6476",
+      "celular": "41987316476",
       "email": "josedarosacarlos86@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14213,7 +14255,7 @@
       "origem": "Prospecção",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Priscilla Rodrigues",
-      "celular": "(41)99916-8417",
+      "celular": "41999168417",
       "email": "pricompanhoni@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14230,7 +14272,7 @@
       "origem": "Busca Ativa",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Enio/Saulo",
-      "celular": "(41)99281-8818",
+      "celular": "41992818818",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14247,7 +14289,7 @@
       "origem": "Olx",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Rafael Dzv",
-      "celular": "(42)99822-5046",
+      "celular": "42998225046",
       "email": "rafaelfervos@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14264,7 +14306,7 @@
       "origem": "WhatsApp | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "jaqueline ines back",
-      "celular": "(47)8849-2289",
+      "celular": "4788492289",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14281,7 +14323,7 @@
       "origem": "Google | Site",
       "motivoInsucesso": "Cliente está pensando na negociação",
       "cliente": "Jose ailton",
-      "celular": "(41)99719-2981",
+      "celular": "41997192981",
       "email": "Josscarvalhoailto@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14298,7 +14340,7 @@
       "origem": "Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "saulo verenka",
-      "celular": "(43)99655-1766",
+      "celular": "43996551766",
       "email": "sauloverenka98@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14315,7 +14357,7 @@
       "origem": "WhatsApp | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Diego",
-      "celular": "(41)9906-7260",
+      "celular": "4199067260",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14332,7 +14374,7 @@
       "origem": "Olx",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Pedro henrique aialla derobio",
-      "celular": "(51)98462-8174",
+      "celular": "51984628174",
       "email": "pedroaialla@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14349,7 +14391,7 @@
       "origem": "Google | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Isabella Saraiva de Aguiar",
-      "celular": "(41)98737-6234",
+      "celular": "41987376234",
       "email": "isasaraiva2807@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14366,7 +14408,7 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Michel Santos",
-      "celular": "(41)99510-5389",
+      "celular": "41995105389",
       "email": "Cristian.sntts02@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14383,7 +14425,7 @@
       "origem": "WhatsApp",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Guilherme",
-      "celular": "(47)7400-8307",
+      "celular": "4774008307",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14400,7 +14442,7 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Hezrom André Carvalho",
-      "celular": "(41)98832-2081",
+      "celular": "41988322081",
       "email": "hezrom.hc@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14417,7 +14459,7 @@
       "origem": "Olx",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Guilherme Henrique",
-      "celular": "(43)99684-8229",
+      "celular": "43996848229",
       "email": "guilhermecasaroto26@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14434,7 +14476,7 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": "Proposta do cliente incompatível com o mercado",
       "cliente": "Davi Galucio",
-      "celular": "(41)98491-2222",
+      "celular": "41984912222",
       "email": "ricoefino@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14451,7 +14493,7 @@
       "origem": "Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Maria Vera Lino da Silva",
-      "celular": "(41)99662-2934",
+      "celular": "41996622934",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14468,7 +14510,7 @@
       "origem": "Telefone",
       "motivoInsucesso": "Crédito não aprovado",
       "cliente": "Camila",
-      "celular": "(41)98851-8488",
+      "celular": "41988518488",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14485,7 +14527,7 @@
       "origem": "Prospecção",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "FERNANDO MIRANDA",
-      "celular": "(41)99999-5387",
+      "celular": "41999995387",
       "email": "fdinizmiranda@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14502,7 +14544,7 @@
       "origem": "Google | Site",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Dayane",
-      "celular": "(41)98827-6907",
+      "celular": "41988276907",
       "email": "Mirandadayane31@yahoo.com.br",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14519,7 +14561,7 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Guto Costa",
-      "celular": "(41)98884-4816",
+      "celular": "41988844816",
       "email": "guto_se@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14536,7 +14578,7 @@
       "origem": "Busca Ativa",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "rafael",
-      "celular": "(41)99117-7700",
+      "celular": "41991177700",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14553,7 +14595,7 @@
       "origem": "Prospecção",
       "motivoInsucesso": null,
       "cliente": "Nadine",
-      "celular": "(41)99943-8630",
+      "celular": "41999438630",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14570,7 +14612,7 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "rogerio serafim cordeiro",
-      "celular": "(41)98463-5046",
+      "celular": "41984635046",
       "email": "rogerioserafin67@uol.com.br",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -14587,7 +14629,7 @@
       "origem": "Aniversariantes",
       "motivoInsucesso": "Atendimento sem posicionamento no período de 3 dias após a data de agendamento",
       "cliente": "Paula",
-      "celular": "(42)98416-8494",
+      "celular": "42984168494",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-08",
@@ -17833,7 +17875,7 @@
       "status": "Sucesso",
       "origem": "Carteira",
       "motivoInsucesso": null,
-      "cliente": "Daivid",
+      "cliente": "daivid",
       "celular": "41998073833",
       "email": "",
       "canal": "Pré-Venda",
@@ -19397,7 +19439,7 @@
       "status": "Sucesso",
       "origem": "Carteira",
       "motivoInsucesso": null,
-      "cliente": "Daivid",
+      "cliente": "daivid",
       "celular": "41998073833",
       "email": "",
       "canal": "Pré-Venda",
@@ -76858,8 +76900,8 @@
       "origem": "Facebook Ads",
       "motivoInsucesso": null,
       "cliente": "Gilberto Dos Santos Maia",
-      "celular": "(41)99818-1405",
-      "email": "",
+      "celular": "41998181405",
+      "email": "sabaravideo@hotmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
       "periodKey": "2026-10-Q2"
@@ -77079,8 +77121,8 @@
       "origem": "WhatsApp",
       "motivoInsucesso": null,
       "cliente": "Maike Jonathan Rodrigues",
-      "celular": "(41)99822-5504",
-      "email": "",
+      "celular": "41998225504",
+      "email": "Maikejonathann@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
       "periodKey": "2026-10-Q2"
@@ -78298,7 +78340,7 @@
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "ESPAÇO BELLOS",
       "tipoProposta": "Troca",
-      "teveVisita": false,
+      "teveVisita": true,
       "status": "Agendado",
       "origem": "Facebook Ads",
       "motivoInsucesso": null,
@@ -78439,7 +78481,7 @@
       "origem": "Carteira",
       "motivoInsucesso": null,
       "cliente": "CRISTINA",
-      "celular": "(41)99129-1747",
+      "celular": "41991291747",
       "email": "",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
@@ -78693,7 +78735,7 @@
       "status": "Sucesso",
       "origem": "Chaves na Mão | WhatsApp",
       "motivoInsucesso": null,
-      "cliente": "Nilson Eduardo",
+      "cliente": "NILSON",
       "celular": "41999638644",
       "email": "nilsoneduardo369@gmail.com",
       "canal": "Pré-Venda",
@@ -78859,7 +78901,7 @@
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Celso Fofo",
       "tipoProposta": "Troca",
-      "teveVisita": false,
+      "teveVisita": true,
       "status": "Insucesso",
       "origem": "WhatsApp | Facebook Ads",
       "motivoInsucesso": "Cliente desistiu da negociação",
@@ -201179,8 +201221,8 @@
     {
       "id": "8835486",
       "data": "2026-08-06",
-      "sdr": "(sem SDR)",
-      "origem": "Mercado Livre | ML WhatsApp",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Mercado Livre | WhatsApp | ML WhatsApp",
       "tipoProposta": "Venda"
     },
     {
@@ -202144,7 +202186,7 @@
     },
     {
       "id": "8817686",
-      "data": "2026-08-05",
+      "data": "2026-08-04",
       "sdr": "Matheus Imbroinise",
       "origem": "Facebook Ads",
       "tipoProposta": "Venda"
@@ -230455,7 +230497,7 @@
       "data": "2026-10-06",
       "sdr": "BRUNO PROSPECÇÃO",
       "origem": "Carteira",
-      "tipoProposta": "Compra"
+      "tipoProposta": "Troca"
     },
     {
       "id": "9525963",
@@ -230929,7 +230971,7 @@
     {
       "id": "9519498",
       "data": "2026-10-06",
-      "sdr": "(sem SDR)",
+      "sdr": "Lais Narimã Ferreira Vieira",
       "origem": "WhatsApp | Site",
       "tipoProposta": "Compra"
     },
@@ -257958,7 +258000,7 @@
       "data": "2026-10-25",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9753900",
@@ -257972,7 +258014,7 @@
       "data": "2026-10-25",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "SóCarrão",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9753719",
@@ -257986,7 +258028,7 @@
       "data": "2026-10-25",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9753665",
@@ -258000,7 +258042,7 @@
       "data": "2026-10-25",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "WebMotors",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9753309",
@@ -258021,7 +258063,7 @@
       "data": "2026-10-25",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9753160",
@@ -258035,7 +258077,7 @@
       "data": "2026-10-25",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp | Site",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9753023",
@@ -258056,7 +258098,7 @@
       "data": "2026-10-25",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9752738",
@@ -258070,40 +258112,40 @@
       "data": "2026-10-25",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9752653",
       "data": "2026-10-25",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Na Pista",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9752573",
       "data": "2026-10-25",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Na Pista",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9752350",
       "data": "2026-10-25",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Na Pista",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9752326",
       "data": "2026-10-25",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Compra"
     },
     {
       "id": "9752315",
       "data": "2026-10-25",
-      "sdr": "Thayna PRE-VENDAS",
+      "sdr": "Lead Sem Interesse",
       "origem": "WhatsApp | Facebook Ads",
       "tipoProposta": "não informado(celulas em branco)"
     },
@@ -258126,35 +258168,35 @@
       "data": "2026-10-25",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9750717",
       "data": "2026-10-25",
-      "sdr": "Thayna PRE-VENDAS",
+      "sdr": "Lead Sem Interesse",
       "origem": "WhatsApp | Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9750660",
       "data": "2026-10-25",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp | Instagram Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9750378",
       "data": "2026-10-24",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Compra"
     },
     {
       "id": "9750317",
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9750131",
@@ -258168,14 +258210,14 @@
       "data": "2026-10-24",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Na Pista",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9749878",
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Google | Site",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Compra"
     },
     {
       "id": "9749598",
@@ -258196,7 +258238,7 @@
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9749423",
@@ -258210,28 +258252,28 @@
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Compra"
     },
     {
       "id": "9748914",
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Na Pista",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9748797",
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9748750",
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9748543",
@@ -258252,35 +258294,35 @@
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp | Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9748367",
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9748361",
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp | Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Compra"
     },
     {
       "id": "9748256",
       "data": "2026-10-24",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Compra"
     },
     {
       "id": "9747957",
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp | Instagram Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Compra"
     },
     {
       "id": "9747953",
@@ -258294,7 +258336,7 @@
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "SóCarrão",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9747742",
@@ -258378,14 +258420,14 @@
       "data": "2026-10-24",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp | Instagram Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9746579",
       "data": "2026-10-24",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "WhatsApp",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Troca"
     },
     {
       "id": "9746241",
@@ -259195,16 +259237,16 @@
     {
       "id": "9726087",
       "data": "2026-10-23",
-      "sdr": "(sem SDR)",
+      "sdr": "Andressa K B Kreia",
       "origem": "Olx",
       "tipoProposta": "Compra"
     },
     {
       "id": "9726088",
       "data": "2026-10-23",
-      "sdr": "(sem SDR)",
+      "sdr": "Andressa K B Kreia",
       "origem": "WhatsApp",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Compra"
     },
     {
       "id": "9726089",
@@ -508635,7 +508677,7 @@
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp | Site",
-      "tipoProposta": "não informado(celulas em branco)",
+      "tipoProposta": "Venda",
       "cliente": "Antonio",
       "celular": "41999353351"
     },
@@ -508836,6 +508878,413 @@
       "tipoProposta": "não informado(celulas em branco)",
       "cliente": "Leandro  Martins",
       "celular": "41998795428"
+    },
+    {
+      "id": "9757778",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Olx",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Rogerio Augusto",
+      "celular": "41997682612"
+    },
+    {
+      "id": "9754140",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Olx",
+      "tipoProposta": "Venda",
+      "cliente": "fabiobarbosa9635",
+      "celular": "31991006070"
+    },
+    {
+      "id": "9753816",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "SóCarrão",
+      "tipoProposta": "Venda",
+      "cliente": "flavio",
+      "celular": "41336700000"
+    },
+    {
+      "id": "9753684",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Olx",
+      "tipoProposta": "Venda",
+      "cliente": "Gabriel Braga de Castro",
+      "celular": "31995345267"
+    },
+    {
+      "id": "9753439",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WebMotors",
+      "tipoProposta": "Venda",
+      "cliente": "Jonatan William Miranda",
+      "celular": "43991208473"
+    },
+    {
+      "id": "9753207",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "valdecir borba",
+      "celular": "43933004103"
+    },
+    {
+      "id": "9752947",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Ricardo Pereira",
+      "celular": "41998033282"
+    },
+    {
+      "id": "9752693",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp",
+      "tipoProposta": "Venda",
+      "cliente": "MarciaMoura",
+      "celular": "3195465934"
+    },
+    {
+      "id": "9752653",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Na Pista",
+      "tipoProposta": "Venda",
+      "cliente": "Odete Simone de Oliveira",
+      "celular": "41996586251"
+    },
+    {
+      "id": "9752573",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Na Pista",
+      "tipoProposta": "Venda",
+      "cliente": "adilson scheffer",
+      "celular": "41987697609"
+    },
+    {
+      "id": "9752350",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Na Pista",
+      "tipoProposta": "Venda",
+      "cliente": "Diogo Rodrigues Batista Da Luz",
+      "celular": "41999195952"
+    },
+    {
+      "id": "9752326",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Reginaldo José dos Santos",
+      "celular": "41987686109"
+    },
+    {
+      "id": "9752315",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Marlete🦅",
+      "celular": "9282488485"
+    },
+    {
+      "id": "9750985",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Giuliano Quina Cwb",
+      "celular": "41987468304"
+    },
+    {
+      "id": "9750717",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Cida Rodrigues",
+      "celular": "4198735976"
+    },
+    {
+      "id": "9750660",
+      "dataAtendido": "2026-10-25",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Maikon Pereira",
+      "celular": "4288687946"
+    },
+    {
+      "id": "9750378",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Richard Andres Andres",
+      "celular": "41999739935"
+    },
+    {
+      "id": "9750317",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Olx",
+      "tipoProposta": "Venda",
+      "cliente": "Ricardo",
+      "celular": "41988427505"
+    },
+    {
+      "id": "9749907",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Na Pista",
+      "tipoProposta": "Venda",
+      "cliente": "Alexsandro pereira de araujo",
+      "celular": "41999645510"
+    },
+    {
+      "id": "9749878",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Google | Site",
+      "tipoProposta": "Compra",
+      "cliente": "Milton",
+      "celular": "41997561846"
+    },
+    {
+      "id": "9749541",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Thaís Renata",
+      "celular": "41998050125"
+    },
+    {
+      "id": "9749324",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp",
+      "tipoProposta": "Compra",
+      "cliente": "KCL",
+      "celular": "4491340022"
+    },
+    {
+      "id": "9748914",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Na Pista",
+      "tipoProposta": "Venda",
+      "cliente": "Jandir Dimas",
+      "celular": "47933807944"
+    },
+    {
+      "id": "9748797",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Olx",
+      "tipoProposta": "Venda",
+      "cliente": "edson",
+      "celular": "47999711000"
+    },
+    {
+      "id": "9748750",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Marcio Marques",
+      "celular": "4130498903"
+    },
+    {
+      "id": "9748432",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "João Apolinário",
+      "celular": "4196791803"
+    },
+    {
+      "id": "9748367",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Jovair Antonio Fernades",
+      "celular": "41995846934"
+    },
+    {
+      "id": "9748361",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Compra",
+      "cliente": "José Daniel Jr",
+      "celular": "4488273336"
+    },
+    {
+      "id": "9748256",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Carlos Miguel Pereira",
+      "celular": "41988479914"
+    },
+    {
+      "id": "9747957",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Alysson Patrick",
+      "celular": "4191813483"
+    },
+    {
+      "id": "9747948",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "SóCarrão",
+      "tipoProposta": "Venda",
+      "cliente": "Simone",
+      "celular": "41988844748"
+    },
+    {
+      "id": "9746593",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Ailton Martins",
+      "celular": "4197247283"
+    },
+    {
+      "id": "9746579",
+      "dataAtendido": "2026-10-24",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp",
+      "tipoProposta": "Troca",
+      "cliente": "Luuh",
+      "celular": "4188343895"
+    },
+    {
+      "id": "9726087",
+      "dataAtendido": "2026-10-23",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Andressa K B Kreia",
+      "origem": "Olx",
+      "tipoProposta": "Compra",
+      "cliente": "Jonathan",
+      "celular": "41987124651"
+    },
+    {
+      "id": "9726088",
+      "dataAtendido": "2026-10-23",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Andressa K B Kreia",
+      "origem": "WhatsApp",
+      "tipoProposta": "Compra",
+      "cliente": "TRANSPORTADORA NICHELE",
+      "celular": "4199615885"
+    },
+    {
+      "id": "9519498",
+      "dataAtendido": "2026-10-06",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "WhatsApp | Site",
+      "tipoProposta": "Compra",
+      "cliente": "Kle",
+      "celular": "4198777763"
+    },
+    {
+      "id": "8846880",
+      "dataAtendido": "2026-08-07",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "ESPAÇO BELLOS",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Andressa",
+      "celular": "41997560308"
     }
   ],
   "sucessosEventos": [
