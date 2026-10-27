@@ -482,6 +482,13 @@ export function ShowSharePanel({ person, periodoLabel, onClose }: Props) {
             </button>
             <button
               type="button"
+              className="show-share-btn show-share-btn--ghost"
+              onClick={() => openWhatsApp(activeDigits)}
+            >
+              Abrir WhatsApp
+            </button>
+            <button
+              type="button"
               className="show-share-btn show-share-btn--primary"
               disabled={busy}
               onClick={shareImage}

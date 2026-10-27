@@ -1,6 +1,6 @@
 # Nexus map — BellosCar · Análise de Resultados
 
-Atualizado: 2026-10-26. Cold start: leia este arquivo antes de criar dados, rotas ou páginas.
+Atualizado: 2026-10-27. Cold start: leia este arquivo antes de criar dados, rotas ou páginas.
 
 ## O que é este produto
 
@@ -14,7 +14,7 @@ SPA React + Vite + HashRouter em GitHub Pages. Hub: **Análise de Resultados**. 
 | `#/indice/gestao` | Gestão do Índice (upload) | `src/pages/IndiceGestao.tsx` |
 | `#/erros` | Cruzamento de IDs (PIN gate) | `src/pages/Erros.tsx` |
 | `#/mapa` | Mapa do Site (PIN gate) + grafo D3 | `src/pages/MapaDoSite.tsx` |
-| `#/apresentacao` | Apresentação de resultados (PIN gate) | `src/pages/ApresentacaoResultados.tsx` |
+| `#/apresentacao` | Apresentação (PIN): destaque + trilho, widgets de período, compartilhar texto/PNG WhatsApp | `src/pages/ApresentacaoResultados.tsx` + `src/components/apresentacao/*` |
 | `#/campanhas/*` | Análise de Campanhas | `src/pages/Dashboard.tsx` + … |
 | `#/agendamentos/*` | Análise de Agendamentos | `src/pages/agendamentos/*` |
 | `#/negociacoes/*` | Análise de Negociações | `src/pages/negociacoes/*` |

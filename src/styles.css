@@ -4104,6 +4104,16 @@ html[data-theme="dark"] .indice-abertura-giro {
   background: transparent;
 }
 
+.show-avatar--logo-clear {
+  background: transparent;
+}
+
+.show-avatar--logo-clear img {
+  object-fit: contain;
+  padding: 8%;
+  background: transparent;
+}
+
 .show-avatar__shine {
   grid-area: 1 / 1;
   position: absolute;

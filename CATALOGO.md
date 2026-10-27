@@ -1,6 +1,6 @@
 # Catálogo do agente
 
-Atualizado em 2026-10-26 (redesign Apresentação).
+Atualizado em 2026-10-27 (Apresentação UX + badges + compartilhar imagem).
 
 Este arquivo reúne o que o agente usa neste projeto: skills, rules, hooks, MCP e plugins. Cada item diz para que serve aqui e se entra sozinho ou só quando você pede.
 
@@ -46,9 +46,15 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 | `dygraphs-series` | Série no tempo com zoom por arraste | Autônoma |
 | `echarts-erros` | Barras ECharts dos tipos de falta | Autônoma |
 | `gsap-belloscar` | Abertura do índice e inclinação do pátio de erros | Autônoma |
-| `three-abertura` | Anel 3D só na abertura do índice | Autônoma |
+| `three-abertura` | Histórico do anel Three; abertura atual usa logo BC + GSAP | Autônoma |
 | `motion-abertura` | Botão Entrar e fade do mapa com Motion | Autônoma |
 | `motion-performance` | Movimento só com transform e opacity | Autônoma |
+| `kpi-dashboard-design` | Widgets e leitura de KPIs na Apresentação | Mista |
+| `polish` | Passada final de microtipografia e espaçamento | Mista |
+| `visual-consistency` | Alinha cards/trilhos (nomes, KPIs, alturas) | Autônoma |
+| `ui-scroll-regions` | Scroll horizontal/vertical com scrollbar no tema | Autônoma |
+| `sharp` | Pipeline de imagem (resize, JPEG/PNG) para assets | Manual |
+| `byted-las-image-resample` | Orientação de resample/upscale de artes | Manual |
 | `remotion-limite` | Impede instalar Remotion neste site | Autônoma |
 | `video-maker-limite` | Impede clonar o video-maker | Autônoma |
 | `hyperframes-limite` | Impede instalar HyperFrames neste site | Autônoma |
@@ -327,8 +333,8 @@ Nenhum plugin do Cursor neste repositório. Se um plugin for adicionado, entra a
 ### three-abertura
 
 - Arquivo: `.agents/skills/three-abertura/SKILL.md`
-- Função: anel vermelho em WebGL só na abertura. Some ao desmontar.
-- Autônoma: quando a tarefa mexe nesse anel.
+- Função: referência histórica do anel WebGL. A abertura vigente (`IndiceAbertura`) usa o logo BC em 2.5D (GSAP), fecha só no clique/Escape e não usa timeout de sessão.
+- Autônoma: quando a tarefa mexe na abertura do índice.
 
 ### motion-abertura
 

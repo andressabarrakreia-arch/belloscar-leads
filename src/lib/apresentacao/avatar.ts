@@ -54,6 +54,7 @@ const FOTOS_EQUIPE: { match: RegExp; file: string }[] = [
 ];
 
 const BADGE_CACHE_BUST = "v=4";
+const TRANSPARENT_CACHE_BUST = "v=2";
 
 /** URL da foto da pessoa, se houver arquivo mapeado. */
 export function fotoEquipe(nome: string): string | null {
@@ -62,20 +63,25 @@ export function fotoEquipe(nome: string): string | null {
   if (!hit) return null;
   const base = `${import.meta.env.BASE_URL}brand/equipe/${hit.file}`;
   if (/\.jpe?g$/i.test(hit.file)) return `${base}?${BADGE_CACHE_BUST}`;
+  if (/\baniversariantes\b/.test(key)) return `${base}?${TRANSPARENT_CACHE_BUST}`;
   return base;
 }
 
-/** Logos com fundo transparente — object-fit contain. */
+/** Logos com fundo claro — object-fit contain. */
 export function isLogoEquipe(nome: string): boolean {
   const key = chaveNome(nome);
   return /\bsem interesse\b/.test(key) || /\bespaco bellos\b/.test(key);
+}
+
+/** Arte com alpha — contain, fundo transparente (sem cream). */
+export function isTransparentEquipe(nome: string): boolean {
+  return /\baniversariantes\b/.test(chaveNome(nome));
 }
 
 /** Badges full-bleed (JPG arte) — object-fit cover, preenche o quadro. */
 export function isBadgeEquipe(nome: string): boolean {
   const key = chaveNome(nome);
   return (
-    /\baniversariantes\b/.test(key) ||
     /\bcampanhas meta\b/.test(key) ||
     key === "agendamentos" ||
     /\bnegociacoes\b.*\bloja\b/.test(key) ||

@@ -1,4 +1,4 @@
-import { fotoEquipe, isLogoEquipe } from "./avatar";
+import { fotoEquipe, isLogoEquipe, isTransparentEquipe } from "./avatar";
 import type { ShowDetalhe, ShowPerson } from "./types";
 
 const W = 1080;
@@ -108,6 +108,7 @@ export async function drawBriefingCard(
   const ax = 64;
   const ay = 110;
   const logoLight = isLogoEquipe(person.nome);
+  const logoClear = isTransparentEquipe(person.nome);
   ctx.fillStyle = logoLight ? "#ebe6df" : "#1a1214";
   ctx.fillRect(ax, ay, avatarSize, avatarSize);
 
@@ -115,9 +116,9 @@ export async function drawBriefingCard(
   if (fotoUrl) {
     const img = await loadImage(fotoUrl);
     if (img) {
-      if (logoLight) {
-        // contain sobre fundo claro
-        const pad = avatarSize * 0.1;
+      if (logoLight || logoClear) {
+        // contain — cream (logos) ou escuro (arte com alpha)
+        const pad = avatarSize * (logoClear ? 0.08 : 0.1);
         const box = avatarSize - pad * 2;
         const scale = Math.min(box / img.width, box / img.height);
         const dw = img.width * scale;

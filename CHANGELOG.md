@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.13.12] - 2026-10-27
+
+### Added
+- Widgets de desempenho (+/−) à direita do card em destaque na **Apresentação**
+- Balão discreto junto ao ponteiro quando o filtro de período não é o mês vigente
+- Destaques elegantes positivos/negativos nos KPIs, widgets e briefing
+- **Abrir WhatsApp** também no modo Imagem (card) do compartilhar
+- Skills: `kpi-dashboard-design`, `polish`, `visual-consistency`, `ui-scroll-regions`, `sharp`, `byted-las-image-resample`
+
+### Changed
+- Trilho: clique só promove ao destaque; clique no destaque (ou Enter) abre o briefing
+- Abertura do índice: sempre aparece e só fecha no clique (ou Escape); sem timeout/sessionStorage
+- Scrollbar do trilho no padrão dark; nomes com 2 linhas reservadas alinham os KPIs
+- Badges do coletivo reprocessados (Sharp 3× Lanczos) a partir das artes novas
+- **Aniversariantes BellosCar**: PNG com fundo transparente (`contain`, sem cream)
+
+### Fixed
+- Espaço entre o fim do conteúdo e os botões sticky no painel de compartilhar
+
 ## [1.13.11] - 2026-10-27
 
 ### Added

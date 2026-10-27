@@ -5,6 +5,7 @@ import {
   fotoEquipe,
   isBadgeEquipe,
   isLogoEquipe,
+  isTransparentEquipe,
 } from "../../lib/apresentacao/avatar";
 
 type Size = "sm" | "lg" | "xl";
@@ -26,6 +27,7 @@ export function ShowAvatar({ nome, size = "sm", strikeOnMount = false }: ShowAva
   const struckRef = useRef(false);
   const foto = fotoEquipe(nome);
   const logo = isLogoEquipe(nome);
+  const transparent = isTransparentEquipe(nome);
   const badge = isBadgeEquipe(nome);
 
   const sizeClass =
@@ -33,7 +35,8 @@ export function ShowAvatar({ nome, size = "sm", strikeOnMount = false }: ShowAva
   let kindClass = "";
   if (foto) {
     kindClass = " show-avatar--photo";
-    if (logo) kindClass += " show-avatar--logo";
+    if (transparent) kindClass += " show-avatar--logo-clear";
+    else if (logo) kindClass += " show-avatar--logo";
     else if (badge) kindClass += " show-avatar--badge";
   }
 
