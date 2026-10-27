@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.3] - 2026-10-27
+
+### Changed
+- **Erros** redesenhada em sala de cruzamento (masthead, toolbar de período, faixas), tema escuro forçado e sem botão de tema
+
+### Added
+- Foto da **Thayna** (pré-venda) nos cards e no modal da **Apresentação** (`public/brand/equipe/`)
+
 ## [1.13.2] - 2026-10-26
 
 ### Changed

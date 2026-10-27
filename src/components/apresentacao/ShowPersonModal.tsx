@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { avatarIniciais, corSetor } from "../../lib/apresentacao/avatar";
+import { avatarIniciais, corSetor, fotoEquipe } from "../../lib/apresentacao/avatar";
 import type { ShowPerson } from "../../lib/apresentacao/types";
 
 type Props = {
@@ -12,6 +12,7 @@ type Props = {
 export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const hue = corSetor(person.setor);
+  const foto = fotoEquipe(person.nome);
   const detalhe = person.detalhe ?? { positivos: person.kpis, negativos: [], notas: [] };
 
   useEffect(() => {
@@ -58,7 +59,7 @@ export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
           </button>
           <header className="show-modal-hero">
             <div className="show-avatar show-avatar--xl" aria-hidden="true">
-              {avatarIniciais(person.nome)}
+              {foto ? <img src={foto} alt="" /> : avatarIniciais(person.nome)}
             </div>
             <div>
               <p className="show-role">{person.cargo}</p>

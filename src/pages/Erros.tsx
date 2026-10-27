@@ -19,9 +19,6 @@ import {
   type ErroIdLinha,
   type PresencaPlanilha,
 } from "../lib/scheduling/errosCruzamento";
-const fundo = `${import.meta.env.BASE_URL}brand/indice-fundo.jpg`;
-const luz = `${import.meta.env.BASE_URL}brand/bc-particle.png`;
-const marca = `${import.meta.env.BASE_URL}brand/belloscar-mark.png`;
 
 function PresencaCell({ value }: { value: PresencaPlanilha }) {
   if (value === "esta") return <span className="num-ok">Está</span>;
@@ -101,13 +98,23 @@ function ErrosConteudo() {
   const [periodo, setPeriodo] = useState(() => currentMonthRange());
   const [query, setQuery] = useState("");
   const [copyNote, setCopyNote] = useState<string | null>(null);
+  const mesaRef = useRef<HTMLDivElement>(null);
   const cena = useRef<HTMLDivElement>(null);
   const motion = useRef<PatioMotion | null>(null);
 
   useEffect(() => {
+    const prev = document.documentElement.dataset.theme;
+    document.documentElement.dataset.theme = "dark";
+    return () => {
+      if (prev) document.documentElement.dataset.theme = prev;
+      else delete document.documentElement.dataset.theme;
+    };
+  }, []);
+
+  useEffect(() => {
     const el = cena.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    gsap.set(el, { transformPerspective: 1400, rotationX: 0, rotationY: 0, scale: 1.04 });
+    gsap.set(el, { transformPerspective: 1400, rotationX: 0, rotationY: 0, scale: 1.02 });
     motion.current = {
       x: gsap.quickTo(el, "rotationY", { duration: 0.55, ease: "power3.out" }),
       y: gsap.quickTo(el, "rotationX", { duration: 0.55, ease: "power3.out" }),
@@ -121,12 +128,12 @@ function ErrosConteudo() {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
-    const z = Math.min(0.04, Math.hypot(x, y) * 0.08);
+    const z = Math.min(0.02, Math.hypot(x, y) * 0.04);
     event.currentTarget.style.setProperty("--patio-x", x.toFixed(3));
     event.currentTarget.style.setProperty("--patio-y", y.toFixed(3));
-    glide.x(x * 7);
-    glide.y(y * -5);
-    glide.s(1.04 + z);
+    glide.x(x * 4);
+    glide.y(y * -3);
+    glide.s(1.02 + z);
   }
 
   useEffect(() => {
@@ -140,6 +147,24 @@ function ErrosConteudo() {
     () => (dataset ? buildErrosCruzamento(dataset) : null),
     [dataset]
   );
+
+  useEffect(() => {
+    const el = mesaRef.current;
+    if (!el || loading || !report) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const bands = el.querySelectorAll(".patio-band");
+    if (!bands.length) return;
+    if (reduce) {
+      gsap.set(bands, { opacity: 1, y: 0 });
+      return;
+    }
+    gsap.fromTo(
+      bands,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: "power2.out" }
+    );
+  }, [loading, dataset]);
+
   const noPeriodo = useMemo(() => {
     const linhas = report?.linhas || [];
     const erros = report?.rows || [];
@@ -204,48 +229,62 @@ function ErrosConteudo() {
 
   const totalFora = report?.insucessosForaDaAgendaTotal;
   const amostra = report?.insucessosForaDaAgendaAmostra ?? 0;
+  const placar = report
+    ? `${noPeriodo.length.toLocaleString("pt-BR")} IDs`
+    : "—";
+  const periodoLabel = rotuloPeriodo(periodo.from, periodo.to);
 
   return (
     <div className="patio" onPointerMove={moverPatio}>
       <div ref={cena} className="patio-cena" aria-hidden="true">
-        <div className="patio-foto" style={{ backgroundImage: `url("${fundo}")` }} />
-        <div className="patio-luz" style={{ backgroundImage: `url("${luz}")` }} />
+        <div className="patio-foto" />
+        <div className="patio-luz" />
       </div>
 
-      <div className="patio-mesa">
-        <header className="patio-topo">
-          <img src={marca} alt="BellosCar" />
-          <div>
-            <h1>Erros</h1>
-            <p>
-              {report
-                ? `${noPeriodo.length.toLocaleString("pt-BR")} IDs em ${rotuloPeriodo(periodo.from, periodo.to)}${
-                    formatWhen(dataset?.updatedAt) ? `, base atualizada em ${formatWhen(dataset?.updatedAt)}` : ""
-                  }.`
-                : "Cruzamento das planilhas."}
-            </p>
+      <div className="patio-mesa" ref={mesaRef}>
+        <header className="patio-masthead">
+          <div className="patio-masthead-left">
+            <Link className="patio-back" to="/">
+              Índice
+            </Link>
+            <div className="patio-brand">
+              <p>Sala de cruzamento</p>
+              <h1>Erros</h1>
+            </div>
           </div>
-          <Link to="/">Voltar ao índice</Link>
+          <div className="patio-masthead-score" aria-label="Placar do período">
+            <span>{periodoLabel}</span>
+            <strong>{placar}</strong>
+          </div>
+          <p className="patio-hint">
+            Mapa de clientes no <Link to="/">índice</Link>
+            {formatWhen(dataset?.updatedAt) ? ` · base ${formatWhen(dataset?.updatedAt)}` : ""}
+          </p>
         </header>
 
-        <p className="muted patio-mapa-nota">
-          O mapa de clientes, com período, região e veículo, está no <Link to="/">índice</Link>.
-        </p>
-
-        {loading ? <p className="card">Carregando o cruzamento…</p> : null}
-        {error ? <p className="card error">{error}</p> : null}
+        {loading ? <p className="patio-status">Carregando o cruzamento…</p> : null}
+        {error ? <p className="patio-status patio-status--err">{error}</p> : null}
 
         {report ? (
           <>
-            <section className="card">
-              <h2>
-                Período
-                <InfoTip>
-                  A página abre no mês vigente. A data do erro é a do agendamento, do atendimento ou do sucesso,
-                  conforme a planilha em que ele apareceu.
-                </InfoTip>
-              </h2>
-              <div className="erro-toolbar">
+            <section className="patio-toolbar patio-band" aria-label="Período">
+              <div className="patio-toolbar-presets">
+                <button
+                  type="button"
+                  className={periodo.from && periodo.to ? "is-active" : undefined}
+                  onClick={() => setPeriodo(currentMonthRange())}
+                >
+                  Mês vigente
+                </button>
+                <button
+                  type="button"
+                  className={!periodo.from && !periodo.to ? "is-active" : undefined}
+                  onClick={() => setPeriodo({ from: "", to: "" })}
+                >
+                  Todo o período
+                </button>
+              </div>
+              <div className="patio-toolbar-dates">
                 <label>
                   De
                   <input
@@ -264,47 +303,51 @@ function ErrosConteudo() {
                     onChange={(event) => setPeriodo((atual) => ({ ...atual, to: event.target.value }))}
                   />
                 </label>
-                <Button type="button" variant="secondary" onClick={() => setPeriodo(currentMonthRange())}>
-                  Mês vigente
-                </Button>
-                <Button type="button" variant="secondary" onClick={() => setPeriodo({ from: "", to: "" })}>
-                  Todo o período
-                </Button>
               </div>
-              {noPeriodo.length === 0 ? <p className="muted">Nenhum ID neste período.</p> : null}
+              <InfoTip>
+                A página abre no mês vigente. A data do erro é a do agendamento, do atendimento ou do sucesso,
+                conforme a planilha em que ele apareceu.
+              </InfoTip>
+              {noPeriodo.length === 0 ? <p className="patio-toolbar-empty">Nenhum ID neste período.</p> : null}
             </section>
 
-            <section className="card patio-grafico">
-              <h2>
-                IDs por tipo de falta
-                <InfoTip>
-                  Clique numa barra para filtrar a tabela. A roda do mouse aproxima as categorias.
-                </InfoTip>
-              </h2>
+            <section className="patio-band patio-grafico">
+              <header className="patio-band-head">
+                <h2>
+                  IDs por tipo de falta
+                  <InfoTip>
+                    Clique numa barra para filtrar a tabela. A roda do mouse aproxima as categorias.
+                  </InfoTip>
+                </h2>
+              </header>
               <FaltasChart data={chartData} categoria={categoria} onPick={escolherBarra} />
               <h3 className="faltas-subtitulo">Falta em cada planilha</h3>
               <FaltasPlanilha linhas={noPeriodo} />
               {!periodo.from && !periodo.to && totalFora != null && totalFora > amostra ? (
-                <p className="muted">
+                <p className="patio-note">
                   A última planilha de insucessos deixou {totalFora.toLocaleString("pt-BR")} IDs fora da agenda. O
                   log guardou {amostra.toLocaleString("pt-BR")} números, e a tabela mostra esses.
                 </p>
               ) : null}
             </section>
 
-            <QuadroCruzamento linhas={visible} onId={(id) => setQuery(id)} />
+            <div className="patio-band">
+              <QuadroCruzamento linhas={visible} onId={(id) => setQuery(id)} />
+            </div>
 
-            <section className="card">
-              <h2>
-                {categoria === "todos"
-                  ? "Onde cada ID está"
-                  : ERRO_CATEGORIAS.find((item) => item.id === categoria)?.label}
-                <InfoTip>
-                  Verde: o ID está nessa planilha. Vermelho: não está, e essa falta é o erro. Cinza: não está, e o
-                  erro deste ID está em outra coluna. Sucesso fica só na planilha de sucessos: o traço em
-                  Insucessos não é erro.
-                </InfoTip>
-              </h2>
+            <section className="patio-band">
+              <header className="patio-band-head">
+                <h2>
+                  {categoria === "todos"
+                    ? "Onde cada ID está"
+                    : ERRO_CATEGORIAS.find((item) => item.id === categoria)?.label}
+                  <InfoTip>
+                    Verde: o ID está nessa planilha. Vermelho: não está, e essa falta é o erro. Cinza: não está, e o
+                    erro deste ID está em outra coluna. Sucesso fica só na planilha de sucessos: o traço em
+                    Insucessos não é erro.
+                  </InfoTip>
+                </h2>
+              </header>
               <p className="erro-legenda">
                 <span className="num-ok">Está</span>
                 <span className="num-bad">Não está</span>
