@@ -49,11 +49,18 @@ function Ambient() {
   return <ParticleField />;
 }
 
+/** Apresentação fica só escura — sem botão de tema nessa rota. */
+function TemaToggleNaRota() {
+  const { pathname } = useLocation();
+  if (pathname === "/apresentacao") return null;
+  return <TemaToggle />;
+}
+
 export default function App() {
   return (
     <TemaProvider>
-      <TemaToggle />
       <HashRouter>
+      <TemaToggleNaRota />
       <Ambient />
       <Routes>
         <Route index element={<IndiceGeral />} />

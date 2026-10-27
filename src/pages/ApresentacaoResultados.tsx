@@ -55,6 +55,16 @@ function filterDealsByRange(deals: NegociacaoDeal[], from: string, to: string): 
 
 export function ApresentacaoResultados() {
   const [authed, setAuthed] = useState(isGateAuthed);
+
+  useEffect(() => {
+    const prev = document.documentElement.dataset.theme;
+    document.documentElement.dataset.theme = "dark";
+    return () => {
+      if (prev) document.documentElement.dataset.theme = prev;
+      else delete document.documentElement.dataset.theme;
+    };
+  }, []);
+
   if (!authed) {
     return (
       <GateLogin
