@@ -4,12 +4,14 @@ import gsap from "gsap";
 import { FaltasChart } from "../components/erros/FaltasChart";
 import { FaltasPlanilha } from "../components/erros/FaltasPlanilha";
 import { QuadroCruzamento } from "../components/viz/QuadroCruzamento";
+import { GateLogin } from "../components/GateLogin";
 import { InfoTip } from "../components/InfoTip";
 import { SiteCredit } from "../components/SiteCredit";
 import { InteractiveTable } from "../components/InteractiveTable";
 import { Button } from "../components/ui/button";
 import { useSchedulingStore } from "../hooks/useSchedulingStore";
 import { currentMonthRange } from "../lib/dates";
+import { isGateAuthed } from "../lib/gateAuth";
 import {
   buildErrosCruzamento,
   ERRO_CATEGORIAS,
@@ -80,6 +82,20 @@ type PatioMotion = {
 };
 
 export function Erros() {
+  const [authed, setAuthed] = useState(isGateAuthed);
+  if (!authed) {
+    return (
+      <GateLogin
+        title="Erros"
+        blurb="Mesmo PIN do Mapa do Site. Abrir o cruzamento de IDs."
+        onSuccess={() => setAuthed(true)}
+      />
+    );
+  }
+  return <ErrosConteudo />;
+}
+
+function ErrosConteudo() {
   const { dataset, loading, error } = useSchedulingStore();
   const [categoria, setCategoria] = useState<ErroCategoria | "todos">("todos");
   const [periodo, setPeriodo] = useState(() => currentMonthRange());
