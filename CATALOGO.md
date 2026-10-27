@@ -1,6 +1,6 @@
 # Catálogo do agente
 
-Atualizado em 2026-10-26.
+Atualizado em 2026-10-26 (mapa gráfico + apresentação).
 
 Este arquivo reúne o que o agente usa neste projeto: skills, rules, hooks, MCP e plugins. Cada item diz para que serve aqui e se entra sozinho ou só quando você pede.
 
@@ -61,6 +61,9 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 | `ghost-repo-context` | Resume arquitetura do repositório em `repo.md` | Mista |
 | `codebase-onboarding` | Guia de onboarding / alinhamento com `AGENTS.md` | Mista |
 | `codebase-learner` | Estado atual do código; modo site-ia para IA do produto | Mista |
+| `d3-visualization` | Grafos e viz customizados em D3 (mapa gráfico do site) | Autônoma |
+| `cinematic-web` | Direção de motion cinematográfica em páginas de show | Mista |
+| `presentation-building` | Estrutura de deck/apresentação (teclado, seções) | Mista |
 
 ---
 
@@ -414,6 +417,27 @@ Nenhum plugin do Cursor neste repositório. Se um plugin for adicionado, entra a
 - Fonte: [pahlevikun/levistack](https://skills.sh/pahlevikun/levistack) (skill `codebase-learner`; ex-super-codebase-learner)
 - Função: estado atual do código; modo `site-ia` para hierarquia de páginas/URLs do produto.
 - Mista: documenta o que existe; não inventa blueprint greenfield.
+
+### d3-visualization
+
+- Arquivo: `.agents/skills/d3-visualization/SKILL.md`
+- Fonte: [lyndonkl/claude](https://skills.sh/lyndonkl/claude/d3-visualization)
+- Função: viz D3 sob medida (force graph, hierarquia) no Mapa do Site.
+- Autônoma: quando a tarefa pede mapa gráfico animado/interativo no atlas.
+
+### cinematic-web
+
+- Arquivo: `.agents/skills/cinematic-web/SKILL.md`
+- Fonte: [anasdorbani/cinematic-web-skill](https://skills.sh/anasdorbani/cinematic-web-skill/cinematic-web)
+- Função: direção de motion cinematográfica (sem Three nas dashboards).
+- Mista: guia a apresentação; respeita `motion-performance` e reduced-motion.
+
+### presentation-building
+
+- Arquivo: `.agents/skills/presentation-building/SKILL.md`
+- Fonte: [joao-aires/agent-skills-public](https://skills.sh/joao-aires/agent-skills-public/presentation-building)
+- Função: estrutura de apresentação (seções, teclado). Substitui `ai-vibe-slides` (repo unclecatvn só tinha Odoo nesta instalação).
+- Mista: quando montar `#/apresentacao`.
 
 ## Quando algo novo chegar
 

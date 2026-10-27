@@ -1,0 +1,43 @@
+prompts:
+  - id: cinematic-hero-missing-assets
+    prompt: >
+      Use $cinematic-web to add a cinematic hero to this SaaS landing page.
+      There are no final visual assets yet. Create a tasteful prototype and
+      document what final assets are needed.
+    expected:
+      - art direction brief
+      - placeholder asset disclosure
+      - motion tokens
+      - reduced motion fallback
+
+  - id: pinned-scroll-story
+    prompt: >
+      Use $cinematic-web to build a pinned scroll story with GSAP and Lenis.
+      The hero should pin for about 320vh and reveal three product claims.
+    expected:
+      - one timeline
+      - labels
+      - pin range
+      - scrub value
+      - mobile fallback
+
+  - id: optimize-webgl
+    prompt: >
+      Use $cinematic-web to optimize this existing R3F hero scene. The GLB feels
+      too heavy and mobile scroll is janky.
+    expected:
+      - GLB inspection
+      - DPR clamp
+      - post-processing review
+      - lazy loading
+      - mobile fallback
+
+  - id: reference-safe-redesign
+    prompt: >
+      Use $cinematic-web to make this page feel like Huly and Linear without
+      copying them.
+    expected:
+      - transferable qualities
+      - non-transferable details
+      - new visual metaphor
+      - no cloning

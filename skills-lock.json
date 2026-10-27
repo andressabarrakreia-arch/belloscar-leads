@@ -37,6 +37,12 @@
       "skillPath": ".agents/skills/changelog-collect/SKILL.md",
       "computedHash": "181354f6b8d7825db94339e230b6638c0f98dc9d7fe0402786cd0bd628d6b995"
     },
+    "cinematic-web": {
+      "source": "anasdorbani/cinematic-web-skill",
+      "sourceType": "github",
+      "skillPath": "cinematic-web/SKILL.md",
+      "computedHash": "32efac84c4321c77f2f5eaf229f184d7fe199c7918188cc1eecaac66fe1ad330"
+    },
     "codebase-learner": {
       "source": "pahlevikun/levistack",
       "sourceType": "github",
@@ -54,6 +60,12 @@
       "sourceType": "github",
       "skillPath": "skills/context-map/SKILL.md",
       "computedHash": "cca0523289057f0f6fbff2c3ead5063359dd2482a451bf8694eac0f282185786"
+    },
+    "d3-visualization": {
+      "source": "lyndonkl/claude",
+      "sourceType": "github",
+      "skillPath": "skills/d3-visualization/SKILL.md",
+      "computedHash": "c70096534ece4833ff2edd4e9407cce7e24d2f69602ec7902e43653f808fd39d"
     },
     "find-skills": {
       "source": "vercel-labs/skills",
@@ -84,6 +96,12 @@
       "sourceType": "github",
       "skillPath": "skills/nexus-mapper/SKILL.md",
       "computedHash": "1550914f72db20192d4d131315b7b20e8d0ae278c6a27af56db2c65e9a5a79bf"
+    },
+    "presentation-building": {
+      "source": "joao-aires/agent-skills-public",
+      "sourceType": "github",
+      "skillPath": "plugins/visualization/skills/presentation-building/SKILL.md",
+      "computedHash": "b35ef460bccca8e1afc239f4376678fb3f907eee7ed0dee27d83a721bec00520"
     },
     "recharts": {
       "source": "andy-spike/skills",

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Cinematic Web"
+  short_description: "Agency-grade animated web execution"
+  default_prompt: "Use $cinematic-web to build a cinematic landing page hero with motion tokens, scroll choreography, asset assumptions, performance budgets, and reduced-motion fallbacks."
+
+policy:
+  allow_implicit_invocation: true
