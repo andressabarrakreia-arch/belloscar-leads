@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { corSetor } from "../../lib/apresentacao/avatar";
 import type { ShowPerson } from "../../lib/apresentacao/types";
 import { ShowAvatar } from "./ShowAvatar";
+import { ShowSharePanel } from "./ShowSharePanel";
 
 type Props = {
   person: ShowPerson;
@@ -14,6 +15,7 @@ export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const hue = corSetor(person.setor);
   const detalhe = person.detalhe ?? { positivos: person.kpis, negativos: [], notas: [] };
+  const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => {
     const panel = panelRef.current;
@@ -26,14 +28,14 @@ export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
       );
     }
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-      }
+      if (event.key !== "Escape") return;
+      if (shareOpen) return;
+      event.preventDefault();
+      onClose();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, shareOpen]);
 
   return (
     <div
@@ -54,9 +56,26 @@ export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
           <strong>{person.setor}</strong>
         </aside>
         <div className="show-modal-main">
-          <button type="button" className="show-modal-close" onClick={onClose} aria-label="Fechar">
-            Fechar
-          </button>
+          <div className="show-modal-toolbar">
+            <button
+              type="button"
+              className="show-modal-share"
+              onClick={() => setShareOpen(true)}
+              aria-label="Compartilhar no WhatsApp"
+              title="Compartilhar no WhatsApp"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"
+                />
+              </svg>
+              <span>Compartilhar</span>
+            </button>
+            <button type="button" className="show-modal-close" onClick={onClose} aria-label="Fechar">
+              Fechar
+            </button>
+          </div>
           <header className="show-modal-hero">
             <ShowAvatar nome={person.nome} size="xl" strikeOnMount />
             <div>
@@ -109,6 +128,16 @@ export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
                 <li key={nota}>{nota}</li>
               ))}
             </ul>
+          ) : null}
+
+          {shareOpen ? (
+            <div className="show-share-layer">
+              <ShowSharePanel
+                person={person}
+                periodoLabel={periodoLabel}
+                onClose={() => setShareOpen(false)}
+              />
+            </div>
           ) : null}
         </div>
       </div>

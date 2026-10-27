@@ -61,6 +61,12 @@
       "skillPath": "skills/codebase-onboarding/SKILL.md",
       "computedHash": "c14dccb7906a8543f0b34126978911f8efcbd717a5b9efd3ce2b4e68ebb8b227"
     },
+    "contagious": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "contagious/SKILL.md",
+      "computedHash": "c5acba5e230748a2a441ecfd432862ac11977044e755def1148b9aaf0c20cf4e"
+    },
     "context-map": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
@@ -133,6 +139,12 @@
       "skillPath": "skills/recharts/SKILL.md",
       "computedHash": "7837f15d0abac0f5199eba9417bd8950e4f01c58731c81884e82e58b0c474404"
     },
+    "social-sharing": {
+      "source": "moh-obaida/readyvibe-skills",
+      "sourceType": "github",
+      "skillPath": "skills/discoverability/social-sharing/SKILL.md",
+      "computedHash": "155cbec948128b229512cb4a99c00eac9433a9e9b41f6229f66e50401482b367"
+    },
     "system-atlas": {
       "source": "inkboard/system-atlas",
       "sourceType": "github",
@@ -144,6 +156,12 @@
       "sourceType": "github",
       "skillPath": "skills/web-design-guidelines/SKILL.md",
       "computedHash": "d8e7d3afe37dcc8a97b99ffb5afdb4d0919ae0092ea8b68f44eb201f035e33ac"
+    },
+    "whatsapp-marketing": {
+      "source": "arnabbagxd/brand-building-skills",
+      "sourceType": "github",
+      "skillPath": "skills/whatsapp-marketing/SKILL.md",
+      "computedHash": "1db7dbdea5fc51424be7fb20765c34b998373866d571a4017bd62f46739c68f3"
     }
   }
 }

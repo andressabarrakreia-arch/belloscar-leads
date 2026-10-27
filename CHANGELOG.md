@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.13.8] - 2026-10-27
+
+### Added
+- Compartilhar briefing no WhatsApp no modal da **Apresentação** (mensagem opcional, prévia do card, abrir/copiar)
+- Skills `whatsapp-marketing`, `contagious` e `social-sharing` no catálogo
+
 ## [1.13.7] - 2026-10-27
 
 ### Changed
