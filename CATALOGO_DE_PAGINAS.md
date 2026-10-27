@@ -17,6 +17,16 @@ Hub: **Análise de Resultados**. Páginas com links distintos para envio a pesso
 Análise de Campanhas=https://andressacarmetrics.com.br/#/campanhas
 Análise de Agendamentos=https://andressacarmetrics.com.br/#/agendamentos
 Análise de Negociações=https://andressacarmetrics.com.br/#/negociacoes
+Perfil de Clientes=https://andressacarmetrics.com.br/#/perfil
+```
+
+## Gate PIN (Erros + Mapa do Site — não enviar como link da equipe)
+
+Mesmo PIN de gate (`VITE_GATE_PIN`, separado da Gestão).
+
+```
+Erros (cruzamento de IDs)=https://andressacarmetrics.com.br/#/erros
+Mapa do Site (atlas de rotas e dados)=https://andressacarmetrics.com.br/#/mapa
 ```
 
 ## Gestão (PIN — não enviar como link da equipe)

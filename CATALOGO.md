@@ -86,7 +86,13 @@ Arquivos em `.cursor/rules/`. **Sempre** entra em toda conversa. **No arquivo** 
 | `scheduling-dedupe` | Sempre | Agendamento único por ID |
 | `graphify` | Sempre | Consulta o mapa do código antes de vasculhar arquivo |
 | `negociacoes-dedupe` | No arquivo de negociações | Contagem e dedupe da loja |
-| `mapa-orientacao-dados` | Sempre | Lê `.nexus-map/` antes de criar/mover dados ou rotas |
+| `mapa-orientacao-dados` | Sempre | Lê `.nexus-map/` antes de criar/mover dados ou rotas; Erros/Mapa usam gate PIN separado da Gestão |
+
+### mapa-orientacao-dados
+
+- Arquivo: `.cursor/rules/mapa-orientacao-dados.mdc`
+- Função: cold start pelos mapas do produto; não recriar JSON keys; mapa geográfico só no índice; `#/mapa` é atlas do site.
+- Sempre: entra em toda conversa.
 
 ## Hooks
 

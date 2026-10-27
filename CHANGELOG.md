@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.12.0] - 2026-10-26
+
+### Added
+- Página **Mapa do Site** (`#/mapa`): atlas de rotas, módulos e fontes de dados, com visual blueprint distinto do índice
+- Porta **Mapa do Site** no Índice
+- PIN de gate compartilhado entre **Erros** e **Mapa do Site** (`gateAuth` / `VITE_GATE_PIN`), separado da Gestão
+- Mapas persistentes para agentes: `.nexus-map/`, `SYSTEM.md`, `repo.md`, rule `mapa-orientacao-dados`
+- Skills de orientação: `nexus-mapper`, `system-atlas`, `context-map`, `ghost-repo-context`, `codebase-onboarding`, `codebase-learner`
+
+### Changed
+- Página **Erros** passa a pedir o PIN de gate antes de abrir
+
 ## [1.11.4] - 2026-10-24
 
 ### Changed
