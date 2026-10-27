@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { GateLogin } from "../components/GateLogin";
+import { AtlasGraph } from "../components/mapa/AtlasGraph";
 import { SiteCredit } from "../components/SiteCredit";
 import { isGateAuthed } from "../lib/gateAuth";
 import { MODULES } from "../modules/registry";
@@ -214,6 +215,17 @@ function MapaDoSiteConteudo() {
           Agentes: <code>.nexus-map/INDEX.md</code> · <code>SYSTEM.md</code> · <code>repo.md</code>
         </p>
       </section>
+
+      <AtlasGraph
+        nodes={nodes.map((n) => ({
+          id: n.id,
+          label: n.label,
+          kind: n.kind,
+          hash: n.hash,
+        }))}
+        activeId={active}
+        onSelect={setActive}
+      />
 
       <footer className="atlas-foot">
         <span>BellosCar · Mapa do Site · Curitiba</span>

@@ -3409,3 +3409,39 @@ html[data-theme="dark"] .indice-abertura-giro {
     animation: none;
   }
 }
+
+/* —— AtlasGraph (force map) —— */
+.atlas-graph {
+  position: relative;
+  z-index: 1;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(61, 154, 173, 0.25);
+}
+
+.atlas-graph-head h3 {
+  margin: 0 0 0.25rem;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.atlas-graph-head p {
+  margin: 0 0 0.75rem;
+  color: var(--atlas-mute, #9aa3a8);
+  font-size: 0.88rem;
+}
+
+.atlas-graph-canvas {
+  width: 100%;
+  border: 1px solid rgba(61, 154, 173, 0.28);
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(61, 154, 173, 0.08), transparent 60%),
+    rgba(18, 21, 26, 0.65);
+  overflow: hidden;
+}
+
+.atlas-graph-node.is-active circle {
+  filter: drop-shadow(0 0 8px rgba(61, 154, 173, 0.65));
+}
