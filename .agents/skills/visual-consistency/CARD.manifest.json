@@ -1,0 +1,22 @@
+[
+  {
+    "path": "SKILL.md",
+    "sha256": "eed0b68d9298d10a8e4f0fa639bff4efc5a58ec6fee9efd923146b6d9f629cef"
+  },
+  {
+    "path": "permissions.yaml",
+    "sha256": "a59c33d37ea2d14fbd0b443829a952a6a6ff099c8ffcdc1f12ff6a8e9c8112aa"
+  },
+  {
+    "path": "references/catalog.md",
+    "sha256": "d62516bf307ec1184999a726e29c641a07041b8c4ded6b3e4e906560dd5bec55"
+  },
+  {
+    "path": "references/index.md",
+    "sha256": "6fff9f64c3b3fff4b88c724d805aab2bd630bf14f9c02825706e392f0745fa04"
+  },
+  {
+    "path": "references/recipes.md",
+    "sha256": "cfae9ccbdbc5062fe7fd56582531e1867da5aca1e1582bccfb98985260430bce"
+  }
+]

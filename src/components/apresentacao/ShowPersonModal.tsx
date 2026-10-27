@@ -93,7 +93,7 @@ export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
               </h3>
               <dl>
                 {detalhe.positivos.map((kpi) => (
-                  <div key={`ok-${kpi.label}`}>
+                  <div key={`ok-${kpi.label}`} className="show-kpi show-kpi--ok">
                     <dt>{kpi.label}</dt>
                     <dd>{kpi.value}</dd>
                   </div>
@@ -110,7 +110,7 @@ export function ShowPersonModal({ person, periodoLabel, onClose }: Props) {
               </h3>
               <dl>
                 {detalhe.negativos.map((kpi) => (
-                  <div key={`bad-${kpi.label}`}>
+                  <div key={`bad-${kpi.label}`} className="show-kpi show-kpi--bad">
                     <dt>{kpi.label}</dt>
                     <dd>{kpi.value}</dd>
                   </div>

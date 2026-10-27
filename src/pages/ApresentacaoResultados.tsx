@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { GateLogin } from "../components/GateLogin";
 import { ShowCard } from "../components/apresentacao/ShowCard";
+import { ShowFilterTip } from "../components/apresentacao/ShowFilterTip";
 import { ShowPeriodFilter } from "../components/apresentacao/ShowPeriodFilter";
 import { ShowPersonModal } from "../components/apresentacao/ShowPersonModal";
 import { SiteCredit } from "../components/SiteCredit";
@@ -508,6 +509,7 @@ function ApresentacaoConteudo() {
       </header>
 
       <ShowPeriodFilter period={period} onChange={setPeriod} />
+      <ShowFilterTip period={period} periodoLabel={periodoLabel} />
 
       {loading ? <p className="show-status">Carregando números vivos…</p> : null}
       {error ? <p className="show-status show-status--err">{error}</p> : null}
@@ -547,10 +549,7 @@ function ApresentacaoConteudo() {
                   person={person}
                   variant="rail"
                   focused={ix === cardIx}
-                  onOpen={() => {
-                    setCardIx(ix);
-                    setModalPerson(person);
-                  }}
+                  onSelect={() => setCardIx(ix)}
                 />
               ))}
             </div>

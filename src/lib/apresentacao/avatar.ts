@@ -53,12 +53,16 @@ const FOTOS_EQUIPE: { match: RegExp; file: string }[] = [
   { match: /\bsibele\b/, file: "sibele-baranhuk.png" },
 ];
 
+const BADGE_CACHE_BUST = "v=4";
+
 /** URL da foto da pessoa, se houver arquivo mapeado. */
 export function fotoEquipe(nome: string): string | null {
   const key = chaveNome(nome);
   const hit = FOTOS_EQUIPE.find((item) => item.match.test(key));
   if (!hit) return null;
-  return `${import.meta.env.BASE_URL}brand/equipe/${hit.file}`;
+  const base = `${import.meta.env.BASE_URL}brand/equipe/${hit.file}`;
+  if (/\.jpe?g$/i.test(hit.file)) return `${base}?${BADGE_CACHE_BUST}`;
+  return base;
 }
 
 /** Logos com fundo transparente — object-fit contain. */

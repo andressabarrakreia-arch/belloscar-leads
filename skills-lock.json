@@ -37,6 +37,12 @@
       "skillPath": "SKILL.md",
       "computedHash": "10574282bd24f42072059efa58cfce6ff3a80347505eb191af55544426fe4c3a"
     },
+    "byted-las-image-resample": {
+      "source": "bytedance/agentkit-samples",
+      "sourceType": "github",
+      "skillPath": "skills/byted-las-image-resample/SKILL.md",
+      "computedHash": "d932477031600b5d001ca4f763fc08f44c7cef14d5f309abdcc3bd39979ac888"
+    },
     "changelog-collect": {
       "source": "ant-design/ant-design",
       "sourceType": "github",
@@ -127,11 +133,23 @@
       "skillPath": "SKILL.md",
       "computedHash": "4c7af5b1efdd897dcad56390d3c5f8708f6ddc11431fbf668e13ceb12ff583ce"
     },
+    "kpi-dashboard-design": {
+      "source": "aj-geddes/useful-ai-prompts",
+      "sourceType": "github",
+      "skillPath": "skills/kpi-dashboard-design/SKILL.md",
+      "computedHash": "288b9a6a0458f64a68ec31a838d2b287c28f22efe79cc7bd5b50fc03e895a082"
+    },
     "nexus-mapper": {
       "source": "haaaiawd/nexus-skills",
       "sourceType": "github",
       "skillPath": "skills/nexus-mapper/SKILL.md",
       "computedHash": "1550914f72db20192d4d131315b7b20e8d0ae278c6a27af56db2c65e9a5a79bf"
+    },
+    "polish": {
+      "source": "educlopez/ui-craft",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/polish/SKILL.md",
+      "computedHash": "57d5a1d0e1ddb0567fe861292933d310a1622c4aed7bea856ef453cf4ca4608f"
     },
     "presentation-building": {
       "source": "joao-aires/agent-skills-public",
@@ -144,6 +162,12 @@
       "sourceType": "github",
       "skillPath": "skills/recharts/SKILL.md",
       "computedHash": "7837f15d0abac0f5199eba9417bd8950e4f01c58731c81884e82e58b0c474404"
+    },
+    "sharp": {
+      "source": "clasen/skills",
+      "sourceType": "github",
+      "skillPath": "sharp/SKILL.md",
+      "computedHash": "3831489ca569bcc4b12717518d5ffd3472c6e9c75f8d6da128d71776471a49a4"
     },
     "social-sharing": {
       "source": "moh-obaida/readyvibe-skills",
@@ -168,6 +192,18 @@
       "sourceType": "github",
       "skillPath": "takumi/SKILL.md",
       "computedHash": "fbc53a8b46dcc8774bd376042892a70a44f25bdf1877d1e366c54004fb7dc25d"
+    },
+    "ui-scroll-regions": {
+      "source": "narenaryan/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ui/ui-scroll-regions/SKILL.md",
+      "computedHash": "961bbb16bfd54875f08a0e00340139b34b9c795ed41abf0e09a902b1c4f7d5be"
+    },
+    "visual-consistency": {
+      "source": "saschb2b/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/visual-consistency/SKILL.md",
+      "computedHash": "79783ba2dea48cbbac814f85f8ecc62c504d4f4047dfc3c00f82c7d04c53351b"
     },
     "web-design-guidelines": {
       "source": "vercel-labs/agent-skills",

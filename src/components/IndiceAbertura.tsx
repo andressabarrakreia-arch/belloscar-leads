@@ -6,13 +6,6 @@ const fundo = `${import.meta.env.BASE_URL}brand/indice-fundo.jpg`;
 const marca = `${import.meta.env.BASE_URL}brand/belloscar-logo.png`;
 const metrics = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
 const bcLogo = `${import.meta.env.BASE_URL}brand/bc-logo-red.jpg`;
-const SESSAO = "belloscar-abertura";
-
-function deveAbrir(): boolean {
-  if (typeof window === "undefined") return false;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
-  return sessionStorage.getItem(SESSAO) !== "1";
-}
 
 /** Logo BC em 2.5D HD (GSAP) — substitui o torus vermelho. */
 function BcLogoSpin() {
@@ -73,14 +66,13 @@ function BcLogoSpin() {
   );
 }
 
-/** Uma entrada no pátio, uma vez por sessão. */
+/** Abertura do pátio: sempre monta; só fecha no clique (ou Escape). */
 export function IndiceAbertura() {
-  const [ativa, setAtiva] = useState(deveAbrir);
+  const [ativa, setAtiva] = useState(true);
   const root = useRef<HTMLDivElement>(null);
   const [luz, setLuz] = useState({ x: -200, y: -200 });
 
   function fechar() {
-    sessionStorage.setItem(SESSAO, "1");
     setAtiva(false);
   }
 
@@ -98,11 +90,20 @@ export function IndiceAbertura() {
         delay: 0.12,
       });
     }, root);
-    const timer = window.setTimeout(fechar, 3400);
     return () => {
-      window.clearTimeout(timer);
       ctx.revert();
     };
+  }, [ativa]);
+
+  useEffect(() => {
+    if (!ativa) return;
+    function onKey(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      fechar();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [ativa]);
 
   if (!ativa) return null;
@@ -114,7 +115,15 @@ export function IndiceAbertura() {
   }
 
   return (
-    <div ref={root} className="indice-abertura" role="dialog" aria-label="Abertura BellosCar">
+    <div
+      ref={root}
+      className="indice-abertura"
+      role="dialog"
+      aria-label="Abertura BellosCar"
+      aria-modal="true"
+      onClick={fechar}
+      style={{ cursor: "pointer" }}
+    >
       <div className="indice-abertura-foto" style={{ backgroundImage: `url("${fundo}")` }} />
       <div className="indice-abertura-placa">
         <div className="indice-abertura-giro" aria-hidden="true" />
@@ -125,7 +134,10 @@ export function IndiceAbertura() {
           <img src={metrics} alt="Andressa Car Metrics" />
           <motion.button
             type="button"
-            onClick={fechar}
+            onClick={(event) => {
+              event.stopPropagation();
+              fechar();
+            }}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.98 }}
             transition={{ type: "spring", stiffness: 420, damping: 28 }}
