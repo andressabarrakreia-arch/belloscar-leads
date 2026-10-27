@@ -1,6 +1,6 @@
 # Catálogo do agente
 
-Atualizado em 2026-10-24.
+Atualizado em 2026-10-26.
 
 Este arquivo reúne o que o agente usa neste projeto: skills, rules, hooks, MCP e plugins. Cada item diz para que serve aqui e se entra sozinho ou só quando você pede.
 
@@ -55,6 +55,12 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 | `higgsfield-limite` | Impede instalar o treino de GPU Higgsfield | Autônoma |
 | `agencia-indice` | Qualidade visual do índice sem clonar agency-agents | Autônoma |
 | `grill-mapa` | Decisões já fechadas do mapa de clientes | Autônoma |
+| `nexus-mapper` | Gera `.nexus-map/` para o agente não se perder no código | Mista |
+| `system-atlas` | Atlas do sistema (`SYSTEM.md` + mapa) a partir de uma fonte de dados | Mista |
+| `context-map` | Antes de mudar código, mapeia arquivos, deps, testes e riscos | Autônoma |
+| `ghost-repo-context` | Resume arquitetura do repositório em `repo.md` | Mista |
+| `codebase-onboarding` | Guia de onboarding / alinhamento com `AGENTS.md` | Mista |
+| `codebase-learner` | Estado atual do código; modo site-ia para IA do produto | Mista |
 
 ---
 
@@ -359,6 +365,48 @@ Nenhum plugin do Cursor neste repositório. Se um plugin for adicionado, entra a
 - Arquivo: `.agents/skills/grill-mapa/SKILL.md`
 - Função: o mapa fica no índice, abre com todo o período e os filtros já definidos. Não reabre essas escolhas sem pedido novo.
 - Autônoma: quando a tarefa mexe no mapa.
+
+### nexus-mapper
+
+- Arquivo: `.agents/skills/nexus-mapper/SKILL.md`
+- Fonte: [haaaiawd/nexus-skills](https://skills.sh/haaaiawd/nexus-skills/nexus-mapper)
+- Função: protocolo PROBE e base `.nexus-map/` para cold start nas sessões.
+- Mista: gera o mapa sozinha; commit dos artefatos espera o fluxo da tarefa.
+
+### system-atlas
+
+- Arquivo: `.agents/skills/system-atlas/SKILL.md`
+- Fonte: [inkboard/system-atlas](https://skills.sh/inkboard/system-atlas/system-atlas)
+- Função: um arquivo de dados vira mapa visual e `SYSTEM.md` (decisões, fluxos, perguntas).
+- Mista: rascunha o atlas; revisão humana quando a decisão mudar.
+
+### context-map
+
+- Arquivo: `.agents/skills/context-map/SKILL.md`
+- Fonte: [github/awesome-copilot](https://skills.sh/github/awesome-copilot/context-map)
+- Função: mapa de contexto antes de implementar (arquivos, deps, testes, riscos).
+- Autônoma: quando a tarefa for mudar código existente.
+
+### ghost-repo-context
+
+- Arquivo: `.agents/skills/ghost-repo-context/SKILL.md`
+- Fonte: [ghostsecurity/skills](https://skills.sh/ghostsecurity/skills/ghost-repo-context)
+- Função: detecta o projeto e escreve `repo.md` com arquitetura.
+- Mista: gera o resumo; versionar `repo.md` faz parte da tarefa de mapa.
+
+### codebase-onboarding
+
+- Arquivo: `.agents/skills/codebase-onboarding/SKILL.md`
+- Fonte: [affaan-m/ecc](https://skills.sh/affaan-m/ecc/codebase-onboarding)
+- Função: onboarding estruturado alinhado a `AGENTS.md` e ao catálogo de páginas.
+- Mista: prepara o guia; não sobrescreve `AGENTS.md` inteiro sem pedido.
+
+### codebase-learner
+
+- Arquivo: `.agents/skills/codebase-learner/SKILL.md`
+- Fonte: [pahlevikun/levistack](https://skills.sh/pahlevikun/levistack) (skill `codebase-learner`; ex-super-codebase-learner)
+- Função: estado atual do código; modo `site-ia` para hierarquia de páginas/URLs do produto.
+- Mista: documenta o que existe; não inventa blueprint greenfield.
 
 ## Quando algo novo chegar
 
