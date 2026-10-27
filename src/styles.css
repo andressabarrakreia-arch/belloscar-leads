@@ -2200,6 +2200,38 @@ tr:hover td {
   display: block;
 }
 
+.indice-abertura-bc {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(192, 32, 38, 0.35);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.indice-abertura-bc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.indice-abertura-bc-shine {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 65%
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0;
+}
+
 .indice-abertura-placa img:first-of-type {
   width: min(280px, 100%);
   height: auto;
@@ -3952,10 +3984,14 @@ html[data-theme="dark"] .indice-abertura-giro {
   padding: 0;
 }
 
+.show-avatar--logo {
+  background: #ebe6df;
+}
+
 .show-avatar--logo img {
   object-fit: contain;
   padding: 10%;
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
 }
 
 .show-avatar__shine {

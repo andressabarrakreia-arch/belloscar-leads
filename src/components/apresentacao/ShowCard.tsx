@@ -27,7 +27,7 @@ export function ShowCard({ person, focused, variant = "rail", onOpen }: ShowCard
         }
       }}
     >
-      <ShowAvatar nome={person.nome} size={featured ? "lg" : "sm"} />
+      <ShowAvatar nome={person.nome} size={featured ? "lg" : "sm"} strikeOnMount={featured} />
       <div className="show-card-body">
         <p className="show-role">{person.cargo}</p>
         <h3 className="show-name">{person.nome}</h3>

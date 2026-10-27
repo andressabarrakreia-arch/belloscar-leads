@@ -1,4 +1,4 @@
-import { fotoEquipe } from "./avatar";
+import { fotoEquipe, isLogoEquipe } from "./avatar";
 import type { ShowDetalhe, ShowPerson } from "./types";
 
 const W = 1080;
@@ -107,13 +107,26 @@ export async function drawBriefingCard(
   const avatarSize = 280;
   const ax = 64;
   const ay = 110;
-  ctx.fillStyle = "#1a1214";
+  const logoLight = isLogoEquipe(person.nome);
+  ctx.fillStyle = logoLight ? "#ebe6df" : "#1a1214";
   ctx.fillRect(ax, ay, avatarSize, avatarSize);
 
   const fotoUrl = fotoEquipe(person.nome);
   if (fotoUrl) {
     const img = await loadImage(fotoUrl);
-    if (img) drawCover(ctx, img, ax, ay, avatarSize);
+    if (img) {
+      if (logoLight) {
+        // contain sobre fundo claro
+        const pad = avatarSize * 0.1;
+        const box = avatarSize - pad * 2;
+        const scale = Math.min(box / img.width, box / img.height);
+        const dw = img.width * scale;
+        const dh = img.height * scale;
+        ctx.drawImage(img, ax + (avatarSize - dw) / 2, ay + (avatarSize - dh) / 2, dw, dh);
+      } else {
+        drawCover(ctx, img, ax, ay, avatarSize);
+      }
+    }
   } else {
     ctx.fillStyle = "#f3eee6";
     ctx.font = "700 96px 'Barlow Condensed', sans-serif";

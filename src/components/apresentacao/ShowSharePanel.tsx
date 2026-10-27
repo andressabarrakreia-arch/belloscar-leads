@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ShowPerson } from "../../lib/apresentacao/types";
 import {
   addQuickContact,
@@ -23,6 +23,12 @@ import {
   buildWhatsappPayload,
   whatsappShareUrl,
 } from "../../lib/apresentacao/whatsappShare";
+import {
+  loadSharePrefs,
+  saveSharePrefs,
+  type ShareDestMode,
+  type ShareFormat,
+} from "../../lib/apresentacao/whatsappSharePrefs";
 
 type Props = {
   person: ShowPerson;
@@ -30,38 +36,69 @@ type Props = {
   onClose: () => void;
 };
 
-type DestMode = "pm" | "quick" | "custom" | "none";
-type ShareFormat = "text" | "image";
+type DestMode = ShareDestMode;
 
 export function ShowSharePanel({ person, periodoLabel, onClose }: Props) {
-  const [includeMessage, setIncludeMessage] = useState(false);
-  const [message, setMessage] = useState(DEFAULT_SHARE_MESSAGE);
+  const initial = useMemo(() => loadSharePrefs(), []);
+  const [includeMessage, setIncludeMessage] = useState(initial.includeMessage);
+  const [message, setMessage] = useState(initial.message || DEFAULT_SHARE_MESSAGE);
   const [copied, setCopied] = useState(false);
-  const [format, setFormat] = useState<ShareFormat>("text");
+  const [format, setFormat] = useState<ShareFormat>(initial.format);
   const [busy, setBusy] = useState(false);
   const [statusNote, setStatusNote] = useState<string | null>(null);
   const [quick, setQuick] = useState<QuickContact[]>([]);
   const [personPm, setPersonPm] = useState<string | null>(null);
-  const [destMode, setDestMode] = useState<DestMode>("none");
-  const [selectedQuickId, setSelectedQuickId] = useState<string | null>(null);
-  const [customPhone, setCustomPhone] = useState("");
-  const [customLabel, setCustomLabel] = useState("");
+  const [destMode, setDestMode] = useState<DestMode>(initial.destMode);
+  const [selectedQuickId, setSelectedQuickId] = useState<string | null>(initial.selectedQuickId);
+  const [customPhone, setCustomPhone] = useState(initial.customPhone);
+  const [customLabel, setCustomLabel] = useState(initial.customLabel);
   const [phoneError, setPhoneError] = useState<string | null>(null);
+  const prefsReady = useRef(false);
 
-  function refreshStore() {
+  function refreshContacts() {
     const store = loadWhatsappContacts();
     setQuick(store.quick);
     const pm = getPersonDefault(person.id);
     setPersonPm(pm);
-    if (pm) {
-      setDestMode("pm");
-      setSelectedQuickId(null);
-    }
+    setDestMode((mode) => {
+      if (mode === "pm" && !pm) return "none";
+      if (mode === "quick" && selectedQuickId && !store.quick.some((c) => c.id === selectedQuickId)) {
+        return pm ? "pm" : "none";
+      }
+      if (!prefsReady.current && pm && initial.destMode === "pm") return "pm";
+      if (!prefsReady.current && pm && initial.destMode === "none" && !initial.customPhone) return "pm";
+      return mode;
+    });
   }
 
   useEffect(() => {
-    refreshStore();
+    refreshContacts();
+    prefsReady.current = true;
   }, [person.id]);
+
+  useEffect(() => {
+    if (!prefsReady.current) return;
+    const t = window.setTimeout(() => {
+      saveSharePrefs({
+        includeMessage,
+        message,
+        format,
+        destMode,
+        selectedQuickId,
+        customPhone,
+        customLabel,
+      });
+    }, 150);
+    return () => window.clearTimeout(t);
+  }, [
+    includeMessage,
+    message,
+    format,
+    destMode,
+    selectedQuickId,
+    customPhone,
+    customLabel,
+  ]);
 
   const cardPreview = useMemo(
     () => buildWhatsappCard(person, periodoLabel),
@@ -187,7 +224,7 @@ export function ShowSharePanel({ person, periodoLabel, onClose }: Props) {
       return;
     }
     setPhoneError(null);
-    refreshStore();
+    refreshContacts();
     setDestMode("quick");
     setSelectedQuickId(contact.id);
   }
@@ -217,7 +254,7 @@ export function ShowSharePanel({ person, periodoLabel, onClose }: Props) {
       setSelectedQuickId(null);
       setDestMode(personPm ? "pm" : "none");
     }
-    refreshStore();
+    refreshContacts();
   }
 
   return (

@@ -49,6 +49,12 @@
       "skillPath": "cinematic-web/SKILL.md",
       "computedHash": "32efac84c4321c77f2f5eaf229f184d7fe199c7918188cc1eecaac66fe1ad330"
     },
+    "cinetic": {
+      "source": "leonxlnx/cinetic",
+      "sourceType": "github",
+      "skillPath": "skills/cinetic/SKILL.md",
+      "computedHash": "963c985987ee175e2b8b24ba3f18e8953275928972fd2acc64ac8322f5a9ff6e"
+    },
     "codebase-learner": {
       "source": "pahlevikun/levistack",
       "sourceType": "github",
@@ -144,6 +150,12 @@
       "sourceType": "github",
       "skillPath": "skills/discoverability/social-sharing/SKILL.md",
       "computedHash": "155cbec948128b229512cb4a99c00eac9433a9e9b41f6229f66e50401482b367"
+    },
+    "svg-animation": {
+      "source": "iart-ai/web-animation-skills",
+      "sourceType": "github",
+      "skillPath": "skills/svg-animation/SKILL.md",
+      "computedHash": "34619073e227bfb7c4c1daa2487006e7b759116f8f88ec9cde5c2dd0a11dfb96"
     },
     "system-atlas": {
       "source": "inkboard/system-atlas",

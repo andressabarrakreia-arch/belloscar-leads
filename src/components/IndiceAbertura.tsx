@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
-import * as THREE from "three";
 
 const fundo = `${import.meta.env.BASE_URL}brand/indice-fundo.jpg`;
 const marca = `${import.meta.env.BASE_URL}brand/belloscar-logo.png`;
 const metrics = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
+const bcLogo = `${import.meta.env.BASE_URL}brand/bc-logo-red.jpg`;
 const SESSAO = "belloscar-abertura";
 
 function deveAbrir(): boolean {
@@ -14,48 +14,63 @@ function deveAbrir(): boolean {
   return sessionStorage.getItem(SESSAO) !== "1";
 }
 
-function Roda() {
-  const ref = useRef<HTMLCanvasElement>(null);
+/** Logo BC em 2.5D HD (GSAP) — substitui o torus vermelho. */
+function BcLogoSpin() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    let renderer: THREE.WebGLRenderer;
-    try {
-      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    } catch {
-      return;
+    const wrap = wrapRef.current;
+    const img = imgRef.current;
+    if (!wrap || !img) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.set(wrap, { transformPerspective: 900, transformStyle: "preserve-3d" });
+    gsap.set(img, { transformOrigin: "50% 50%" });
+
+    const tl = gsap.timeline({ repeat: -1, defaults: { ease: "sine.inOut" } });
+    tl.to(wrap, { rotationY: 18, rotationX: -10, duration: 1.6 })
+      .to(wrap, { rotationY: -18, rotationX: 8, duration: 1.8 })
+      .to(wrap, { rotationY: 0, rotationX: 0, duration: 1.4 });
+
+    const pulse = gsap.to(img, {
+      scale: 1.06,
+      duration: 1.35,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut",
+    });
+
+    const shine = wrap.querySelector(".indice-abertura-bc-shine");
+    let shineTween: gsap.core.Tween | null = null;
+    if (shine) {
+      shineTween = gsap.fromTo(
+        shine,
+        { xPercent: -120, opacity: 0 },
+        {
+          xPercent: 120,
+          opacity: 0.75,
+          duration: 2.2,
+          repeat: -1,
+          repeatDelay: 0.9,
+          ease: "power2.inOut",
+        }
+      );
     }
-    renderer.setSize(160, 160, false);
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 10);
-    camera.position.z = 3.2;
-    const geometry = new THREE.TorusGeometry(0.85, 0.14, 16, 48);
-    const material = new THREE.MeshStandardMaterial({ color: 0xc02026, metalness: 0.35, roughness: 0.4 });
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-    scene.add(new THREE.AmbientLight(0xffffff, 0.75));
-    const key = new THREE.DirectionalLight(0xffffff, 1.3);
-    key.position.set(2, 2, 3);
-    scene.add(key);
-    let frame = 0;
-    const start = performance.now();
-    const loop = (now: number) => {
-      mesh.rotation.x = (now - start) / 1700;
-      mesh.rotation.y = (now - start) / 1100;
-      renderer.render(scene, camera);
-      frame = requestAnimationFrame(loop);
-    };
-    frame = requestAnimationFrame(loop);
+
     return () => {
-      cancelAnimationFrame(frame);
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
+      tl.kill();
+      pulse.kill();
+      shineTween?.kill();
     };
   }, []);
 
-  return <canvas ref={ref} className="indice-abertura-roda" width={160} height={160} aria-hidden="true" />;
+  return (
+    <div ref={wrapRef} className="indice-abertura-bc" aria-hidden="true">
+      <img ref={imgRef} src={bcLogo} alt="" className="indice-abertura-bc-img" />
+      <span className="indice-abertura-bc-shine" />
+    </div>
+  );
 }
 
 /** Uma entrada no pátio, uma vez por sessão. */
@@ -74,6 +89,14 @@ export function IndiceAbertura() {
     const ctx = gsap.context(() => {
       gsap.from(".indice-abertura-placa", { autoAlpha: 0, y: 18, duration: 0.7, ease: "power2.out" });
       gsap.from(".indice-abertura-foto", { scale: 1.06, duration: 3.2, ease: "power1.out" });
+      gsap.from(".indice-abertura-bc", {
+        autoAlpha: 0,
+        scale: 0.82,
+        rotationY: -40,
+        duration: 0.9,
+        ease: "power3.out",
+        delay: 0.12,
+      });
     }, root);
     const timer = window.setTimeout(fechar, 3400);
     return () => {
@@ -97,7 +120,7 @@ export function IndiceAbertura() {
         <div className="indice-abertura-giro" aria-hidden="true" />
         <div className="indice-abertura-miolo" onPointerMove={moverLuz}>
           <div className="spotlight-luz" style={{ left: luz.x, top: luz.y }} />
-          <Roda />
+          <BcLogoSpin />
           <img src={marca} alt="BellosCar, veículos seminovos e usados" />
           <img src={metrics} alt="Andressa Car Metrics" />
           <motion.button

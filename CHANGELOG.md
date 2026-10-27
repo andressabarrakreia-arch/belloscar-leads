@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.13.11] - 2026-10-27
+
+### Added
+- Preferências do compartilhar (destino, mensagem, formato) salvas automaticamente no navegador
+- Abertura do índice com animação 2.5D do logo **BC** (substitui o anel Three.js)
+- Skills `cinetic` e `svg-animation` no catálogo
+
+### Changed
+- Lead Sem Interesse / Espaço Bellos: fundo claro `#ebe6df` no avatar e no card PNG
+- Glass/shine dispara ao abrir o briefing e no card em destaque (após load da foto)
+
 ## [1.13.10] - 2026-10-27
 
 ### Fixed

@@ -23,6 +23,7 @@ function prefersReducedMotion(): boolean {
 export function ShowAvatar({ nome, size = "sm", strikeOnMount = false }: ShowAvatarProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const shineRef = useRef<HTMLSpanElement>(null);
+  const struckRef = useRef(false);
   const foto = fotoEquipe(nome);
   const logo = isLogoEquipe(nome);
   const badge = isBadgeEquipe(nome);
@@ -44,17 +45,17 @@ export function ShowAvatar({ nome, size = "sm", strikeOnMount = false }: ShowAva
     gsap.killTweensOf(shine);
     gsap.fromTo(
       shine,
-      { opacity: 0, xPercent: -120, yPercent: -40 },
+      { opacity: 0, xPercent: -130, yPercent: -50 },
       {
         opacity: 1,
-        xPercent: 120,
-        yPercent: 40,
-        duration: 0.45,
+        xPercent: 130,
+        yPercent: 50,
+        duration: 0.55,
         ease: "power2.out",
         onComplete: () => {
           gsap.to(shine, {
             opacity: 0,
-            duration: 0.2,
+            duration: 0.25,
             ease: "power1.in",
             onComplete: () => root.classList.remove("is-struck"),
           });
@@ -63,9 +64,27 @@ export function ShowAvatar({ nome, size = "sm", strikeOnMount = false }: ShowAva
     );
   }, []);
 
+  const triggerMountShine = useCallback(() => {
+    if (!strikeOnMount || struckRef.current) return;
+    struckRef.current = true;
+    // defer so layout/paint + imagem já estão no DOM
+    requestAnimationFrame(() => {
+      runStrike();
+      window.setTimeout(() => runStrike(), 420);
+    });
+  }, [strikeOnMount, runStrike]);
+
   useEffect(() => {
-    if (strikeOnMount) runStrike();
-  }, [strikeOnMount, nome, runStrike]);
+    struckRef.current = false;
+    if (!strikeOnMount) return;
+    if (!foto) {
+      triggerMountShine();
+      return;
+    }
+    // se a img já estiver em cache, onLoad pode não disparar — fallback
+    const t = window.setTimeout(triggerMountShine, 80);
+    return () => window.clearTimeout(t);
+  }, [strikeOnMount, nome, foto, triggerMountShine]);
 
   function onPointerMove(event: PointerEvent<HTMLDivElement>) {
     const root = rootRef.current;
@@ -92,7 +111,15 @@ export function ShowAvatar({ nome, size = "sm", strikeOnMount = false }: ShowAva
 
   let content: ReactNode;
   if (foto) {
-    content = <img src={foto} alt="" />;
+    content = (
+      <img
+        src={foto}
+        alt=""
+        onLoad={() => {
+          if (strikeOnMount) triggerMountShine();
+        }}
+      />
+    );
   } else {
     content = avatarIniciais(nome);
   }
