@@ -23,11 +23,9 @@
 - Repo: https://github.com/andressabarrakreia-arch/belloscar-leads
 - Catálogo: [`CATALOGO_DE_PAGINAS.md`](CATALOGO_DE_PAGINAS.md)
 - **Análise de Campanhas (equipe):** https://andressacarmetrics.com.br/#/campanhas
-- Gestão Campanhas: https://andressacarmetrics.com.br/#/campanhas/admin
 - **Análise de Agendamentos (equipe):** https://andressacarmetrics.com.br/#/agendamentos
-- Gestão Agendamentos: https://andressacarmetrics.com.br/#/agendamentos/admin
 - **Análise de Negociações (equipe):** https://andressacarmetrics.com.br/#/negociacoes
-- Gestão Negociações: https://andressacarmetrics.com.br/#/negociacoes/admin
+- **Gestão do Índice (importar e exportar):** https://andressacarmetrics.com.br/#/indice/gestao
 
 ## Pós-lançamento
 
@@ -46,8 +44,18 @@
 - [x] Aba **Portais** em `#/agendamentos/portais` (origem/canal + grupos; sem UTM/custo)
 - [x] Módulo **Análise de Negociações** (`#/negociacoes`) + seed + Gestão (merge por nº)
 - [x] Campanhas restrita a Facebook/Instagram (origem do LEADS GERAL, cruzamento por ID)
+- [x] Gestão unificada só em `#/indice/gestao` (import + export com seleção; sem abas Gestão nos módulos)
 - [ ] **Fase 2:** UTMs / tráfego pago no módulo `#/campanhas`
 - [ ] Próximos módulos com públicos/links próprios
+
+## Agendado — teste cópias `#/v2` (2D HD / Remotion / filme)
+
+- [ ] **30 out 2026, após 13h** (reset da cota semanal do Cursor) — executar o plano de **cópias de teste** em `#/v2` (páginas oficiais intocadas):
+  - Skills Remotion / HyperFrames / vídeo de marketing
+  - Índice v2 + abertura Remotion; Apresentação v2 (Remotion no show); Mapa, Erros e módulos v2
+  - Scaffold `film/` (HyperFrames, video-maker, Higgsfield); docs como teste
+  - Tornar oficial **só** quando Andressa avisar
+- Plano: Cursor plan `2d_hd_no_site` (cópias, não substituição)
 
 ## Backlog — próximos módulos e integrações (não esquecer)
 
