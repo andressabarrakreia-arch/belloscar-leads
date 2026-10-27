@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.13.1] - 2026-10-26
+
+### Changed
+- **Apresentação** abre no mês vigente (dia 01 até hoje), com filtro de período (presets e datas)
+- Clique no card abre modal ampliado com fundo fosco e blocos de performance positiva e negativa
+
 ## [1.13.0] - 2026-10-26
 
 ### Added

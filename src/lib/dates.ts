@@ -44,6 +44,38 @@ export function currentMonthRange(date = new Date()): { from: string; to: string
   return monthRange(currentMonthKey(date));
 }
 
+/** Hoje no calendário local, YYYY-MM-DD. */
+export function isoToday(date = new Date()): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/** N dias atrás (incluindo hoje como 0), YYYY-MM-DD local. */
+export function isoDaysAgo(days: number, date = new Date()): string {
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate() - days);
+  return isoToday(d);
+}
+
+/** Dia 1 do mês vigente até hoje (mês em curso / MTD). */
+export function monthToDateRange(date = new Date()): { from: string; to: string } {
+  return { from: `${currentMonthKey(date)}-01`, to: isoToday(date) };
+}
+
+/** Rótulo pt-BR de um intervalo YYYY-MM-DD. */
+export function formatDateRangeLabel(from: string, to: string): string {
+  const fmt = (iso: string) => {
+    const [y, m, d] = iso.split("-");
+    if (!y || !m || !d) return iso;
+    return `${d}/${m}/${y}`;
+  };
+  if (!from && !to) return "todo o período";
+  if (from && to) return `${fmt(from)} a ${fmt(to)}`;
+  if (from) return `a partir de ${fmt(from)}`;
+  return `até ${fmt(to)}`;
+}
+
 /** Mesmo dia do mês anterior, para comparar o mês em curso sem o mês cheio. */
 export function previousMonthSameSpan(date = new Date()): { month: string; from: string; to: string } {
   const day = date.getDate();

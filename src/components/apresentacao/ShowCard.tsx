@@ -4,15 +4,25 @@ import type { ShowPerson } from "../../lib/apresentacao/types";
 type ShowCardProps = {
   person: ShowPerson;
   focused?: boolean;
+  onOpen: () => void;
 };
 
-export function ShowCard({ person, focused }: ShowCardProps) {
+export function ShowCard({ person, focused, onOpen }: ShowCardProps) {
   const hue = corSetor(person.setor as SetorId);
   return (
     <article
       className={`show-card${focused ? " is-focused" : ""}`}
       style={{ ["--show-accent" as string]: hue }}
       data-person-id={person.id}
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          onOpen();
+        }
+      }}
     >
       <div className="show-avatar" aria-hidden="true">
         {avatarIniciais(person.nome)}
