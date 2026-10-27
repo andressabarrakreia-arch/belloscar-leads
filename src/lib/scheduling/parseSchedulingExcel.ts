@@ -65,6 +65,9 @@ const LEADS_ALIASES: Record<string, string> = {
   "atendido por": "sdr",
   status: "status",
   visita: "visita",
+  "visita em": "dataVisita",
+  "data visita": "dataVisita",
+  "data da visita": "dataVisita",
   origem: "origem",
   "tipo proposta": "tipoProposta",
   cliente: "cliente",
@@ -229,14 +232,48 @@ function buildBaseItem(
   };
 }
 
+/** CSV BR: SheetJS interpreta 08/10 como MM/DD. Converte para ISO antes do parse. */
+function normalizeBrazilianCsvDates(buffer: ArrayBuffer): ArrayBuffer {
+  const head = new TextDecoder("utf-8").decode(buffer.slice(0, 800));
+  const looksCsv =
+    (head.includes(";") || head.includes(",")) &&
+    !head.includes("PK\u0003\u0004") &&
+    (/criado em|data visita|visita em|atendido em/i.test(head) ||
+      /^"?id"?[;,]|^#?id[;,]/im.test(head));
+  if (!looksCsv) return buffer;
+  const text = new TextDecoder("utf-8").decode(buffer);
+  const next = text.replace(
+    /(^|[;",\t])(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?(?=[;",\t]|$)/gm,
+    (
+      _full,
+      prefix: string,
+      day: string,
+      month: string,
+      year: string,
+      hour?: string,
+      minute?: string,
+      second?: string
+    ) => {
+      const iso = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+      if (hour === undefined) return `${prefix}${iso}`;
+      const h = hour.padStart(2, "0");
+      const m = minute!.padStart(2, "0");
+      const s = second !== undefined ? `:${second.padStart(2, "0")}` : "";
+      return `${prefix}${iso} ${h}:${m}${s}`;
+    }
+  );
+  return new TextEncoder().encode(next).buffer;
+}
+
 export function parseSchedulingArrayBuffer(buffer: ArrayBuffer): {
   kind: SheetKind;
   rows: ParsedSchedulingRow[];
 } {
-  // codepage 65001 = UTF-8 (CSV exportado do sistema com acentos em Responsável)
-  const workbook = XLSX.read(buffer, {
+  // CSV BR: normaliza DD/MM/AAAA → ISO antes do SheetJS (senão 08/10 vira agosto).
+  // codepage 65001 = UTF-8 (CSV com acentos em Responsável)
+  const workbook = XLSX.read(normalizeBrazilianCsvDates(buffer), {
     type: "array",
-    cellDates: true,
+    cellDates: false,
     codepage: 65001,
   });
   const sheetName = workbook.SheetNames[0];
@@ -387,22 +424,26 @@ export function parseSchedulingArrayBuffer(buffer: ArrayBuffer): {
       continue;
     }
 
-    // leads — enriquecimento (origem/email/cliente)
+    // leads / recebidos — origem + Visita / Data Visita (contagem de visitas na Pré-Vendas)
     const dataAgendamento = toIsoDate(cell(row, headers.dataAgendamento));
+    const dataVisita = toIsoDate(cell(row, headers.dataVisita)) || null;
     const sdr = String(cell(row, headers.sdr) ?? "").trim();
     const status = normalizeStatus(cell(row, headers.status));
     const tipoProposta = normalizeTipoProposta(cell(row, headers.tipoProposta));
     const visitaRaw = cell(row, headers.visita);
+    const teveVisita = isVisitYesNo(visitaRaw) || Boolean(dataVisita);
     parsed.push({
       id,
       kind,
       dataAgendamento: dataAgendamento || undefined,
+      dataAtendido: dataAgendamento || undefined,
+      dataVisita,
       sdr: sdr || undefined,
       statusTexto: String(cell(row, headers.status) ?? "").trim(),
       vendedor: undefined,
       tipoProposta,
       status,
-      teveVisita: isVisitFlag(visitaRaw, status),
+      teveVisita,
       origem: String(cell(row, headers.origem) ?? "").trim() || undefined,
       motivoInsucesso: null,
       cliente: String(cell(row, headers.cliente) ?? "").trim() || undefined,

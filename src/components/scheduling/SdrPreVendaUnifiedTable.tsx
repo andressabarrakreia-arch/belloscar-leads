@@ -21,8 +21,8 @@ export function SdrPreVendaUnifiedTable({ rows, onExport }: Props) {
         <InfoTip>
           Equipe web (Allan, Thayna, Lais, Matheus e Liriane). Outros SDRs só aparecem se
           selecionados no filtro. Atendimentos = REALIZADOS (Atendido em) · Agend. = Agendado em ·
-          Visitas = Visita em · Sucessos = Finalizado em · % Agend. = Ag/Atend · Conv. visita =
-          Vis/Ag · Conv. = Suc/Vis. Recepção não entra neste bloco.
+          Visitas = Data Visita dos recebidos (Visita em) · Sucessos = Finalizado em · % Agend. =
+          Ag/Atend · Conv. visita = Vis/Ag · Conv. = Suc/Vis. Recepção não entra neste bloco.
         </InfoTip>
         <button
           type="button"

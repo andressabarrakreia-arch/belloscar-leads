@@ -50,34 +50,82 @@ function statusForaDoAtendimento(value: string | undefined): boolean {
   return text === "pendente" || text === "descartado";
 }
 
-/** Recebido que não está em realizados vira atendimento na data de Criado em. Pendente e Descartado ficam de fora. */
+/**
+ * Recebidos → realizados.
+ * - Visita / Data Visita da planilha de recebidos mandam na contagem de visitas.
+ * - ID novo (fora de Pendente/Descartado) entra como atendimento na data de Criado em.
+ * - ID já existente atualiza visita, data da visita e responsável quando o recebido traz.
+ */
 function atendimentosFromLeads(
   realizados: RealizadoItem[],
   incoming: ParsedSchedulingRow[]
-): { realizados: RealizadoItem[]; added: number } {
+): { realizados: RealizadoItem[]; added: number; visitsUpdated: number } {
   const { unique } = dedupeCount(incoming);
-  const present = new Set(realizados.map((row) => row.id));
-  const next = [...realizados];
+  const map = new Map(realizados.map((row) => [row.id, { ...row }]));
   let added = 0;
+  let visitsUpdated = 0;
+
   for (const row of unique) {
-    if (!row.id || present.has(row.id) || statusForaDoAtendimento(row.statusTexto)) continue;
+    if (!row.id) continue;
+    const prev = map.get(row.id);
+    const sdr = row.sdr?.trim() || prev?.sdr || "(sem SDR)";
+    const origem =
+      row.origem?.trim() && row.origem.trim() !== "Não informado"
+        ? row.origem.trim()
+        : prev?.origem || row.origem?.trim() || "Não informado";
+    const tipoProposta =
+      row.tipoProposta && row.tipoProposta !== "não informado(celulas em branco)"
+        ? row.tipoProposta
+        : prev?.tipoProposta || row.tipoProposta || "não informado(celulas em branco)";
+    // Data Visita / Visita=Sim dos recebidos mandam; Visita=Não sem data não apaga visita já gravada.
+    const leadHasVisit =
+      Boolean(row.teveVisita) && Boolean(row.dataVisita);
+    const dataVisita = leadHasVisit
+      ? row.dataVisita!
+      : prev?.dataVisita ?? (row.dataVisita !== undefined ? row.dataVisita : null);
+    const teveVisita = leadHasVisit
+      ? true
+      : prev
+        ? Boolean(prev.teveVisita)
+        : Boolean(row.teveVisita);
+
+    if (prev) {
+      const visitChanged =
+        Boolean(prev.teveVisita) !== teveVisita || (prev.dataVisita || null) !== (dataVisita || null);
+      if (visitChanged) visitsUpdated += 1;
+      map.set(row.id, {
+        ...prev,
+        dataVisita,
+        teveVisita,
+        // Responsável do recebido manda na atribuição da visita
+        sdr: leadHasVisit && row.sdr?.trim() ? row.sdr.trim() : sdr,
+        origem,
+        tipoProposta,
+        cliente: row.cliente?.trim() || prev.cliente || "",
+        celular: row.celular?.trim() || prev.celular || "",
+      });
+      continue;
+    }
+
+    if (statusForaDoAtendimento(row.statusTexto)) continue;
     const dataAtendido = row.dataAgendamento || row.dataAtendido;
     if (!dataAtendido) continue;
-    next.push({
+    map.set(row.id, {
       id: row.id,
       dataAtendido,
-      dataVisita: null,
-      teveVisita: false,
-      sdr: row.sdr?.trim() || "(sem SDR)",
-      origem: row.origem?.trim() || "Não informado",
-      tipoProposta: row.tipoProposta || "não informado(celulas em branco)",
+      dataVisita,
+      teveVisita,
+      sdr,
+      origem,
+      tipoProposta,
       cliente: row.cliente?.trim() || "",
       celular: row.celular?.trim() || "",
     });
-    present.add(row.id);
     added += 1;
+    if (teveVisita && dataVisita) visitsUpdated += 1;
   }
-  return { realizados: next, added };
+
+  return { realizados: [...map.values()], added, visitsUpdated };
 }
 
 function mergeRealizados(
@@ -661,7 +709,16 @@ export function applySchedulingImport(
   const fromLeads =
     kind === "leads"
       ? atendimentosFromLeads(base.realizados || [], incoming)
-      : { realizados: base.realizados || [], added: 0 };
+      : { realizados: base.realizados || [], added: 0, visitsUpdated: 0 };
+
+  if (kind === "leads") {
+    const visitaById = new Map(
+      dedupeCount(incoming).unique.map((row) => [row.id, Boolean(row.teveVisita)])
+    );
+    agendaItems = agendaItems.map((item) =>
+      visitaById.has(item.id) ? { ...item, teveVisita: visitaById.get(item.id)! } : item
+    );
+  }
 
   const leadNote =
     kind === "leads"
@@ -669,7 +726,10 @@ export function applySchedulingImport(
           `LEADS GERAL: ${leadsAtendimentos.length} leads únicos na base`,
           fromLeads.added > 0
             ? `${fromLeads.added} recebidos sem realizado entraram como atendimento na data de Criado em. Pendente e Descartado não entram.`
-            : "Nenhum recebido novo virou atendimento. Pendente e Descartado não entram, e quem já está em realizados permanece.",
+            : "Nenhum recebido novo virou atendimento. Pendente e Descartado não entram.",
+          fromLeads.visitsUpdated > 0
+            ? `${fromLeads.visitsUpdated} visitas atualizadas pela Data Visita dos recebidos (regra da Pré-Vendas).`
+            : "Nenhuma visita nova/alterada pela Data Visita dos recebidos.",
           "Após o import, origem/tipo são recruzados por ID em REALIZADOS/agenda/SUCESSOS",
         ]
       : [];

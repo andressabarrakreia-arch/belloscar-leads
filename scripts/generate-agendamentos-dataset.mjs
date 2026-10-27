@@ -4,7 +4,7 @@
  * Ordem:
  * 1. AGENDAMENTOS (Agendado em)
  * 2. INSUCESSOS (enrich)
- * 3. LEADS GERAL (enrich origem)
+ * 3. LEADS GERAL / recebidos (enrich origem + Visita / Data Visita → visitas)
  * 4. LEADS REALIZADOS (Atendido em / Visita em)
  * 5. SUCESSOS (Finalizado em)
  *
