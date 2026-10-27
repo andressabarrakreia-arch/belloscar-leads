@@ -921,6 +921,176 @@ button.kpi-card.is-on {
   grid-template-columns: 1fr;
 }
 
+/* Rankings (Negociações · Vendedores) ? design-taste app: colour on podium, quiet chrome */
+.card--rank {
+  padding-bottom: 12px;
+}
+
+.rank-table {
+  min-width: 640px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.rank-table thead th {
+  background: transparent;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+}
+
+.rank-table__groups th {
+  border-bottom: none;
+  padding-bottom: 4px;
+}
+
+.rank-table__groups th.rank-group {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--brand-charcoal);
+  text-align: center;
+  padding: 6px 12px 8px;
+  box-shadow: inset 0 -2px 0 var(--brand-red);
+}
+
+.rank-table__groups th.rank-qtde {
+  vertical-align: middle;
+  text-align: right;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.rank-table__cols th {
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+.rank-table .rank-vendedor {
+  text-align: center;
+  font-weight: 500;
+  color: var(--brand-charcoal);
+}
+
+.rank-table thead .rank-vendedor {
+  text-align: center;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.rank-table .rank-qtde {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--brand-charcoal);
+  padding-right: 16px;
+}
+
+.rank-table thead .rank-qtde {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.rank-table__pos {
+  width: 52px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.rank-table tbody td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+}
+
+.rank-table tbody tr.rank-row--1 td {
+  background: rgba(212, 160, 23, 0.07);
+}
+
+.rank-table tbody tr.rank-row--2 td {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.rank-table tbody tr.rank-row--3 td {
+  background: rgba(184, 115, 51, 0.08);
+}
+
+.rank-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.rank-pos {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.rank-medal {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  vertical-align: middle;
+}
+
+.rank-medal__disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 1px 2px rgba(64, 64, 65, 0.18);
+}
+
+.rank-medal__n {
+  position: relative;
+  z-index: 1;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.rank-medal--ouro .rank-medal__disc {
+  background: linear-gradient(145deg, #f7e08a 0%, #d4a017 48%, #a67c00 100%);
+}
+
+.rank-medal--ouro .rank-medal__n {
+  color: #3a2a00;
+}
+
+.rank-medal--prata .rank-medal__disc {
+  background: linear-gradient(145deg, #f1f5f9 0%, #94a3b8 48%, #64748b 100%);
+}
+
+.rank-medal--prata .rank-medal__n {
+  color: #1e293b;
+}
+
+.rank-medal--bronze .rank-medal__disc {
+  background: linear-gradient(145deg, #e8b88a 0%, #b87333 48%, #8a4f1d 100%);
+}
+
+.rank-medal--bronze .rank-medal__n {
+  color: #2a1608;
+}
+
 table {
   width: 100%;
   border-collapse: separate;
@@ -3101,6 +3271,51 @@ html[data-theme="dark"] .nav button.linkish:hover {
 html[data-theme="dark"] th {
   background: #212023;
   color: #f2f2f3;
+}
+
+html[data-theme="dark"] .rank-table thead th {
+  background: transparent;
+  color: #8a8c92;
+  border-bottom-color: #222224;
+}
+
+html[data-theme="dark"] .rank-table__groups th.rank-group {
+  color: #ffffff;
+  box-shadow: inset 0 -2px 0 #c02026;
+}
+
+html[data-theme="dark"] .rank-table__groups th.rank-qtde {
+  color: #8a8c92;
+}
+
+html[data-theme="dark"] .rank-table .rank-vendedor,
+html[data-theme="dark"] .rank-table .rank-qtde {
+  color: #f2f2f3;
+}
+
+html[data-theme="dark"] .rank-table thead .rank-vendedor,
+html[data-theme="dark"] .rank-table thead .rank-qtde {
+  color: #8a8c92;
+}
+
+html[data-theme="dark"] .rank-table tbody td {
+  border-bottom-color: #222224;
+}
+
+html[data-theme="dark"] .rank-table tbody tr.rank-row--1 td {
+  background: rgba(212, 160, 23, 0.12);
+}
+
+html[data-theme="dark"] .rank-table tbody tr.rank-row--2 td {
+  background: rgba(148, 163, 184, 0.12);
+}
+
+html[data-theme="dark"] .rank-table tbody tr.rank-row--3 td {
+  background: rgba(184, 115, 51, 0.12);
+}
+
+html[data-theme="dark"] .rank-pos {
+  color: #8a8c92;
 }
 
 html[data-theme="dark"] .portal-cascade-table thead th,

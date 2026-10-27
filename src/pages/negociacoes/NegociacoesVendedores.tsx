@@ -17,6 +17,36 @@ function mesAnterior(): string {
   return currentMonthKey(new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1));
 }
 
+function RankMedal({ pos }: { pos: number }) {
+  if (pos === 1 || pos === 2 || pos === 3) {
+    const tom = pos === 1 ? "ouro" : pos === 2 ? "prata" : "bronze";
+    const label = pos === 1 ? "1º ouro" : pos === 2 ? "2º prata" : "3º bronze";
+    return (
+      <span className={`rank-medal rank-medal--${tom}`} title={label} aria-label={label}>
+        <span className="rank-medal__disc" aria-hidden="true" />
+        <span className="rank-medal__n">{pos}</span>
+      </span>
+    );
+  }
+  return <span className="rank-pos">{pos}</span>;
+}
+
+function RankSlotCell({
+  slot,
+  kind,
+}: {
+  slot: { vendedor: string; qtde: number } | null;
+  kind: "vendedor" | "qtde";
+}) {
+  if (!slot) {
+    return <td className={kind === "vendedor" ? "rank-vendedor" : "rank-qtde muted"}>—</td>;
+  }
+  if (kind === "vendedor") {
+    return <td className="rank-vendedor">{slot.vendedor}</td>;
+  }
+  return <td className="rank-qtde">{slot.qtde}</td>;
+}
+
 export function NegociacoesVendedores() {
   const { analytics, dataset } = useNegociacoesAnalyticsContext();
   const mesPadrao = useMemo(() => mesAnterior(), []);
@@ -50,6 +80,66 @@ export function NegociacoesVendedores() {
 
   return (
     <>
+      <div className="card card--rank">
+        <h2>
+          Rankings
+          <InfoTip>
+            Uma linha por colocação. Ouro, prata e bronze marcam o pódio. Cada bloco mostra o vendedor e a
+            quantidade daquela métrica.
+          </InfoTip>
+        </h2>
+        <div className="table-scroll">
+          <table className="rank-table">
+            <thead>
+              <tr className="rank-table__groups">
+                <th rowSpan={2} className="rank-table__pos">
+                  #
+                </th>
+                <th className="rank-group">Vendas + Trocas</th>
+                <th rowSpan={2} className="rank-qtde">
+                  Qtde
+                </th>
+                <th className="rank-group">Compras</th>
+                <th rowSpan={2} className="rank-qtde">
+                  Qtde
+                </th>
+                <th className="rank-group">Consignações</th>
+                <th rowSpan={2} className="rank-qtde">
+                  Qtde
+                </th>
+              </tr>
+              <tr className="rank-table__cols">
+                <th className="rank-vendedor">Vendedor</th>
+                <th className="rank-vendedor">Vendedor</th>
+                <th className="rank-vendedor">Vendedor</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rankings.map((r) => (
+                <tr key={r.pos} className={r.pos <= 3 ? `rank-row rank-row--${r.pos}` : "rank-row"}>
+                  <td className="rank-table__pos">
+                    <RankMedal pos={r.pos} />
+                  </td>
+                  <RankSlotCell slot={r.vendasTrocas} kind="vendedor" />
+                  <RankSlotCell slot={r.vendasTrocas} kind="qtde" />
+                  <RankSlotCell slot={r.compras} kind="vendedor" />
+                  <RankSlotCell slot={r.compras} kind="qtde" />
+                  <RankSlotCell slot={r.consignacoes} kind="vendedor" />
+                  <RankSlotCell slot={r.consignacoes} kind="qtde" />
+                </tr>
+              ))}
+              {rankings.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="muted">
+                    Sem dados de ranking no filtro atual.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div className="charts charts--full">
         <ShareDonut
           title="Total por vendedor"
@@ -75,55 +165,6 @@ export function NegociacoesVendedores() {
             { key: "total", label: "Total", sortValue: (row) => row.total },
           ]}
         />
-      </div>
-
-      <div className="card">
-        <h2>
-          Rankings
-          <InfoTip>
-            Uma linha por colocação. Cada bloco mostra o vendedor e a quantidade daquela métrica.
-          </InfoTip>
-        </h2>
-        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th rowSpan={2}>#</th>
-                <th colSpan={2}>Vendas + Trocas</th>
-                <th colSpan={2}>Compras</th>
-                <th colSpan={2}>Consignações</th>
-              </tr>
-              <tr>
-                <th>Vendedor</th>
-                <th>Qtde</th>
-                <th>Vendedor</th>
-                <th>Qtde</th>
-                <th>Vendedor</th>
-                <th>Qtde</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rankings.map((r) => (
-                <tr key={r.pos}>
-                  <td>{r.pos}</td>
-                  <td>{r.vendasTrocas?.vendedor || "—"}</td>
-                  <td>{r.vendasTrocas ? r.vendasTrocas.qtde : "—"}</td>
-                  <td>{r.compras?.vendedor || "—"}</td>
-                  <td>{r.compras ? r.compras.qtde : "—"}</td>
-                  <td>{r.consignacoes?.vendedor || "—"}</td>
-                  <td>{r.consignacoes ? r.consignacoes.qtde : "—"}</td>
-                </tr>
-              ))}
-              {rankings.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="muted">
-                    Sem dados de ranking no filtro atual.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
       </div>
 
       <div className="card">
