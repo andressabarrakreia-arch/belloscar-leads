@@ -67,6 +67,18 @@
       "skillPath": "skills/d3-visualization/SKILL.md",
       "computedHash": "c70096534ece4833ff2edd4e9407cce7e24d2f69602ec7902e43653f808fd39d"
     },
+    "design-distinctive-ui": {
+      "source": "bugroo/design-distinctive-ui",
+      "sourceType": "github",
+      "skillPath": "skill/design-distinctive-ui/SKILL.md",
+      "computedHash": "b765673e4ebe6e8c5f649fc9d85b928e905b6f37058d0f44377d6c2b0d2310dd"
+    },
+    "design-taste-frontend": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/taste-skill/SKILL.md",
+      "computedHash": "53590ee9325bee34d7888bf0d81bd3941a108b1e7850df46802d93104e3f2b90"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",

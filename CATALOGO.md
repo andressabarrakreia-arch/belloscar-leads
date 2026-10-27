@@ -1,6 +1,6 @@
 # Catálogo do agente
 
-Atualizado em 2026-10-26 (mapa gráfico + apresentação).
+Atualizado em 2026-10-26 (redesign Apresentação).
 
 Este arquivo reúne o que o agente usa neste projeto: skills, rules, hooks, MCP e plugins. Cada item diz para que serve aqui e se entra sozinho ou só quando você pede.
 
@@ -64,6 +64,8 @@ Limite deste projeto: as seis skills vindas do Ant Design foram escritas para o 
 | `d3-visualization` | Grafos e viz customizados em D3 (mapa gráfico do site) | Autônoma |
 | `cinematic-web` | Direção de motion cinematográfica em páginas de show | Mista |
 | `presentation-building` | Estrutura de deck/apresentação (teclado, seções) | Mista |
+| `design-taste-frontend` | Audit/redesign anti-slop de telas existentes | Mista |
+| `design-distinctive-ui` | Redesign/Polish com ponto de vista distintivo | Mista |
 
 ---
 
@@ -438,6 +440,20 @@ Nenhum plugin do Cursor neste repositório. Se um plugin for adicionado, entra a
 - Fonte: [joao-aires/agent-skills-public](https://skills.sh/joao-aires/agent-skills-public/presentation-building)
 - Função: estrutura de apresentação (seções, teclado). Substitui `ai-vibe-slides` (repo unclecatvn só tinha Odoo nesta instalação).
 - Mista: quando montar `#/apresentacao`.
+
+### design-taste-frontend
+
+- Arquivo: `.agents/skills/design-taste-frontend/SKILL.md`
+- Fonte: [Leonxlnx/taste-skill](https://skills.sh/leonxlnx/taste-skill/design-taste-frontend)
+- Função: audit e redesign de telas existentes sem quebrar comportamento.
+- Mista: quando pedir cara profissional / tirar look de app de IA.
+
+### design-distinctive-ui
+
+- Arquivo: `.agents/skills/design-distinctive-ui/SKILL.md`
+- Fonte: [bugroo/design-distinctive-ui](https://skills.sh/bugroo/design-distinctive-ui/design-distinctive-ui)
+- Função: modos Redesign/Polish anti-slop com direção visual específica.
+- Mista: polir ou redesenhar uma superfície (ex. Apresentação).
 
 ## Quando algo novo chegar
 
