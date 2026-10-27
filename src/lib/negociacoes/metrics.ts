@@ -142,6 +142,8 @@ export type LancamentoRow = {
   movimentacao: string;
   placaEntrada: string;
   placaSaida: string;
+  modeloEntrada: string;
+  modeloSaida: string;
   cliente: string;
   negociacaoId: string;
   tipoVenda: string;
@@ -161,6 +163,8 @@ export function buildLancamentoRows(deals: NegociacaoDeal[]): LancamentoRow[] {
         movimentacao,
         placaEntrada: d.placaEntrada,
         placaSaida: d.placaSaida,
+        modeloEntrada: d.modeloEntrada,
+        modeloSaida: d.modeloSaida,
         cliente: d.cliente,
         negociacaoId: d.negociacaoId,
         tipoVenda: d.tipoVenda,

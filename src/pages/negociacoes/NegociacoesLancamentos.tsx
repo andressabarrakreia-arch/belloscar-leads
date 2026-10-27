@@ -1,8 +1,5 @@
 import { InfoTip } from "../../components/InfoTip";
 import { InteractiveTable } from "../../components/InteractiveTable";
-import { SeriesChart } from "../../components/charts/SeriesChart";
-import { ShareDonut } from "../../components/charts/ShareDonut";
-import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
 
 function fmtDate(iso: string): string {
@@ -17,22 +14,8 @@ export function NegociacoesLancamentos() {
   if (!analytics) return null;
 
   const { lancamentos } = analytics;
-  const porTipo = countBy(lancamentos, (row) => row.tipo);
-  const porStatus = countBy(lancamentos, (row) => row.status);
 
   return (
-    <>
-      <div className="charts">
-        <SeriesChart
-          title="Lançamentos por tipo"
-          tip="Contagem das linhas desta tabela."
-          data={porTipo}
-          xKey="nome"
-          kind="bar"
-          series={[{ key: "qtd", name: "Quantidade", color: CHART_COLORS.red }]}
-        />
-        <ShareDonut title="Lançamentos por status" data={porStatus.map((row) => ({ label: row.nome, value: row.qtd }))} />
-      </div>
     <div className="card">
       <h2>
         Lançamentos
@@ -49,23 +32,41 @@ export function NegociacoesLancamentos() {
           { key: "vendedor", label: "Vendedor", sortValue: (row) => row.vendedor },
           { key: "tipo", label: "Tipo", sortValue: (row) => row.tipo },
           { key: "mov", label: "Mov.", sortValue: (row) => row.movimentacao || "" },
-          { key: "pe", label: "Placa entrada", sortValue: (row) => row.placaEntrada || "" },
-          { key: "ps", label: "Placa saída", sortValue: (row) => row.placaSaida || "" },
+          {
+            key: "pe",
+            label: "Placa entrada",
+            sortValue: (row) => row.placaEntrada || "",
+            render: (row) => (
+              <div>
+                <div>{row.placaEntrada || "—"}</div>
+                {row.modeloEntrada ? (
+                  <div className="muted" style={{ fontSize: "0.75rem", lineHeight: 1.2 }}>
+                    {row.modeloEntrada}
+                  </div>
+                ) : null}
+              </div>
+            ),
+          },
+          {
+            key: "ps",
+            label: "Placa saída",
+            sortValue: (row) => row.placaSaida || "",
+            render: (row) => (
+              <div>
+                <div>{row.placaSaida || "—"}</div>
+                {row.modeloSaida ? (
+                  <div className="muted" style={{ fontSize: "0.75rem", lineHeight: 1.2 }}>
+                    {row.modeloSaida}
+                  </div>
+                ) : null}
+              </div>
+            ),
+          },
           { key: "tv", label: "Tipo venda", sortValue: (row) => row.tipoVenda },
           { key: "status", label: "Status", sortValue: (row) => row.status },
           { key: "cliente", label: "Cliente", sortValue: (row) => row.cliente || "" },
         ]}
       />
     </div>
-    </>
   );
-}
-
-function countBy<T>(rows: T[], pick: (row: T) => string) {
-  const map = new Map<string, number>();
-  for (const row of rows) {
-    const nome = pick(row) || "—";
-    map.set(nome, (map.get(nome) || 0) + 1);
-  }
-  return [...map.entries()].map(([nome, qtd]) => ({ nome, qtd }));
 }

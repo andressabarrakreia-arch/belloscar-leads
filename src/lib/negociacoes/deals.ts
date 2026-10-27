@@ -1,22 +1,41 @@
 import { isCancelado } from "./normalize";
 import type { NegociacaoDeal, NegociacaoLine } from "./types";
 
-function platesOf(lines: NegociacaoLine[]): { entrada: string; saida: string } {
-  let entrada = "";
-  let saida = "";
+function platesAndModelsOf(lines: NegociacaoLine[]): {
+  placaEntrada: string;
+  placaSaida: string;
+  modeloEntrada: string;
+  modeloSaida: string;
+} {
+  let placaEntrada = "";
+  let placaSaida = "";
+  let modeloEntrada = "";
+  let modeloSaida = "";
   for (const line of lines) {
     const mov = line.movimentacao.toLowerCase();
-    if (mov.includes("entrada") && line.placa) entrada = line.placa;
+    if (mov.includes("entrada") && line.placa) {
+      placaEntrada = line.placa;
+      modeloEntrada = line.modelo.trim();
+    }
     if (mov.includes("saída") || mov.includes("saida")) {
-      if (line.placa) saida = line.placa;
+      if (line.placa) {
+        placaSaida = line.placa;
+        modeloSaida = line.modelo.trim();
+      }
     }
   }
-  if (!entrada && !saida && lines[0]?.placa) {
-    const mov = lines[0].movimentacao.toLowerCase();
-    if (mov.includes("entrada")) entrada = lines[0].placa;
-    else saida = lines[0].placa;
+  if (!placaEntrada && !placaSaida && lines[0]?.placa) {
+    const line = lines[0];
+    const mov = line.movimentacao.toLowerCase();
+    if (mov.includes("entrada")) {
+      placaEntrada = line.placa;
+      modeloEntrada = line.modelo.trim();
+    } else {
+      placaSaida = line.placa;
+      modeloSaida = line.modelo.trim();
+    }
   }
-  return { entrada, saida };
+  return { placaEntrada, placaSaida, modeloEntrada, modeloSaida };
 }
 
 function dealFromLines(
@@ -25,7 +44,7 @@ function dealFromLines(
   lines: NegociacaoLine[]
 ): NegociacaoDeal {
   const head = lines[0]!;
-  const { entrada, saida } = platesOf(lines);
+  const plates = platesAndModelsOf(lines);
   return {
     dealId,
     negociacaoId,
@@ -37,8 +56,10 @@ function dealFromLines(
     tipoVenda: head.tipoVenda,
     monthKey: head.monthKey,
     periodKey: head.periodKey,
-    placaEntrada: entrada,
-    placaSaida: saida,
+    placaEntrada: plates.placaEntrada,
+    placaSaida: plates.placaSaida,
+    modeloEntrada: plates.modeloEntrada,
+    modeloSaida: plates.modeloSaida,
     lines,
   };
 }

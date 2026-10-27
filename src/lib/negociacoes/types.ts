@@ -45,6 +45,8 @@ export type NegociacaoDeal = {
   periodKey: string;
   placaEntrada: string;
   placaSaida: string;
+  modeloEntrada: string;
+  modeloSaida: string;
   lines: NegociacaoLine[];
 };
 
