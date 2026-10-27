@@ -36,7 +36,7 @@ const DOORS: {
   label: string;
   line: string;
   summary: string;
-  tone?: "red";
+  tone?: "red" | "atlas";
 }[] = [
   {
     to: "/campanhas",
@@ -70,6 +70,13 @@ const DOORS: {
     line: "Cruzamento",
     summary: "ID que está numa planilha e falta na outra, com a base e o número.",
     tone: "red",
+  },
+  {
+    to: "/mapa",
+    label: "Mapa do Site",
+    line: "Atlas",
+    summary: "Rotas, módulos e fontes de dados do painel — PIN igual ao de Erros.",
+    tone: "atlas",
   },
 ];
 
@@ -305,7 +312,13 @@ export function IndiceGeral() {
             <Link
               key={door.to}
               to={door.to}
-              className={door.tone === "red" ? "indice-door indice-door--erros" : "indice-door"}
+              className={
+                door.tone === "red"
+                  ? "indice-door indice-door--erros"
+                  : door.tone === "atlas"
+                    ? "indice-door indice-door--atlas"
+                    : "indice-door"
+              }
             >
               {door.label}
               <span className="indice-door-tip" role="tooltip">

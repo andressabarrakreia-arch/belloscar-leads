@@ -25,6 +25,7 @@ import { PerfilClientes } from "./pages/perfil/PerfilClientes";
 import { Erros } from "./pages/Erros";
 import { IndiceGeral } from "./pages/IndiceGeral";
 import { IndiceGestao } from "./pages/IndiceGestao";
+import { MapaDoSite } from "./pages/MapaDoSite";
 
 /**
  * Módulos com rotas e links distintos.
@@ -35,7 +36,14 @@ import { IndiceGestao } from "./pages/IndiceGestao";
  */
 function Ambient() {
   const { pathname } = useLocation();
-  if (pathname === "/" || pathname === "/indice" || pathname === "/erros") return null;
+  if (
+    pathname === "/" ||
+    pathname === "/indice" ||
+    pathname === "/erros" ||
+    pathname === "/mapa"
+  ) {
+    return null;
+  }
   return <ParticleField />;
 }
 
@@ -50,6 +58,7 @@ export default function App() {
         <Route path="indice" element={<IndiceGeral />} />
         <Route path="indice/gestao" element={<IndiceGestao />} />
         <Route path="erros" element={<Erros />} />
+        <Route path="mapa" element={<MapaDoSite />} />
         <Route path="agendamentos/erros" element={<Navigate to="/erros" replace />} />
 
         <Route path="campanhas" element={<ModuleLayout module={CAMPANHAS} />}>
