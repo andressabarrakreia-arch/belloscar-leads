@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.13.7] - 2026-10-27
+
+### Changed
+- Badges do coletivo na Apresentação atualizados (Campanhas Meta, Agendamentos, Negociações · Loja, sem SDR, Recepção)
+
 ## [1.13.6] - 2026-10-27
 
 ### Added
