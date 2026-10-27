@@ -1,0 +1,38 @@
+---
+description: Antes de criar ou mover dados/rotas, ler o mapa do produto e não recriar fontes.
+alwaysApply: true
+---
+
+# Orientação por mapa (não se perder / não recriar)
+
+## Antes de editar dados ou rotas
+
+1. Ler `.nexus-map/INDEX.md`.
+2. Conferir `SYSTEM.md` e `repo.md` se a mudança for estrutural.
+3. Só então alterar código. Não inventar JSON keys, paths de storage ou rotas novas sem pedido explícito.
+
+## Fontes de verdade
+
+| Uso | Arquivo / key |
+| --- | --- |
+| Agendamentos + campanhas vivo + Erros | `public/data/agendamentos-dataset.json` |
+| Negociações / ranking índice | `public/data/negociacoes-dataset.json` |
+| Legado campanhas (admin histórico) | `public/data/dataset.json` — **não** é o dashboard vivo |
+| Storage agendamentos | `agendamentos_dataset`, `agendamentos_admin_config` |
+| Storage negociações | `negociacoes_dataset`, `negociacoes_admin_config` |
+| PIN Gestão | `belloscar_admin_ok` (`adminAuth`) |
+| PIN Erros + Mapa do Site | `belloscar_gate_ok` (`gateAuth`) |
+
+## Decisões fechadas
+
+- Mapa **geográfico de clientes** fica no **índice** — skill `grill-mapa`. Não mover para Erros nem para Mapa do Site.
+- Erros = cruzamento de IDs entre planilhas.
+- Mapa do Site = atlas de rotas/módulos/dados do **produto** (`#/mapa`).
+- Isolamento de storage por módulo — `module-storage-isolation.mdc`.
+- Upload só no Painel de Gestão.
+
+## Proibido
+
+- Recriar datasets paralelos “temporários” no lugar dos JSON publicados.
+- Misturar keys de um módulo no storage de outro.
+- Trocar o PIN da Gestão pelo PIN do gate (ou o contrário) sem pedido.

@@ -5,6 +5,17 @@
 - Alterar somente o que foi pedido. Arquivo, refatoração, teste ou documentação fora do pedido exige pergunta e confirmação antes — `escopo-estrito.mdc`
 - Essa regra prevalece sobre a atualização automática de documentação abaixo
 
+## Mapa do produto (cold start)
+
+Antes de criar dados, rotas ou páginas, ler nesta ordem:
+
+1. `.nexus-map/INDEX.md` — rotas, JSON, storage, decisões fechadas
+2. `SYSTEM.md` — atlas textual (fluxos e decisões)
+3. `repo.md` — overview da arquitetura
+4. Rule alwaysApply: `.cursor/rules/mapa-orientacao-dados.mdc`
+
+Não recriar `public/data/*.json` com chaves inventadas. Campanhas/agendamentos/Erros usam `agendamentos-dataset.json`; negociações usam `negociacoes-dataset.json`; `dataset.json` é legado. Mapa geográfico de clientes fica no índice (`grill-mapa`). `#/mapa` é o atlas do site (produto), com o mesmo PIN de gate que `#/erros`.
+
 ## Documentação
 
 Quando o pedido incluir documentação, ou depois de confirmação explícita, atualizar:
