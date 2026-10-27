@@ -151,6 +151,12 @@
       "skillPath": "skills/system-atlas/SKILL.md",
       "computedHash": "4f0af277cc5866ea1b83e556f0791b1c4cdcae9a53bfa907194c4242df71fe94"
     },
+    "takumi": {
+      "source": "kravetsone/skills",
+      "sourceType": "github",
+      "skillPath": "takumi/SKILL.md",
+      "computedHash": "fbc53a8b46dcc8774bd376042892a70a44f25bdf1877d1e366c54004fb7dc25d"
+    },
     "web-design-guidelines": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",

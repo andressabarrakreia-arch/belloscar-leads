@@ -1,3 +1,4 @@
+import { fotoEquipe } from "./avatar";
 import type { ShowDetalhe, ShowKpi, ShowPerson } from "./types";
 
 const DIVIDER = "────────────────";
@@ -15,10 +16,12 @@ export function buildWhatsappCard(person: ShowPerson, periodoLabel: string): str
     notas: [],
   };
 
+  const foto = fotoEquipe(person.nome);
   const lines: string[] = [
     "*BellosCar · Sala de resultados*",
     `*${person.nome}* — ${person.cargo}`,
     `Período: ${periodoLabel}`,
+    foto ? `_Avatar:_ ${foto}` : "_Avatar: iniciais no painel da sala_",
     DIVIDER,
     "*Performance positiva*",
     ...linesKpi(detalhe.positivos),

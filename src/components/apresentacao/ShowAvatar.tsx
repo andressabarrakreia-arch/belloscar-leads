@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useRef, type PointerEvent, type ReactNode } from "react";
 import gsap from "gsap";
-import { avatarIniciais, fotoEquipe, isLogoEquipe } from "../../lib/apresentacao/avatar";
+import {
+  avatarIniciais,
+  fotoEquipe,
+  isBadgeEquipe,
+  isLogoEquipe,
+} from "../../lib/apresentacao/avatar";
 
 type Size = "sm" | "lg" | "xl";
 
@@ -20,10 +25,16 @@ export function ShowAvatar({ nome, size = "sm", strikeOnMount = false }: ShowAva
   const shineRef = useRef<HTMLSpanElement>(null);
   const foto = fotoEquipe(nome);
   const logo = isLogoEquipe(nome);
+  const badge = isBadgeEquipe(nome);
 
   const sizeClass =
     size === "xl" ? " show-avatar--xl" : size === "lg" ? " show-avatar--lg" : "";
-  const kindClass = foto ? (logo ? " show-avatar--photo show-avatar--logo" : " show-avatar--photo") : "";
+  let kindClass = "";
+  if (foto) {
+    kindClass = " show-avatar--photo";
+    if (logo) kindClass += " show-avatar--logo";
+    else if (badge) kindClass += " show-avatar--badge";
+  }
 
   const runStrike = useCallback(() => {
     const shine = shineRef.current;

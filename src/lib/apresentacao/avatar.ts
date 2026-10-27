@@ -61,12 +61,16 @@ export function fotoEquipe(nome: string): string | null {
   return `${import.meta.env.BASE_URL}brand/equipe/${hit.file}`;
 }
 
-/** Logos / artes coletivas usam contain em vez de cover. */
+/** Logos com fundo transparente — object-fit contain. */
 export function isLogoEquipe(nome: string): boolean {
   const key = chaveNome(nome);
+  return /\bsem interesse\b/.test(key) || /\bespaco bellos\b/.test(key);
+}
+
+/** Badges full-bleed (JPG arte) — object-fit cover, preenche o quadro. */
+export function isBadgeEquipe(nome: string): boolean {
+  const key = chaveNome(nome);
   return (
-    /\bsem interesse\b/.test(key) ||
-    /\bespaco bellos\b/.test(key) ||
     /\baniversariantes\b/.test(key) ||
     /\bcampanhas meta\b/.test(key) ||
     key === "agendamentos" ||

@@ -12,6 +12,12 @@ import {
   type QuickContact,
 } from "../../lib/apresentacao/whatsappContacts";
 import {
+  copyBriefingPng,
+  downloadBriefingPng,
+  drawBriefingCard,
+  shareBriefingFiles,
+} from "../../lib/apresentacao/whatsappCardImage";
+import {
   DEFAULT_SHARE_MESSAGE,
   buildWhatsappCard,
   buildWhatsappPayload,
@@ -25,11 +31,15 @@ type Props = {
 };
 
 type DestMode = "pm" | "quick" | "custom" | "none";
+type ShareFormat = "text" | "image";
 
 export function ShowSharePanel({ person, periodoLabel, onClose }: Props) {
   const [includeMessage, setIncludeMessage] = useState(false);
   const [message, setMessage] = useState(DEFAULT_SHARE_MESSAGE);
   const [copied, setCopied] = useState(false);
+  const [format, setFormat] = useState<ShareFormat>("text");
+  const [busy, setBusy] = useState(false);
+  const [statusNote, setStatusNote] = useState<string | null>(null);
   const [quick, setQuick] = useState<QuickContact[]>([]);
   const [personPm, setPersonPm] = useState<string | null>(null);
   const [destMode, setDestMode] = useState<DestMode>("none");
@@ -76,6 +86,18 @@ export function ShowSharePanel({ person, periodoLabel, onClose }: Props) {
     return null;
   }, [destMode, personPm, selectedQuickId, quick, customPhone]);
 
+  const fileSlug = useMemo(
+    () =>
+      `belloscar-briefing-${person.nome
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+        .slice(0, 40)}.png`,
+    [person.nome]
+  );
+
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -100,6 +122,46 @@ export function ShowSharePanel({ person, periodoLabel, onClose }: Props) {
 
   function openWhatsApp(phone?: string | null) {
     window.open(whatsappShareUrl(payload, phone), "_blank", "noopener,noreferrer");
+  }
+
+  async function withCard(action: (blob: Blob) => Promise<void>) {
+    setBusy(true);
+    setStatusNote(null);
+    try {
+      const blob = await drawBriefingCard(person, periodoLabel);
+      await action(blob);
+    } catch {
+      setStatusNote("Não foi possível gerar o card.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function downloadImage() {
+    await withCard(async (blob) => {
+      await downloadBriefingPng(blob, fileSlug);
+      setStatusNote("PNG baixado.");
+    });
+  }
+
+  async function copyImage() {
+    await withCard(async (blob) => {
+      const ok = await copyBriefingPng(blob);
+      setStatusNote(ok ? "Imagem copiada." : "Copiar imagem bloqueado neste navegador — use Baixar.");
+    });
+  }
+
+  async function shareImage() {
+    await withCard(async (blob) => {
+      const result = await shareBriefingFiles(blob, payload, fileSlug);
+      if (result === "fallback") {
+        await downloadBriefingPng(blob, fileSlug);
+        openWhatsApp(activeDigits);
+        setStatusNote("Imagem baixada; WhatsApp aberto com o texto.");
+      } else {
+        setStatusNote("Compartilhado.");
+      }
+    });
   }
 
   function selectQuick(contact: QuickContact) {
@@ -176,158 +238,221 @@ export function ShowSharePanel({ person, periodoLabel, onClose }: Props) {
         </button>
       </header>
 
-      <section className="show-share-dest" aria-label="Destino">
-        <header className="show-share-dest-head">
-          <span>Destino</span>
+      <div className="show-share-body">
+        <div className="show-share-formats" role="tablist" aria-label="Formato">
           <button
             type="button"
-            className={`show-share-chip${destMode === "none" ? " is-on" : ""}`}
-            onClick={() => {
-              setDestMode("none");
-              setSelectedQuickId(null);
-            }}
+            role="tab"
+            aria-selected={format === "text"}
+            className={format === "text" ? "is-on" : undefined}
+            onClick={() => setFormat("text")}
           >
-            Sem número
+            Texto (embed)
           </button>
-        </header>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={format === "image"}
+            className={format === "image" ? "is-on" : undefined}
+            onClick={() => setFormat("image")}
+          >
+            Imagem (card)
+          </button>
+        </div>
 
-        {personPm ? (
-          <div className="show-share-pm">
+        <section className="show-share-dest" aria-label="Destino">
+          <header className="show-share-dest-head">
+            <span>Destino</span>
             <button
               type="button"
-              className={`show-share-chip show-share-chip--pm${destMode === "pm" ? " is-on" : ""}`}
+              className={`show-share-chip${destMode === "none" ? " is-on" : ""}`}
               onClick={() => {
-                setDestMode("pm");
+                setDestMode("none");
                 setSelectedQuickId(null);
               }}
             >
-              PM · {person.nome.split(/\s+/)[0]} · {formatPhoneDisplay(personPm)}
+              Sem número
             </button>
-            <button type="button" className="show-share-linkish" onClick={unlinkPm}>
-              Desvincular PM
-            </button>
+          </header>
+
+          {personPm ? (
+            <div className="show-share-pm">
+              <button
+                type="button"
+                className={`show-share-chip show-share-chip--pm${destMode === "pm" ? " is-on" : ""}`}
+                onClick={() => {
+                  setDestMode("pm");
+                  setSelectedQuickId(null);
+                }}
+              >
+                PM · {person.nome.split(/\s+/)[0]} · {formatPhoneDisplay(personPm)}
+              </button>
+              <button type="button" className="show-share-linkish" onClick={unlinkPm}>
+                Desvincular PM
+              </button>
+            </div>
+          ) : (
+            <p className="show-share-hint">Nenhum PM fixo neste colaborador.</p>
+          )}
+
+          {quick.length > 0 ? (
+            <div className="show-share-chips" aria-label="Lista rápida">
+              {quick.map((contact) => (
+                <div key={contact.id} className="show-share-chip-row">
+                  <button
+                    type="button"
+                    className={`show-share-chip${destMode === "quick" && selectedQuickId === contact.id ? " is-on" : ""}`}
+                    onClick={() => selectQuick(contact)}
+                  >
+                    {contact.label}
+                  </button>
+                  <button
+                    type="button"
+                    className="show-share-chip-x"
+                    aria-label={`Remover ${contact.label}`}
+                    onClick={() => dropQuick(contact.id)}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          <div className="show-share-new">
+            <label>
+              Número agora
+              <input
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                placeholder="41 99999-9999"
+                value={customPhone}
+                onChange={(event) => {
+                  setCustomPhone(event.target.value);
+                  setPhoneError(null);
+                }}
+              />
+            </label>
+            <label>
+              Apelido (lista)
+              <input
+                type="text"
+                placeholder={person.nome.split(/\s+/)[0]}
+                value={customLabel}
+                onChange={(event) => setCustomLabel(event.target.value)}
+              />
+            </label>
+            <div className="show-share-new-actions">
+              <button type="button" className="show-share-btn show-share-btn--ghost" onClick={useCustomNumber}>
+                Usar este
+              </button>
+              <button type="button" className="show-share-btn show-share-btn--ghost" onClick={saveToList}>
+                Salvar na lista
+              </button>
+              <button type="button" className="show-share-btn show-share-btn--ghost" onClick={pinToPerson}>
+                Fixar neste colaborador
+              </button>
+            </div>
+            {phoneError ? <p className="show-share-err">{phoneError}</p> : null}
+            {activeDigits ? (
+              <p className="show-share-active">
+                Enviando para <strong>{formatPhoneDisplay(activeDigits)}</strong>
+              </p>
+            ) : (
+              <p className="show-share-active">WhatsApp pedirá o contato na hora.</p>
+            )}
+          </div>
+        </section>
+
+        <label className="show-share-toggle">
+          <input
+            type="checkbox"
+            checked={includeMessage}
+            onChange={(event) => setIncludeMessage(event.target.checked)}
+          />
+          <span>Incluir mensagem à parte</span>
+        </label>
+
+        <label className={`show-share-msg${includeMessage ? "" : " is-disabled"}`}>
+          <span>Mensagem</span>
+          <textarea
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
+            disabled={!includeMessage}
+            rows={2}
+            placeholder={DEFAULT_SHARE_MESSAGE}
+          />
+        </label>
+
+        {format === "text" ? (
+          <div className="show-share-preview">
+            <span>Prévia do card (texto)</span>
+            <pre>{cardPreview}</pre>
           </div>
         ) : (
-          <p className="show-share-hint">Nenhum PM fixo neste colaborador.</p>
+          <p className="show-share-hint">
+            Card PNG no tema BellosCar com avatar, KPIs e marca. Baixe, copie ou compartilhe; no
+            WhatsApp o texto do briefing acompanha.
+          </p>
         )}
 
-        {quick.length > 0 ? (
-          <div className="show-share-chips" aria-label="Lista rápida">
-            {quick.map((contact) => (
-              <div key={contact.id} className="show-share-chip-row">
-                <button
-                  type="button"
-                  className={`show-share-chip${destMode === "quick" && selectedQuickId === contact.id ? " is-on" : ""}`}
-                  onClick={() => selectQuick(contact)}
-                >
-                  {contact.label}
-                </button>
-                <button
-                  type="button"
-                  className="show-share-chip-x"
-                  aria-label={`Remover ${contact.label}`}
-                  onClick={() => dropQuick(contact.id)}
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : null}
-
-        <div className="show-share-new">
-          <label>
-            Número agora
-            <input
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel"
-              placeholder="41 99999-9999"
-              value={customPhone}
-              onChange={(event) => {
-                setCustomPhone(event.target.value);
-                setPhoneError(null);
-              }}
-            />
-          </label>
-          <label>
-            Apelido (lista)
-            <input
-              type="text"
-              placeholder={person.nome.split(/\s+/)[0]}
-              value={customLabel}
-              onChange={(event) => setCustomLabel(event.target.value)}
-            />
-          </label>
-          <div className="show-share-new-actions">
-            <button type="button" className="show-share-btn show-share-btn--ghost" onClick={useCustomNumber}>
-              Usar este
-            </button>
-            <button type="button" className="show-share-btn show-share-btn--ghost" onClick={saveToList}>
-              Salvar na lista
-            </button>
-            <button type="button" className="show-share-btn show-share-btn--ghost" onClick={pinToPerson}>
-              Fixar neste colaborador
-            </button>
-          </div>
-          {phoneError ? <p className="show-share-err">{phoneError}</p> : null}
-          {activeDigits ? (
-            <p className="show-share-active">
-              Enviando para <strong>{formatPhoneDisplay(activeDigits)}</strong>
-            </p>
-          ) : (
-            <p className="show-share-active">WhatsApp pedirá o contato na hora.</p>
-          )}
-        </div>
-      </section>
-
-      <label className="show-share-toggle">
-        <input
-          type="checkbox"
-          checked={includeMessage}
-          onChange={(event) => setIncludeMessage(event.target.checked)}
-        />
-        <span>Incluir mensagem à parte</span>
-      </label>
-
-      <label className={`show-share-msg${includeMessage ? "" : " is-disabled"}`}>
-        <span>Mensagem</span>
-        <textarea
-          value={message}
-          onChange={(event) => setMessage(event.target.value)}
-          disabled={!includeMessage}
-          rows={3}
-          placeholder={DEFAULT_SHARE_MESSAGE}
-        />
-      </label>
-
-      <div className="show-share-preview">
-        <span>Prévia do card</span>
-        <pre>{cardPreview}</pre>
+        {statusNote ? <p className="show-share-active">{statusNote}</p> : null}
       </div>
 
       <footer className="show-share-actions">
         <button type="button" className="show-share-btn show-share-btn--ghost" onClick={onClose}>
           Cancelar
         </button>
-        <button type="button" className="show-share-btn show-share-btn--ghost" onClick={copyText}>
-          {copied ? "Copiado" : "Copiar texto"}
-        </button>
-        <button
-          type="button"
-          className="show-share-btn show-share-btn--ghost"
-          onClick={() => openWhatsApp(activeDigits)}
-        >
-          Abrir WhatsApp
-        </button>
-        <button
-          type="button"
-          className="show-share-btn show-share-btn--primary"
-          disabled={!activeDigits}
-          onClick={() => openWhatsApp(activeDigits)}
-        >
-          Enviar PM
-        </button>
+        {format === "text" ? (
+          <>
+            <button type="button" className="show-share-btn show-share-btn--ghost" onClick={copyText}>
+              {copied ? "Copiado" : "Copiar texto"}
+            </button>
+            <button
+              type="button"
+              className="show-share-btn show-share-btn--ghost"
+              onClick={() => openWhatsApp(activeDigits)}
+            >
+              Abrir WhatsApp
+            </button>
+            <button
+              type="button"
+              className="show-share-btn show-share-btn--primary"
+              disabled={!activeDigits}
+              onClick={() => openWhatsApp(activeDigits)}
+            >
+              Enviar PM
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              className="show-share-btn show-share-btn--ghost"
+              disabled={busy}
+              onClick={downloadImage}
+            >
+              Baixar PNG
+            </button>
+            <button
+              type="button"
+              className="show-share-btn show-share-btn--ghost"
+              disabled={busy}
+              onClick={copyImage}
+            >
+              Copiar imagem
+            </button>
+            <button
+              type="button"
+              className="show-share-btn show-share-btn--primary"
+              disabled={busy}
+              onClick={shareImage}
+            >
+              {busy ? "Gerando…" : "Compartilhar"}
+            </button>
+          </>
+        )}
       </footer>
     </div>
   );

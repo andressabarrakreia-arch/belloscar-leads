@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.13.10] - 2026-10-27
+
+### Fixed
+- Avatares/badges da Apresentação preenchem o quadro (`cover`); logos transparentes seguem `contain`
+- Painel de compartilhar: overlay fixo, corpo rolável e rodapé sticky (botões sempre visíveis)
+
+### Added
+- Formato **Imagem (card)** PNG BellosCar no compartilhar (avatar + KPIs), além do embed texto
+- Skill `takumi` no catálogo
+
 ## [1.13.9] - 2026-10-27
 
 ### Added
