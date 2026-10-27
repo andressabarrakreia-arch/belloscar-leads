@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.5] - 2026-10-27
+
+### Changed
+- Foto do **Matheus Imbroinise** atualizada na Apresentação
+
+### Added
+- Arte **Aniversariantes BellosCar** como avatar na Apresentação
+
 ## [1.13.4] - 2026-10-27
 
 ### Added

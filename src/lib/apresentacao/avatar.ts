@@ -26,6 +26,7 @@ function chaveNome(nome: string): string {
 const FOTOS_EQUIPE: { match: RegExp; file: string }[] = [
   { match: /\bsem interesse\b/, file: "lead-sem-interesse.png" },
   { match: /\bespaco bellos\b/, file: "espaco-bellos.png" },
+  { match: /\baniversariantes\b/, file: "aniversariantes-belloscar.png" },
   { match: /\bthayna\b/, file: "thayna.png" },
   { match: /\bmatheus\b.*\bimbroinise\b|\bimbroinise\b/, file: "matheus-imbroinise.png" },
   { match: /\ballan\b/, file: "allan-junior.png" },
@@ -55,10 +56,14 @@ export function fotoEquipe(nome: string): string | null {
   return `${import.meta.env.BASE_URL}brand/equipe/${hit.file}`;
 }
 
-/** Logos (lead / espaço) usam contain em vez de cover. */
+/** Logos / artes (lead, espaço, aniversariantes) usam contain em vez de cover. */
 export function isLogoEquipe(nome: string): boolean {
   const key = chaveNome(nome);
-  return /\bsem interesse\b/.test(key) || /\bespaco bellos\b/.test(key);
+  return (
+    /\bsem interesse\b/.test(key) ||
+    /\bespaco bellos\b/.test(key) ||
+    /\baniversariantes\b/.test(key)
+  );
 }
 
 export type SetorId = "coletivo" | "prevenda" | "campanhas" | "vendedores" | "loja";
