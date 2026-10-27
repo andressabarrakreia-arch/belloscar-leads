@@ -27,6 +27,11 @@ const FOTOS_EQUIPE: { match: RegExp; file: string }[] = [
   { match: /\bsem interesse\b/, file: "lead-sem-interesse.png" },
   { match: /\bespaco bellos\b/, file: "espaco-bellos.png" },
   { match: /\baniversariantes\b/, file: "aniversariantes-belloscar.png" },
+  { match: /\bcampanhas meta\b/, file: "campanhas-meta.png" },
+  { match: /^agendamentos$/, file: "agendamentos.png" },
+  { match: /\bnegociacoes\b.*\bloja\b/, file: "negociacoes-loja.png" },
+  { match: /\bsem sdr\b/, file: "sem-sdr.png" },
+  { match: /^recepcao$/, file: "recepcao.png" },
   { match: /\bthayna\b/, file: "thayna.png" },
   { match: /\bmatheus\b.*\bimbroinise\b|\bimbroinise\b/, file: "matheus-imbroinise.png" },
   { match: /\ballan\b/, file: "allan-junior.png" },
@@ -56,13 +61,18 @@ export function fotoEquipe(nome: string): string | null {
   return `${import.meta.env.BASE_URL}brand/equipe/${hit.file}`;
 }
 
-/** Logos / artes (lead, espaço, aniversariantes) usam contain em vez de cover. */
+/** Logos / artes coletivas usam contain em vez de cover. */
 export function isLogoEquipe(nome: string): boolean {
   const key = chaveNome(nome);
   return (
     /\bsem interesse\b/.test(key) ||
     /\bespaco bellos\b/.test(key) ||
-    /\baniversariantes\b/.test(key)
+    /\baniversariantes\b/.test(key) ||
+    /\bcampanhas meta\b/.test(key) ||
+    key === "agendamentos" ||
+    /\bnegociacoes\b.*\bloja\b/.test(key) ||
+    /\bsem sdr\b/.test(key) ||
+    key === "recepcao"
   );
 }
 

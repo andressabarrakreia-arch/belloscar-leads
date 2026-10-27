@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.13.6] - 2026-10-27
+
+### Added
+- Badges de avatar na Apresentação: Campanhas Meta, Agendamentos, Negociações · Loja, (sem SDR), Recepção
+
 ## [1.13.5] - 2026-10-27
 
 ### Changed
