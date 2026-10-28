@@ -908,6 +908,52 @@ select {
   padding-left: 48px;
 }
 
+.sdr-vendedor-expande .sdr-pai td {
+  font-weight: 700;
+  background: rgba(192, 32, 38, 0.04);
+}
+
+.sdr-vendedor-expande .sdr-filho td:first-child {
+  padding-left: 48px;
+  font-weight: 400;
+}
+
+.sdr-vendedor-expande .sdr-neto td {
+  background: #f3f4f6;
+  font-weight: 400;
+}
+
+.sdr-vendedor-expande .sdr-neto td:first-child {
+  padding-left: 72px;
+  font-size: 0.85rem;
+}
+
+.sdr-neto__sdr {
+  font-weight: 600;
+  color: var(--brand-charcoal);
+}
+
+.sdr-neto__vend {
+  color: var(--muted);
+}
+
+html[data-theme="dark"] .sdr-vendedor-expande .sdr-pai td {
+  background: rgba(192, 32, 38, 0.1);
+}
+
+html[data-theme="dark"] .modelo-filho td,
+html[data-theme="dark"] .sdr-vendedor-expande .sdr-filho td {
+  background: #171719;
+}
+
+html[data-theme="dark"] .sdr-vendedor-expande .sdr-neto td {
+  background: #0e0e10;
+}
+
+html[data-theme="dark"] .sdr-neto__sdr {
+  color: #f2f2f3;
+}
+
 .kpi-card {
   background: #fff;
   border-radius: 12px;
@@ -1013,6 +1059,16 @@ button.kpi-card.is-on {
   text-transform: uppercase;
   color: var(--muted);
   font-weight: 700;
+}
+
+.kpi-card--vendedor h3 {
+  font-size: 0.792rem; /* 0.72rem + 10% */
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--brand-charcoal);
+  font-weight: 750;
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.3;
 }
 
 .kpi-card p {
@@ -3484,6 +3540,10 @@ html[data-theme="dark"] .nav button.linkish:hover {
   color: #f2f2f3;
   border-color: #222224;
   box-shadow: none;
+}
+
+html[data-theme="dark"] .kpi-card--vendedor h3 {
+  color: #f2f2f3;
 }
 
 html[data-theme="dark"] .loja-kpi {

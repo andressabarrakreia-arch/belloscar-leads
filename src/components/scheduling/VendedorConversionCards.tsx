@@ -11,6 +11,23 @@ type Props = {
   onSelectVendedor: (vendedor: string | null) => void;
 };
 
+const LAIS_KEY = "lais narima ferreira vieira";
+
+function normalizePersonKey(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function isLaisNarima(name: string): boolean {
+  const key = normalizePersonKey(name);
+  return key === LAIS_KEY || (key.includes("lais") && key.includes("narima"));
+}
+
 function MotivosTable({ rows, emptyHint }: { rows: MotivoStats[]; emptyHint: string }) {
   return (
     <div className="table-scroll">
@@ -91,16 +108,20 @@ function DetailBlock({
   const pvTitle = isAll
     ? "Pré-Venda (geral de todos os vendedores)"
     : "Pré-Venda (geral do vendedor)";
-  const recTitle = isAll
-    ? "Recepção (à parte · todos)"
-    : "Recepção (à parte)";
+  const recTitle = "Recepção (à parte)";
+  const fechamentoPv = v.totalVisitas
+    ? Math.round((v.totalSucesso / v.totalVisitas) * 1000) / 10
+    : 0;
+  const fechamentoRec = v.visitasRecepcao
+    ? Math.round((v.sucessoRecepcao / v.visitasRecepcao) * 1000) / 10
+    : 0;
 
   return (
     <div className="stack">
       <h3>{pvTitle}</h3>
       <div className="kpi-grid">
         <div className="kpi-card">
-          <h3>Recebidos</h3>
+          <h3>Agendados</h3>
           <p>{v.totalRecebidos}</p>
         </div>
         <div className="kpi-card">
@@ -116,15 +137,13 @@ function DetailBlock({
           <p>{v.totalInsucesso}</p>
         </div>
         <div className="kpi-card success num-ok">
-          <h3>Conv. Pré-Venda</h3>
+          <h3>Conversão agendamento/sucesso</h3>
           <p>{v.conversaoPreVenda}%</p>
-          <small className="muted">Su/Recebidos PV</small>
+          <small className="muted">Su/Ag PV</small>
         </div>
         <div className="kpi-card">
-          <h3>Fechamento em loja</h3>
-          <p>
-            {v.totalVisitas ? Math.round((v.totalSucesso / v.totalVisitas) * 1000) / 10 : 0}%
-          </p>
+          <h3>Conversão visita/sucesso</h3>
+          <p>{fechamentoPv}%</p>
           <small className="muted">Su/Visitas PV</small>
         </div>
       </div>
@@ -140,7 +159,7 @@ function DetailBlock({
       </h3>
       <div className="kpi-grid">
         <div className="kpi-card accent">
-          <h3>Recebidos</h3>
+          <h3>Agendados</h3>
           <p>{v.totalRecepcao}</p>
         </div>
         <div className="kpi-card">
@@ -155,24 +174,14 @@ function DetailBlock({
           <h3>Insucessos</h3>
           <p>{v.insucessosRecepcao}</p>
         </div>
-        <div className="kpi-card">
-          <h3>Show-up Rec</h3>
-          <p>{v.taxaVisitaRecepcao}%</p>
-          <small className="muted">Vi/Recebidos Rec</small>
-        </div>
         <div className="kpi-card success num-ok">
-          <h3>Conv. Recepção</h3>
-          <p>{v.conversaoRecepcao}%</p>
-          <small className="muted">Su/Recebidos Rec</small>
+          <h3>Conversão agendamento/visita</h3>
+          <p>{v.taxaVisitaRecepcao}%</p>
+          <small className="muted">Vi/Ag Rec</small>
         </div>
         <div className="kpi-card">
-          <h3>Fechamento em loja Rec</h3>
-          <p>
-            {v.visitasRecepcao
-              ? Math.round((v.sucessoRecepcao / v.visitasRecepcao) * 1000) / 10
-              : 0}
-            %
-          </p>
+          <h3>Conversão visita/sucesso</h3>
+          <p>{fechamentoRec}%</p>
           <small className="muted">Su/Visitas Rec</small>
         </div>
       </div>
@@ -193,6 +202,19 @@ export function VendedorConversionCards({
   selectedVendedor,
   onSelectVendedor,
 }: Props) {
+  const cardRows = useMemo(
+    () =>
+      [...rows]
+        .filter((v) => !isLaisNarima(v.vendedor))
+        .filter((v) => v.totalRecebidos + v.totalRecepcao >= 1)
+        .sort(
+          (a, b) =>
+            b.conversaoGeral - a.conversaoGeral ||
+            a.vendedor.localeCompare(b.vendedor, "pt-BR")
+        ),
+    [rows]
+  );
+
   const detail = useMemo(() => {
     if (!selectedVendedor) return aggregateVendedorMetrics(rows);
     return rows.find((r) => r.vendedor === selectedVendedor) ?? aggregateVendedorMetrics(rows);
@@ -205,16 +227,17 @@ export function VendedorConversionCards({
       <h2>
         Desempenho por vendedor
         <InfoTip>
-          Cards com a conversão de cada vendedor (Pré-Venda). Abaixo: resultado geral de todos, ou
-          só do vendedor escolhido em <strong>Ver vendedor</strong>. Recepção fica à parte.
+          Cards com a conversão de cada vendedor (Pré-Venda), do maior para o menor. Só entram
+          quem teve pelo menos 1 agendamento. Abaixo: resultado geral de todos, ou só do vendedor
+          escolhido em <strong>Ver vendedor</strong>. Recepção fica à parte.
         </InfoTip>
       </h2>
       <div className="kpi-grid" style={{ marginBottom: 16 }}>
-        {rows.map((v) => (
+        {cardRows.map((v) => (
           <button
             key={v.vendedor}
             type="button"
-            className={`kpi-card ${selectedVendedor === v.vendedor ? "accent" : ""}`}
+            className={`kpi-card kpi-card--vendedor ${selectedVendedor === v.vendedor ? "accent" : ""}`}
             style={{ textAlign: "left", cursor: "pointer", border: "none", width: "100%" }}
             onClick={() =>
               onSelectVendedor(selectedVendedor === v.vendedor ? null : v.vendedor)
@@ -223,11 +246,17 @@ export function VendedorConversionCards({
             <h3>{v.vendedor}</h3>
             <p>{v.conversaoGeral}%</p>
             <small className="muted">
-              Pré-Venda {v.sucessoPreVenda}/{v.totalPreVenda} · Recepção {v.sucessoRecepcao}/
-              {v.totalRecepcao} ({v.conversaoRecepcao}%)
+              Pré-Venda <span className="num-ok">{v.sucessoPreVenda}</span>/{v.totalPreVenda} ·
+              Recepção <span className="num-ok">{v.sucessoRecepcao}</span>/{v.totalRecepcao} (
+              {v.conversaoRecepcao}%)
             </small>
           </button>
         ))}
+        {cardRows.length === 0 && (
+          <p className="muted" style={{ gridColumn: "1 / -1", margin: 0 }}>
+            Nenhum vendedor com agendamento no filtro atual.
+          </p>
+        )}
       </div>
 
       <label style={{ display: "block", marginBottom: 12 }}>

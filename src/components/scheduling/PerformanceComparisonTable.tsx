@@ -31,8 +31,8 @@ export function PerformanceComparisonTable({
               <th>Visitas</th>
               <th>Sucessos</th>
               <th>Insucessos</th>
-              <th>Show-up (Vi/Ag)</th>
-              <th>Conv. (Su/Ag)</th>
+              <th>Conversão (agendamento/visita)</th>
+              <th>Conversão (agendamento/sucesso)</th>
               {showCanalSplit && <th>% Pré-Venda</th>}
               {showCanalSplit && <th>% Recepção</th>}
               <th>Compra</th>

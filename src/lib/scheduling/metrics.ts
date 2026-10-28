@@ -890,8 +890,11 @@ export function buildVendedorComparisonRows(
   return rows.sort((a, b) => b.total - a.total);
 }
 
-export type SdrVendedorPairRow = {
+/** ID cujo atendimento é do SDR da linha, mas o agendamento foi feito por outra pessoa. */
+export type SdrVendedorCruzadoId = {
+  id: string;
   sdr: string;
+  agendadoPor: string;
   vendedor: string;
   total: number;
   visitas: number;
@@ -907,9 +910,71 @@ export type SdrVendedorPairRow = {
   naoInformado: number;
 };
 
+export type SdrVendedorPairRow = {
+  sdr: string;
+  vendedor: string;
+  total: number;
+  visitas: number;
+  sucessos: number;
+  insucessos: number;
+  taxaVisita: number;
+  taxaSucesso: number;
+  compra: number;
+  venda: number;
+  troca: number;
+  consignacao: number;
+  financiamento: number;
+  naoInformado: number;
+  /** Sucessos/visitas do SDR em que outra pessoa agendou. */
+  cruzados: SdrVendedorCruzadoId[];
+};
+
+function samePerson(a: string, b: string): boolean {
+  const ka = normalizePersonKey(a);
+  const kb = normalizePersonKey(b);
+  if (!ka || !kb) return false;
+  return ka === kb;
+}
+
+function emptyCruzado(
+  id: string,
+  sdr: string,
+  agendadoPor: string,
+  vendedor: string
+): SdrVendedorCruzadoId {
+  return {
+    id,
+    sdr,
+    agendadoPor,
+    vendedor,
+    total: 0,
+    visitas: 0,
+    sucessos: 0,
+    insucessos: 0,
+    taxaVisita: 0,
+    taxaSucesso: 0,
+    compra: 0,
+    venda: 0,
+    troca: 0,
+    consignacao: 0,
+    financiamento: 0,
+    naoInformado: 0,
+  };
+}
+
+function applyTipoProposta(row: SdrVendedorCruzadoId, tipo: TipoProposta) {
+  if (tipo === "Compra") row.compra = 1;
+  else if (tipo === "Venda") row.venda = 1;
+  else if (tipo === "Troca") row.troca = 1;
+  else if (tipo === "Consignação") row.consignacao = 1;
+  else if (tipo === "Financiamento") row.financiamento = 1;
+  else row.naoInformado = 1;
+}
+
 /**
  * Uma linha por par SDR × Vendedor (Pré-Venda).
- * Omite pares com 0 agendamentos; ordena por SDR (pré-venda) em sequência, depois vendedor.
+ * Visitas e sucessos entram pelo responsável do atendimento (não por quem agendou).
+ * IDs agendados por outra pessoa ficam em `cruzados` para expandir na UI.
  */
 export function buildSdrVendedorProposalRows(
   items: AgendamentoItem[],
@@ -932,22 +997,76 @@ export function buildSdrVendedorProposalRows(
 
   const visitasByPair = new Map<string, number>();
   const sucessosByPair = new Map<string, number>();
+  const cruzadosByPair = new Map<string, Map<string, SdrVendedorCruzadoId>>();
+
+  const ensurePair = (sdr: string, vendedor: string): string | null => {
+    if (!sdr || !vendedor || vendedor === "(sem vendedor)") return null;
+    if (!isFeaturedPreVendaSdr(sdr)) return null;
+    const key = `${sdr}::${vendedor}`;
+    if (!groups.has(key)) groups.set(key, []);
+    return key;
+  };
+
+  const bumpCruzado = (
+    key: string,
+    id: string,
+    sdr: string,
+    agendadoPor: string,
+    vendedor: string,
+    patch: (row: SdrVendedorCruzadoId) => void
+  ) => {
+    let bag = cruzadosByPair.get(key);
+    if (!bag) {
+      bag = new Map();
+      cruzadosByPair.set(key, bag);
+    }
+    let row = bag.get(id);
+    if (!row) {
+      row = emptyCruzado(id, sdr, agendadoPor, vendedor);
+      bag.set(id, row);
+    }
+    patch(row);
+  };
+
   if (dated) {
     const agendaById = new Map(dated.agenda.map((item) => [item.id, item]));
-    const addPair = (sdr: string, vendedor: string, map: Map<string, number>) => {
-      if (!sdr || !vendedor || vendedor === "(sem vendedor)") return;
-      if (!isFeaturedPreVendaSdr(sdr)) return;
-      const key = `${sdr}::${vendedor}`;
-      map.set(key, (map.get(key) || 0) + 1);
-      if (!groups.has(key)) groups.set(key, []);
-    };
+
     for (const row of dated.visitas) {
+      if (isRecepcaoName(row.sdr)) continue;
       const agenda = agendaById.get(row.id);
-      addPair(agenda?.sdr || row.sdr, agenda?.vendedor || "", visitasByPair);
+      const sdr = row.sdr;
+      const vendedor = (agenda?.vendedor || "").trim();
+      const key = ensurePair(sdr, vendedor);
+      if (!key) continue;
+      visitasByPair.set(key, (visitasByPair.get(key) || 0) + 1);
+      const agendadoPor = displaySdrName(agenda?.sdr || "");
+      if (agenda?.sdr && !samePerson(sdr, agenda.sdr)) {
+        bumpCruzado(key, row.id, sdr, agendadoPor || agenda.sdr, vendedor, (c) => {
+          c.visitas = 1;
+          if (!c.compra && !c.venda && !c.troca && !c.consignacao && !c.financiamento && !c.naoInformado) {
+            applyTipoProposta(c, agenda.tipoProposta);
+          }
+        });
+      }
     }
+
     for (const row of dated.sucessos) {
+      if (isRecepcaoName(row.sdr)) continue;
       const agenda = agendaById.get(row.id);
-      addPair(agenda?.sdr || row.sdr, agenda?.vendedor || row.vendedor, sucessosByPair);
+      const sdr = row.sdr;
+      const vendedor = (agenda?.vendedor || row.vendedor || "").trim();
+      const key = ensurePair(sdr, vendedor);
+      if (!key) continue;
+      sucessosByPair.set(key, (sucessosByPair.get(key) || 0) + 1);
+      const agendadoPor = displaySdrName(agenda?.sdr || "");
+      if (agenda?.sdr && !samePerson(sdr, agenda.sdr)) {
+        bumpCruzado(key, row.id, sdr, agendadoPor || agenda.sdr, vendedor, (c) => {
+          c.sucessos = 1;
+          applyTipoProposta(c, agenda.tipoProposta || row.tipoProposta);
+        });
+      } else if (!agenda && row.vendedor) {
+        // Sem agenda: não há "agendado por" distinto — não entra em cruzados.
+      }
     }
   }
 
@@ -962,6 +1081,13 @@ export function buildSdrVendedorProposalRows(
     const insucessos = list.filter((i) => i.status === "Insucesso").length;
     if (total === 0 && visitas === 0 && sucessos === 0 && insucessos === 0) continue;
     const b = breakdownPropostas(list);
+    const cruzados = [...(cruzadosByPair.get(key)?.values() || [])]
+      .map((c) => ({
+        ...c,
+        taxaVisita: c.total ? round2((c.visitas / c.total) * 100) : c.visitas ? 100 : 0,
+        taxaSucesso: c.total ? round2((c.sucessos / c.total) * 100) : c.sucessos ? 100 : 0,
+      }))
+      .sort((a, b) => a.id.localeCompare(b.id));
     rows.push({
       sdr: sdr || "",
       vendedor: vendedor || "",
@@ -977,6 +1103,7 @@ export function buildSdrVendedorProposalRows(
       consignacao: b.Consignação,
       financiamento: b.Financiamento,
       naoInformado: b["não informado(celulas em branco)"],
+      cruzados,
     });
   }
 

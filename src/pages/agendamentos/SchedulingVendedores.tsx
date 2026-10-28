@@ -1,6 +1,4 @@
 import { useMemo, useState } from "react";
-import { SeriesChart } from "../../components/charts/SeriesChart";
-import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { PerformanceComparisonTable } from "../../components/scheduling/PerformanceComparisonTable";
 import { VendedorConversionCards } from "../../components/scheduling/VendedorConversionCards";
 import { useSchedulingAnalyticsContext } from "../../context/SchedulingAnalyticsContext";
@@ -35,20 +33,6 @@ export function SchedulingVendedores() {
 
   return (
     <>
-      <div className="charts">
-        <SeriesChart
-          title="Recebidos, visitas e sucessos"
-          tip="Totais de pré-venda já usados nos cards."
-          data={analytics.vendedorMetrics}
-          xKey="vendedor"
-          kind="bar"
-          series={[
-            { key: "totalRecebidos", name: "Recebidos", color: CHART_COLORS.charcoal },
-            { key: "totalVisitas", name: "Visitas", color: CHART_COLORS.blue },
-            { key: "totalSucesso", name: "Sucessos", color: CHART_COLORS.green },
-          ]}
-        />
-      </div>
       <VendedorConversionCards
         rows={analytics.vendedorMetrics}
         selectedVendedor={selectedVendedor}
@@ -58,7 +42,7 @@ export function SchedulingVendedores() {
       <PerformanceComparisonTable
         rows={filteredComparisons.preVenda}
         title="Comparação direta entre vendedores · Pré-Venda"
-        subtitle={`${scopeHint} Somente canal Pré-Venda — totais, propostas, visitas, sucessos e taxas (Su/Ag e Vi/Ag).`}
+        subtitle={`${scopeHint} Somente canal Pré-Venda — totais, propostas, visitas, sucessos e taxas (agendamento/visita e agendamento/sucesso).`}
       />
 
       <PerformanceComparisonTable
