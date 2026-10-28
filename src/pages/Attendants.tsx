@@ -45,7 +45,7 @@ export function Attendants() {
 
       <div className="card">
         <h2>
-          SDR · só Facebook e Instagram
+          SDR · só Facebook Ads e Instagram Ads
           <InfoTip>
             Atendimentos e visitas pelo SDR de LEADS REALIZADOS. Agendamentos e sucessos do mesmo
             ID, nas datas de Agendado em e Finalizado em.
@@ -70,7 +70,8 @@ export function Attendants() {
         <h2>
           Vendedor · Agendado para
           <InfoTip>
-            Só IDs Meta. Agendamentos pela data Agendado em; sucessos pela data Finalizado em.
+            Só IDs Facebook Ads / Instagram Ads. Agendamentos pela data Agendado em; sucessos pela
+            data Finalizado em.
           </InfoTip>
         </h2>
         <InteractiveTable

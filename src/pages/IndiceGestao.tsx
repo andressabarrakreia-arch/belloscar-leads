@@ -357,7 +357,7 @@ export function IndiceGestao() {
                 onChange={() => toggleExport("campanhas")}
                 disabled={!scheduling}
               />
-              Clientes · Campanhas (Facebook e Instagram)
+              Clientes · Campanhas (Facebook Ads e Instagram Ads)
             </label>
             <label className="row" style={{ gap: 8, alignItems: "center" }}>
               <input

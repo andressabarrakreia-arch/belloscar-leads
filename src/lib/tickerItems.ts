@@ -21,7 +21,7 @@ export function buildCampanhasTickerItems(
   const totals = kpis ?? sliceCampanhas(rows, {}).kpis;
   const updated = new Date(updatedAt).toLocaleDateString("pt-BR");
   return [
-    "Campanhas: Facebook e Instagram",
+    "Campanhas: Facebook Ads e Instagram Ads",
     `Atendimentos: ${totals.atendimentos.toLocaleString("pt-BR")}`,
     `Visitas: ${totals.visitas.toLocaleString("pt-BR")} (${totals.taxaVisita}%)`,
     `Agendamentos: ${totals.agendamentos.toLocaleString("pt-BR")}`,

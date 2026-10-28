@@ -143,7 +143,7 @@ function ApresentacaoConteudo() {
             },
             { label: "Taxa visita", value: pct(campSlice.kpis.taxaVisita) },
           ],
-          notas: [`Período ${periodoLabel}`, "Universo Meta (Facebook/Instagram)."],
+          notas: [`Período ${periodoLabel}`, "Universo Meta (Facebook Ads / Instagram Ads)."],
         },
       },
       {
@@ -290,7 +290,7 @@ function ApresentacaoConteudo() {
       list.push({
         id: "campanhas",
         title: "Campanhas · Atendentes",
-        blurb: "Facebook e Instagram — desempenho por atendente.",
+        blurb: "Facebook Ads e Instagram Ads — desempenho por atendente.",
         people: atendentes,
       });
     }

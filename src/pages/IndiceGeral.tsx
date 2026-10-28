@@ -41,7 +41,7 @@ const DOORS: {
   {
     to: "/campanhas",
     label: "Campanhas",
-    line: "Facebook e Instagram",
+    line: "Facebook Ads e Instagram Ads",
     summary:
       "Atendimentos, visitas, agendamentos e sucessos. Dentro: painel, atendentes e comparação de períodos.",
   },

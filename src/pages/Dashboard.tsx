@@ -50,15 +50,15 @@ export function Dashboard() {
     <>
       <div className="card">
         <h2>
-          Facebook e Instagram
+          Facebook Ads e Instagram Ads
           <InfoTip>
-            Só entram IDs cuja origem no LEADS GERAL é Facebook, Facebook Ads, Instagram ou
-            Instagram Ads (também com canal junto, como WhatsApp | Instagram Ads). Os demais
-            atendimentos ficam de fora. Cada número usa a própria data: atendimento em{" "}
-            <strong>Atendido em</strong>, visita em <strong>Visita em</strong> (Visita = Sim),
-            agendamento em <strong>Agendado em</strong>, sucesso em <strong>Finalizado em</strong>.
-            Cruzamento e dedupe por ID. Abre no mês vigente; amplie De/Até ou troque o mês no
-            filtro para ver outros períodos.
+            Só entram IDs cuja origem no LEADS GERAL é <strong>Facebook Ads</strong> ou{" "}
+            <strong>Instagram Ads</strong> (também com canal junto, como WhatsApp | Instagram Ads).
+            Origem só Facebook ou só Instagram (orgânico) fica de fora. Cada número usa a própria
+            data: atendimento em <strong>Atendido em</strong>, visita em <strong>Visita em</strong>{" "}
+            (Visita = Sim), agendamento em <strong>Agendado em</strong>, sucesso em{" "}
+            <strong>Finalizado em</strong>. Cruzamento e dedupe por ID. Abre no mês vigente; amplie
+            De/Até ou troque o mês no filtro para ver outros períodos.
           </InfoTip>
         </h2>
         <p className="muted" style={{ marginTop: 4 }}>
@@ -100,8 +100,8 @@ export function Dashboard() {
         <h2>
           Por canal
           <InfoTip>
-            Um ID com Facebook e Instagram entra nas duas linhas. O total dos cards acima conta o
-            ID uma vez. Com sucessos, o + abre ID, atendente, vendedor e proposta.
+            Um ID com Facebook Ads e Instagram Ads entra nas duas linhas. O total dos cards acima
+            conta o ID uma vez. Com sucessos, o + abre ID, atendente, vendedor e proposta.
           </InfoTip>
         </h2>
         <div className="table-scroll">
@@ -213,7 +213,8 @@ export function Dashboard() {
       </div>
 
       <p className="muted">
-        IDs Meta no LEADS GERAL: {rows.length.toLocaleString("pt-BR")} · base publicada em{" "}
+        IDs Facebook Ads / Instagram Ads no LEADS GERAL: {rows.length.toLocaleString("pt-BR")} · base
+        publicada em{" "}
         {new Date(dataset.updatedAt).toLocaleString("pt-BR")}
       </p>
     </>

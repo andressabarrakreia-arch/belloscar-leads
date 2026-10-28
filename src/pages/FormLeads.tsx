@@ -15,9 +15,16 @@ import {
   listFormularioMonths,
   listFormularioOptions,
   type FormularioFilters,
+  type FormularioReport,
+  type FormularioScore,
 } from "../lib/campanhas/leadsFormulario";
 import { formatMonthLabel, monthBounds, monthKeyFromRange } from "../lib/campanhas/analytics";
-import { currentMonthKey, currentMonthRange, formatDateRangeLabel } from "../lib/dates";
+import {
+  currentMonthKey,
+  currentMonthRange,
+  formatDateRangeLabel,
+  monthRange,
+} from "../lib/dates";
 
 function formatIso(iso: string | null): string {
   if (!iso || iso.length < 10) return "—";
@@ -30,10 +37,103 @@ function simNao(value: boolean) {
   return <span className={value ? "positive" : "zero"}>{value ? "Sim" : "Não"}</span>;
 }
 
+function previousMonthKey(date = new Date()): string {
+  return currentMonthKey(new Date(date.getFullYear(), date.getMonth() - 1, 1));
+}
+
+function delta(a: number, b: number) {
+  const n = b - a;
+  return `${n > 0 ? "+" : ""}${n.toLocaleString("pt-BR")}`;
+}
+
+function periodLabel(from: string, to: string): string {
+  const ym = monthKeyFromRange(from, to);
+  return ym ? formatMonthLabel(ym) : formatDateRangeLabel(from, to);
+}
+
+type CompareKpiRow = { name: string; va: number; vb: number };
+
+function kpisFromReport(report: FormularioReport): { name: string; value: number }[] {
+  return [
+    { name: "Leads", value: report.total },
+    { name: "Cruzados", value: report.cruzados.filter((r) => r.leadNoPeriodo).length },
+    { name: "Agendados", value: report.agendados },
+    { name: "Visitas", value: report.visitas },
+    { name: "Sucessos", value: report.sucessos },
+  ];
+}
+
+function mergeCompareKpis(a: FormularioReport, b: FormularioReport): CompareKpiRow[] {
+  const rowsA = kpisFromReport(a);
+  const rowsB = kpisFromReport(b);
+  return rowsA.map((row, i) => ({ name: row.name, va: row.value, vb: rowsB[i]!.value }));
+}
+
+type CampanhaCompareRow = {
+  formulario: string;
+  leadsA: number;
+  leadsB: number;
+  agendadosA: number;
+  agendadosB: number;
+  visitasA: number;
+  visitasB: number;
+  sucessosA: number;
+  sucessosB: number;
+};
+
+function mergeCampanhas(a: FormularioScore[], b: FormularioScore[]): CampanhaCompareRow[] {
+  const map = new Map<string, CampanhaCompareRow>();
+  const ensure = (formulario: string) => {
+    const prev = map.get(formulario);
+    if (prev) return prev;
+    const created: CampanhaCompareRow = {
+      formulario,
+      leadsA: 0,
+      leadsB: 0,
+      agendadosA: 0,
+      agendadosB: 0,
+      visitasA: 0,
+      visitasB: 0,
+      sucessosA: 0,
+      sucessosB: 0,
+    };
+    map.set(formulario, created);
+    return created;
+  };
+  for (const row of a) {
+    const cur = ensure(row.formulario);
+    cur.leadsA = row.leads;
+    cur.agendadosA = row.agendados;
+    cur.visitasA = row.visitas;
+    cur.sucessosA = row.sucessos;
+  }
+  for (const row of b) {
+    const cur = ensure(row.formulario);
+    cur.leadsB = row.leads;
+    cur.agendadosB = row.agendados;
+    cur.visitasB = row.visitas;
+    cur.sucessosB = row.sucessos;
+  }
+  return [...map.values()].sort(
+    (x, y) =>
+      y.sucessosB - x.sucessosB ||
+      y.sucessosA - x.sucessosA ||
+      y.leadsB - x.leadsB ||
+      x.formulario.localeCompare(y.formulario, "pt-BR")
+  );
+}
+
 export function FormLeads() {
   const { dataset, loading, error } = useCampanhas();
   const [filters, setFilters] = useState<FormularioFilters>(() => currentMonthRange());
   const [openMissing, setOpenMissing] = useState(false);
+  const [comparar, setComparar] = useState(false);
+  const mesAnterior = monthRange(previousMonthKey());
+  const mesAtual = currentMonthRange();
+  const [fromA, setFromA] = useState(mesAnterior.from);
+  const [toA, setToA] = useState(mesAnterior.to);
+  const [fromB, setFromB] = useState(mesAtual.from);
+  const [toB, setToB] = useState(mesAtual.to);
   const leads = dataset?.leadsCampanha || [];
   const formularios = useMemo(() => listFormularioOptions(leads), [leads]);
   const months = useMemo(() => listFormularioMonths(leads), [leads]);
@@ -57,6 +157,34 @@ export function FormLeads() {
         scoped
       ),
     [leads, dataset, scoped]
+  );
+  const reportA = useMemo(() => {
+    if (!comparar) return null;
+    return buildFormularioReport(
+      leads,
+      dataset?.items || [],
+      dataset?.realizados || [],
+      dataset?.sucessosEventos || [],
+      { from: fromA, to: toA, formulario: scoped.formulario }
+    );
+  }, [comparar, leads, dataset, fromA, toA, scoped.formulario]);
+  const reportB = useMemo(() => {
+    if (!comparar) return null;
+    return buildFormularioReport(
+      leads,
+      dataset?.items || [],
+      dataset?.realizados || [],
+      dataset?.sucessosEventos || [],
+      { from: fromB, to: toB, formulario: scoped.formulario }
+    );
+  }, [comparar, leads, dataset, fromB, toB, scoped.formulario]);
+  const compareKpis = useMemo(
+    () => (reportA && reportB ? mergeCompareKpis(reportA, reportB) : []),
+    [reportA, reportB]
+  );
+  const compareCampanhas = useMemo(
+    () => (reportA && reportB ? mergeCampanhas(reportA.campanhas, reportB.campanhas) : []),
+    [reportA, reportB]
   );
   const ddds = useMemo(() => {
     const mapa = new Map<string, number>();
@@ -182,6 +310,206 @@ export function FormLeads() {
               <ClearFiltersButton onClick={() => setFilters({ ...currentMonthRange() })} />
             </div>
           </FiltersPanel>
+
+          <div className="card">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
+              <h2 style={{ margin: 0, flex: "1 1 auto" }}>
+                Comparar períodos
+                <InfoTip>
+                  Período A × período B com os mesmos critérios da aba (leads pelo Criado em,
+                  agendamentos, visitas e sucessos pelas datas próprias). O filtro de campanha
+                  acima vale para os dois lados.
+                </InfoTip>
+              </h2>
+              <button
+                type="button"
+                className={`btn ${comparar ? "" : "secondary"}`}
+                aria-pressed={comparar}
+                onClick={() => setComparar((v) => !v)}
+              >
+                {comparar ? "Ocultar comparação" : "Comparar períodos"}
+              </button>
+            </div>
+
+            {comparar && (
+              <>
+                <div className="filters filters--compare" role="search" aria-label="Períodos A e B" style={{ marginTop: 12 }}>
+                  <label>
+                    Mês A
+                    <select
+                      value={monthKeyFromRange(fromA, toA) || "__custom__"}
+                      aria-label="Mês do período A"
+                      onChange={(e) => {
+                        const ym = e.target.value;
+                        if (!ym || ym === "__custom__") return;
+                        const range = monthBounds(ym);
+                        setFromA(range.from);
+                        setToA(range.to);
+                      }}
+                    >
+                      {!monthKeyFromRange(fromA, toA) && (
+                        <option value="__custom__" disabled>
+                          Personalizado
+                        </option>
+                      )}
+                      {monthChoices.map((ym) => (
+                        <option key={`a-${ym}`} value={ym}>
+                          {formatMonthLabel(ym)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    A · de
+                    <input type="date" value={fromA} onChange={(e) => setFromA(e.target.value || mesAnterior.from)} />
+                  </label>
+                  <label>
+                    A · até
+                    <input type="date" value={toA} onChange={(e) => setToA(e.target.value || mesAnterior.to)} />
+                  </label>
+                  <label>
+                    Mês B
+                    <select
+                      value={monthKeyFromRange(fromB, toB) || "__custom__"}
+                      aria-label="Mês do período B"
+                      onChange={(e) => {
+                        const ym = e.target.value;
+                        if (!ym || ym === "__custom__") return;
+                        const range = monthBounds(ym);
+                        setFromB(range.from);
+                        setToB(range.to);
+                      }}
+                    >
+                      {!monthKeyFromRange(fromB, toB) && (
+                        <option value="__custom__" disabled>
+                          Personalizado
+                        </option>
+                      )}
+                      {monthChoices.map((ym) => (
+                        <option key={`b-${ym}`} value={ym}>
+                          {formatMonthLabel(ym)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    B · de
+                    <input type="date" value={fromB} onChange={(e) => setFromB(e.target.value || mesAtual.from)} />
+                  </label>
+                  <label>
+                    B · até
+                    <input type="date" value={toB} onChange={(e) => setToB(e.target.value || mesAtual.to)} />
+                  </label>
+                  <ClearFiltersButton
+                    onClick={() => {
+                      setFromA(mesAnterior.from);
+                      setToA(mesAnterior.to);
+                      setFromB(mesAtual.from);
+                      setToB(mesAtual.to);
+                    }}
+                  />
+                </div>
+
+                <p className="muted" style={{ marginTop: 8 }}>
+                  A: <strong>{periodLabel(fromA, toA)}</strong>
+                  {" · "}
+                  B: <strong>{periodLabel(fromB, toB)}</strong>
+                </p>
+
+                <InteractiveTable
+                  rows={compareKpis}
+                  rowKey={(row) => row.name}
+                  columns={[
+                    {
+                      key: "name",
+                      label: "Indicador",
+                      sortValue: (row) => row.name,
+                      render: (row) => <strong>{row.name}</strong>,
+                    },
+                    {
+                      key: "a",
+                      label: "Período A",
+                      sortValue: (row) => row.va,
+                      render: (row) => row.va.toLocaleString("pt-BR"),
+                    },
+                    {
+                      key: "b",
+                      label: "Período B",
+                      sortValue: (row) => row.vb,
+                      render: (row) => row.vb.toLocaleString("pt-BR"),
+                    },
+                    {
+                      key: "d",
+                      label: "Δ B−A",
+                      sortValue: (row) => row.vb - row.va,
+                      render: (row) => delta(row.va, row.vb),
+                    },
+                  ]}
+                />
+
+                <h3 style={{ marginTop: 16 }}>Por campanha · A × B</h3>
+                <InteractiveTable
+                  rows={compareCampanhas}
+                  rowKey={(row) => row.formulario}
+                  columns={[
+                    {
+                      key: "campanha",
+                      label: "Campanha",
+                      sortValue: (row) => row.formulario,
+                      render: (row) => <strong>{row.formulario}</strong>,
+                    },
+                    {
+                      key: "leadsA",
+                      label: "Leads A",
+                      sortValue: (row) => row.leadsA,
+                      render: (row) => row.leadsA.toLocaleString("pt-BR"),
+                    },
+                    {
+                      key: "leadsB",
+                      label: "Leads B",
+                      sortValue: (row) => row.leadsB,
+                      render: (row) => row.leadsB.toLocaleString("pt-BR"),
+                    },
+                    {
+                      key: "sucA",
+                      label: "Suc. A",
+                      sortValue: (row) => row.sucessosA,
+                      render: (row) => row.sucessosA.toLocaleString("pt-BR"),
+                    },
+                    {
+                      key: "sucB",
+                      label: "Suc. B",
+                      sortValue: (row) => row.sucessosB,
+                      render: (row) => (
+                        <span className="num-ok">{row.sucessosB.toLocaleString("pt-BR")}</span>
+                      ),
+                    },
+                    {
+                      key: "dSuc",
+                      label: "Δ Suc.",
+                      sortValue: (row) => row.sucessosB - row.sucessosA,
+                      render: (row) => delta(row.sucessosA, row.sucessosB),
+                    },
+                    {
+                      key: "visA",
+                      label: "Vis. A",
+                      sortValue: (row) => row.visitasA,
+                      render: (row) => row.visitasA.toLocaleString("pt-BR"),
+                    },
+                    {
+                      key: "visB",
+                      label: "Vis. B",
+                      sortValue: (row) => row.visitasB,
+                      render: (row) => row.visitasB.toLocaleString("pt-BR"),
+                    },
+                  ]}
+                />
+                {compareCampanhas.length === 0 ? (
+                  <p className="muted">Nenhuma campanha nos dois períodos.</p>
+                ) : null}
+              </>
+            )}
+          </div>
 
           {report.destaque && (
             <div className="card">

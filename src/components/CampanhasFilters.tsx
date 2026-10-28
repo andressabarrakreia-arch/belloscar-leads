@@ -108,7 +108,7 @@ export function CampanhasFilters({
               onChange({ ...filters, canal: (e.target.value || "") as MetaCanal | "" })
             }
           >
-            <option value="">Facebook e Instagram</option>
+            <option value="">Facebook Ads e Instagram Ads</option>
             {META_CANAIS.map((canal) => (
               <option key={canal} value={canal}>
                 {canal}

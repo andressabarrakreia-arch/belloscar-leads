@@ -4,7 +4,7 @@ import type { SchedulingDataset, TipoProposta } from "../scheduling/types";
 import { META_CANAIS, metaTokensInOrigem, type MetaCanal } from "./metaOrigem";
 
 /**
- * Um ID do LEADS GERAL cuja Origem é Facebook/Instagram.
+ * Um ID do LEADS GERAL cuja Origem é Facebook Ads / Instagram Ads.
  * Datas vêm de planilhas diferentes e não se misturam:
  * atendimento = REALIZADOS · Atendido em
  * visita = REALIZADOS · Visita em (Visita = Sim)

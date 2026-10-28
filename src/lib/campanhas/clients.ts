@@ -3,7 +3,7 @@ import type { SchedulingDataset } from "../scheduling/types";
 
 export type ClienteExport = { nome: string; email: string; telefone: string };
 
-/** Clientes do recorte Facebook e Instagram, cruzados por ID com a agenda. */
+/** Clientes do recorte Facebook Ads / Instagram Ads, cruzados por ID com a agenda. */
 export function campanhaClientsForExport(dataset: SchedulingDataset): ClienteExport[] {
   const ids = new Set(indexCampanhas(dataset).map((row) => row.id));
   const map = new Map<string, ClienteExport>();
