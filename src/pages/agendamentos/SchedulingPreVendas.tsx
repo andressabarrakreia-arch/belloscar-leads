@@ -54,6 +54,7 @@ export function SchedulingPreVendas() {
 
   return (
     <>
+      <SdrPreVendaUnifiedTable rows={deskRows} onExport={exportar} />
       <div className="charts">
         <SeriesChart
           title="Agenda e visita por SDR"
@@ -76,7 +77,6 @@ export function SchedulingPreVendas() {
           data={deskRows.map((row) => ({ label: displaySdrName(row.sdr), value: row.totalSucesso }))}
         />
       </div>
-      <SdrPreVendaUnifiedTable rows={deskRows} onExport={exportar} />
       <SdrPreVendaConvPropostaTable rows={convRows} />
       <SdrPreVendaTopParceirosTable rows={convRows} />
 
