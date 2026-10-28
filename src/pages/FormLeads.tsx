@@ -17,7 +17,7 @@ import {
   type FormularioFilters,
 } from "../lib/campanhas/leadsFormulario";
 import { formatMonthLabel, monthBounds, monthKeyFromRange } from "../lib/campanhas/analytics";
-import { currentMonthKey, currentMonthRange } from "../lib/dates";
+import { currentMonthKey, currentMonthRange, formatDateRangeLabel } from "../lib/dates";
 
 function formatIso(iso: string | null): string {
   if (!iso || iso.length < 10) return "—";
@@ -37,6 +37,16 @@ export function FormLeads() {
   const leads = dataset?.leadsCampanha || [];
   const formularios = useMemo(() => listFormularioOptions(leads), [leads]);
   const months = useMemo(() => listFormularioMonths(leads), [leads]);
+  const padrao = currentMonthRange();
+  /** Sempre com intervalo; mês vigente se faltar De/Até (nunca “todo o histórico”). */
+  const scoped = useMemo<FormularioFilters>(
+    () => ({
+      ...filters,
+      from: filters.from || padrao.from,
+      to: filters.to || padrao.to,
+    }),
+    [filters, padrao.from, padrao.to]
+  );
   const report = useMemo(
     () =>
       buildFormularioReport(
@@ -44,16 +54,16 @@ export function FormLeads() {
         dataset?.items || [],
         dataset?.realizados || [],
         dataset?.sucessosEventos || [],
-        filters
+        scoped
       ),
-    [leads, dataset, filters]
+    [leads, dataset, scoped]
   );
   const ddds = useMemo(() => {
     const mapa = new Map<string, number>();
     for (const row of leads) {
-      if (filters.from && row.criadoEm < filters.from) continue;
-      if (filters.to && row.criadoEm > filters.to) continue;
-      if (filters.formulario && row.formulario !== filters.formulario) continue;
+      if (scoped.from && row.criadoEm < scoped.from) continue;
+      if (scoped.to && row.criadoEm > scoped.to) continue;
+      if (scoped.formulario && row.formulario !== scoped.formulario) continue;
       const chaves = row.phoneKeys?.length ? row.phoneKeys : [row.phoneKey || row.telefone];
       const ddd = phoneKey(chaves[0] || "").slice(0, 2);
       if (ddd.length !== 2) continue;
@@ -63,13 +73,15 @@ export function FormLeads() {
       .map(([ddd, total]) => ({ ddd, leads: total }))
       .sort((a, b) => b.leads - a.leads)
       .slice(0, 12);
-  }, [leads, filters]);
-  const selectedMonth = monthKeyFromRange(filters.from, filters.to);
-  const padrao = currentMonthRange();
+  }, [leads, scoped]);
+  const selectedMonth = monthKeyFromRange(scoped.from, scoped.to);
   const monthPadrao = currentMonthKey();
   const monthChoices = months.includes(monthPadrao) ? months : [monthPadrao, ...months];
-  const periodFora = filters.from !== padrao.from || filters.to !== padrao.to;
-  const active = Boolean(filters.formulario || periodFora);
+  const periodFora = scoped.from !== padrao.from || scoped.to !== padrao.to;
+  const active = Boolean(scoped.formulario || periodFora);
+  const periodoLabel = selectedMonth
+    ? formatMonthLabel(selectedMonth)
+    : formatDateRangeLabel(scoped.from!, scoped.to!);
 
   if (loading) return <p className="muted">Carregando campanhas…</p>;
   if (error) return <p className="error">{error}</p>;
@@ -84,8 +96,13 @@ export function FormLeads() {
             O cruzamento com a operação é pelo telefone. O lead conta pelo Criado em. O agendamento
             conta pelo Agendado em, a visita pelo Visita em e o sucesso pelo Finalizado em. O mesmo
             ID pode entrar em meses diferentes. Quem não achou telefone fica em Leads sem cruzamento.
+            Abre no mês vigente; amplie De/Até ou troque o mês no filtro para ver outros períodos.
           </InfoTip>
         </h2>
+        <p className="muted" style={{ marginTop: 4 }}>
+          Período: <strong>{periodoLabel}</strong>
+          {!periodFora ? " (mês vigente)" : ""}
+        </p>
       </div>
 
       {leads.length === 0 ? (
@@ -100,19 +117,20 @@ export function FormLeads() {
                 Mês
                 <select
                   className={filterActiveClass(selectedMonth !== monthPadrao)}
-                  value={selectedMonth}
+                  value={selectedMonth || "__custom__"}
                   aria-label="Mês"
                   onChange={(event) => {
                     const ym = event.target.value;
-                    if (!ym) {
-                      setFilters({ ...filters, from: undefined, to: undefined });
-                      return;
-                    }
+                    if (!ym || ym === "__custom__") return;
                     const range = monthBounds(ym);
                     setFilters({ ...filters, from: range.from, to: range.to });
                   }}
                 >
-                  <option value="">Todos</option>
+                  {!selectedMonth && (
+                    <option value="__custom__" disabled>
+                      Personalizado
+                    </option>
+                  )}
                   {monthChoices.map((ym) => (
                     <option key={ym} value={ym}>
                       {formatMonthLabel(ym)}
@@ -123,30 +141,32 @@ export function FormLeads() {
               <label>
                 De
                 <input
-                  className={filterActiveClass(filters.from !== padrao.from)}
+                  className={filterActiveClass(scoped.from !== padrao.from)}
                   type="date"
-                  value={filters.from || ""}
-                  onChange={(event) =>
-                    setFilters({ ...filters, from: event.target.value || undefined })
-                  }
+                  value={scoped.from}
+                  onChange={(event) => {
+                    const from = event.target.value || padrao.from;
+                    setFilters({ ...filters, from, to: scoped.to });
+                  }}
                 />
               </label>
               <label>
                 Até
                 <input
-                  className={filterActiveClass(filters.to !== padrao.to)}
+                  className={filterActiveClass(scoped.to !== padrao.to)}
                   type="date"
-                  value={filters.to || ""}
-                  onChange={(event) =>
-                    setFilters({ ...filters, to: event.target.value || undefined })
-                  }
+                  value={scoped.to}
+                  onChange={(event) => {
+                    const to = event.target.value || padrao.to;
+                    setFilters({ ...filters, from: scoped.from, to });
+                  }}
                 />
               </label>
               <label>
                 Campanha
                 <select
-                  className={filterActiveClass(Boolean(filters.formulario))}
-                  value={filters.formulario || ""}
+                  className={filterActiveClass(Boolean(scoped.formulario))}
+                  value={scoped.formulario || ""}
                   onChange={(event) =>
                     setFilters({ ...filters, formulario: event.target.value || undefined })
                   }

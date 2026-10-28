@@ -1,6 +1,6 @@
 import { monthRange } from "../dates";
 import { displaySdrName, round2 } from "../scheduling/metrics";
-import type { SchedulingDataset } from "../scheduling/types";
+import type { SchedulingDataset, TipoProposta } from "../scheduling/types";
 import { META_CANAIS, metaTokensInOrigem, type MetaCanal } from "./metaOrigem";
 
 /**
@@ -22,6 +22,7 @@ export type CampanhaRecord = {
   dataAgendamento: string | null;
   vendedor: string | null;
   dataSucesso: string | null;
+  tipoProposta: TipoProposta | string;
 };
 
 export type CampanhaFilters = {
@@ -81,6 +82,7 @@ export function indexCampanhas(dataset: SchedulingDataset): CampanhaRecord[] {
       dataAgendamento: null,
       vendedor: null,
       dataSucesso: null,
+      tipoProposta: lead.tipoProposta || "não informado(celulas em branco)",
     });
   }
 
@@ -91,6 +93,7 @@ export function indexCampanhas(dataset: SchedulingDataset): CampanhaRecord[] {
     rec.dataAtendido = row.dataAtendido || null;
     rec.teveVisita = Boolean(row.teveVisita);
     rec.dataVisita = row.dataVisita;
+    if (row.tipoProposta) rec.tipoProposta = row.tipoProposta;
   }
 
   for (const item of dataset.items) {
@@ -99,6 +102,7 @@ export function indexCampanhas(dataset: SchedulingDataset): CampanhaRecord[] {
     rec.dataAgendamento = item.dataAgendamento || null;
     if (item.vendedor && item.vendedor !== "(sem vendedor)") rec.vendedor = item.vendedor;
     if (rec.sdr === "(sem SDR)" && item.sdr) rec.sdr = displaySdrName(item.sdr);
+    if (item.tipoProposta) rec.tipoProposta = item.tipoProposta;
   }
 
   for (const sucesso of dataset.sucessosEventos || []) {
@@ -109,6 +113,7 @@ export function indexCampanhas(dataset: SchedulingDataset): CampanhaRecord[] {
       rec.vendedor = sucesso.vendedor;
     }
     if (rec.sdr === "(sem SDR)" && sucesso.sdr) rec.sdr = displaySdrName(sucesso.sdr);
+    if (sucesso.tipoProposta) rec.tipoProposta = sucesso.tipoProposta;
   }
 
   return [...byId.values()];
@@ -195,14 +200,46 @@ export function buildSdrRows(slice: CampanhaSlice): SdrRow[] {
     .sort((a, b) => b.atendimentos - a.atendimentos || a.sdr.localeCompare(b.sdr, "pt-BR"));
 }
 
+export type CanalSucessoDetail = {
+  id: string;
+  atendente: string;
+  vendedor: string;
+  proposta: string;
+};
+
+export type CanalRowWithSucessos = CanalRow & {
+  sucessoItens: CanalSucessoDetail[];
+};
+
+function propostaLabel(value: string): string {
+  return value === "não informado(celulas em branco)" ? "N/I" : value || "—";
+}
+
 /** Um ID com dois tokens entra nos dois canais. O total do KPI não duplica o ID. */
-export function buildCanalRows(slice: CampanhaSlice): CanalRow[] {
+export function buildCanalRows(slice: CampanhaSlice): CanalRowWithSucessos[] {
   return META_CANAIS.map((canal) => {
     const atendimentos = slice.atendimentos.filter((r) => r.tokens.includes(canal)).length;
     const visitas = slice.visitas.filter((r) => r.tokens.includes(canal)).length;
     const agendamentos = slice.agendamentos.filter((r) => r.tokens.includes(canal)).length;
-    const sucessos = slice.sucessos.filter((r) => r.tokens.includes(canal)).length;
-    return { canal, ...kpisOf(atendimentos, visitas, agendamentos, sucessos) };
+    const sucessoRows = slice.sucessos.filter((r) => r.tokens.includes(canal));
+    const sucessoItens = sucessoRows
+      .map((r) => ({
+        id: r.id,
+        atendente: r.sdr || "—",
+        vendedor: r.vendedor || "—",
+        proposta: propostaLabel(String(r.tipoProposta || "")),
+      }))
+      .sort(
+        (a, b) =>
+          a.atendente.localeCompare(b.atendente, "pt-BR") ||
+          a.vendedor.localeCompare(b.vendedor, "pt-BR") ||
+          a.id.localeCompare(b.id, "pt-BR")
+      );
+    return {
+      canal,
+      ...kpisOf(atendimentos, visitas, agendamentos, sucessoRows.length),
+      sucessoItens,
+    };
   }).filter((row) => row.atendimentos || row.visitas || row.agendamentos || row.sucessos);
 }
 

@@ -1,33 +1,44 @@
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { CampanhasFilters } from "../components/CampanhasFilters";
 import { InfoTip } from "../components/InfoTip";
 import { InteractiveTable } from "../components/InteractiveTable";
-import { SeriesChart } from "../components/charts/SeriesChart";
-import { ShareDonut } from "../components/charts/ShareDonut";
-import { DygraphLinhas } from "../components/viz/DygraphLinhas";
-import { CHART_COLORS } from "../components/charts/chartTheme";
 import { Card } from "../components/ui/card";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
   buildCanalRows,
-  buildMonthRows,
   buildSdrRows,
+  formatMonthLabel,
   listMonthOptions,
   listSdrOptions,
+  monthKeyFromRange,
   sliceCampanhas,
   type CampanhaFilters,
 } from "../lib/campanhas/analytics";
-import { currentMonthRange } from "../lib/dates";
+import { currentMonthRange, formatDateRangeLabel } from "../lib/dates";
 
 export function Dashboard() {
   const { dataset, rows, loading, error } = useCampanhas();
   const [filters, setFilters] = useState<CampanhaFilters>(() => currentMonthRange());
+  const [openCanais, setOpenCanais] = useState<Record<string, boolean>>({});
+  const padrao = currentMonthRange();
+  const scoped = useMemo<CampanhaFilters>(
+    () => ({
+      ...filters,
+      from: filters.from || padrao.from,
+      to: filters.to || padrao.to,
+    }),
+    [filters, padrao.from, padrao.to]
+  );
   const sdrs = useMemo(() => listSdrOptions(rows), [rows]);
   const months = useMemo(() => listMonthOptions(rows), [rows]);
-  const slice = useMemo(() => sliceCampanhas(rows, filters), [rows, filters]);
+  const slice = useMemo(() => sliceCampanhas(rows, scoped), [rows, scoped]);
   const canais = useMemo(() => buildCanalRows(slice), [slice]);
   const sdrRows = useMemo(() => buildSdrRows(slice).slice(0, 12), [slice]);
-  const monthChart = useMemo(() => buildMonthRows(slice), [slice]);
+  const selectedMonth = monthKeyFromRange(scoped.from, scoped.to);
+  const periodFora = scoped.from !== padrao.from || scoped.to !== padrao.to;
+  const periodoLabel = selectedMonth
+    ? formatMonthLabel(selectedMonth)
+    : formatDateRangeLabel(scoped.from!, scoped.to!);
 
   if (loading) return <p className="muted">Carregando campanhas…</p>;
   if (error) return <p className="error">{error}</p>;
@@ -46,12 +57,17 @@ export function Dashboard() {
             atendimentos ficam de fora. Cada número usa a própria data: atendimento em{" "}
             <strong>Atendido em</strong>, visita em <strong>Visita em</strong> (Visita = Sim),
             agendamento em <strong>Agendado em</strong>, sucesso em <strong>Finalizado em</strong>.
-            Cruzamento e dedupe por ID.
+            Cruzamento e dedupe por ID. Abre no mês vigente; amplie De/Até ou troque o mês no
+            filtro para ver outros períodos.
           </InfoTip>
         </h2>
+        <p className="muted" style={{ marginTop: 4 }}>
+          Período: <strong>{periodoLabel}</strong>
+          {!periodFora ? " (mês vigente)" : ""}
+        </p>
       </div>
 
-      <CampanhasFilters filters={filters} sdrs={sdrs} months={months} onChange={setFilters} />
+      <CampanhasFilters filters={scoped} sdrs={sdrs} months={months} onChange={setFilters} />
 
       <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
         <Card className="border-l-4 border-l-foreground px-4 py-3 shadow-none">
@@ -85,78 +101,100 @@ export function Dashboard() {
           Por canal
           <InfoTip>
             Um ID com Facebook e Instagram entra nas duas linhas. O total dos cards acima conta o
-            ID uma vez.
+            ID uma vez. Com sucessos, o + abre ID, atendente, vendedor e proposta.
           </InfoTip>
         </h2>
-        <InteractiveTable
-          rows={canais}
-          rowKey={(row) => row.canal}
-          columns={[
-            { key: "canal", label: "Canal", sortValue: (row) => row.canal, render: (row) => <strong>{row.canal}</strong> },
-            { key: "atendimentos", label: "Atendimentos", sortValue: (row) => row.atendimentos },
-            { key: "visitas", label: "Visitas", sortValue: (row) => row.visitas },
-            { key: "agendamentos", label: "Agendamentos", sortValue: (row) => row.agendamentos },
-            { key: "sucessos", label: "Sucessos", sortValue: (row) => row.sucessos, render: (row) => <span className="num-ok">{row.sucessos}</span> },
-            { key: "taxaVisita", label: "Visita / atend.", sortValue: (row) => row.taxaVisita, render: (row) => `${row.taxaVisita}%` },
-            { key: "taxaSucesso", label: "Sucesso / visita", sortValue: (row) => row.taxaVisitaParaSucesso, render: (row) => `${row.taxaVisitaParaSucesso}%` },
-          ]}
-        />
+        <div className="table-scroll">
+          <table className="sdr-vendedor-expande">
+            <thead>
+              <tr>
+                <th>Canal</th>
+                <th>Atendimentos</th>
+                <th>Visitas</th>
+                <th>Agendamentos</th>
+                <th>Sucessos</th>
+                <th>Visita / atend.</th>
+                <th>Sucesso / visita</th>
+              </tr>
+            </thead>
+            <tbody>
+              {canais.map((row) => {
+                const aberto = !!openCanais[row.canal];
+                const temSucesso = row.sucessoItens.length > 0;
+                return (
+                  <Fragment key={row.canal}>
+                    <tr className="sdr-pai">
+                      <td>
+                        {temSucesso ? (
+                          <button
+                            type="button"
+                            className="marca-mais"
+                            aria-expanded={aberto}
+                            aria-label={
+                              aberto
+                                ? `Fechar sucessos de ${row.canal}`
+                                : `Abrir sucessos de ${row.canal}`
+                            }
+                            onClick={() =>
+                              setOpenCanais((prev) => ({ ...prev, [row.canal]: !prev[row.canal] }))
+                            }
+                          >
+                            {aberto ? "−" : "+"}
+                          </button>
+                        ) : null}
+                        <strong>{row.canal}</strong>
+                      </td>
+                      <td>{row.atendimentos}</td>
+                      <td>{row.visitas}</td>
+                      <td>{row.agendamentos}</td>
+                      <td className="num-ok">{row.sucessos}</td>
+                      <td>{row.taxaVisita}%</td>
+                      <td>{row.taxaVisitaParaSucesso}%</td>
+                    </tr>
+                    {aberto && (
+                      <tr className="modelo-filho sdr-filho">
+                        <td colSpan={7}>
+                          <div className="table-scroll expand-panel">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>ID</th>
+                                  <th>Atendente</th>
+                                  <th>Vendedor</th>
+                                  <th>Proposta</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {row.sucessoItens.map((item) => (
+                                  <tr key={`${row.canal}::${item.id}`}>
+                                    <td>
+                                      <strong>{item.id}</strong>
+                                    </td>
+                                    <td>{item.atendente}</td>
+                                    <td>{item.vendedor}</td>
+                                    <td>{item.proposta}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                );
+              })}
+              {canais.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="muted">
+                    Sem volume Meta neste período.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-
-      <div className="charts">
-        <SeriesChart
-          title="Volume por canal"
-          tip="Clique numa série para esconder. Os números são os da tabela."
-          data={canais}
-          xKey="canal"
-          kind="bar"
-          series={[
-            { key: "atendimentos", name: "Atendimentos", color: CHART_COLORS.charcoal },
-            { key: "visitas", name: "Visitas", color: CHART_COLORS.blue },
-            { key: "agendamentos", name: "Agendamentos", color: CHART_COLORS.gray },
-            { key: "sucessos", name: "Sucessos", color: CHART_COLORS.green },
-          ]}
-        />
-        <SeriesChart
-          title="Por mês"
-          data={monthChart}
-          xKey="month"
-          kind="area"
-          series={[
-            { key: "atendimentos", name: "Atendimentos", color: CHART_COLORS.charcoal },
-            { key: "visitas", name: "Visitas", color: CHART_COLORS.blue },
-            { key: "sucessos", name: "Sucessos", color: CHART_COLORS.green },
-          ]}
-        />
-        <ShareDonut
-          title="Sucessos por canal"
-          tip="A fatia usa o sucesso já contado na tabela de canal."
-          data={canais.map((row) => ({ label: row.canal, value: row.sucessos }))}
-        />
-        <SeriesChart
-          title="SDR no recorte"
-          tip="Os 12 SDRs da tabela abaixo."
-          data={sdrRows}
-          xKey="sdr"
-          kind="bar"
-          series={[
-            { key: "atendimentos", name: "Atendimentos", color: CHART_COLORS.charcoal },
-            { key: "sucessos", name: "Sucessos", color: CHART_COLORS.green },
-          ]}
-        />
-      </div>
-
-      <DygraphLinhas
-        titulo="Série dos meses"
-        dica="Arraste um trecho para aproximar. Clique duplo volta a série inteira."
-        linhas={monthChart}
-        x="month"
-        series={[
-          { key: "atendimentos", name: "Atendimentos", color: "var(--chart-ink)" },
-          { key: "visitas", name: "Visitas", color: "var(--chart-dy-blue)" },
-          { key: "sucessos", name: "Sucessos", color: "var(--chart-dy-green)" },
-        ]}
-      />
 
       <div className="card">
         <h2>Por SDR</h2>
