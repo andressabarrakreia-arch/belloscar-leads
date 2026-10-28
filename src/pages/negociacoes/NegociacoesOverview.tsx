@@ -5,6 +5,7 @@ import { ShareDonut } from "../../components/charts/ShareDonut";
 import { DygraphLinhas } from "../../components/viz/DygraphLinhas";
 import { CHART_COLORS } from "../../components/charts/chartTheme";
 import { useNegociacoesAnalyticsContext } from "../../context/NegociacoesAnalyticsContext";
+import type { NegociacoesCanalKpis } from "../../lib/negociacoes/types";
 
 function vendedorDeRepasse(nome: string): boolean {
   const chave = nome
@@ -14,6 +15,50 @@ function vendedorDeRepasse(nome: string): boolean {
     .replace(/\s+/g, " ")
     .trim();
   return chave === "filipe portes";
+}
+
+function fmt(n: number): string {
+  return n.toLocaleString("pt-BR");
+}
+
+function CanalCard({
+  titulo,
+  meta,
+  canal,
+  tom,
+}: {
+  titulo: string;
+  meta: string;
+  canal: NegociacoesCanalKpis;
+  tom: "showroom" | "atacado";
+}) {
+  return (
+    <div className={`loja-kpi loja-kpi--canal loja-kpi--${tom}`}>
+      <div className="loja-kpi__canal-head">
+        <h3>{titulo}</h3>
+        <p>{fmt(canal.total)}</p>
+        <span className="loja-kpi__meta">{meta}</span>
+      </div>
+      <ul className="loja-kpi__subtipos">
+        <li>
+          <span>Vendas</span>
+          <strong>{fmt(canal.vendas)}</strong>
+        </li>
+        <li>
+          <span>Trocas</span>
+          <strong>{fmt(canal.trocas)}</strong>
+        </li>
+        <li>
+          <span>Compras</span>
+          <strong>{fmt(canal.compras)}</strong>
+        </li>
+        <li>
+          <span>Consignações</span>
+          <strong>{fmt(canal.consignacoes)}</strong>
+        </li>
+      </ul>
+    </div>
+  );
 }
 
 export function NegociacoesOverview() {
@@ -32,39 +77,59 @@ export function NegociacoesOverview() {
 
   return (
     <>
-      <div className="card">
+      <div className="card loja-resumo">
         <h2>
           Resumo da loja
           <InfoTip>
             Total = negócios contáveis (sem Cancelado · sem Compra de Consignado). Troca com 2
-            linhas conta como 1; Venda/Compra multi-linha contam por linha.
+            linhas conta como 1; Venda/Compra multi-linha contam por linha. Showroom e Atacado
+            vêm do Tipo Venda (um negócio “Showroom e Atacado” entra nos dois).
           </InfoTip>
         </h2>
-        <div className="kpi-grid">
-          <div className="kpi-card accent">
+
+        <div className="loja-resumo__tipos">
+          <div className="loja-kpi loja-kpi--total">
             <h3>Total negócios</h3>
-            <p>{kpis.total}</p>
+            <p>{fmt(kpis.total)}</p>
+            <span className="loja-kpi__meta">Loja no filtro atual</span>
           </div>
-          <div className="kpi-card success num-ok">
+          <div className="loja-kpi loja-kpi--venda">
             <h3>Vendas</h3>
-            <p>{kpis.vendas}</p>
-            {lider("vendas") ? <small className="kpi-lider">{lider("vendas")}</small> : null}
+            <p>{fmt(kpis.vendas)}</p>
+            {lider("vendas") ? <small className="loja-kpi__lider">{lider("vendas")}</small> : null}
           </div>
-          <div className="kpi-card">
+          <div className="loja-kpi loja-kpi--troca">
             <h3>Trocas</h3>
-            <p>{kpis.trocas}</p>
-            {lider("trocas") ? <small className="kpi-lider">{lider("trocas")}</small> : null}
+            <p>{fmt(kpis.trocas)}</p>
+            {lider("trocas") ? <small className="loja-kpi__lider">{lider("trocas")}</small> : null}
           </div>
-          <div className="kpi-card">
+          <div className="loja-kpi loja-kpi--compra">
             <h3>Compras</h3>
-            <p>{kpis.compras}</p>
-            {lider("compras") ? <small className="kpi-lider">{lider("compras")}</small> : null}
+            <p>{fmt(kpis.compras)}</p>
+            {lider("compras") ? <small className="loja-kpi__lider">{lider("compras")}</small> : null}
           </div>
-          <div className="kpi-card success">
+          <div className="loja-kpi loja-kpi--consig">
             <h3>Consignações</h3>
-            <p>{kpis.consignacoes}</p>
-            {lider("consignacoes") ? <small className="kpi-lider">{lider("consignacoes")}</small> : null}
+            <p>{fmt(kpis.consignacoes)}</p>
+            {lider("consignacoes") ? (
+              <small className="loja-kpi__lider">{lider("consignacoes")}</small>
+            ) : null}
           </div>
+        </div>
+
+        <div className="loja-resumo__canais" aria-label="Por tipo de venda">
+          <CanalCard
+            titulo="Showroom"
+            meta="Negociações showroom"
+            canal={kpis.showroom}
+            tom="showroom"
+          />
+          <CanalCard
+            titulo="Atacado"
+            meta="Negociações atacado"
+            canal={kpis.atacado}
+            tom="atacado"
+          />
         </div>
       </div>
 

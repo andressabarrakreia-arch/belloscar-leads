@@ -5,6 +5,7 @@ import type {
   NegociacaoDeal,
   NegociacaoLine,
   NegociacoesFilters,
+  NegociacoesCanalKpis,
   NegociacoesKpis,
   VendedorNegociacaoRow,
 } from "./types";
@@ -40,6 +41,29 @@ export function getNegociacoesFilterOptions(deals: NegociacaoDeal[]) {
   return { months, periods, vendedores, tipos, statuses, tiposVenda };
 }
 
+function canalTipoVenda(tipoVenda: string): { showroom: boolean; atacado: boolean } {
+  const chave = tipoVenda
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase();
+  return {
+    showroom: chave.includes("showroom"),
+    atacado: chave.includes("atacado"),
+  };
+}
+
+function emptyCanalKpis(): NegociacoesCanalKpis {
+  return { total: 0, vendas: 0, trocas: 0, compras: 0, consignacoes: 0 };
+}
+
+function bumpCanal(canal: NegociacoesCanalKpis, tipo: NegociacaoDeal["tipo"]) {
+  canal.total += 1;
+  if (tipo === "Venda") canal.vendas += 1;
+  else if (tipo === "Troca") canal.trocas += 1;
+  else if (tipo === "Compra") canal.compras += 1;
+  else if (tipo === "Consignação") canal.consignacoes += 1;
+}
+
 export function buildNegociacoesKpis(deals: NegociacaoDeal[]): NegociacoesKpis {
   const kpis: NegociacoesKpis = {
     total: deals.length,
@@ -48,6 +72,8 @@ export function buildNegociacoesKpis(deals: NegociacaoDeal[]): NegociacoesKpis {
     compras: 0,
     consignacoes: 0,
     outros: 0,
+    showroom: emptyCanalKpis(),
+    atacado: emptyCanalKpis(),
   };
   for (const d of deals) {
     if (d.tipo === "Venda") kpis.vendas += 1;
@@ -55,6 +81,9 @@ export function buildNegociacoesKpis(deals: NegociacaoDeal[]): NegociacoesKpis {
     else if (d.tipo === "Compra") kpis.compras += 1;
     else if (d.tipo === "Consignação") kpis.consignacoes += 1;
     else kpis.outros += 1;
+    const canal = canalTipoVenda(d.tipoVenda);
+    if (canal.showroom) bumpCanal(kpis.showroom, d.tipo);
+    if (canal.atacado) bumpCanal(kpis.atacado, d.tipo);
   }
   return kpis;
 }

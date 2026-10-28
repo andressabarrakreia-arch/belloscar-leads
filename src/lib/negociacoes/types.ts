@@ -91,6 +91,15 @@ export type NegociacoesAdminConfig = {
   autoPublish: boolean;
 };
 
+/** KPIs por canal (Tipo Venda). */
+export type NegociacoesCanalKpis = {
+  total: number;
+  vendas: number;
+  trocas: number;
+  compras: number;
+  consignacoes: number;
+};
+
 export type NegociacoesKpis = {
   total: number;
   vendas: number;
@@ -98,6 +107,10 @@ export type NegociacoesKpis = {
   compras: number;
   consignacoes: number;
   outros: number;
+  /** Negócios com Tipo Venda contendo Showroom (e breakdown por tipo). */
+  showroom: NegociacoesCanalKpis;
+  /** Negócios com Tipo Venda contendo Atacado (e breakdown por tipo). */
+  atacado: NegociacoesCanalKpis;
 };
 
 export type VendedorNegociacaoRow = {
