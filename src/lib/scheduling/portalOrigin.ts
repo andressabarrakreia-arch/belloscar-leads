@@ -1,12 +1,13 @@
 /**
  * Parse de origem bruta (planilha) → origem(ns) de portal + canal(is) de chegada.
  *
- * Regra: tokens separados por "|".
- * - Canais fixos: WhatsApp, Telefone, Passante, Outdoor, ML*
+ * Regra: tokens separados por "|" (e também misturados no mesmo texto, ex. "whatsapp site").
+ * - Canais (quando há outra palavra): WhatsApp, Telefone, Site
+ * - Canais fixos extras: Passante, Outdoor, ML*
  * - Site é dual: vira canal se já houver portal; senão vira origem (ex.: WhatsApp | Site)
  * - Demais tokens = origem/portal
  * - Só canal puro (ex.: "WhatsApp") → origem e canal iguais
- * - Cada ID conta uma vez: a primeira origem e o primeiro canal da célula
+ * - Uma origem principal (primeira); todos os canais da célula entram
  */
 
 export type ParsedOrigem = {
@@ -38,6 +39,18 @@ const CHANNEL_ONLY_KEYS = new Set([
 
 const DUAL_KEYS = new Set(["site"]);
 
+/** Palavras de canal/dual a separar quando coladas no mesmo texto (maior → menor). */
+const PEELABLE_CHANNEL_ATOMS = [
+  "ml financiamento",
+  "ml ligacao",
+  "ml whatsapp",
+  "whatsapp",
+  "telefone",
+  "passante",
+  "outdoor",
+  "site",
+];
+
 /** Rótulos canônicos de exibição por chave normalizada. */
 const DISPLAY_BY_KEY: Record<string, string> = {
   whatsapp: "WhatsApp",
@@ -61,8 +74,11 @@ const DISPLAY_BY_KEY: Record<string, string> = {
   "instagram ads": "Instagram Ads",
   google: "Google",
   carteira: "Carteira",
+  "carteira prospeccao": "Carteira Prospecção",
   indicacao: "Indicação",
   prospeccao: "Prospecção",
+  "busca ativa": "Busca Ativa",
+  "link auto": "LINK AUTO",
   loja: "Loja",
   "na pista": "Na Pista",
   "nao informado": "Não informado",
@@ -82,12 +98,50 @@ function isDual(token: string): boolean {
   return DUAL_KEYS.has(normalizeToken(token));
 }
 
+/**
+ * Separa canais colados no mesmo texto sem "|".
+ * Ex.: "whatsapp site" → ["whatsapp", "site"]; "olx whatsapp" → ["olx", "whatsapp"].
+ * Labels canônicos inteiros (ex.: "carteira prospeccao") não são quebrados.
+ */
+function expandMixedPart(part: string): string[] {
+  const key = normalizeToken(part);
+  if (!key) return [];
+  if (DISPLAY_BY_KEY[key]) return [key];
+
+  let padded = ` ${key} `;
+  const found: { atom: string; idx: number }[] = [];
+
+  for (const atom of PEELABLE_CHANNEL_ATOMS) {
+    let searchFrom = 0;
+    while (true) {
+      const idx = padded.indexOf(` ${atom} `, searchFrom);
+      if (idx < 0) break;
+      found.push({ atom, idx });
+      padded =
+        padded.slice(0, idx + 1) +
+        " ".repeat(atom.length) +
+        padded.slice(idx + 1 + atom.length);
+      searchFrom = idx + 1;
+    }
+  }
+
+  if (found.length === 0) return [key];
+
+  const rest = padded.replace(/\s+/g, " ").trim();
+  found.sort((a, b) => a.idx - b.idx);
+  const out: string[] = [];
+  if (rest) out.push(rest);
+  for (const f of found) out.push(f.atom);
+  return out;
+}
+
 export function parseOrigemRaw(raw: string): ParsedOrigem {
   const cleaned = (raw || "").trim() || "Não informado";
   const parts = cleaned
     .split("|")
     .map((p) => p.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .flatMap(expandMixedPart);
 
   if (parts.length === 0) {
     return { raw: cleaned, origins: ["Não informado"], channels: [] };
@@ -101,12 +155,13 @@ export function parseOrigemRaw(raw: string): ParsedOrigem {
   let channels: string[];
 
   if (portalParts.length > 0) {
+    // Ex.: WhatsApp | Site | Carteira → origem Carteira, canais WhatsApp + Site
     origins = portalParts.map(canonicalLabel);
     channels = parts
       .filter((p) => isChannelOnly(p) || isDual(p))
       .map(canonicalLabel);
   } else if (dualParts.length > 0) {
-    // Ex.: WhatsApp | Site → origem Site, canal WhatsApp
+    // Ex.: WhatsApp | Site / "whatsapp site" → origem Site, canal WhatsApp
     origins = dualParts.map(canonicalLabel);
     channels =
       channelParts.length > 0
@@ -118,20 +173,21 @@ export function parseOrigemRaw(raw: string): ParsedOrigem {
     channels = channelParts.map(canonicalLabel);
   }
 
-  // Dedup preservando ordem. Um ID entra na primeira origem e no primeiro canal.
+  // Dedup preservando ordem. Uma origem principal; todos os canais da célula.
   const uniq = (list: string[]) => [...new Set(list)];
   const originsUniq = uniq(origins);
   const channelsUniq = uniq(channels);
   return {
     raw: cleaned,
     origins: originsUniq.length > 0 ? [originsUniq[0]] : ["Não informado"],
-    channels: channelsUniq.length > 0 ? [channelsUniq[0]] : [],
+    channels: channelsUniq,
   };
 }
 
 export type PortalGroupId =
   | "meta"
   | "classificados"
+  | "link_auto"
   | "site_google"
   | "whatsapp"
   | "relacionamento"
@@ -147,6 +203,7 @@ export type PortalGroupDef = {
 export const PORTAL_GROUPS: PortalGroupDef[] = [
   { id: "meta", label: "Meta / Social" },
   { id: "classificados", label: "Classificados" },
+  { id: "link_auto", label: "LINK AUTO" },
   { id: "site_google", label: "Site / Google" },
   { id: "whatsapp", label: "WhatsApp" },
   { id: "relacionamento", label: "Carteira & relacionamento" },
@@ -155,43 +212,53 @@ export const PORTAL_GROUPS: PortalGroupDef[] = [
   { id: "outros", label: "Outros" },
 ];
 
+const CLASSIFICADOS_HINTS = [
+  "olx",
+  "webmotors",
+  "chaves na mao",
+  "socarrao",
+  "mercado livre",
+  "usadosbr",
+  "marktplace",
+  "marketplace",
+  "portais de anuncios",
+  "na pista",
+  "midia vendedores",
+  "busca ativa",
+];
+
 export function portalGroupIdForOrigin(origin: string): PortalGroupId {
   const key = normalizeToken(origin);
-  if (
-    key === "facebook" ||
-    key === "facebook ads" ||
-    key === "instagram" ||
-    key === "instagram ads"
-  ) {
+
+  if (key.includes("link auto")) return "link_auto";
+
+  if (key.includes("facebook") || key.includes("instagram")) {
     return "meta";
   }
-  if (
-    key === "olx" ||
-    key === "olx vendedores" ||
-    key === "webmotors" ||
-    key === "webmotors vendedores" ||
-    key === "socarrao" ||
-    key === "chaves na mao" ||
-    key === "mercado livre" ||
-    key === "usadosbr" ||
-    key === "marktplace vendedores" ||
-    key === "portais de anuncios" ||
-    key === "na pista" ||
-    key === "midia vendedores"
-  ) {
+
+  if (CLASSIFICADOS_HINTS.some((hint) => key === hint || key.includes(hint))) {
     return "classificados";
   }
-  if (key === "site" || key === "google") return "site_google";
+
+  if (key === "site" || key === "google" || key.includes("google")) {
+    return "site_google";
+  }
+
   if (key === "whatsapp") return "whatsapp";
+
   if (
     key === "carteira" ||
+    key.includes("carteira") ||
     key === "indicacao" ||
+    key.includes("indicacao") ||
     key === "prospeccao" ||
+    key.includes("prospeccao") ||
     key === "aniversariantes" ||
-    key === "busca ativa"
+    key.includes("aniversariante")
   ) {
     return "relacionamento";
   }
+
   if (key === "telefone") return "telefone";
   if (key === "loja") return "loja";
   return "outros";

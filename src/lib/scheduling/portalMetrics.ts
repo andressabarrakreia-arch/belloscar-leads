@@ -1,4 +1,7 @@
+import { phoneKey } from "../campanhas/phoneMatch";
 import { formatPeriodLabel } from "../dates";
+import { DDD_POR_CODIGO } from "../geo/ddd";
+import { isoToPeriodKey } from "./dates";
 import { round2, buildMotivosStats } from "./metrics";
 import {
   parseOrigemRaw,
@@ -14,6 +17,8 @@ import type {
   SucessoItem,
   TipoProposta,
 } from "./types";
+
+const QUINZENA_KEY = /^\d{4}-\d{2}-Q[12]$/;
 
 export type PortalExtraCounts = {
   visitas?: RealizadoItem[];
@@ -45,6 +50,14 @@ export type ChannelBreakdown = {
   propostas: ProposalBreakdownRow[];
 };
 
+export type PortalDddRow = {
+  ddd: string;
+  cidade: string;
+  uf: string;
+  ids: number;
+  percentual: number;
+};
+
 export type PortalOriginMetrics = {
   origin: string;
   groupId: PortalGroupId;
@@ -64,6 +77,9 @@ export type PortalOriginMetrics = {
   topVendedores: { nome: string; total: number; sucessos: number; taxaSucesso: number }[];
   topMotivos: MotivoStats[];
   rawLabels: { label: string; total: number }[];
+  byDdd: PortalDddRow[];
+  dddSemTelefone: number;
+  dddSemCodigo: number;
 };
 
 export type PortalGroupMetrics = {
@@ -208,6 +224,48 @@ function attributeByOrigemChannels<T extends { id: string; origem: string }>(
   }
 }
 
+function buildDddBreakdown(items: AgendamentoItem[]): {
+  byDdd: PortalDddRow[];
+  dddSemTelefone: number;
+  dddSemCodigo: number;
+} {
+  const idsPorDdd = new Map<string, Set<string>>();
+  let dddSemTelefone = 0;
+  let dddSemCodigo = 0;
+  const seenIds = new Set<string>();
+  for (const item of items) {
+    if (seenIds.has(item.id)) continue;
+    seenIds.add(item.id);
+    const key = phoneKey(item.celular);
+    if (!key) {
+      dddSemTelefone += 1;
+      continue;
+    }
+    const ddd = key.slice(0, 2);
+    if (!DDD_POR_CODIGO.has(ddd)) {
+      dddSemCodigo += 1;
+      continue;
+    }
+    if (!idsPorDdd.has(ddd)) idsPorDdd.set(ddd, new Set());
+    idsPorDdd.get(ddd)!.add(item.id);
+  }
+  const totalComDdd = [...idsPorDdd.values()].reduce((s, set) => s + set.size, 0);
+  const byDdd: PortalDddRow[] = [...idsPorDdd.entries()]
+    .map(([ddd, set]) => {
+      const info = DDD_POR_CODIGO.get(ddd)!;
+      const ids = set.size;
+      return {
+        ddd,
+        cidade: info.cidade,
+        uf: info.uf,
+        ids,
+        percentual: round2(totalComDdd ? (ids / totalComDdd) * 100 : 0),
+      };
+    })
+    .sort((a, b) => b.ids - a.ids || a.ddd.localeCompare(b.ddd));
+  return { byDdd, dddSemTelefone, dddSemCodigo };
+}
+
 function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOriginMetrics {
   const items = acc.items;
   const leads = acc.leads;
@@ -297,6 +355,8 @@ function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOrig
     })
     .sort((a, b) => b.total - a.total || b.atendimentos - a.atendimentos);
 
+  const ddd = buildDddBreakdown(items);
+
   return {
     origin,
     groupId: portalGroupIdForOrigin(origin),
@@ -318,6 +378,9 @@ function finalizeOrigin(origin: string, acc: Acc, useExtra: boolean): PortalOrig
     rawLabels: [...acc.raw.entries()]
       .map(([label, n]) => ({ label, total: n }))
       .sort((a, b) => b.total - a.total),
+    byDdd: ddd.byDdd,
+    dddSemTelefone: ddd.dddSemTelefone,
+    dddSemCodigo: ddd.dddSemCodigo,
   };
 }
 
@@ -438,7 +501,8 @@ export function buildPortalDashboard(
     const parsed = parseOrigemRaw(item.origem);
     for (const origin of parsed.origins) {
       if (!topNames.has(origin)) continue;
-      const pk = item.periodKey || item.monthKey;
+      const pk = item.periodKey;
+      if (!QUINZENA_KEY.test(pk)) continue;
       if (!periodMap.has(pk)) periodMap.set(pk, new Map());
       const m = periodMap.get(pk)!;
       const cur = m.get(origin) || { total: 0, sucessos: 0 };
@@ -448,12 +512,13 @@ export function buildPortalDashboard(
       m.set(origin, cur);
     }
   }
-  // Com SUCESSOS: Finalizado em (mês) — não mistura com status da agenda
+  // Com SUCESSOS: Finalizado em → mesma chave de quinzena (não YYYY-MM)
   if (useExtra) {
     for (const s of extra.sucessos || []) {
       const origemRaw = resolveOrigemRaw(s.id, s.origem, origemById);
       const parsed = parseOrigemRaw(origemRaw);
-      const pk = s.dataFinalizado.slice(0, 7);
+      const pk = isoToPeriodKey(s.dataFinalizado);
+      if (!QUINZENA_KEY.test(pk)) continue;
       for (const origin of parsed.origins) {
         if (!topNames.has(origin)) continue;
         if (!periodMap.has(pk)) periodMap.set(pk, new Map());

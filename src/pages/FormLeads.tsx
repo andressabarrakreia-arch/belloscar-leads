@@ -201,6 +201,55 @@ export function FormLeads() {
             </Card>
           </div>
 
+          <div className="card">
+            <h2>
+              Resultado por campanha
+              <InfoTip>
+                Uma linha por formulário (campanha). Leads pelo Criado em; agendamentos pelo Agendado
+                em; visitas pelo Visita em; sucessos pelo Finalizado em — cruzados pelo telefone.
+              </InfoTip>
+            </h2>
+            <InteractiveTable
+              rows={report.campanhas}
+              rowKey={(row) => row.formulario}
+              columns={[
+                {
+                  key: "campanha",
+                  label: "Campanha",
+                  sortValue: (row) => row.formulario,
+                  render: (row) => <strong>{row.formulario}</strong>,
+                },
+                {
+                  key: "leads",
+                  label: "Leads",
+                  sortValue: (row) => row.leads,
+                  render: (row) => row.leads.toLocaleString("pt-BR"),
+                },
+                {
+                  key: "agendamentos",
+                  label: "Agendamentos",
+                  sortValue: (row) => row.agendados,
+                  render: (row) => row.agendados.toLocaleString("pt-BR"),
+                },
+                {
+                  key: "visitas",
+                  label: "Visitas",
+                  sortValue: (row) => row.visitas,
+                  render: (row) => row.visitas.toLocaleString("pt-BR"),
+                },
+                {
+                  key: "sucessos",
+                  label: "Sucessos",
+                  sortValue: (row) => row.sucessos,
+                  render: (row) => <span className="num-ok">{row.sucessos.toLocaleString("pt-BR")}</span>,
+                },
+              ]}
+            />
+            {report.campanhas.length === 0 ? (
+              <p className="muted">Nenhuma campanha no filtro atual.</p>
+            ) : null}
+          </div>
+
           <div className="charts">
             <SeriesChart
               title="Resultado por anúncio"

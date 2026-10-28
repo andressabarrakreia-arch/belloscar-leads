@@ -2,10 +2,7 @@ import { useMemo, useState } from "react";
 import { CampanhasFilters } from "../components/CampanhasFilters";
 import { InfoTip } from "../components/InfoTip";
 import { InteractiveTable } from "../components/InteractiveTable";
-import { SeriesChart } from "../components/charts/SeriesChart";
 import { ShareDonut } from "../components/charts/ShareDonut";
-import { DcCruzado } from "../components/viz/DcCruzado";
-import { CHART_COLORS } from "../components/charts/chartTheme";
 import { useCampanhas } from "../hooks/useCampanhas";
 import {
   buildSdrRows,
@@ -25,14 +22,6 @@ export function Attendants() {
   const slice = useMemo(() => sliceCampanhas(rows, filters), [rows, filters]);
   const sdrRows = useMemo(() => buildSdrRows(slice), [slice]);
   const vendedores = useMemo(() => buildVendedorRows(slice), [slice]);
-  const cruzado = useMemo(
-    () =>
-      slice.atendimentos.map((row) => ({
-        sdr: row.sdr || "Sem SDR",
-        resultado: row.dataSucesso ? "Sucesso" : row.teveVisita ? "Visita" : "Atendimento",
-      })),
-    [slice]
-  );
 
   if (loading) return <p className="muted">Carregando campanhas…</p>;
   if (error) return <p className="error">{error}</p>;
@@ -42,16 +31,10 @@ export function Attendants() {
       <CampanhasFilters filters={filters} sdrs={sdrs} months={months} onChange={setFilters} />
 
       <div className="charts">
-        <SeriesChart
-          title="Atendimentos e visitas por SDR"
-          tip="Mesmos números da tabela de SDR."
-          data={sdrRows}
-          xKey="sdr"
-          kind="bar"
-          series={[
-            { key: "atendimentos", name: "Atendimentos", color: CHART_COLORS.charcoal },
-            { key: "visitas", name: "Visitas", color: CHART_COLORS.blue },
-          ]}
+        <ShareDonut
+          title="Sucessos por SDR"
+          tip="Sucessos já contados na tabela de SDR."
+          data={sdrRows.map((row) => ({ label: row.sdr, value: row.sucessos }))}
         />
         <ShareDonut
           title="Sucessos por vendedor"
@@ -59,16 +42,6 @@ export function Attendants() {
           data={vendedores.map((row) => ({ label: row.vendedor, value: row.sucessos }))}
         />
       </div>
-
-      <DcCruzado
-        titulo="SDR e resultado, ligados"
-        dica="Clique num SDR para filtrar o resultado ao lado. Clique de novo para soltar."
-        linhas={cruzado}
-        chaveA="sdr"
-        tituloA="SDR"
-        chaveB="resultado"
-        tituloB="Resultado"
-      />
 
       <div className="card">
         <h2>

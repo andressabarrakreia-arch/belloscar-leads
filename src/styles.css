@@ -1786,6 +1786,23 @@ tr:hover td {
   font-style: italic;
 }
 
+html[data-theme="dark"] .portal-row-group td {
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .portal-row-origin td {
+  color: #93c5fd;
+}
+
+html[data-theme="dark"] .portal-row-channel td {
+  color: #fbbf24;
+}
+
+html[data-theme="dark"] .portal-row-proposta td {
+  color: #a3a3a3;
+}
+
 .portal-label-origin {
   color: #1d4ed8;
   font-weight: 600;

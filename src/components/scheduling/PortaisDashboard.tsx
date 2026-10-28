@@ -37,14 +37,14 @@ function ExpandBtn({
   );
 }
 
-function OriginSummary({ origin }: { origin: PortalOriginMetrics }) {
+function OriginTops({ origin }: { origin: PortalOriginMetrics }) {
   return (
-    <div className="portal-detail stack">
-      <h3>
+    <div className="portal-detail stack" style={{ marginTop: 12 }}>
+      <h3 style={{ marginBottom: 8 }}>
         {origin.origin}
         <InfoTip>
-          Atendimentos = LEADS GERAL · % Agend. = Agend./Atend. · Conv. visita = Vi/Ag · Conv. =
-          Su/Ag. Pré-Venda {origin.preVenda} · Recepção {origin.recepcao}.
+          Pré-Venda {origin.preVenda} · Recepção {origin.recepcao}. Totais Su/Ag na origem
+          selecionada.
         </InfoTip>
       </h3>
 
@@ -79,36 +79,33 @@ function OriginSummary({ origin }: { origin: PortalOriginMetrics }) {
         </div>
       </div>
 
-      <h4>Top motivos de insucesso</h4>
-      <div className="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>Motivo</th>
-              <th>Qtd</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody>
-            {origin.topMotivos.map((m) => (
-              <tr key={m.motivo}>
-                <td>
-                  <MotivoLabel motivo={m.motivo} ids={m.ids} />
-                </td>
-                <td>{m.quantidade}</td>
-                <td>{m.percentual}%</td>
-              </tr>
-            ))}
-            {origin.topMotivos.length === 0 && (
-              <tr>
-                <td colSpan={3} className="muted">
-                  Sem insucessos neste portal.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      {origin.topMotivos.length > 0 && (
+        <>
+          <h4>Top motivos de insucesso</h4>
+          <div className="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Motivo</th>
+                  <th>Qtd</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody>
+                {origin.topMotivos.map((m) => (
+                  <tr key={m.motivo}>
+                    <td>
+                      <MotivoLabel motivo={m.motivo} ids={m.ids} />
+                    </td>
+                    <td>{m.quantidade}</td>
+                    <td>{m.percentual}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -117,13 +114,18 @@ export function PortaisDashboard({ data }: Props) {
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   const [expandedOrigins, setExpandedOrigins] = useState<Record<string, boolean>>({});
   const [expandedChannels, setExpandedChannels] = useState<Record<string, boolean>>({});
-  const [selected, setSelected] = useState<string | null>(
+  const [selectedVolume, setSelectedVolume] = useState<string | null>(
     data.topByVolume[0]?.origin ?? null
   );
+  const [selectedConversion, setSelectedConversion] = useState<string | null>(null);
 
-  const selectedOrigin = useMemo(
-    () => data.origins.find((o) => o.origin === selected) ?? null,
-    [data.origins, selected]
+  const selectedVolumeOrigin = useMemo(
+    () => data.origins.find((o) => o.origin === selectedVolume) ?? null,
+    [data.origins, selectedVolume]
+  );
+  const selectedConversionOrigin = useMemo(
+    () => data.origins.find((o) => o.origin === selectedConversion) ?? null,
+    [data.origins, selectedConversion]
   );
 
   const toggleGroup = (id: string) =>
@@ -151,7 +153,7 @@ export function PortaisDashboard({ data }: Props) {
           Ranking por grupo
           <InfoTip>
             Expanda grupo → origem → canal. A soma dos canais fecha com a origem. Clique no nome
-            da origem para top SDR / vendedores.
+            da origem para ver tops no bloco de volume.
           </InfoTip>
         </h2>
         <div className="table-scroll table-scroll--cascade">
@@ -201,9 +203,13 @@ export function PortaisDashboard({ data }: Props) {
                       return (
                         <Fragment key={originKey}>
                           <tr
-                            className={`portal-row-origin ${selected === o.origin ? "highlight-row" : ""}`}
+                            className={`portal-row-origin ${
+                              selectedVolume === o.origin || selectedConversion === o.origin
+                                ? "highlight-row"
+                                : ""
+                            }`}
                             style={{ cursor: "pointer" }}
-                            onClick={() => setSelected(o.origin)}
+                            onClick={() => setSelectedVolume(o.origin)}
                           >
                             <td>
                               <ExpandBtn
@@ -290,16 +296,16 @@ export function PortaisDashboard({ data }: Props) {
         <div className="card">
           <h2>
             Top 5 · volume (atendimentos)
-            <InfoTip>Clique para selecionar a origem e ver tops abaixo.</InfoTip>
+            <InfoTip>Clique na origem para ver top SDR e top vendedores abaixo.</InfoTip>
           </h2>
           <div className="kpi-grid">
             {data.topByVolume.map((o) => (
               <button
                 key={o.origin}
                 type="button"
-                className={`kpi-card ${selected === o.origin ? "accent" : ""}`}
+                className={`kpi-card ${selectedVolume === o.origin ? "accent" : ""}`}
                 style={{ textAlign: "left", cursor: "pointer", border: "none", width: "100%" }}
-                onClick={() => setSelected(o.origin)}
+                onClick={() => setSelectedVolume(o.origin)}
               >
                 <h3>{o.origin}</h3>
                 <p>{o.atendimentos}</p>
@@ -309,20 +315,25 @@ export function PortaisDashboard({ data }: Props) {
               </button>
             ))}
           </div>
+          {selectedVolumeOrigin && <OriginTops origin={selectedVolumeOrigin} />}
         </div>
         <div className="card">
           <h2>
             Top 5 · conversão
-            <InfoTip>Mínimo 20 agendamentos. Clique para selecionar.</InfoTip>
+            <InfoTip>
+              Mínimo 20 agendamentos. Clique na origem para ver top SDR e top vendedores abaixo.
+            </InfoTip>
           </h2>
           <div className="kpi-grid">
             {data.topByConversion.map((o) => (
               <button
                 key={o.origin}
                 type="button"
-                className={`kpi-card success num-ok ${selected === o.origin ? "accent" : ""}`}
+                className={`kpi-card success num-ok ${
+                  selectedConversion === o.origin ? "accent" : ""
+                }`}
                 style={{ textAlign: "left", cursor: "pointer", border: "none", width: "100%" }}
-                onClick={() => setSelected(o.origin)}
+                onClick={() => setSelectedConversion(o.origin)}
               >
                 <h3>{o.origin}</h3>
                 <p>{o.taxaSucesso}%</p>
@@ -335,14 +346,9 @@ export function PortaisDashboard({ data }: Props) {
               <p className="muted">Sem portais com volume mínimo no filtro.</p>
             )}
           </div>
+          {selectedConversionOrigin && <OriginTops origin={selectedConversionOrigin} />}
         </div>
       </div>
-
-      {selectedOrigin && (
-        <div className="card">
-          <OriginSummary origin={selectedOrigin} />
-        </div>
-      )}
 
       {data.periodSeriesTop.length > 0 && (
         <div className="card">
@@ -372,6 +378,57 @@ export function PortaisDashboard({ data }: Props) {
           </div>
         </div>
       )}
+
+      <div className="card">
+        <h2>
+          Volume de IDs por DDD
+          {selectedVolumeOrigin ? ` · ${selectedVolumeOrigin.origin}` : ""}
+          <InfoTip>
+            Segue a origem clicada em Top 5 · volume. IDs únicos dos agendamentos dessa origem,
+            pelo DDD do celular.
+            {selectedVolumeOrigin && selectedVolumeOrigin.dddSemTelefone > 0
+              ? ` ${selectedVolumeOrigin.dddSemTelefone} sem telefone.`
+              : ""}
+            {selectedVolumeOrigin && selectedVolumeOrigin.dddSemCodigo > 0
+              ? ` ${selectedVolumeOrigin.dddSemCodigo} com DDD fora da lista Anatel.`
+              : ""}
+          </InfoTip>
+        </h2>
+        {!selectedVolumeOrigin ? (
+          <p className="muted">Clique numa origem em Top 5 · volume para ver os DDDs.</p>
+        ) : selectedVolumeOrigin.byDdd.length === 0 ? (
+          <p className="muted">Nenhum ID com DDD reconhecido nesta origem.</p>
+        ) : (
+          <div className="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>DDD</th>
+                  <th>Cidade</th>
+                  <th>UF</th>
+                  <th>IDs</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedVolumeOrigin.byDdd.map((row, i) => (
+                  <tr key={row.ddd}>
+                    <td>{i + 1}</td>
+                    <td>
+                      <strong>{row.ddd}</strong>
+                    </td>
+                    <td>{row.cidade}</td>
+                    <td>{row.uf}</td>
+                    <td>{row.ids}</td>
+                    <td>{row.percentual}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </>
   );
 }
