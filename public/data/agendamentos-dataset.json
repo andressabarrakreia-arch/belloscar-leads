@@ -1,6 +1,63 @@
 {
-  "updatedAt": "2026-10-28T17:41:42.994Z",
+  "updatedAt": "2026-10-29T12:25:54.981Z",
   "imports": [
+    {
+      "fileName": "recebidos ate 28_10.csv",
+      "label": "recebidos ate 28_10.csv",
+      "kind": "leads",
+      "at": "2026-10-29T12:25:54.981Z",
+      "received": 8197,
+      "kept": 0,
+      "removed": 6742,
+      "enriched": 1455,
+      "notes": [
+        "6742 IDs sem agendamento (não criam órfãos na agenda)",
+        "LEADS GERAL: 26139 leads únicos na base",
+        "Nenhum recebido novo virou atendimento. Pendente e Descartado não entram.",
+        "Nenhuma visita nova/alterada pela Data Visita dos recebidos.",
+        "Após o import, origem/tipo são recruzados por ID em REALIZADOS/agenda/SUCESSOS",
+        "ID 9800142 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799969 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799967 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799768 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799700 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799673 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799650 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799492 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799448 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799336 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9799151 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9798479 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9798422 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9798381 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9798152 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9798093 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9797824 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9797821 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9797810 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9797600 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9797388 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9797386 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9797286 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9797237 ignorado (enrich-only: não existe na base de agendamentos)",
+        "ID 9797208 ignorado (enrich-only: não existe na base de agendamentos)",
+        "Reconciliação: coleções já alinhadas por ID"
+      ]
+    },
+    {
+      "fileName": "realizados ate 28_10.xlsx",
+      "label": "realizados ate 28_10.xlsx",
+      "kind": "realizados",
+      "at": "2026-10-29T12:25:54.470Z",
+      "received": 2402,
+      "kept": 79,
+      "removed": 0,
+      "enriched": 2323,
+      "notes": [
+        "REALIZADOS: 23058 atendimentos únicos (Atendido em / Visita em)",
+        "Reconciliação: coleções já alinhadas por ID"
+      ]
+    },
     {
       "fileName": "agendamentos ate 27_10.xlsx",
       "label": "agendamentos ate 27_10.xlsx",
@@ -1124,7 +1181,7 @@
       "tipoProposta": "Troca",
       "teveVisita": true,
       "status": "Sucesso",
-      "origem": "Facebook Ads",
+      "origem": "Facebook",
       "motivoInsucesso": null,
       "cliente": "Ale",
       "celular": "(41)99845-4768",
@@ -1920,7 +1977,7 @@
       "dataAgendamento": "2026-10-10",
       "sdr": "Ana Dal Bello",
       "vendedor": "Gabriel VENDAS",
-      "tipoProposta": "Venda",
+      "tipoProposta": "Troca",
       "teveVisita": true,
       "status": "Sucesso",
       "origem": "Chaves na Mão",
@@ -4130,7 +4187,7 @@
       "dataAgendamento": "2026-10-03",
       "sdr": "Andressa K B Kreia",
       "vendedor": "Anderson Pires Lopes",
-      "tipoProposta": "Compra",
+      "tipoProposta": "Consignação",
       "teveVisita": false,
       "status": "Sucesso",
       "origem": "WhatsApp | Facebook Ads",
@@ -77435,7 +77492,7 @@
       "sdr": "Andressa K B Kreia",
       "vendedor": "Filipe Portes",
       "tipoProposta": "Venda",
-      "teveVisita": true,
+      "teveVisita": false,
       "status": "Sucesso",
       "origem": "Carteira",
       "motivoInsucesso": null,
@@ -77452,7 +77509,7 @@
       "sdr": "Andressa K B Kreia",
       "vendedor": "Filipe Portes",
       "tipoProposta": "Venda",
-      "teveVisita": true,
+      "teveVisita": false,
       "status": "Sucesso",
       "origem": "Carteira",
       "motivoInsucesso": null,
@@ -77656,7 +77713,7 @@
       "sdr": "Andressa K B Kreia",
       "vendedor": "Dimas Noldin",
       "tipoProposta": "Consignação",
-      "teveVisita": true,
+      "teveVisita": false,
       "status": "Sucesso",
       "origem": "Carteira",
       "motivoInsucesso": null,
@@ -77741,7 +77798,7 @@
       "sdr": "Andressa K B Kreia",
       "vendedor": "Filipe Portes",
       "tipoProposta": "Venda",
-      "teveVisita": true,
+      "teveVisita": false,
       "status": "Sucesso",
       "origem": "Carteira",
       "motivoInsucesso": null,
@@ -77843,7 +77900,7 @@
       "sdr": "Andressa K B Kreia",
       "vendedor": "Filipe Portes",
       "tipoProposta": "Venda",
-      "teveVisita": true,
+      "teveVisita": false,
       "status": "Sucesso",
       "origem": "LINK AUTO",
       "motivoInsucesso": null,
@@ -79685,7 +79742,7 @@
       "motivoInsucesso": null,
       "cliente": "Jo Rodrigues",
       "celular": "(41)99789-0717",
-      "email": "",
+      "email": "jocelma.brde@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
       "periodKey": "2026-10-Q2"
@@ -79753,7 +79810,7 @@
       "motivoInsucesso": null,
       "cliente": "Denise",
       "celular": "(41)99129-5106",
-      "email": "",
+      "email": "deniselangeayla87@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
       "periodKey": "2026-10-Q2"
@@ -79787,7 +79844,7 @@
       "motivoInsucesso": null,
       "cliente": "Fernando Varaschin",
       "celular": "(46)99108-0584",
-      "email": "",
+      "email": "fernandovaraschin@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
       "periodKey": "2026-10-Q2"
@@ -79855,7 +79912,7 @@
       "motivoInsucesso": null,
       "cliente": "Wagner Berto",
       "celular": "(41)99719-0999",
-      "email": "",
+      "email": "Wagnerberto@gmail.com",
       "canal": "Pré-Venda",
       "monthKey": "2026-10",
       "periodKey": "2026-10-Q2"
@@ -225410,7 +225467,7 @@
       "id": "9625047",
       "data": "2026-10-15",
       "sdr": "Thayna PRE-VENDAS",
-      "origem": "Facebook Ads",
+      "origem": "Facebook",
       "tipoProposta": "Troca"
     },
     {
@@ -227952,7 +228009,7 @@
       "data": "2026-10-10",
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Chaves na Mão",
-      "tipoProposta": "Venda"
+      "tipoProposta": "Troca"
     },
     {
       "id": "9574735",
@@ -243226,7 +243283,7 @@
       "data": "2026-09-18",
       "sdr": "Andressa K B Kreia",
       "origem": "WhatsApp | Facebook Ads",
-      "tipoProposta": "Compra"
+      "tipoProposta": "Consignação"
     },
     {
       "id": "9323191",
@@ -257618,7 +257675,7 @@
       "data": "2026-10-22",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9720916",
@@ -257821,7 +257878,7 @@
       "data": "2026-10-22",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Troca"
     },
     {
       "id": "9716123",
@@ -258906,7 +258963,7 @@
       "data": "2026-10-25",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9754328",
@@ -259970,7 +260027,7 @@
       "data": "2026-10-23",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp | Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9731795",
@@ -259998,7 +260055,7 @@
       "data": "2026-10-23",
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)"
+      "tipoProposta": "Venda"
     },
     {
       "id": "9731384",
@@ -261994,6 +262051,839 @@
       "sdr": "Lais Narimã Ferreira Vieira",
       "origem": "Facebook Ads",
       "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9800142",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799969",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799967",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799768",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799700",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799673",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799650",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799492",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799448",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799336",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9799151",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9798479",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Site",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9798422",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Mercado Livre | ML WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9798381",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Mercado Livre | WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9798152",
+      "data": "2026-10-28",
+      "sdr": "Ana Dal Bello",
+      "origem": "Indicação",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9798093",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797824",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797821",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Olx",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797810",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797600",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797388",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797386",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9797286",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797237",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797208",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797188",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9797035",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Olx",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9796978",
+      "data": "2026-10-28",
+      "sdr": "Recepção",
+      "origem": "Carteira",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9796366",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9796256",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Prospecção",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9796229",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9796207",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9796158",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "SóCarrão",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9796071",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9795910",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9795799",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9795789",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9795748",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Telefone",
+      "tipoProposta": "Troca"
+    },
+    {
+      "id": "9795626",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9795559",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9795488",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9795262",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9795127",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9795089",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9795059",
+      "data": "2026-10-28",
+      "sdr": "Recepção",
+      "origem": "Carteira",
+      "tipoProposta": "Troca"
+    },
+    {
+      "id": "9794901",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9794859",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "SóCarrão",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9794786",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9794770",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9794494",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9794338",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9794157",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Mercado Livre | WhatsApp",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9793765",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Chaves na Mão | WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9793670",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9793530",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9793489",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Chaves na Mão",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9793484",
+      "data": "2026-10-28",
+      "sdr": "Liriane Larissa Ribeiro",
+      "origem": "Busca Ativa",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9793481",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9793420",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9793349",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9793204",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9793141",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9793030",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9792991",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9792671",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Olx",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9792577",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9792330",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9792224",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9792169",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9792098",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Site",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9792050",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Google | Site",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9792025",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9791822",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Olx",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9791633",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9791365",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9791292",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9791071",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Na Pista",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9791035",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9790911",
+      "data": "2026-10-28",
+      "sdr": "Liriane Larissa Ribeiro",
+      "origem": "Olx",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9790903",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Telefone",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9790896",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9790893",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Prospecção",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9790876",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9790883",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Olx",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9790589",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Carteira",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9790543",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9790536",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Troca"
+    },
+    {
+      "id": "9790516",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9790496",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9790449",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Carteira",
+      "tipoProposta": "Troca"
+    },
+    {
+      "id": "9790363",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "Carteira",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9790306",
+      "data": "2026-10-28",
+      "sdr": "(sem SDR)",
+      "origem": "WhatsApp | Site",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9790198",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9790196",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Troca"
+    },
+    {
+      "id": "9790176",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9790062",
+      "data": "2026-10-28",
+      "sdr": "BRUNO PROSPECÇÃO",
+      "origem": "Facebook",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9789914",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9789721",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9789320",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9789200",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9789108",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Google | Site",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9788918",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9788805",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9788793",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9788788",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Troca"
+    },
+    {
+      "id": "9788725",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9788669",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9787856",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9787746",
+      "data": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9787703",
+      "data": "2026-10-28",
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)"
+    },
+    {
+      "id": "9787522",
+      "data": "2026-10-28",
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento"
+    },
+    {
+      "id": "9787507",
+      "data": "2026-10-28",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9787346",
+      "data": "2026-10-27",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "SóCarrão",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9787342",
+      "data": "2026-10-27",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9786904",
+      "data": "2026-10-27",
+      "sdr": "(sem SDR)",
+      "origem": "Telefone",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9786905",
+      "data": "2026-10-27",
+      "sdr": "(sem SDR)",
+      "origem": "Prospecção",
+      "tipoProposta": "Compra"
+    },
+    {
+      "id": "9786862",
+      "data": "2026-10-27",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9786859",
+      "data": "2026-10-27",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda"
+    },
+    {
+      "id": "9786737",
+      "data": "2026-10-27",
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Na Pista",
+      "tipoProposta": "Venda"
     }
   ],
   "realizados": [
@@ -489053,7 +489943,7 @@
       "dataAtendido": "2026-10-08",
       "dataVisita": "2026-10-08",
       "teveVisita": true,
-      "sdr": "Recepção",
+      "sdr": "Matheus Imbroinise",
       "origem": "Facebook Ads",
       "tipoProposta": "Troca",
       "cliente": "Danielle Rodrigues de Matos",
@@ -496425,7 +497315,7 @@
       "teveVisita": true,
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Chaves na Mão",
-      "tipoProposta": "Venda",
+      "tipoProposta": "Troca",
       "cliente": "MARCO",
       "celular": "(41)99723-8170"
     },
@@ -497630,7 +498520,7 @@
     },
     {
       "id": "9589815",
-      "dataAtendido": "2026-10-23",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -499467,7 +500357,7 @@
     },
     {
       "id": "9615731",
-      "dataAtendido": "2026-10-23",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -499823,7 +500713,7 @@
       "dataVisita": "2026-10-15",
       "teveVisita": true,
       "sdr": "Thayna PRE-VENDAS",
-      "origem": "Facebook Ads",
+      "origem": "Facebook",
       "tipoProposta": "Troca",
       "cliente": "Ale",
       "celular": "(41)99845-4768"
@@ -500633,7 +501523,7 @@
     },
     {
       "id": "9641868",
-      "dataAtendido": "2026-10-22",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -501953,7 +502843,7 @@
     },
     {
       "id": "9658653",
-      "dataAtendido": "2026-10-23",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -502206,7 +503096,7 @@
     },
     {
       "id": "9663701",
-      "dataAtendido": "2026-10-23",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -502393,7 +503283,7 @@
     },
     {
       "id": "9666481",
-      "dataAtendido": "2026-10-23",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -502426,7 +503316,7 @@
     },
     {
       "id": "9667022",
-      "dataAtendido": "2026-10-23",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -502525,7 +503415,7 @@
     },
     {
       "id": "9669678",
-      "dataAtendido": "2026-10-19",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -503223,7 +504113,7 @@
       "teveVisita": false,
       "sdr": "Andressa K B Kreia",
       "origem": "WhatsApp | Facebook Ads",
-      "tipoProposta": "Compra",
+      "tipoProposta": "Consignação",
       "cliente": "Lucas",
       "celular": "(41)9514-9007"
     },
@@ -506474,7 +507364,7 @@
     },
     {
       "id": "8835486",
-      "dataAtendido": "2026-10-22",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -506716,7 +507606,7 @@
     },
     {
       "id": "9680930",
-      "dataAtendido": "2026-10-20",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -506914,7 +507804,7 @@
     },
     {
       "id": "9684670",
-      "dataAtendido": "2026-10-20",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -507739,7 +508629,7 @@
     },
     {
       "id": "9696878",
-      "dataAtendido": "2026-10-22",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -507849,7 +508739,7 @@
     },
     {
       "id": "9697412",
-      "dataAtendido": "2026-10-21",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -508289,7 +509179,7 @@
     },
     {
       "id": "9703926",
-      "dataAtendido": "2026-10-21",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -508378,8 +509268,8 @@
     {
       "id": "9705530",
       "dataAtendido": "2026-10-21",
-      "dataVisita": null,
-      "teveVisita": false,
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Prospecção",
       "tipoProposta": "Compra",
@@ -508575,7 +509465,7 @@
     },
     {
       "id": "9708345",
-      "dataAtendido": "2026-10-22",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -508998,7 +509888,7 @@
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)",
+      "tipoProposta": "Troca",
       "cliente": "Eulersom tuono",
       "celular": "(43)99822-2624"
     },
@@ -509191,7 +510081,7 @@
     },
     {
       "id": "9719887",
-      "dataAtendido": "2026-10-22",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -509251,7 +510141,7 @@
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)",
+      "tipoProposta": "Venda",
       "cliente": "Ana Paula Barbosa da Silva de Jesus",
       "celular": "(41)99726-1469"
     },
@@ -509334,7 +510224,7 @@
     },
     {
       "id": "9724631",
-      "dataAtendido": "2026-10-23",
+      "dataAtendido": "2026-10-27",
       "dataVisita": "2026-10-27",
       "teveVisita": true,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -509713,7 +510603,7 @@
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)",
+      "tipoProposta": "Venda",
       "cliente": "SANDRO DA SILVA",
       "celular": "(41)98856-1313"
     },
@@ -509724,7 +510614,7 @@
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
       "origem": "WhatsApp | Facebook Ads",
-      "tipoProposta": "não informado(celulas em branco)",
+      "tipoProposta": "Venda",
       "cliente": "Euclides",
       "celular": "(43)9811-5239"
     },
@@ -510885,9 +511775,9 @@
     },
     {
       "id": "9741907",
-      "dataAtendido": "2026-10-24",
-      "dataVisita": null,
-      "teveVisita": false,
+      "dataAtendido": "2026-10-27",
+      "dataVisita": "2026-10-29",
+      "teveVisita": true,
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "WhatsApp",
       "tipoProposta": "Venda",
@@ -511050,7 +511940,7 @@
     },
     {
       "id": "9758181",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511061,7 +511951,7 @@
     },
     {
       "id": "9758060",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511072,7 +511962,7 @@
     },
     {
       "id": "9757998",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511083,7 +511973,7 @@
     },
     {
       "id": "9757990",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511094,7 +511984,7 @@
     },
     {
       "id": "9757895",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511105,7 +511995,7 @@
     },
     {
       "id": "9757480",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511116,7 +512006,7 @@
     },
     {
       "id": "9757052",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -511127,7 +512017,7 @@
     },
     {
       "id": "9756878",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511138,7 +512028,7 @@
     },
     {
       "id": "9756704",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -511149,7 +512039,7 @@
     },
     {
       "id": "9756242",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511160,7 +512050,7 @@
     },
     {
       "id": "9756195",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511171,7 +512061,7 @@
     },
     {
       "id": "9756142",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511182,7 +512072,7 @@
     },
     {
       "id": "9755282",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511193,7 +512083,7 @@
     },
     {
       "id": "9755252",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511204,7 +512094,7 @@
     },
     {
       "id": "9755225",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511215,7 +512105,7 @@
     },
     {
       "id": "9754776",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511226,7 +512116,7 @@
     },
     {
       "id": "9754733",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511237,7 +512127,7 @@
     },
     {
       "id": "9754576",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511248,7 +512138,7 @@
     },
     {
       "id": "9754554",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511259,18 +512149,18 @@
     },
     {
       "id": "9754478",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
       "origem": "Olx",
-      "tipoProposta": "não informado(celulas em branco)",
+      "tipoProposta": "Venda",
       "cliente": "Sergio Almeida",
       "celular": "(41)99600-2526"
     },
     {
       "id": "9754328",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511281,7 +512171,7 @@
     },
     {
       "id": "9754257",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511292,7 +512182,7 @@
     },
     {
       "id": "9754246",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511303,7 +512193,7 @@
     },
     {
       "id": "9754160",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511314,7 +512204,7 @@
     },
     {
       "id": "9754157",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511325,7 +512215,7 @@
     },
     {
       "id": "9753900",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511336,7 +512226,7 @@
     },
     {
       "id": "9753719",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -511347,7 +512237,7 @@
     },
     {
       "id": "9753665",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -511358,7 +512248,7 @@
     },
     {
       "id": "9753309",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511369,7 +512259,7 @@
     },
     {
       "id": "9753226",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511380,7 +512270,7 @@
     },
     {
       "id": "9753160",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511391,7 +512281,7 @@
     },
     {
       "id": "9753080",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511402,7 +512292,7 @@
     },
     {
       "id": "9753023",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511413,7 +512303,7 @@
     },
     {
       "id": "9752985",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511424,7 +512314,7 @@
     },
     {
       "id": "9752738",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511435,7 +512325,7 @@
     },
     {
       "id": "9752310",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511446,7 +512336,7 @@
     },
     {
       "id": "9751000",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -511457,7 +512347,7 @@
     },
     {
       "id": "9750131",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511468,7 +512358,7 @@
     },
     {
       "id": "9749598",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -511479,7 +512369,7 @@
     },
     {
       "id": "9749552",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -511490,7 +512380,7 @@
     },
     {
       "id": "9749423",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -511501,7 +512391,7 @@
     },
     {
       "id": "9748543",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511512,7 +512402,7 @@
     },
     {
       "id": "9748520",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -511523,7 +512413,7 @@
     },
     {
       "id": "9747953",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511534,7 +512424,7 @@
     },
     {
       "id": "9747742",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511545,7 +512435,7 @@
     },
     {
       "id": "9747716",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -511556,7 +512446,7 @@
     },
     {
       "id": "9746231",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": "2026-10-27",
       "teveVisita": true,
       "sdr": "Thayna PRE-VENDAS",
@@ -511567,7 +512457,7 @@
     },
     {
       "id": "9744248",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511578,7 +512468,7 @@
     },
     {
       "id": "9453953",
-      "dataAtendido": "2026-09-30",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511589,7 +512479,7 @@
     },
     {
       "id": "9453941",
-      "dataAtendido": "2026-09-30",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511600,7 +512490,7 @@
     },
     {
       "id": "9757778",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511611,7 +512501,7 @@
     },
     {
       "id": "9754140",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511622,7 +512512,7 @@
     },
     {
       "id": "9753816",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511633,7 +512523,7 @@
     },
     {
       "id": "9753684",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511644,7 +512534,7 @@
     },
     {
       "id": "9753439",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511655,7 +512545,7 @@
     },
     {
       "id": "9753207",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511666,7 +512556,7 @@
     },
     {
       "id": "9752947",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511677,7 +512567,7 @@
     },
     {
       "id": "9752693",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511688,7 +512578,7 @@
     },
     {
       "id": "9752653",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511699,7 +512589,7 @@
     },
     {
       "id": "9752573",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511710,7 +512600,7 @@
     },
     {
       "id": "9752350",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511721,7 +512611,7 @@
     },
     {
       "id": "9752326",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511732,7 +512622,7 @@
     },
     {
       "id": "9752315",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -511743,7 +512633,7 @@
     },
     {
       "id": "9750985",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511754,7 +512644,7 @@
     },
     {
       "id": "9750717",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -511765,7 +512655,7 @@
     },
     {
       "id": "9750660",
-      "dataAtendido": "2026-10-25",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511776,7 +512666,7 @@
     },
     {
       "id": "9750378",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511787,7 +512677,7 @@
     },
     {
       "id": "9750317",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511798,7 +512688,7 @@
     },
     {
       "id": "9749907",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511809,7 +512699,7 @@
     },
     {
       "id": "9749878",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511820,7 +512710,7 @@
     },
     {
       "id": "9749541",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511831,7 +512721,7 @@
     },
     {
       "id": "9749324",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511842,7 +512732,7 @@
     },
     {
       "id": "9748914",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511853,7 +512743,7 @@
     },
     {
       "id": "9748797",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511864,7 +512754,7 @@
     },
     {
       "id": "9748750",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511875,7 +512765,7 @@
     },
     {
       "id": "9748432",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511886,7 +512776,7 @@
     },
     {
       "id": "9748367",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511897,7 +512787,7 @@
     },
     {
       "id": "9748361",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511908,9 +512798,9 @@
     },
     {
       "id": "9748256",
-      "dataAtendido": "2026-10-24",
-      "dataVisita": null,
-      "teveVisita": false,
+      "dataAtendido": "2026-10-26",
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Facebook Ads",
       "tipoProposta": "Compra",
@@ -511919,7 +512809,7 @@
     },
     {
       "id": "9747957",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511930,7 +512820,7 @@
     },
     {
       "id": "9747948",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511941,7 +512831,7 @@
     },
     {
       "id": "9746593",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -511952,7 +512842,7 @@
     },
     {
       "id": "9746579",
-      "dataAtendido": "2026-10-24",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -511963,7 +512853,7 @@
     },
     {
       "id": "9726087",
-      "dataAtendido": "2026-10-23",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Andressa K B Kreia",
@@ -511974,7 +512864,7 @@
     },
     {
       "id": "9726088",
-      "dataAtendido": "2026-10-23",
+      "dataAtendido": "2026-10-26",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Andressa K B Kreia",
@@ -511985,7 +512875,7 @@
     },
     {
       "id": "9519498",
-      "dataAtendido": "2026-10-06",
+      "dataAtendido": "2026-10-26",
       "dataVisita": "2026-10-26",
       "teveVisita": true,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -512942,7 +513832,7 @@
     },
     {
       "id": "9786559",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -512953,7 +513843,7 @@
     },
     {
       "id": "9786548",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -512964,7 +513854,7 @@
     },
     {
       "id": "9786512",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -512975,7 +513865,7 @@
     },
     {
       "id": "9786473",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -512986,7 +513876,7 @@
     },
     {
       "id": "9785797",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -512997,7 +513887,7 @@
     },
     {
       "id": "9785728",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": "2026-10-28",
       "teveVisita": true,
       "sdr": "Thayna PRE-VENDAS",
@@ -513008,7 +513898,7 @@
     },
     {
       "id": "9785717",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513019,7 +513909,7 @@
     },
     {
       "id": "9785701",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513030,7 +513920,7 @@
     },
     {
       "id": "9785677",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513041,7 +513931,7 @@
     },
     {
       "id": "9785616",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -513052,7 +513942,7 @@
     },
     {
       "id": "9785495",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513063,7 +513953,7 @@
     },
     {
       "id": "9785464",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513074,7 +513964,7 @@
     },
     {
       "id": "9785383",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513085,7 +513975,7 @@
     },
     {
       "id": "9785353",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -513096,7 +513986,7 @@
     },
     {
       "id": "9785251",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513107,7 +513997,7 @@
     },
     {
       "id": "9785079",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -513118,7 +514008,7 @@
     },
     {
       "id": "9785063",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513129,7 +514019,7 @@
     },
     {
       "id": "9784990",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513140,7 +514030,7 @@
     },
     {
       "id": "9784902",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -513151,7 +514041,7 @@
     },
     {
       "id": "9784854",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513162,7 +514052,7 @@
     },
     {
       "id": "9784814",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513173,7 +514063,7 @@
     },
     {
       "id": "9784655",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513184,7 +514074,7 @@
     },
     {
       "id": "9784456",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513195,7 +514085,7 @@
     },
     {
       "id": "9784412",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513206,7 +514096,7 @@
     },
     {
       "id": "9784408",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513217,7 +514107,7 @@
     },
     {
       "id": "9784317",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513228,7 +514118,7 @@
     },
     {
       "id": "9784168",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513239,7 +514129,7 @@
     },
     {
       "id": "9784111",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -513250,7 +514140,7 @@
     },
     {
       "id": "9784041",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -513261,7 +514151,7 @@
     },
     {
       "id": "9783990",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -513272,7 +514162,7 @@
     },
     {
       "id": "9783447",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -513283,7 +514173,7 @@
     },
     {
       "id": "9783281",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -513294,7 +514184,7 @@
     },
     {
       "id": "9783202",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513305,7 +514195,7 @@
     },
     {
       "id": "9783054",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513316,7 +514206,7 @@
     },
     {
       "id": "9782826",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513327,7 +514217,7 @@
     },
     {
       "id": "9782714",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513338,7 +514228,7 @@
     },
     {
       "id": "9782672",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513349,7 +514239,7 @@
     },
     {
       "id": "9782642",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -513371,7 +514261,7 @@
     },
     {
       "id": "9782069",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513393,7 +514283,7 @@
     },
     {
       "id": "9782060",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513426,7 +514316,7 @@
     },
     {
       "id": "9782006",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513459,7 +514349,7 @@
     },
     {
       "id": "9781654",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -513591,7 +514481,7 @@
     },
     {
       "id": "9780924",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -513613,7 +514503,7 @@
     },
     {
       "id": "9780383",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -513866,7 +514756,7 @@
     },
     {
       "id": "9776745",
-      "dataAtendido": "2026-10-27",
+      "dataAtendido": "2026-10-28",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -513999,8 +514889,8 @@
     {
       "id": "9775752",
       "dataAtendido": "2026-10-27",
-      "dataVisita": null,
-      "teveVisita": false,
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
       "sdr": "Allan Junior Dos Santos Ramos",
       "origem": "Facebook Ads",
       "tipoProposta": "Troca",
@@ -514152,7 +515042,7 @@
     },
     {
       "id": "9772614",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514163,7 +515053,7 @@
     },
     {
       "id": "9772577",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514174,7 +515064,7 @@
     },
     {
       "id": "9772561",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514185,7 +515075,7 @@
     },
     {
       "id": "9771785",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514196,7 +515086,7 @@
     },
     {
       "id": "9771770",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514207,7 +515097,7 @@
     },
     {
       "id": "9771598",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514218,7 +515108,7 @@
     },
     {
       "id": "9771390",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514229,7 +515119,7 @@
     },
     {
       "id": "9771362",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514240,7 +515130,7 @@
     },
     {
       "id": "9771278",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514251,7 +515141,7 @@
     },
     {
       "id": "9771230",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514262,7 +515152,7 @@
     },
     {
       "id": "9771177",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514273,7 +515163,7 @@
     },
     {
       "id": "9771065",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514295,7 +515185,7 @@
     },
     {
       "id": "9770945",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514306,7 +515196,7 @@
     },
     {
       "id": "9770877",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514317,7 +515207,7 @@
     },
     {
       "id": "9770366",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514328,7 +515218,7 @@
     },
     {
       "id": "9770323",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514339,7 +515229,7 @@
     },
     {
       "id": "9770313",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514350,7 +515240,7 @@
     },
     {
       "id": "9770292",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514361,7 +515251,7 @@
     },
     {
       "id": "9770274",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514372,7 +515262,7 @@
     },
     {
       "id": "9770254",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514383,7 +515273,7 @@
     },
     {
       "id": "9770234",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514394,7 +515284,7 @@
     },
     {
       "id": "9770191",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514405,7 +515295,7 @@
     },
     {
       "id": "9769994",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -514416,7 +515306,7 @@
     },
     {
       "id": "9769922",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514427,7 +515317,7 @@
     },
     {
       "id": "9769920",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514438,7 +515328,7 @@
     },
     {
       "id": "9769850",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514449,7 +515339,7 @@
     },
     {
       "id": "9769724",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514460,7 +515350,7 @@
     },
     {
       "id": "9769713",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514471,7 +515361,7 @@
     },
     {
       "id": "9769543",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514482,7 +515372,7 @@
     },
     {
       "id": "9769354",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514493,7 +515383,7 @@
     },
     {
       "id": "9769306",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -514504,7 +515394,7 @@
     },
     {
       "id": "9769307",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -514515,7 +515405,7 @@
     },
     {
       "id": "9769305",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -514526,7 +515416,7 @@
     },
     {
       "id": "9769021",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514537,7 +515427,7 @@
     },
     {
       "id": "9768951",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514548,7 +515438,7 @@
     },
     {
       "id": "9768944",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -514559,7 +515449,7 @@
     },
     {
       "id": "9768848",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514570,7 +515460,7 @@
     },
     {
       "id": "9768811",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514581,7 +515471,7 @@
     },
     {
       "id": "9768677",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514592,7 +515482,7 @@
     },
     {
       "id": "9768613",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514603,7 +515493,7 @@
     },
     {
       "id": "9768601",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514614,7 +515504,7 @@
     },
     {
       "id": "9768499",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514625,7 +515515,7 @@
     },
     {
       "id": "9768417",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lais Narimã Ferreira Vieira",
@@ -514636,7 +515526,7 @@
     },
     {
       "id": "9768376",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514647,7 +515537,7 @@
     },
     {
       "id": "9768374",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514658,7 +515548,7 @@
     },
     {
       "id": "9767703",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514669,7 +515559,7 @@
     },
     {
       "id": "9767489",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514680,7 +515570,7 @@
     },
     {
       "id": "9767406",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Lead Sem Interesse",
@@ -514691,7 +515581,7 @@
     },
     {
       "id": "9767162",
-      "dataAtendido": "2026-10-26",
+      "dataAtendido": "2026-10-27",
       "dataVisita": null,
       "teveVisita": false,
       "sdr": "Thayna PRE-VENDAS",
@@ -514702,7 +515592,7 @@
     },
     {
       "id": "9696973",
-      "dataAtendido": "2026-10-20",
+      "dataAtendido": "2026-10-27",
       "dataVisita": "2026-10-28",
       "teveVisita": true,
       "sdr": "Allan Junior Dos Santos Ramos",
@@ -514713,9 +515603,9 @@
     },
     {
       "id": "9440783",
-      "dataAtendido": "2026-09-28",
-      "dataVisita": null,
-      "teveVisita": false,
+      "dataAtendido": "2026-10-28",
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
       "sdr": "Liriane Larissa Ribeiro",
       "origem": "Olx",
       "tipoProposta": "Compra",
@@ -514765,6 +515655,875 @@
       "tipoProposta": "não informado(celulas em branco)",
       "cliente": "Maria Teresa",
       "celular": "(41)9127-7451"
+    },
+    {
+      "id": "9786737",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Na Pista",
+      "tipoProposta": "Venda",
+      "cliente": "DIRCEU PAULA GONCALVES",
+      "celular": "(41)99685-4742"
+    },
+    {
+      "id": "9786859",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Kiss Forever",
+      "celular": "(41)9551-1350"
+    },
+    {
+      "id": "9786862",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Jean Verissimo/ Rock Singer/ Rusty Cage",
+      "celular": "(41)99875-6308"
+    },
+    {
+      "id": "9787342",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Nayana Castro",
+      "celular": "(13)93300-7638"
+    },
+    {
+      "id": "9787346",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "SóCarrão",
+      "tipoProposta": "Venda",
+      "cliente": "Daniel Gomes Fernandes",
+      "celular": "(83)99915-6285"
+    },
+    {
+      "id": "9787507",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Geraldo",
+      "celular": "(41)9616-3588"
+    },
+    {
+      "id": "9787522",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Thiago Nascimento Dos Santos",
+      "celular": "(41)99790-8229"
+    },
+    {
+      "id": "9787703",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Contato Instagram",
+      "celular": ""
+    },
+    {
+      "id": "9787746",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp",
+      "tipoProposta": "Venda",
+      "cliente": "Julio",
+      "celular": "(54)8141-4047"
+    },
+    {
+      "id": "9787856",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Andrei Stange",
+      "celular": "(41)98455-8852"
+    },
+    {
+      "id": "9788669",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Eli",
+      "celular": "(41)98426-5812"
+    },
+    {
+      "id": "9788725",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Compra",
+      "cliente": "alanychavesss",
+      "celular": "(45)9955-7920"
+    },
+    {
+      "id": "9788788",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Troca",
+      "cliente": "Itacir",
+      "celular": "(46)9934-6249"
+    },
+    {
+      "id": "9788793",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "GLEIZER",
+      "celular": "(41)99581-7251"
+    },
+    {
+      "id": "9788805",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Lucas",
+      "celular": "(43)99562-2010"
+    },
+    {
+      "id": "9788918",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Mauro",
+      "celular": "(41)9910-5926"
+    },
+    {
+      "id": "9789108",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Google | Site",
+      "tipoProposta": "Compra",
+      "cliente": "Mariana Ortega",
+      "celular": "(49)99193-5179"
+    },
+    {
+      "id": "9789200",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "V-A polimento",
+      "celular": "(41)8752-7605"
+    },
+    {
+      "id": "9789320",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Contato Instagram",
+      "celular": ""
+    },
+    {
+      "id": "9789721",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Wagner Kawano",
+      "celular": "(43)99617-2944"
+    },
+    {
+      "id": "9789914",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Altamir Rossatto",
+      "celular": "(49)9994-3200"
+    },
+    {
+      "id": "9790062",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
+      "sdr": "BRUNO PROSPECÇÃO",
+      "origem": "Facebook",
+      "tipoProposta": "Venda",
+      "cliente": "Gumercindo Francisco",
+      "celular": "(41)98865-6440"
+    },
+    {
+      "id": "9790176",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Edson Garcia",
+      "celular": "(49)9124-9924"
+    },
+    {
+      "id": "9790196",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Troca",
+      "cliente": "Pety Brotto",
+      "celular": "(41)9183-7496"
+    },
+    {
+      "id": "9790198",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Joao  JP",
+      "celular": "(69)9988-4726"
+    },
+    {
+      "id": "9790496",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Edney",
+      "celular": "(41)99848-2594"
+    },
+    {
+      "id": "9790516",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Herculano",
+      "celular": "(41)99610-3348"
+    },
+    {
+      "id": "9790543",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "🪻Ivete Antoniolli",
+      "celular": "(44)9132-2062"
+    },
+    {
+      "id": "9790876",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Lucas Ortega",
+      "celular": "(49)99916-9817"
+    },
+    {
+      "id": "9790883",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Olx",
+      "tipoProposta": "Venda",
+      "cliente": "Edinho",
+      "celular": "(41)99977-9597"
+    },
+    {
+      "id": "9790893",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Prospecção",
+      "tipoProposta": "Compra",
+      "cliente": "Tiago",
+      "celular": "(41)99503-7465"
+    },
+    {
+      "id": "9790896",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Contato Instagram",
+      "celular": ""
+    },
+    {
+      "id": "9790903",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Telefone",
+      "tipoProposta": "Compra",
+      "cliente": "Luiz",
+      "celular": "(41)99792-8669"
+    },
+    {
+      "id": "9790911",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Liriane Larissa Ribeiro",
+      "origem": "Olx",
+      "tipoProposta": "Compra",
+      "cliente": "Milena",
+      "celular": "(41)99703-7671"
+    },
+    {
+      "id": "9791035",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Jardel Victor",
+      "celular": "(44)98461-3207"
+    },
+    {
+      "id": "9791071",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Na Pista",
+      "tipoProposta": "Venda",
+      "cliente": "Osmair Kreuch Paes",
+      "celular": "(47)99667-8995"
+    },
+    {
+      "id": "9791292",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Thomas Augusto Otto",
+      "celular": "(41)99807-0890"
+    },
+    {
+      "id": "9791365",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Ilma Freitas",
+      "celular": "(84)9998-4060"
+    },
+    {
+      "id": "9791633",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Leila",
+      "celular": "(41)9710-7908"
+    },
+    {
+      "id": "9791822",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Olx",
+      "tipoProposta": "Venda",
+      "cliente": "Fabio Perciak",
+      "celular": "(41)99951-0600"
+    },
+    {
+      "id": "9792025",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Lucimara",
+      "celular": "(42)9872-0820"
+    },
+    {
+      "id": "9792050",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Google | Site",
+      "tipoProposta": "Financiamento",
+      "cliente": "Fábio José da Silva",
+      "celular": "(41)99948-4215"
+    },
+    {
+      "id": "9792098",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Site",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Keilla Virginia",
+      "celular": "(41)9878-6122"
+    },
+    {
+      "id": "9792169",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Negrini Bruno",
+      "celular": "(41)98840-9055"
+    },
+    {
+      "id": "9792224",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Alberi",
+      "celular": "(41)9989-2308"
+    },
+    {
+      "id": "9792330",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Silvan Dal Bello",
+      "celular": ""
+    },
+    {
+      "id": "9792577",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Gustavo Lucas de Lima",
+      "celular": "(41)99167-9481"
+    },
+    {
+      "id": "9792671",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Olx",
+      "tipoProposta": "Venda",
+      "cliente": "APOLO GLEIDSON LIRA DE OLIVEIRA",
+      "celular": "(99)98422-7958"
+    },
+    {
+      "id": "9792991",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Ricardo Alves de Abreu",
+      "celular": "(41)99924-6761"
+    },
+    {
+      "id": "9793030",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Janaina Soares",
+      "celular": "(41)99899-2974"
+    },
+    {
+      "id": "9793141",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Jefferson Bertoldi",
+      "celular": "(41)99169-2986"
+    },
+    {
+      "id": "9793204",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Venda",
+      "cliente": "4196426063",
+      "celular": "(41)9642-6063"
+    },
+    {
+      "id": "9793349",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Dyaana Biguetti",
+      "celular": "(41)99630-2054"
+    },
+    {
+      "id": "9793420",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Contato Instagram",
+      "celular": ""
+    },
+    {
+      "id": "9793481",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp | Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Psicólogo Ademir Tavares",
+      "celular": "(92)9226-1038"
+    },
+    {
+      "id": "9793484",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
+      "sdr": "Liriane Larissa Ribeiro",
+      "origem": "Busca Ativa",
+      "tipoProposta": "Compra",
+      "cliente": "Maike Jonathan Rodrigues",
+      "celular": "(41)99822-5504"
+    },
+    {
+      "id": "9793489",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Chaves na Mão",
+      "tipoProposta": "Venda",
+      "cliente": "Cleber",
+      "celular": "(41)99175-1727"
+    },
+    {
+      "id": "9793530",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Karine 🥰",
+      "celular": "(41)8517-7449"
+    },
+    {
+      "id": "9793670",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Joa",
+      "celular": "(66)8117-7545"
+    },
+    {
+      "id": "9794157",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Mercado Livre | WhatsApp",
+      "tipoProposta": "Venda",
+      "cliente": "Cezar Pelussi",
+      "celular": "(41)9616-0344"
+    },
+    {
+      "id": "9794338",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "WhatsApp | Instagram Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Bernardo",
+      "celular": "(41)8814-2286"
+    },
+    {
+      "id": "9794494",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Claudio Olsemann",
+      "celular": "(41)99842-8402"
+    },
+    {
+      "id": "9794786",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Ingridy Biasi",
+      "celular": "(49)98906-3015"
+    },
+    {
+      "id": "9794859",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "SóCarrão",
+      "tipoProposta": "Venda",
+      "cliente": "Rebeca Silva",
+      "celular": "(92)99459-6575"
+    },
+    {
+      "id": "9794901",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "WhatsApp",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Leila",
+      "celular": "(41)9710-7908"
+    },
+    {
+      "id": "9795059",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
+      "sdr": "Recepção",
+      "origem": "Carteira",
+      "tipoProposta": "Troca",
+      "cliente": "kaline",
+      "celular": "(41)99155-8390"
+    },
+    {
+      "id": "9795127",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Contato Instagram",
+      "celular": ""
+    },
+    {
+      "id": "9795262",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Contato Instagram",
+      "celular": ""
+    },
+    {
+      "id": "9795488",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Compra",
+      "cliente": "Patricia Langendyk",
+      "celular": "(41)99972-1277"
+    },
+    {
+      "id": "9795626",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Venda",
+      "cliente": "Izabeli",
+      "celular": "(41)99218-5412"
+    },
+    {
+      "id": "9795748",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Telefone",
+      "tipoProposta": "Troca",
+      "cliente": "Eduardo",
+      "celular": "(42)99976-0060"
+    },
+    {
+      "id": "9795789",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Thayna PRE-VENDAS",
+      "origem": "Facebook Ads",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Débora Oliveira",
+      "celular": "(46)98801-1026"
+    },
+    {
+      "id": "9795910",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Toni Santos",
+      "celular": "(41)98705-1749"
+    },
+    {
+      "id": "9796071",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Contato Instagram",
+      "celular": ""
+    },
+    {
+      "id": "9796229",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lead Sem Interesse",
+      "origem": "Instagram",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Contato Instagram",
+      "celular": ""
+    },
+    {
+      "id": "9796256",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "origem": "Prospecção",
+      "tipoProposta": "Venda",
+      "cliente": "William",
+      "celular": "(41)99818-2975"
+    },
+    {
+      "id": "9796978",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": "2026-10-28",
+      "teveVisita": true,
+      "sdr": "Recepção",
+      "origem": "Carteira",
+      "tipoProposta": "Venda",
+      "cliente": "MARCELO",
+      "celular": "(41)99264-5564"
+    },
+    {
+      "id": "9797386",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Lais Narimã Ferreira Vieira",
+      "origem": "Facebook Ads",
+      "tipoProposta": "Financiamento",
+      "cliente": "Rogério Mineiro",
+      "celular": "(49)99921-0465"
+    },
+    {
+      "id": "9798152",
+      "dataAtendido": "2026-10-28",
+      "dataVisita": null,
+      "teveVisita": false,
+      "sdr": "Ana Dal Bello",
+      "origem": "Indicação",
+      "tipoProposta": "não informado(celulas em branco)",
+      "cliente": "Leo",
+      "celular": "(41)98446-0883"
     }
   ],
   "sucessosEventos": [
