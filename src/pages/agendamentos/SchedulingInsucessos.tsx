@@ -106,9 +106,9 @@ export function SchedulingInsucessos() {
 
       <MotivoByPersonTable
         rows={motivosBySdr}
-        title="Motivos por SDR / Atendido por"
+        title="Motivos por SDR / Responsável"
         subtitle="Principal motivo de cada atendente no filtro atual (% sobre os insucessos daquela pessoa)."
-        nameLabel="Atendido por"
+        nameLabel="Responsável"
       />
 
       <MotivoByPersonTable

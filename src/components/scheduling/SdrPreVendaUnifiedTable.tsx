@@ -20,9 +20,11 @@ export function SdrPreVendaUnifiedTable({ rows, onExport }: Props) {
         Desempenho Pré-Vendas
         <InfoTip>
           Equipe web (Allan, Thayna, Lais, Matheus e Liriane). Outros SDRs só aparecem se
-          selecionados no filtro. Atendimentos = REALIZADOS (Atendido em) · Agend. = Agendado em ·
-          Visitas = Data Visita dos recebidos (Visita em) · Sucessos = Finalizado em · % Agend. =
-          Ag/Atend · Conv. visita = Vis/Ag · Conv. = Suc/Vis. Recepção não entra neste bloco.
+          selecionados no filtro. Atendente do ID = sempre Responsável. Atendimentos = Atendido em
+          (se o ID não estiver em REALIZADOS, usa Criado em) · Agend. = Agendado em · Visitas =
+          Visita=Sim no Responsável · Sucessos = Finalizado em · % Agend. = Ag/Atend · Conv. visita
+          = Vis/Ag · Conv. = Suc/Vis. "Atendido por" da agenda só aparece em cruzados. Recepção
+          não entra neste bloco.
         </InfoTip>
         <button
           type="button"
@@ -37,7 +39,7 @@ export function SdrPreVendaUnifiedTable({ rows, onExport }: Props) {
         <table>
           <thead>
             <tr>
-              <th>Atendido por</th>
+              <th>Responsável</th>
               <th>Atendimentos</th>
               <th>Agend.</th>
               <th>% Agend.</th>
@@ -103,7 +105,7 @@ export function SdrPreVendaConvPropostaTable({ rows }: Props) {
         <table>
           <thead>
             <tr>
-              <th>Atendido por</th>
+              <th>Responsável</th>
               <th>Compra</th>
               <th>Venda</th>
               <th>Troca</th>
@@ -153,7 +155,7 @@ export function SdrPreVendaTopParceirosTable({ rows }: Props) {
         <table>
           <thead>
             <tr>
-              <th>Atendido por</th>
+              <th>Responsável</th>
               <th>1º</th>
               <th>2º</th>
               <th>3º</th>

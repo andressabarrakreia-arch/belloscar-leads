@@ -99,18 +99,86 @@ function digitsOnly(value: string): string {
   return value.replace(/\D/g, "");
 }
 
+/**
+ * Responsável do ID: REALIZADOS manda; LEADS GERAL só preenche quem ainda não tem.
+ * "Atendido por" da agenda NÃO entra aqui — fica só para cruzados.
+ */
+export function buildResponsavelById(
+  realizados: RealizadoItem[],
+  leads: LeadAtendimentoItem[] = []
+): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const lead of leads) {
+    if (!lead.id || !lead.sdr?.trim()) continue;
+    map.set(lead.id, lead.sdr.trim());
+  }
+  for (const row of realizados) {
+    if (!row.id || !row.sdr?.trim()) continue;
+    map.set(row.id, row.sdr.trim());
+  }
+  return map;
+}
+
+export function resolveResponsavel(
+  id: string,
+  fallbackSdr: string,
+  responsavelById?: Map<string, string>
+): string {
+  return responsavelById?.get(id) || fallbackSdr;
+}
+
+/**
+ * Atendimentos: Atendido em (REALIZADOS).
+ * Só se o ID não existir em REALIZADOS → Criado em (LEADS GERAL).
+ */
+export function buildAtendimentosComFallback(
+  realizados: RealizadoItem[],
+  leads: LeadAtendimentoItem[],
+  filters: SchedulingFilters
+): RealizadoItem[] {
+  const realizadoIds = new Set(realizados.map((row) => row.id));
+  const fromRealizados = filterRealizadosAtendimentos(realizados, filters);
+  const fromLeads: RealizadoItem[] = [];
+  for (const lead of leads) {
+    if (!lead.id || realizadoIds.has(lead.id)) continue;
+    if (!matchSdrFilter(lead.sdr, filters)) continue;
+    if (filters.tipoProposta && lead.tipoProposta !== filters.tipoProposta) continue;
+    if (filters.origem && lead.origem !== filters.origem) continue;
+    if (filters.from && lead.data < filters.from) continue;
+    if (filters.to && lead.data > filters.to) continue;
+    if (filters.q?.trim()) {
+      const q = filters.q.trim().toLowerCase();
+      if (!lead.id.toLowerCase().includes(q)) continue;
+    }
+    fromLeads.push({
+      id: lead.id,
+      dataAtendido: lead.data,
+      dataVisita: null,
+      teveVisita: false,
+      sdr: lead.sdr,
+      origem: lead.origem,
+      tipoProposta: lead.tipoProposta,
+      cliente: "",
+      celular: "",
+    });
+  }
+  return [...fromRealizados, ...fromLeads];
+}
+
 export function filterAgendamentos(
   items: AgendamentoItem[],
-  filters: SchedulingFilters
+  filters: SchedulingFilters,
+  responsavelById?: Map<string, string>
 ): AgendamentoItem[] {
   const q = filters.q?.trim().toLowerCase();
   const qDigits = q ? digitsOnly(q) : "";
 
   return items.filter((item) => {
     if (filters.sdr) {
+      const who = resolveResponsavel(item.id, item.sdr, responsavelById);
       if (filters.sdr === "Recepção") {
-        if (!isRecepcaoName(item.sdr)) return false;
-      } else if (item.sdr !== filters.sdr) {
+        if (!isRecepcaoName(who)) return false;
+      } else if (who !== filters.sdr && displaySdrName(who) !== filters.sdr) {
         return false;
       }
     }
@@ -202,26 +270,35 @@ export function filterRealizadosVisitas(
   });
 }
 
-/** SUCESSOS no período por Finalizado em. */
+/**
+ * SUCESSOS no período por Finalizado em.
+ * O atendente do ID é sempre o Responsável (não o "Atendido por" da planilha de sucessos).
+ */
 export function filterSucessosEventos(
   sucessos: SucessoItem[],
-  filters: SchedulingFilters
+  filters: SchedulingFilters,
+  responsavelById?: Map<string, string>
 ): SucessoItem[] {
-  return sucessos.filter((s) => {
-    if (!matchSdrFilter(s.sdr, filters)) return false;
-    if (filters.vendedor && s.vendedor !== filters.vendedor) return false;
-    if (filters.tipoProposta && s.tipoProposta !== filters.tipoProposta) return false;
-    if (filters.origem && s.origem !== filters.origem) return false;
-    if (filters.from && s.dataFinalizado < filters.from) return false;
-    if (filters.to && s.dataFinalizado > filters.to) return false;
-    if (filters.q?.trim()) {
-      const q = filters.q.trim().toLowerCase();
-      if (!s.id.toLowerCase().includes(q) && !s.cliente.toLowerCase().includes(q)) {
-        return false;
+  return sucessos
+    .map((s) => ({
+      ...s,
+      sdr: resolveResponsavel(s.id, s.sdr, responsavelById),
+    }))
+    .filter((s) => {
+      if (!matchSdrFilter(s.sdr, filters)) return false;
+      if (filters.vendedor && s.vendedor !== filters.vendedor) return false;
+      if (filters.tipoProposta && s.tipoProposta !== filters.tipoProposta) return false;
+      if (filters.origem && s.origem !== filters.origem) return false;
+      if (filters.from && s.dataFinalizado < filters.from) return false;
+      if (filters.to && s.dataFinalizado > filters.to) return false;
+      if (filters.q?.trim()) {
+        const q = filters.q.trim().toLowerCase();
+        if (!s.id.toLowerCase().includes(q) && !s.cliente.toLowerCase().includes(q)) {
+          return false;
+        }
       }
-    }
-    return true;
-  });
+      return true;
+    });
 }
 
 /** Contagem por SDR (display name), com Recepção consolidada. */
@@ -300,12 +377,15 @@ export type MotivoByPersonRow = {
   motivos: MotivoStats[];
 };
 
-/** Insucessos agrupados por SDR (Atendido por). Recepção+Gabriela → "Recepção". */
-export function buildMotivosBySdr(items: AgendamentoItem[]): MotivoByPersonRow[] {
+/** Insucessos agrupados pelo Responsável do ID. Recepção+Gabriela → "Recepção". */
+export function buildMotivosBySdr(
+  items: AgendamentoItem[],
+  responsavelById?: Map<string, string>
+): MotivoByPersonRow[] {
   const closed = items.filter((i) => i.status === "Insucesso");
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of closed) {
-    const nome = displaySdrName(item.sdr);
+    const nome = displaySdrName(resolveResponsavel(item.id, item.sdr, responsavelById));
     const list = groups.get(nome) || [];
     list.push(item);
     groups.set(nome, list);
@@ -534,19 +614,23 @@ function topParceirosDoSdr(
 
 /**
  * Painel unificado Pré-Vendas.
- * Atendimentos = REALIZADOS (Atendido em) · Agend. = planilha (Agendado em)
- * Visitas = REALIZADOS (Visita em) · Sucessos = SUCESSOS (Finalizado em)
- * Conv. visita = Vis/Ag · Conv. = Suc/Vis (como no CRM).
+ * Atendente do ID = sempre Responsável.
+ * Atendimentos = Atendido em (ou Criado em se o ID não estiver em REALIZADOS)
+ * Agend. = Agendado em · Visitas = Visita=Sim (Responsável) · Sucessos = Finalizado em
+ * "Atendido por" da agenda não conta volume — só cruzados na aba Agendamentos.
+ * Conv. visita = Vis/Ag · Conv. = Suc/Vis.
  */
 export function buildSdrPreVendaRows(
   items: AgendamentoItem[],
   realizadosAtend: RealizadoItem[] = [],
   realizadosVisitas: RealizadoItem[] = [],
-  sucessos: SucessoItem[] = []
+  sucessos: SucessoItem[] = [],
+  responsavelById?: Map<string, string>
 ): SdrPreVendaRow[] {
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of items) {
-    const key = displaySdrName(item.sdr);
+    const key = displaySdrName(resolveResponsavel(item.id, item.sdr, responsavelById));
+    if (isRecepcaoName(key)) continue;
     const list = groups.get(key) || [];
     list.push(item);
     groups.set(key, list);
@@ -568,6 +652,7 @@ export function buildSdrPreVendaRows(
   ]);
 
   return [...allSdrs]
+    .filter((sdr) => !isRecepcaoName(sdr))
     .map((sdr) => {
       const list = groups.get(sdr) || [];
       const base =
@@ -972,9 +1057,9 @@ function applyTipoProposta(row: SdrVendedorCruzadoId, tipo: TipoProposta) {
 }
 
 /**
- * Uma linha por par SDR × Vendedor (Pré-Venda).
- * Visitas e sucessos entram pelo responsável do atendimento (não por quem agendou).
- * IDs agendados por outra pessoa ficam em `cruzados` para expandir na UI.
+ * Uma linha por par Responsável × Vendedor (Pré-Venda).
+ * Visitas e sucessos entram pelo Responsável.
+ * "Atendido por" da agenda só aparece em `cruzados` quando for outra pessoa.
  */
 export function buildSdrVendedorProposalRows(
   items: AgendamentoItem[],
@@ -982,14 +1067,17 @@ export function buildSdrVendedorProposalRows(
     visitas: RealizadoItem[];
     sucessos: SucessoItem[];
     agenda: AgendamentoItem[];
-  }
+  },
+  responsavelById?: Map<string, string>
 ): SdrVendedorPairRow[] {
   const groups = new Map<string, AgendamentoItem[]>();
   for (const item of items) {
     if (!item.vendedor || item.vendedor === "(sem vendedor)") continue;
-    if (!item.sdr || item.sdr === "(sem SDR)") continue;
-    if (!isFeaturedPreVendaSdr(item.sdr)) continue;
-    const key = `${item.sdr}::${item.vendedor}`;
+    const responsavel = resolveResponsavel(item.id, item.sdr, responsavelById);
+    if (!responsavel || responsavel === "(sem SDR)") continue;
+    if (!isFeaturedPreVendaSdr(responsavel)) continue;
+    if (isRecepcaoName(responsavel)) continue;
+    const key = `${responsavel}::${item.vendedor}`;
     const list = groups.get(key) || [];
     list.push(item);
     groups.set(key, list);
@@ -1002,6 +1090,7 @@ export function buildSdrVendedorProposalRows(
   const ensurePair = (sdr: string, vendedor: string): string | null => {
     if (!sdr || !vendedor || vendedor === "(sem vendedor)") return null;
     if (!isFeaturedPreVendaSdr(sdr)) return null;
+    if (isRecepcaoName(sdr)) return null;
     const key = `${sdr}::${vendedor}`;
     if (!groups.has(key)) groups.set(key, []);
     return key;
@@ -1034,7 +1123,7 @@ export function buildSdrVendedorProposalRows(
     for (const row of dated.visitas) {
       if (isRecepcaoName(row.sdr)) continue;
       const agenda = agendaById.get(row.id);
-      const sdr = row.sdr;
+      const sdr = resolveResponsavel(row.id, row.sdr, responsavelById);
       const vendedor = (agenda?.vendedor || "").trim();
       const key = ensurePair(sdr, vendedor);
       if (!key) continue;
@@ -1053,7 +1142,7 @@ export function buildSdrVendedorProposalRows(
     for (const row of dated.sucessos) {
       if (isRecepcaoName(row.sdr)) continue;
       const agenda = agendaById.get(row.id);
-      const sdr = row.sdr;
+      const sdr = resolveResponsavel(row.id, row.sdr, responsavelById);
       const vendedor = (agenda?.vendedor || row.vendedor || "").trim();
       const key = ensurePair(sdr, vendedor);
       if (!key) continue;
@@ -1216,14 +1305,13 @@ export type CanalKpis = {
 };
 
 /** Canal do ID pela agenda. Sem agenda, o nome do atendente separa Recepção. */
+/** Canal pelo Responsável do ID (sdr já remapeado). Agenda.canal não manda. */
 export function eventMatchesCanal(
-  id: string,
+  _id: string,
   sdr: string,
   canal: CanalAtendimento,
-  agendaById: Map<string, AgendamentoItem>
+  _agendaById?: Map<string, AgendamentoItem>
 ): boolean {
-  const item = agendaById.get(id);
-  if (item) return item.canal === canal;
   return canal === "Recepção" ? isRecepcaoName(sdr) : !isRecepcaoName(sdr);
 }
 

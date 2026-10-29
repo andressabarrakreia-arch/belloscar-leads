@@ -8,8 +8,9 @@ import type { SchedulingDataset } from "../lib/scheduling/types";
 import { dealsFromLines } from "../lib/negociacoes/metrics";
 import { loadNegociacoesDataset } from "../lib/negociacoes/storage";
 import {
+  buildAtendimentosComFallback,
+  buildResponsavelById,
   filterAgendamentos,
-  filterRealizadosAtendimentos,
   filterRealizadosVisitas,
   filterSucessosEventos,
 } from "../lib/scheduling/metrics";
@@ -63,18 +64,18 @@ export function KeyTicker({ moduleId }: Props) {
         if (moduleId === "agendamentos") {
           const ds = await loadSchedulingDataset();
           if (!cancelled) {
-            const items = filterAgendamentos(ds.items, {});
             const realizados = ds.realizados || [];
-            const leadsAsAtend: LeadAtendimentoItem[] =
-              realizados.length > 0
-                ? filterRealizadosAtendimentos(realizados, {}).map((r) => ({
-                    id: r.id,
-                    data: r.dataAtendido,
-                    sdr: r.sdr,
-                    origem: r.origem,
-                    tipoProposta: r.tipoProposta,
-                  }))
-                : ds.leadsAtendimentos || [];
+            const leadsGerais = ds.leadsAtendimentos || [];
+            const responsavelById = buildResponsavelById(realizados, leadsGerais);
+            const items = filterAgendamentos(ds.items, {}, responsavelById);
+            const atendimentos = buildAtendimentosComFallback(realizados, leadsGerais, {});
+            const leadsAsAtend: LeadAtendimentoItem[] = atendimentos.map((r) => ({
+              id: r.id,
+              data: r.dataAtendido,
+              sdr: r.sdr,
+              origem: r.origem,
+              tipoProposta: r.tipoProposta,
+            }));
             setFallbackItems(
               buildAgendamentosTickerItems(
                 items,
@@ -83,8 +84,11 @@ export function KeyTicker({ moduleId }: Props) {
                 undefined,
                 {
                   visitas: filterRealizadosVisitas(realizados, {}).length,
-                  sucessos: filterSucessosEventos(ds.sucessosEventos || [], {})
-                    .length,
+                  sucessos: filterSucessosEventos(
+                    ds.sucessosEventos || [],
+                    {},
+                    responsavelById
+                  ).length,
                 }
               )
             );

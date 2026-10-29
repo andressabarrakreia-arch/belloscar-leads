@@ -31,7 +31,7 @@ export function SDRPerformanceTable({
         <table>
           <thead>
             <tr>
-              <th>Atendido por</th>
+              <th>Responsável</th>
               {showAtendimentos && <th>Atendimentos</th>}
               <th>Agendamentos</th>
               {showAtendimentos && <th>% Agend.</th>}

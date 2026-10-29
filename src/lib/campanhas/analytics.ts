@@ -64,7 +64,11 @@ function passesIdentity(row: CampanhaRecord, filters: CampanhaFilters): boolean 
   return true;
 }
 
-/** IDs Meta do LEADS GERAL, enriquecidos por ID. Quem não é Meta não entra. */
+/**
+ * IDs Meta (Facebook Ads / Instagram Ads) do LEADS GERAL, enriquecidos por ID.
+ * Atendente = sempre Responsável (REALIZADOS/LEADS). Agenda "Atendido por" não atribui.
+ * Atendimento = Atendido em; se o ID não estiver em REALIZADOS → Criado em.
+ */
 export function indexCampanhas(dataset: SchedulingDataset): CampanhaRecord[] {
   const byId = new Map<string, CampanhaRecord>();
 
@@ -75,8 +79,9 @@ export function indexCampanhas(dataset: SchedulingDataset): CampanhaRecord[] {
       id: lead.id,
       origem: lead.origem,
       tokens,
-      sdr: "(sem SDR)",
-      dataAtendido: null,
+      sdr: displaySdrName(lead.sdr || "(sem SDR)"),
+      // Provisório: Criado em — sobrescrito se o ID existir em REALIZADOS
+      dataAtendido: lead.data || null,
       teveVisita: false,
       dataVisita: null,
       dataAgendamento: null,
@@ -101,7 +106,6 @@ export function indexCampanhas(dataset: SchedulingDataset): CampanhaRecord[] {
     if (!rec) continue;
     rec.dataAgendamento = item.dataAgendamento || null;
     if (item.vendedor && item.vendedor !== "(sem vendedor)") rec.vendedor = item.vendedor;
-    if (rec.sdr === "(sem SDR)" && item.sdr) rec.sdr = displaySdrName(item.sdr);
     if (item.tipoProposta) rec.tipoProposta = item.tipoProposta;
   }
 
@@ -112,7 +116,6 @@ export function indexCampanhas(dataset: SchedulingDataset): CampanhaRecord[] {
     if (!rec.vendedor && sucesso.vendedor && sucesso.vendedor !== "(sem vendedor)") {
       rec.vendedor = sucesso.vendedor;
     }
-    if (rec.sdr === "(sem SDR)" && sucesso.sdr) rec.sdr = displaySdrName(sucesso.sdr);
     if (sucesso.tipoProposta) rec.tipoProposta = sucesso.tipoProposta;
   }
 

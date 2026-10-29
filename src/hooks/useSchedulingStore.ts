@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  buildAtendimentosComFallback,
   buildCanalKpis,
   buildInsucessoKpis,
   buildMotivosBySdr,
@@ -8,6 +9,7 @@ import {
   buildPeriodSeries,
   buildProposalDistribution,
   buildRecepcaoConsolidatedMetrics,
+  buildResponsavelById,
   buildSdrPreVendaRows,
   buildSdrVendedorProposalRows,
   buildVendedorComparisonRows,
@@ -15,16 +17,16 @@ import {
   eventMatchesCanal,
   filterAgendamentos,
   filterLeadsAtendimentos,
-  filterRealizadosAtendimentos,
   filterRealizadosVisitas,
   filterSucessosEventos,
   getSchedulingFilterOptions,
-  splitByCanal,
+  resolveResponsavel,
 } from "../lib/scheduling/metrics";
 import { isRecepcaoName } from "../lib/scheduling/normalize";
 import { buildPortalDashboard } from "../lib/scheduling/portalMetrics";
 import { loadSchedulingDataset } from "../lib/scheduling/storage";
 import type {
+  AgendamentoItem,
   LeadAtendimentoItem,
   SchedulingDataset,
   SchedulingFilters,
@@ -45,26 +47,45 @@ export function useSchedulingStore() {
   return { dataset, setDataset, error, loading };
 }
 
+function splitAgendaByResponsavel(
+  items: AgendamentoItem[],
+  responsavelById: Map<string, string>
+): { preVenda: AgendamentoItem[]; recepcao: AgendamentoItem[] } {
+  const preVenda: AgendamentoItem[] = [];
+  const recepcao: AgendamentoItem[] = [];
+  for (const item of items) {
+    const who = resolveResponsavel(item.id, item.sdr, responsavelById);
+    if (isRecepcaoName(who)) recepcao.push(item);
+    else preVenda.push(item);
+  }
+  return { preVenda, recepcao };
+}
+
 export function useSchedulingAnalytics(
   dataset: SchedulingDataset | null,
   filters: SchedulingFilters
 ) {
   return useMemo(() => {
     if (!dataset) return null;
-    const filtered = filterAgendamentos(dataset.items, filters);
     const realizados = dataset.realizados || [];
-    const filteredRealizados = filterRealizadosAtendimentos(realizados, filters);
+    const leadsGerais = dataset.leadsAtendimentos || [];
+    const responsavelById = buildResponsavelById(realizados, leadsGerais);
+
+    const filtered = filterAgendamentos(dataset.items, filters, responsavelById);
+    const filteredRealizados = buildAtendimentosComFallback(
+      realizados,
+      leadsGerais,
+      filters
+    );
     const filteredVisitas = filterRealizadosVisitas(realizados, filters);
     const filteredSucessos = filterSucessosEventos(
       dataset.sucessosEventos || [],
-      filters
+      filters,
+      responsavelById
     );
 
     // Fallback legado: sem REALIZADOS, usa LEADS GERAL para atendimentos
-    const legacyLeads = filterLeadsAtendimentos(
-      dataset.leadsAtendimentos || [],
-      filters
-    );
+    const legacyLeads = filterLeadsAtendimentos(leadsGerais, filters);
     const atendSource =
       realizados.length > 0
         ? filteredRealizados
@@ -72,7 +93,7 @@ export function useSchedulingAnalytics(
             (l): LeadAtendimentoItem & { dataAtendido?: string } => l
           );
 
-    const { preVenda, recepcao } = splitByCanal(filtered);
+    const { preVenda, recepcao } = splitAgendaByResponsavel(filtered, responsavelById);
     const atendPv = filteredRealizados.filter((l) => !isRecepcaoName(l.sdr));
     const atendRec = filteredRealizados.filter((l) => isRecepcaoName(l.sdr));
     const visitasPv = filteredVisitas.filter((l) => !isRecepcaoName(l.sdr));
@@ -81,53 +102,25 @@ export function useSchedulingAnalytics(
     const sucessosRec = filteredSucessos.filter((s) => isRecepcaoName(s.sdr));
 
     const sdrPreVendaRows =
-      realizados.length > 0
-        ? buildSdrPreVendaRows(preVenda, atendPv, visitasPv, sucessosPv)
-        : buildSdrPreVendaRows(
-            preVenda,
-            legacyLeads
-              .filter((l) => !isRecepcaoName(l.sdr))
-              .map((l) => ({
-                id: l.id,
-                dataAtendido: l.data,
-                dataVisita: null,
-                teveVisita: false,
-                sdr: l.sdr,
-                origem: l.origem,
-                tipoProposta: l.tipoProposta,
-                cliente: "",
-                celular: "",
-              })),
-            [],
-            []
-          );
+      realizados.length > 0 || leadsGerais.length > 0
+        ? buildSdrPreVendaRows(
+            filtered,
+            atendPv,
+            visitasPv,
+            sucessosPv,
+            responsavelById
+          )
+        : buildSdrPreVendaRows(preVenda, [], [], [], responsavelById);
 
     const sdrRecepcao =
-      realizados.length > 0
+      realizados.length > 0 || leadsGerais.length > 0
         ? buildRecepcaoConsolidatedMetrics(
             recepcao,
             atendRec,
             visitasRec,
             sucessosRec
           )
-        : buildRecepcaoConsolidatedMetrics(
-            recepcao,
-            legacyLeads
-              .filter((l) => isRecepcaoName(l.sdr))
-              .map((l) => ({
-                id: l.id,
-                dataAtendido: l.data,
-                dataVisita: null,
-                teveVisita: false,
-                sdr: l.sdr,
-                origem: l.origem,
-                tipoProposta: l.tipoProposta,
-                cliente: "",
-                celular: "",
-              })),
-            [],
-            []
-          );
+        : buildRecepcaoConsolidatedMetrics(recepcao, [], [], []);
 
     const vendedorMetrics = buildVendedorMetrics(filtered, {
       visitas: filteredVisitas,
@@ -136,7 +129,7 @@ export function useSchedulingAnalytics(
     });
 
     const leadsForPortal: LeadAtendimentoItem[] =
-      realizados.length > 0
+      filteredRealizados.length > 0
         ? filteredRealizados.map((r) => ({
             id: r.id,
             data: r.dataAtendido,
@@ -148,16 +141,37 @@ export function useSchedulingAnalytics(
 
     const agendaById = new Map(dataset.items.map((item) => [item.id, item]));
     const visitasDoCanal = (canal: "Pré-Venda" | "Recepção") =>
-      filteredVisitas.filter((row) => eventMatchesCanal(row.id, row.sdr, canal, agendaById));
+      filteredVisitas.filter((row) =>
+        eventMatchesCanal(
+          row.id,
+          resolveResponsavel(row.id, row.sdr, responsavelById),
+          canal,
+          agendaById
+        )
+      );
     const sucessosDoCanal = (canal: "Pré-Venda" | "Recepção") =>
-      filteredSucessos.filter((row) => eventMatchesCanal(row.id, row.sdr, canal, agendaById));
+      filteredSucessos.filter((row) =>
+        eventMatchesCanal(
+          row.id,
+          resolveResponsavel(row.id, row.sdr, responsavelById),
+          canal,
+          agendaById
+        )
+      );
     const visitasPreVenda = visitasDoCanal("Pré-Venda");
     const visitasRecepcaoCanal = visitasDoCanal("Recepção");
     const sucessosPreVenda = sucessosDoCanal("Pré-Venda");
     const sucessosRecepcaoCanal = sucessosDoCanal("Recepção");
-    const fonteAtendimentos = realizados.length > 0 ? filteredRealizados : legacyLeads;
+    const fonteAtendimentos = filteredRealizados.length > 0 ? filteredRealizados : legacyLeads;
     const atendimentosDoCanal = (canal: "Pré-Venda" | "Recepção") =>
-      fonteAtendimentos.filter((row) => eventMatchesCanal(row.id, row.sdr, canal, agendaById));
+      fonteAtendimentos.filter((row) =>
+        eventMatchesCanal(
+          row.id,
+          resolveResponsavel(row.id, row.sdr, responsavelById),
+          canal,
+          agendaById
+        )
+      );
 
     return {
       filtered,
@@ -183,11 +197,15 @@ export function useSchedulingAnalytics(
       vendedorMetrics,
       comparisonVendedoresPreVenda: buildVendedorComparisonRows(vendedorMetrics, "Pré-Venda"),
       comparisonVendedoresRecepcao: buildVendedorComparisonRows(vendedorMetrics, "Recepção"),
-      sdrVendedorPairs: buildSdrVendedorProposalRows(preVenda, {
-        visitas: filteredVisitas,
-        sucessos: filteredSucessos,
-        agenda: dataset.items,
-      }),
+      sdrVendedorPairs: buildSdrVendedorProposalRows(
+        filtered,
+        {
+          visitas: filteredVisitas,
+          sucessos: filteredSucessos,
+          agenda: dataset.items,
+        },
+        responsavelById
+      ),
       proposalsPreVenda: buildProposalDistribution(preVenda),
       proposalsRecepcao: buildProposalDistribution(recepcao),
       periodSeriesPreVenda: buildPeriodSeries(preVenda, {
@@ -200,7 +218,7 @@ export function useSchedulingAnalytics(
       }),
       insucessoKpis: buildInsucessoKpis(filtered),
       motivosInsucesso: buildMotivosStats(filtered),
-      motivosBySdr: buildMotivosBySdr(filtered),
+      motivosBySdr: buildMotivosBySdr(filtered, responsavelById),
       motivosByVendedor: buildMotivosByVendedor(filtered),
       portais: buildPortalDashboard(filtered, leadsForPortal, {
         visitas: filteredVisitas,
@@ -208,6 +226,7 @@ export function useSchedulingAnalytics(
         agenda: dataset.items,
       }),
       atendSourceCount: atendSource.length,
+      responsavelById,
     };
   }, [dataset, filters]);
 }

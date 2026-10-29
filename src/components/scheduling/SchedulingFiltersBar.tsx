@@ -172,7 +172,7 @@ export function SchedulingFiltersBar({
         </select>
       </label>
       <label>
-        SDR / Atendido por
+        SDR / Responsável
         <select
           className={filterActiveClass(Boolean(filters.sdr))}
           value={filters.sdr || ""}
