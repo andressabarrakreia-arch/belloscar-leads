@@ -1,6 +1,20 @@
 {
-  "updatedAt": "2026-10-29T12:53:38.458Z",
+  "updatedAt": "2026-10-29T12:54:59.462Z",
   "imports": [
+    {
+      "fileName": "sucessos ate 28_10.xlsx",
+      "label": "sucessos ate 28_10.xlsx",
+      "kind": "sucessos",
+      "at": "2026-10-29T12:54:59.462Z",
+      "received": 60,
+      "kept": 11,
+      "removed": 0,
+      "enriched": 49,
+      "notes": [
+        "SUCESSOS: 830 eventos únicos (Finalizado em)",
+        "Reconciliação: origem preenchida em 3 agendamentos (cruzamento por ID)"
+      ]
+    },
     {
       "fileName": "agendamentos ate 28_10.xlsx",
       "label": "agendamentos ate 28_10.xlsx",
@@ -79949,7 +79963,7 @@
       "tipoProposta": "Compra",
       "teveVisita": true,
       "status": "Sucesso",
-      "origem": "Não informado",
+      "origem": "Busca Ativa",
       "motivoInsucesso": null,
       "cliente": "Maike Jonathan Rodrigues",
       "celular": "(41)99822-5504",
@@ -80051,7 +80065,7 @@
       "tipoProposta": "Compra",
       "teveVisita": true,
       "status": "Sucesso",
-      "origem": "Não informado",
+      "origem": "Telefone",
       "motivoInsucesso": null,
       "cliente": "Luiz",
       "celular": "(41)99792-8669",
@@ -80068,7 +80082,7 @@
       "tipoProposta": "Venda",
       "teveVisita": true,
       "status": "Sucesso",
-      "origem": "Não informado",
+      "origem": "Facebook",
       "motivoInsucesso": null,
       "cliente": "Gumercindo Francisco",
       "celular": "(41)98865-6440",
@@ -521432,9 +521446,9 @@
       "dataFinalizado": "2026-10-16",
       "sdr": "Allan Junior Dos Santos Ramos",
       "vendedor": "Gabriel VENDAS",
-      "tipoProposta": "Venda",
-      "origem": "WhatsApp Site Carteira",
-      "cliente": "Marco",
+      "tipoProposta": "Troca",
+      "origem": "Chaves na Mão",
+      "cliente": "MARCO",
       "celular": "(41)99723-8170"
     },
     {
@@ -521464,7 +521478,7 @@
       "vendedor": "Anderson Pires Lopes",
       "tipoProposta": "Troca",
       "origem": "Busca Ativa",
-      "cliente": "vitor",
+      "cliente": "VITOR",
       "celular": "(41)99832-8059"
     },
     {
@@ -521483,7 +521497,7 @@
       "sdr": "Thayna PRE-VENDAS",
       "vendedor": "Filipe Portes",
       "tipoProposta": "Troca",
-      "origem": "Facebook Ads",
+      "origem": "Facebook",
       "cliente": "Ale",
       "celular": "(41)99845-4768"
     },
@@ -521614,7 +521628,7 @@
       "vendedor": "Gabriel VENDAS",
       "tipoProposta": "Troca",
       "origem": "Telefone",
-      "cliente": "Hanna",
+      "cliente": "HANNA",
       "celular": "(41)98890-2690"
     },
     {
@@ -523276,6 +523290,116 @@
       "origem": "Facebook",
       "cliente": "Jamile",
       "celular": "(41)99656-1903"
+    },
+    {
+      "id": "9782033",
+      "dataFinalizado": "2026-10-28",
+      "sdr": "Recepção",
+      "vendedor": "Gabriel Willyan Santana da Silva",
+      "tipoProposta": "Troca",
+      "origem": "Carteira",
+      "cliente": "MARIA KILVIA",
+      "celular": "(41)99645-5161"
+    },
+    {
+      "id": "9741907",
+      "dataFinalizado": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "vendedor": "Marquinhos",
+      "tipoProposta": "Venda",
+      "origem": "WhatsApp",
+      "cliente": "Luis Eduardo Costa da Silva",
+      "celular": "(41)99171-5310"
+    },
+    {
+      "id": "9765314",
+      "dataFinalizado": "2026-10-28",
+      "sdr": "SIBELE CRISTIANE BARANHUK DA COSTA",
+      "vendedor": "Marquinhos",
+      "tipoProposta": "não informado(celulas em branco)",
+      "origem": "Carteira",
+      "cliente": "Pedro Antônio",
+      "celular": "(41)99687-0816"
+    },
+    {
+      "id": "9795748",
+      "dataFinalizado": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "vendedor": "Gabriel VENDAS",
+      "tipoProposta": "Troca",
+      "origem": "Telefone",
+      "cliente": "Eduardo",
+      "celular": "(42)99976-0060"
+    },
+    {
+      "id": "9790903",
+      "dataFinalizado": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "vendedor": "Dimas Noldin",
+      "tipoProposta": "Compra",
+      "origem": "Telefone",
+      "cliente": "Luiz",
+      "celular": "(41)99792-8669"
+    },
+    {
+      "id": "9793484",
+      "dataFinalizado": "2026-10-28",
+      "sdr": "Liriane Larissa Ribeiro",
+      "vendedor": "Liriane Larissa Ribeiro",
+      "tipoProposta": "Compra",
+      "origem": "Busca Ativa",
+      "cliente": "Maike Jonathan Rodrigues",
+      "celular": "(41)99822-5504"
+    },
+    {
+      "id": "9790062",
+      "dataFinalizado": "2026-10-28",
+      "sdr": "BRUNO PROSPECÇÃO",
+      "vendedor": "BRUNO PROSPECÇÃO",
+      "tipoProposta": "Venda",
+      "origem": "Facebook",
+      "cliente": "Gumercindo Francisco",
+      "celular": "(41)98865-6440"
+    },
+    {
+      "id": "9696973",
+      "dataFinalizado": "2026-10-28",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "vendedor": "Gabriel VENDAS",
+      "tipoProposta": "Compra",
+      "origem": "WhatsApp",
+      "cliente": "Eduardo Ongaro Ongaro",
+      "celular": "(41)99621-5887"
+    },
+    {
+      "id": "9776381",
+      "dataFinalizado": "2026-10-27",
+      "sdr": "Ana Dal Bello",
+      "vendedor": "Silvan Dal Bello",
+      "tipoProposta": "não informado(celulas em branco)",
+      "origem": "Carteira",
+      "cliente": "Nexton",
+      "celular": "(41)99957-7610"
+    },
+    {
+      "id": "9696989",
+      "dataFinalizado": "2026-10-27",
+      "sdr": "Andressa K B Kreia",
+      "vendedor": "Ewerton Rocha De Salles",
+      "tipoProposta": "Compra",
+      "origem": "Carteira",
+      "cliente": "THIAGO",
+      "celular": "(41)99685-6449"
+    },
+    {
+      "id": "9735896",
+      "dataFinalizado": "2026-10-27",
+      "sdr": "Recepção",
+      "vendedor": "Dimas Noldin",
+      "tipoProposta": "Consignação",
+      "origem": "Carteira",
+      "cliente": "ROBERTO ANTONIO MASSARO",
+      "celular": "(41)99127-1974"
     }
   ],
   "leadsCampanha": [
