@@ -12,11 +12,21 @@ type Props<T> = {
   rows: T[];
   columns: TableColumn<T>[];
   rowKey: (row: T) => string;
+  /** Coluna inicial de ordenação (padrão: primeira). */
+  defaultSortKey?: string;
+  /** Direção inicial (padrão: asc). */
+  defaultDirection?: "asc" | "desc";
 };
 
-export function InteractiveTable<T>({ rows, columns, rowKey }: Props<T>) {
-  const [sortKey, setSortKey] = useState(columns[0]?.key ?? "");
-  const [direction, setDirection] = useState<"asc" | "desc">("asc");
+export function InteractiveTable<T>({
+  rows,
+  columns,
+  rowKey,
+  defaultSortKey,
+  defaultDirection = "asc",
+}: Props<T>) {
+  const [sortKey, setSortKey] = useState(defaultSortKey ?? columns[0]?.key ?? "");
+  const [direction, setDirection] = useState<"asc" | "desc">(defaultDirection);
   const [picked, setPicked] = useState<string | null>(null);
 
   const sorted = useMemo(() => {

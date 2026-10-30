@@ -13,6 +13,7 @@ import { SchedulingOverview } from "./pages/agendamentos/SchedulingOverview";
 import { SchedulingPortais } from "./pages/agendamentos/SchedulingPortais";
 import { SchedulingPreVendas } from "./pages/agendamentos/SchedulingPreVendas";
 import { SchedulingShell } from "./pages/agendamentos/SchedulingShell";
+import { SchedulingSucessos } from "./pages/agendamentos/SchedulingSucessos";
 import { SchedulingVendedores } from "./pages/agendamentos/SchedulingVendedores";
 import { NegociacoesLancamentos } from "./pages/negociacoes/NegociacoesLancamentos";
 import { NegociacoesOverview } from "./pages/negociacoes/NegociacoesOverview";
@@ -83,6 +84,7 @@ export default function App() {
             <Route path="vendedores" element={<SchedulingVendedores />} />
             <Route path="detalhe" element={<SchedulingDetalhe />} />
             <Route path="portais" element={<SchedulingPortais />} />
+            <Route path="sucessos" element={<SchedulingSucessos />} />
             <Route path="insucessos" element={<SchedulingInsucessos />} />
           </Route>
           <Route path="admin" element={<Navigate to="/indice/gestao" replace />} />
