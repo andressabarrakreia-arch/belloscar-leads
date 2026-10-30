@@ -1,5 +1,6 @@
 import { monthRange } from "../dates";
 import { displaySdrName, round2 } from "../scheduling/metrics";
+import { statusForaDoAtendimento } from "../scheduling/normalize";
 import type { SchedulingDataset, TipoProposta } from "../scheduling/types";
 import { META_CANAIS, metaTokensInOrigem, type MetaCanal } from "./metaOrigem";
 
@@ -75,6 +76,7 @@ export function indexCampanhas(dataset: SchedulingDataset): CampanhaRecord[] {
   for (const lead of dataset.leadsAtendimentos || []) {
     const tokens = metaTokensInOrigem(lead.origem);
     if (!tokens.length || !lead.id) continue;
+    if (statusForaDoAtendimento(lead.status)) continue;
     byId.set(lead.id, {
       id: lead.id,
       origem: lead.origem,

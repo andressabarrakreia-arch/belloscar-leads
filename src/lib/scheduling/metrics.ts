@@ -1,6 +1,10 @@
 import { formatPeriodLabel } from "../dates";
 import { isoToPeriodKey } from "./dates";
-import { emptyPropostasBreakdown, isRecepcaoName } from "./normalize";
+import {
+  emptyPropostasBreakdown,
+  isRecepcaoName,
+  statusForaDoAtendimento,
+} from "./normalize";
 import type {
   AgendamentoItem,
   CanalAtendimento,
@@ -130,6 +134,7 @@ export function resolveResponsavel(
 /**
  * Atendimentos: Atendido em (REALIZADOS).
  * Só se o ID não existir em REALIZADOS → Criado em (LEADS GERAL).
+ * Pendente / Descartado nunca entram.
  */
 export function buildAtendimentosComFallback(
   realizados: RealizadoItem[],
@@ -141,6 +146,7 @@ export function buildAtendimentosComFallback(
   const fromLeads: RealizadoItem[] = [];
   for (const lead of leads) {
     if (!lead.id || realizadoIds.has(lead.id)) continue;
+    if (statusForaDoAtendimento(lead.status)) continue;
     if (!matchSdrFilter(lead.sdr, filters)) continue;
     if (filters.tipoProposta && lead.tipoProposta !== filters.tipoProposta) continue;
     if (filters.origem && lead.origem !== filters.origem) continue;
@@ -209,6 +215,7 @@ export function filterLeadsAtendimentos(
   filters: SchedulingFilters
 ): LeadAtendimentoItem[] {
   return leads.filter((lead) => {
+    if (statusForaDoAtendimento(lead.status)) return false;
     if (!matchSdrFilter(lead.sdr, filters)) return false;
     if (filters.tipoProposta && lead.tipoProposta !== filters.tipoProposta) return false;
     if (filters.origem && lead.origem !== filters.origem) return false;
@@ -615,7 +622,7 @@ function topParceirosDoSdr(
 /**
  * Painel unificado Pré-Vendas.
  * Atendente do ID = sempre Responsável.
- * Atendimentos = Atendido em (ou Criado em se o ID não estiver em REALIZADOS)
+ * Atendimentos = Atendido em (ou Criado em se o ID não estiver em REALIZADOS; sem Pendente/Descartado)
  * Agend. = Agendado em · Visitas = Visita=Sim (Responsável) · Sucessos = Finalizado em
  * "Atendido por" da agenda não conta volume — só cruzados na aba Agendamentos.
  * Conv. visita = Vis/Ag · Conv. = Suc/Vis.

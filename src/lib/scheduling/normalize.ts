@@ -102,6 +102,16 @@ export function canalFromSdr(sdr: string): CanalAtendimento {
   return isRecepcaoName(sdr) ? "Recepção" : "Pré-Venda";
 }
 
+/** Pendente / Descartado não entram em atendimento de ninguém. */
+export function statusForaDoAtendimento(value: string | undefined): boolean {
+  const text = (value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "");
+  return text === "pendente" || text === "descartado";
+}
+
 export function emptyPropostasBreakdown(): Record<TipoProposta, number> {
   return {
     Compra: 0,

@@ -58,6 +58,8 @@ export type LeadAtendimentoItem = {
   sdr: string;
   origem: string;
   tipoProposta: TipoProposta;
+  /** Status do LEADS GERAL (Pendente/Descartado não contam atendimento). */
+  status?: string;
 };
 
 /**

@@ -21,7 +21,8 @@ export function SdrPreVendaUnifiedTable({ rows, onExport }: Props) {
         <InfoTip>
           Equipe web (Allan, Thayna, Lais, Matheus e Liriane). Outros SDRs só aparecem se
           selecionados no filtro. Atendente do ID = sempre Responsável. Atendimentos = Atendido em
-          (se o ID não estiver em REALIZADOS, usa Criado em) · Agend. = Agendado em · Visitas =
+          (se o ID não estiver em REALIZADOS, usa Criado em; Pendente/Descartado não entram) ·
+          Agend. = Agendado em · Visitas =
           Visita=Sim no Responsável · Sucessos = Finalizado em · % Agend. = Ag/Atend · Conv. visita
           = Vis/Ag · Conv. = Suc/Vis. "Atendido por" da agenda só aparece em cruzados. Recepção
           não entra neste bloco.

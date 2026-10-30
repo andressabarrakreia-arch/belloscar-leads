@@ -1,4 +1,4 @@
-import { canalFromSdr } from "./normalize";
+import { canalFromSdr, statusForaDoAtendimento } from "./normalize";
 import { isoToMonthKey, isoToPeriodKey } from "./dates";
 import type {
   AgendamentoItem,
@@ -20,6 +20,11 @@ function mergeLeadsAtendimentos(
   const map = new Map(current.map((l) => [l.id, l]));
   for (const row of incoming) {
     if (!row.id) continue;
+    // Pendente / Descartado: não ficam em leadsAtendimentos (não contam atendimento).
+    if (statusForaDoAtendimento(row.statusTexto)) {
+      map.delete(row.id);
+      continue;
+    }
     const prev = map.get(row.id);
     const sdr = row.sdr?.trim() || prev?.sdr || "(sem SDR)";
     const origem =
@@ -36,18 +41,10 @@ function mergeLeadsAtendimentos(
       sdr,
       origem,
       tipoProposta,
+      status: row.statusTexto?.trim() || prev?.status,
     });
   }
   return [...map.values()];
-}
-
-function statusForaDoAtendimento(value: string | undefined): boolean {
-  const text = (value || "")
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "");
-  return text === "pendente" || text === "descartado";
 }
 
 /**
