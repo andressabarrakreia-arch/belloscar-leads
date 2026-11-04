@@ -1,6 +1,20 @@
 {
-  "updatedAt": "2026-11-04T18:30:06.883Z",
+  "updatedAt": "2026-11-04T18:31:48.946Z",
   "imports": [
+    {
+      "fileName": "sucessos (4).xlsx",
+      "label": "sucessos (4).xlsx",
+      "kind": "sucessos",
+      "at": "2026-11-04T18:31:48.946Z",
+      "received": 7,
+      "kept": 7,
+      "removed": 0,
+      "enriched": 0,
+      "notes": [
+        "SUCESSOS: 844 eventos únicos (Finalizado em)",
+        "Reconciliação: origem preenchida em 1 agendamentos (cruzamento por ID)"
+      ]
+    },
     {
       "fileName": "agendamentos-por-vendedor (2).xlsx",
       "label": "agendamentos-por-vendedor (2).xlsx",
@@ -81659,7 +81673,7 @@
       "tipoProposta": "Venda",
       "teveVisita": true,
       "status": "Sucesso",
-      "origem": "Não informado",
+      "origem": "Mercado Livre WhatsApp",
       "motivoInsucesso": null,
       "cliente": "Leandro Borges",
       "celular": "(41)8706-4384",
@@ -517653,6 +517667,76 @@
       "origem": "WhatsApp Site",
       "cliente": "Wagner Berto",
       "celular": "(41)99719-0999"
+    },
+    {
+      "id": "9870686",
+      "dataFinalizado": "2026-11-04",
+      "sdr": "Allan Junior Dos Santos Ramos",
+      "vendedor": "Gabriel VENDAS",
+      "tipoProposta": "Venda",
+      "origem": "Mercado Livre WhatsApp",
+      "cliente": "Leandro Borges",
+      "celular": "(41)8706-4384"
+    },
+    {
+      "id": "9496293",
+      "dataFinalizado": "2026-11-04",
+      "sdr": "Andressa K B Kreia",
+      "vendedor": "Celso Fofo",
+      "tipoProposta": "Venda",
+      "origem": "Passante",
+      "cliente": "helcio",
+      "celular": "(41)99957-2340"
+    },
+    {
+      "id": "9833729",
+      "dataFinalizado": "2026-11-03",
+      "sdr": "SIBELE CRISTIANE BARANHUK DA COSTA",
+      "vendedor": "SIBELE CRISTIANE BARANHUK DA COSTA",
+      "tipoProposta": "Consignação",
+      "origem": "Carteira",
+      "cliente": "Ione Spack Pallu ( Marquinhos)",
+      "celular": "(41)98423-0265"
+    },
+    {
+      "id": "9440783",
+      "dataFinalizado": "2026-11-03",
+      "sdr": "Liriane Larissa Ribeiro",
+      "vendedor": "Liriane Larissa Ribeiro",
+      "tipoProposta": "Compra",
+      "origem": "Busca Ativa OLX Vendedores",
+      "cliente": "Lucas",
+      "celular": "(41)99698-3784"
+    },
+    {
+      "id": "9831667",
+      "dataFinalizado": "2026-11-03",
+      "sdr": "Thayna PRE-VENDAS",
+      "vendedor": "Márcia",
+      "tipoProposta": "Troca",
+      "origem": "WhatsApp Instagram Ads",
+      "cliente": "Rafael Eduardo Weber",
+      "celular": "(41)98773-0348"
+    },
+    {
+      "id": "9832092",
+      "dataFinalizado": "2026-11-03",
+      "sdr": "Thayna PRE-VENDAS",
+      "vendedor": "Celso Fofo",
+      "tipoProposta": "Venda",
+      "origem": "Na Pista WhatsApp",
+      "cliente": "Jeferson de souza",
+      "celular": "(41)98813-9829"
+    },
+    {
+      "id": "9519507",
+      "dataFinalizado": "2026-11-03",
+      "sdr": "Andressa K B Kreia",
+      "vendedor": "Gabriel VENDAS",
+      "tipoProposta": "Consignação",
+      "origem": "Passante",
+      "cliente": "LUCCA",
+      "celular": "(41)99289-3956"
     }
   ],
   "leadsCampanha": [
