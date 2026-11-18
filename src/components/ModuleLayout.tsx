@@ -4,9 +4,9 @@ import { ModuleTickerProvider } from "../context/ModuleTickerContext";
 import type { AppModule } from "../modules/registry";
 import { InfoTip } from "./InfoTip";
 import { KeyTicker } from "./KeyTicker";
+import { MetriCarLogo } from "./MetriCarLogo";
 import { SiteCredit } from "./SiteCredit";
 
-const brandLogo = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
 const HUB_TITLE = "Análise de Resultados";
 
 type Props = {
@@ -31,7 +31,7 @@ export function ModuleLayout({ module, showAdminNav = true }: Props) {
         <header className="sticky top-0 z-20 mb-4 rounded-lg border border-border bg-white/95 shadow-sm backdrop-blur">
           <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-3">
             <div className="flex min-w-0 items-center gap-3">
-              <img className="h-14 w-auto max-w-[140px] object-contain" src={brandLogo} alt="Andressa Car Metrics" />
+              <MetriCarLogo className="h-24 w-auto max-w-[280px] object-contain" />
               <div className="min-w-0">
                 <p className="font-display text-lg font-extrabold leading-none text-foreground">
                   Bellos<span className="text-primary">Car</span>

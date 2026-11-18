@@ -6,7 +6,8 @@ import { useTema } from "../theme";
 const fundo = `${import.meta.env.BASE_URL}brand/indice-fundo.jpg`;
 const marcaClara = `${import.meta.env.BASE_URL}brand/belloscar-logo-clear.png`;
 const marcaEscura = `${import.meta.env.BASE_URL}brand/belloscar-logo-dark.png`;
-const metrics = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
+const metricsClara = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=5`;
+const metricsEscura = `${import.meta.env.BASE_URL}brand/acm-logo-dark.png?v=5`;
 const bcLogo = `${import.meta.env.BASE_URL}brand/bc-logo-red.jpg`;
 
 /** Logo BC em 2.5D HD (GSAP) — substitui o torus vermelho. */
@@ -75,6 +76,7 @@ export function IndiceAbertura() {
   const root = useRef<HTMLDivElement>(null);
   const [luz, setLuz] = useState({ x: -200, y: -200 });
   const marca = tema === "dark" ? marcaEscura : marcaClara;
+  const metrics = tema === "dark" ? metricsEscura : metricsClara;
 
   function fechar() {
     setAtiva(false);
@@ -139,7 +141,7 @@ export function IndiceAbertura() {
             src={marca}
             alt="BellosCar, veículos seminovos e usados"
           />
-          <img src={metrics} alt="Andressa Car Metrics" />
+          <img className="metricar-logo" src={metrics} alt="MetriCar" key={metrics} />
           <motion.button
             type="button"
             onClick={(event) => {

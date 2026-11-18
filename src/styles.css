@@ -112,9 +112,9 @@ select {
 }
 
 .brand-logo {
-  height: 104px;
+  height: 140px;
   width: auto;
-  max-width: min(220px, 42vw);
+  max-width: min(320px, 52vw);
   object-fit: contain;
   flex-shrink: 0;
   display: block;
@@ -1606,7 +1606,7 @@ tr:hover td {
 }
 
 .login-card .login-logo {
-  width: min(240px, 100%);
+  width: min(320px, 100%);
   height: auto;
   display: block;
   margin: 0 auto 14px;
@@ -2007,9 +2007,9 @@ html[data-theme="dark"] .portal-row-proposta td {
 }
 
 .indice-logo {
-  height: 72px;
+  height: 112px;
   width: auto;
-  max-width: min(180px, 46vw);
+  max-width: min(300px, 58vw);
   object-fit: contain;
 }
 
@@ -2571,8 +2571,8 @@ html[data-theme="dark"] .portal-row-proposta td {
   }
 
   .brand-logo {
-    height: 48px;
-    max-width: 62vw;
+    height: 72px;
+    max-width: 72vw;
   }
 
   .brand-module-row > span {
@@ -2750,7 +2750,7 @@ html[data-theme="dark"] .portal-row-proposta td {
 }
 
 .indice-abertura-placa img:not(.indice-abertura-bc-img):not(.indice-abertura-marca) {
-  width: min(180px, 100%);
+  width: min(300px, 100%);
   height: auto;
 }
 
@@ -3868,9 +3868,13 @@ html[data-theme="dark"] .dc-chart g.axis text {
   fill: #f2f2f3;
 }
 
-html[data-theme="dark"] .indice-logo,
-html[data-theme="dark"] .brand-logo {
-  background: radial-gradient(ellipse at center, rgba(23, 23, 25, 0.94) 46%, rgba(23, 23, 25, 0) 74%);
+/* MetriCar dark usa acm-logo-dark.png (tagline clara); halo leve só para separação */
+html[data-theme="dark"] .metricar-logo {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.08) 28%,
+    transparent 70%
+  );
 }
 
 html[data-theme="dark"] .indice-abertura-marca {

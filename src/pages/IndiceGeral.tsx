@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { IndiceAbertura } from "../components/IndiceAbertura";
+import { MetriCarLogo } from "../components/MetriCarLogo";
 import { MapaClientes } from "../components/viz/MapaClientes";
 import { MarketStrip } from "../components/MarketStrip";
 import { SiteCredit } from "../components/SiteCredit";
@@ -16,7 +17,6 @@ import { FILTRO_MAPA_INICIAL, buildMapaClientes, indiceVeiculos, opcoesMapa, typ
 import { agendaPeople, campanhaPeople, lojaPeople, topFaturamento, type SectorPeople } from "../lib/indice/destaques";
 import type { NegociacoesFilters } from "../lib/negociacoes/types";
 
-const brandLogo = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
 const fundo = `${import.meta.env.BASE_URL}brand/indice-fundo.jpg`;
 
 const MES_ATUAL = currentMonthRange();
@@ -307,7 +307,7 @@ export function IndiceGeral() {
       <div className="indice-bg" style={{ backgroundImage: `url("${fundo}")` }} aria-hidden="true" />
       <div className="indice-content">
         <header className="indice-hero">
-          <img className="indice-logo" src={brandLogo} alt="Andressa Car Metrics" />
+          <MetriCarLogo className="indice-logo" />
           <h1>
             Bellos<span>Car</span>
           </h1>

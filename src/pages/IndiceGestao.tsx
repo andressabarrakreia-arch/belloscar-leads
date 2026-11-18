@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { MetriCarLogo } from "../components/MetriCarLogo";
 import { ADMIN_PIN, isAdminAuthed, setAdminAuthed } from "../lib/adminAuth";
 import { campanhaClientsForExport } from "../lib/campanhas/clients";
 import {
@@ -25,8 +26,6 @@ import {
   SCHEDULING_GITHUB_PATH,
 } from "../lib/scheduling/storage";
 import type { SchedulingDataset } from "../lib/scheduling/types";
-
-const logo = `${import.meta.env.BASE_URL}brand/acm-logo.png?v=2`;
 
 type ExportChoice = "campanhas" | "agendamentos" | "negociacoes";
 
@@ -193,7 +192,7 @@ export function IndiceGestao() {
     return (
       <div className="login-page" style={{ minHeight: "70vh" }}>
         <div className="login-card">
-          <img className="login-logo" src={logo} alt="Andressa Car Metrics" />
+          <MetriCarLogo className="login-logo" />
           <h1>Gestão · Índice</h1>
           <p>PIN de gestão do Índice.</p>
           <form onSubmit={login}>
@@ -220,7 +219,7 @@ export function IndiceGestao() {
     <div className="app-shell">
       <header className="topbar">
         <div className="brand">
-          <img className="brand-logo" src={logo} alt="Andressa Car Metrics" />
+          <MetriCarLogo className="brand-logo" />
           <div className="brand-text">
             <h1>
               Bellos<span className="car">Car</span>
