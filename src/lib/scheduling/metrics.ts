@@ -68,6 +68,14 @@ export function displaySdrName(sdr: string): string {
   return isRecepcaoName(sdr) ? "Recepção" : sdr;
 }
 
+/** Primeiro nome (ou Recepção) para tabelas densas; título/hover guarda o completo. */
+export function shortSdrName(sdr: string): string {
+  const name = displaySdrName(sdr).trim();
+  if (!name || name === "Recepção") return name || sdr;
+  const first = name.split(/\s+/)[0];
+  return first || name;
+}
+
 /** Índice de prioridade (0…n-1); quem não está na lista vai para o fim. */
 export function preVendaSdrPriority(name: string): number {
   const idx = PRE_VENDA_SDR_PRIORITY_KEYS.findIndex((member) => matchesPreVendaSdr(name, member));

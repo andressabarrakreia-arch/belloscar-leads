@@ -10,7 +10,7 @@ export function SchedulingDetalhe() {
   const { sdrVendedorPairs, proposalsPreVenda, proposalsRecepcao } = analytics;
 
   return (
-    <>
+    <div className="scheduling-detalhe">
       <SdrVendedorProposalTable rows={sdrVendedorPairs} />
 
       <div className="charts">
@@ -25,6 +25,6 @@ export function SchedulingDetalhe() {
           subtitle="Rosca do mix de propostas no canal Recepção (filtro atual)."
         />
       </div>
-    </>
+    </div>
   );
 }

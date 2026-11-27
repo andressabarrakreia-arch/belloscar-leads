@@ -3,7 +3,11 @@ import type {
   SdrVendedorCruzadoId,
   SdrVendedorPairRow,
 } from "../../lib/scheduling/metrics";
-import { comparePreVendaSdrNames, round2 } from "../../lib/scheduling/metrics";
+import {
+  comparePreVendaSdrNames,
+  round2,
+  shortSdrName,
+} from "../../lib/scheduling/metrics";
 import { InfoTip } from "../InfoTip";
 
 type Props = {
@@ -86,23 +90,27 @@ function sumGroup(sdr: string, vendedores: SdrVendedorPairRow[]): SdrGroup {
 function MetricCells({ row }: { row: MetricRow }) {
   return (
     <>
-      <td>{row.total}</td>
-      <td>{row.compra}</td>
-      <td>{row.venda}</td>
-      <td>{row.troca}</td>
-      <td>{row.consignacao}</td>
-      <td>{row.financiamento}</td>
-      <td>{row.naoInformado}</td>
-      <td>{row.visitas}</td>
-      <td className="num-ok">{row.sucessos}</td>
-      <td className="num-bad">{row.insucessos}</td>
-      <td>{row.taxaVisita}%</td>
-      <td className="num-ok">{row.taxaSucesso}%</td>
+      <td className="col-metric col-metric--volume">{row.total}</td>
+      <td className="col-metric">{row.compra}</td>
+      <td className="col-metric">{row.venda}</td>
+      <td className="col-metric">{row.troca}</td>
+      <td className="col-metric">{row.consignacao}</td>
+      <td className="col-metric">{row.financiamento}</td>
+      <td className="col-metric">{row.naoInformado}</td>
+      <td className="col-metric col-metric--resultado">{row.visitas}</td>
+      <td className="col-metric col-metric--resultado num-ok">{row.sucessos}</td>
+      <td className="col-metric col-metric--resultado num-bad">{row.insucessos}</td>
+      <td className="col-metric col-metric--taxa">{row.taxaVisita}%</td>
+      <td className="col-metric col-metric--taxa num-ok">{row.taxaSucesso}%</td>
     </>
   );
 }
 
 function sdrAgendadoLabel(row: SdrVendedorCruzadoId): string {
+  return `${shortSdrName(row.sdr)} / por ${shortSdrName(row.agendadoPor)}`;
+}
+
+function sdrAgendadoTitle(row: SdrVendedorCruzadoId): string {
   return `${row.sdr} / agendado por ${row.agendadoPor}`;
 }
 
@@ -139,35 +147,72 @@ export function SdrVendedorProposalTable({ rows }: Props) {
     );
   }
 
+  function expandirTodos() {
+    setAbertosSdr(grupos.map((g) => g.sdr));
+  }
+
+  function recolherTodos() {
+    setAbertosSdr([]);
+    setAbertosVend([]);
+  }
+
   return (
-    <div className="card">
-      <h2>
-        Comparação direta: agendamentos × proposta
-        <InfoTip>
-          Pré-Venda — visitas e sucessos pelo responsável do atendimento (não por quem agendou).
-          Uma linha por SDR; o + abre os vendedores. Se o ID foi agendado por outra pessoa, o + no
-          vendedor mostra esse ID com “SDR / agendado por …”. Ordem: Allan → Thayna → Lais → Matheus
-          → Liriane.
-        </InfoTip>
-      </h2>
-      <div className="table-scroll table-scroll--sticky-head" tabIndex={0}>
-        <table className="table-sticky-head sdr-vendedor-expande">
+    <div className="card card--sdr-cruzamento">
+      <div className="sdr-cruzamento__cabecalho">
+        <h2>
+          Comparação direta: agendamentos × proposta
+          <InfoTip>
+            Pré-Venda — visitas e sucessos pelo responsável do atendimento (não por quem agendou).
+            Uma linha por SDR; o + abre os vendedores. Se o ID foi agendado por outra pessoa, o + no
+            vendedor mostra esse ID com “SDR / agendado por …”. Ordem: Allan → Thayna → Lais → Matheus
+            → Liriane.
+          </InfoTip>
+        </h2>
+        <div className="sdr-cruzamento__acoes">
+          <button type="button" className="btn secondary" onClick={expandirTodos}>
+            Expandir todos
+          </button>
+          <button type="button" className="btn secondary" onClick={recolherTodos}>
+            Recolher
+          </button>
+        </div>
+      </div>
+
+      <div className="table-scroll table-scroll--sdr-cruzamento" tabIndex={0}>
+        <table className="table-sticky-head sdr-vendedor-expande sdr-cruzamento-table">
           <thead>
-            <tr>
-              <th>SDR</th>
-              <th>Vendedor</th>
-              <th>Agendamentos</th>
-              <th>Compra</th>
-              <th>Venda</th>
-              <th>Troca</th>
-              <th>Consign.</th>
-              <th>Financ.</th>
-              <th>N/I</th>
-              <th>Visitas</th>
-              <th>Sucessos</th>
-              <th>Insucessos</th>
-              <th>% Visita</th>
-              <th>% Sucesso</th>
+            <tr className="sdr-cruzamento-table__grupos">
+              <th colSpan={2} scope="colgroup">
+                Quem
+              </th>
+              <th colSpan={1} scope="colgroup">
+                Volume
+              </th>
+              <th colSpan={6} scope="colgroup">
+                Tipo de proposta
+              </th>
+              <th colSpan={3} scope="colgroup">
+                Resultado
+              </th>
+              <th colSpan={2} scope="colgroup">
+                Taxas
+              </th>
+            </tr>
+            <tr className="sdr-cruzamento-table__cols">
+              <th className="col-sticky col-sticky--sdr">SDR</th>
+              <th className="col-sticky col-sticky--vend">Vendedor</th>
+              <th className="col-metric col-metric--volume">Agend.</th>
+              <th className="col-metric">Compra</th>
+              <th className="col-metric">Venda</th>
+              <th className="col-metric">Troca</th>
+              <th className="col-metric">Consign.</th>
+              <th className="col-metric">Financ.</th>
+              <th className="col-metric">N/I</th>
+              <th className="col-metric col-metric--resultado">Visitas</th>
+              <th className="col-metric col-metric--resultado">Sucessos</th>
+              <th className="col-metric col-metric--resultado">Insucessos</th>
+              <th className="col-metric col-metric--taxa">% Visita</th>
+              <th className="col-metric col-metric--taxa">% Sucesso</th>
             </tr>
           </thead>
           <tbody>
@@ -176,7 +221,7 @@ export function SdrVendedorProposalTable({ rows }: Props) {
               return (
                 <Fragment key={grupo.sdr}>
                   <tr className="sdr-pai">
-                    <td>
+                    <td className="col-sticky col-sticky--sdr">
                       <button
                         type="button"
                         className="marca-mais"
@@ -190,11 +235,13 @@ export function SdrVendedorProposalTable({ rows }: Props) {
                       >
                         {sdrAberto ? "−" : "+"}
                       </button>
-                      {grupo.sdr}
+                      <span className="sdr-cruzamento__nome" title={grupo.sdr}>
+                        {shortSdrName(grupo.sdr)}
+                      </span>
                     </td>
-                    <td className="muted">
+                    <td className="col-sticky col-sticky--vend muted">
                       {grupo.vendedores.length}{" "}
-                      {grupo.vendedores.length === 1 ? "vendedor" : "vendedores"}
+                      {grupo.vendedores.length === 1 ? "vend." : "vends."}
                     </td>
                     <MetricCells row={grupo} />
                   </tr>
@@ -206,7 +253,7 @@ export function SdrVendedorProposalTable({ rows }: Props) {
                         return (
                           <Fragment key={chave}>
                             <tr className="modelo-filho sdr-filho">
-                              <td className="muted">
+                              <td className="col-sticky col-sticky--sdr muted">
                                 {temCruzados ? (
                                   <button
                                     type="button"
@@ -221,10 +268,16 @@ export function SdrVendedorProposalTable({ rows }: Props) {
                                   >
                                     {vendAberto ? "−" : "+"}
                                   </button>
-                                ) : null}
-                                {row.sdr}
+                                ) : (
+                                  <span className="marca-mais marca-mais--fantasma" aria-hidden="true" />
+                                )}
+                                <span className="sdr-cruzamento__nome" title={row.sdr}>
+                                  {shortSdrName(row.sdr)}
+                                </span>
                               </td>
-                              <td>{row.vendedor}</td>
+                              <td className="col-sticky col-sticky--vend" title={row.vendedor}>
+                                {row.vendedor}
+                              </td>
                               <MetricCells row={row} />
                             </tr>
                             {vendAberto
@@ -233,10 +286,14 @@ export function SdrVendedorProposalTable({ rows }: Props) {
                                     className="modelo-filho sdr-neto"
                                     key={`${chave}::${cruzado.id}`}
                                   >
-                                    <td className="sdr-neto__sdr">{sdrAgendadoLabel(cruzado)}</td>
-                                    <td>
+                                    <td
+                                      className="col-sticky col-sticky--sdr sdr-neto__sdr"
+                                      title={sdrAgendadoTitle(cruzado)}
+                                    >
+                                      {sdrAgendadoLabel(cruzado)}
+                                    </td>
+                                    <td className="col-sticky col-sticky--vend" title={cruzado.vendedor}>
                                       <span className="muted">ID {cruzado.id}</span>
-                                      <span className="sdr-neto__vend"> · {cruzado.vendedor}</span>
                                     </td>
                                     <MetricCells row={cruzado} />
                                   </tr>

@@ -14,6 +14,8 @@ export type SucessoListaRow = {
   id: string;
   dataInicio: string | null;
   responsavel: string;
+  /** Quem agendou (Atendido por / SDR da planilha de agendamentos). */
+  agendadoPor: string;
   vendedor: string;
   proposta: string;
   origem: string;
@@ -147,11 +149,16 @@ export function buildSucessosListaRows(
     const veiculoSaida = deal
       ? formatVeiculo(deal.modeloSaida, deal.placaSaida)
       : "";
+    const agenda = agendaById.get(s.id);
+    const agendadoPor = agenda?.sdr?.trim()
+      ? displaySdrName(agenda.sdr)
+      : "—";
 
     return {
       id: s.id,
       dataInicio,
       responsavel: displaySdrName(s.sdr),
+      agendadoPor,
       vendedor: s.vendedor || "(sem vendedor)",
       proposta: s.tipoProposta,
       origem: s.origem || "Não informado",

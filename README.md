@@ -133,4 +133,5 @@ npm run dev
 
 - Ao final de cada alteração: `CHANGELOG.md`, `ROADMAP.md`, README/DEPLOY/CATALOGO se URLs mudarem  
 - Segredos nunca no Git — `.cursor/rules/no-secrets-in-repo.mdc`  
+- Proteção do site publicado (e-mail + código, grátis): [`docs/CLOUDFLARE_ACCESS.md`](docs/CLOUDFLARE_ACCESS.md)  
 - Ver `AGENTS.md` e regras alwaysApply em `.cursor/rules/`  

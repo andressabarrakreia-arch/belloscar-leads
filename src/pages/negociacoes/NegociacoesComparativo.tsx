@@ -63,8 +63,8 @@ export function NegociacoesComparativo() {
   const deals = analytics.filtered;
   const charts = periodFiltersOpen(filters) ? (
     <>
-      <ComparativoChart deals={deals} grain="quinzena" tipo={tipo} />
       <ComparativoChart deals={deals} grain="dezena" tipo={tipo} />
+      <ComparativoChart deals={deals} grain="quinzena" tipo={tipo} />
     </>
   ) : (
     <ComparativoChart deals={deals} grain={comparisonGrain(filters)} tipo={tipo} />

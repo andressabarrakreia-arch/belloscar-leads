@@ -70,7 +70,7 @@ export function ApresentacaoResultados() {
     return (
       <GateLogin
         title="Apresentação"
-        blurb="Mesmo PIN de Erros e Mapa do Site. Resultados individuais e coletivos."
+        blurb="Mesmo PIN do Mapa do Site. Resultados individuais e coletivos."
         onSuccess={() => setAuthed(true)}
       />
     );

@@ -43,8 +43,16 @@ Regenerar a base completa a partir das planilhas locais: `npm run generate:agend
 
 Endereço principal: `https://andressacarmetrics.com.br`  
 O `www` redireciona para esse endereço quando o CNAME dele aponta para `andressabarrakreia-arch.github.io`.  
-DNS (registros A, AAAA e CNAME) fica na zona da HostGator. O arquivo `public/CNAME` vai no artefato do Pages.
+DNS: após ativar o Access, a zona autoritativa fica na **Cloudflare** (nameservers trocados na HostGator). O arquivo `public/CNAME` continua no artefato do Pages.
+
+## Proteção de acesso (grátis)
+
+Site trancado com **Cloudflare Access** (e-mail + código, até 50 usuários).  
+Guia completo: [`docs/CLOUDFLARE_ACCESS.md`](docs/CLOUDFLARE_ACCESS.md).
+
+- Compartilhar: link + e-mail autorizado (sem entregar o repo).  
+- **Não** tornar o repo privado no GitHub Free sem migrar o host — Pages desliga. Para esconder código sem pagar: Fase B do guia (Cloudflare Pages).
 
 ## Deploy técnico
 
-Repo público + workflow `Deploy GitHub Pages` na branch `main`.
+Repo público (GitHub Free + Pages) + workflow `Deploy GitHub Pages` na branch `main`.

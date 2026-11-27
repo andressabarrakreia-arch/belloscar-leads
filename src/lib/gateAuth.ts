@@ -1,4 +1,4 @@
-/** PIN compartilhado entre Erros e Mapa do Site (separado da Gestão). */
+/** PIN compartilhado entre Apresentação e Mapa do Site (separado da Gestão). */
 export const GATE_PIN = import.meta.env.VITE_GATE_PIN || "2640";
 export const GATE_AUTH_KEY = "belloscar_gate_ok";
 

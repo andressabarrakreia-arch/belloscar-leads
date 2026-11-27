@@ -26,12 +26,12 @@ const EXTRA: AtlasNode[] = [
     data: "Ranking e mapa no Índice",
   },
   {
-    id: "erros",
-    hash: "/erros",
-    label: "Erros",
+    id: "apresentacao",
+    hash: "/apresentacao",
+    label: "Apresentação",
     kind: "gate",
-    line: "Cruzamento de IDs entre planilhas",
-    data: "Base compartilhada de agendamentos",
+    line: "Cards individuais e coletivos da equipe",
+    data: "Números vivos · PIN do gate",
   },
   {
     id: "mapa",
@@ -54,7 +54,7 @@ const EXTRA: AtlasNode[] = [
     hash: "#",
     label: "Base de agendamentos",
     kind: "data",
-    line: "Campanhas vivo · Agendamentos · Erros",
+    line: "Campanhas vivo · Agendamentos",
   },
   {
     id: "data-neg",
@@ -78,7 +78,7 @@ export function MapaDoSite() {
     return (
       <GateLogin
         title="Mapa do Site"
-        blurb="Mesmo PIN da página Erros. Abrir o atlas de rotas e dados."
+        blurb="Mesmo PIN da Apresentação. Abrir o atlas de rotas e dados."
         onSuccess={() => setAuthed(true)}
       />
     );
@@ -209,7 +209,7 @@ function MapaDoSiteConteudo() {
         <div className="atlas-legend-row">
           <div>
             <strong>Base de agendamentos</strong>
-            <span>Campanhas vivo · Agendamentos · Erros</span>
+            <span>Campanhas vivo · Agendamentos</span>
           </div>
           <div>
             <strong>Base de negociações</strong>

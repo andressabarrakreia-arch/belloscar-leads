@@ -38,10 +38,11 @@ export function SchedulingSucessos() {
           Sucessos · lista
           <InfoTip>
             Recorte pelos mesmos filtros do módulo (padrão: mês atual · Finalizado em).
-            Responsável = Responsável do ID. Início = Atendido em (senão Criado em / Agendado em).
-            Dias = Finalizado em − Início. Veículos vêm das Negociações: o telefone do sucesso
-            liga aos nomes na base de agendamentos e cruza com o cliente da loja (a planilha da
-            loja não tem telefone). Clique no cabeçalho para ordenar.
+            Responsável = Responsável do ID. Agendado por = quem agendou na planilha de
+            agendamentos (Atendido por da agenda). Início = Atendido em (senão Criado em /
+            Agendado em). Dias = Finalizado em − Início. Veículos vêm das Negociações: o telefone
+            do sucesso liga aos nomes na base e cruza com o cliente da loja (a planilha da loja
+            não tem telefone). Clique no cabeçalho para ordenar.
           </InfoTip>
         </h2>
         <div className="kpi-grid">
@@ -89,6 +90,11 @@ export function SchedulingSucessos() {
               key: "responsavel",
               label: "Responsável",
               sortValue: (row) => row.responsavel,
+            },
+            {
+              key: "agendadoPor",
+              label: "Agendado por",
+              sortValue: (row) => row.agendadoPor,
             },
             {
               key: "vendedor",

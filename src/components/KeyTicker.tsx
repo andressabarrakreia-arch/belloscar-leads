@@ -60,7 +60,7 @@ export function KeyTicker({ moduleId }: Props) {
           }
           return;
         }
-        if (moduleId === "perfil") return;
+        if (moduleId === "perfil" || moduleId === "mapa" || moduleId === "apresentacao") return;
         if (moduleId === "agendamentos") {
           const ds = await loadSchedulingDataset();
           if (!cancelled) {
