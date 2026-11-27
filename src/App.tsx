@@ -15,6 +15,7 @@ import { SchedulingPreVendas } from "./pages/agendamentos/SchedulingPreVendas";
 import { SchedulingShell } from "./pages/agendamentos/SchedulingShell";
 import { SchedulingSucessos } from "./pages/agendamentos/SchedulingSucessos";
 import { SchedulingVendedores } from "./pages/agendamentos/SchedulingVendedores";
+import { NegociacoesComparativo } from "./pages/negociacoes/NegociacoesComparativo";
 import { NegociacoesLancamentos } from "./pages/negociacoes/NegociacoesLancamentos";
 import { NegociacoesOverview } from "./pages/negociacoes/NegociacoesOverview";
 import { NegociacoesShell } from "./pages/negociacoes/NegociacoesShell";
@@ -99,6 +100,7 @@ export default function App() {
             <Route index element={<NegociacoesOverview />} />
             <Route path="lancamentos" element={<NegociacoesLancamentos />} />
             <Route path="vendedores" element={<NegociacoesVendedores />} />
+            <Route path="comparativo" element={<NegociacoesComparativo />} />
           </Route>
           <Route path="admin" element={<Navigate to="/indice/gestao" replace />} />
         </Route>

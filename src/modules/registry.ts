@@ -65,6 +65,7 @@ export const MODULES: AppModule[] = [
       { to: "/negociacoes", label: "Visão Geral", end: true },
       { to: "/negociacoes/lancamentos", label: "Lançamentos" },
       { to: "/negociacoes/vendedores", label: "Vendedores" },
+      { to: "/negociacoes/comparativo", label: "Comparativo" },
     ],
   },
   {

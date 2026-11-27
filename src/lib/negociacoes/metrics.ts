@@ -1,4 +1,4 @@
-import { formatPeriodLabel } from "../dates";
+import { formatDezenaLabel, formatPeriodLabel } from "../dates";
 import { isoToDezenaKey } from "../scheduling/dates";
 import { linesToDeals } from "./deals";
 import type {
@@ -131,6 +131,76 @@ export type PeriodNegociacaoPoint = {
   compras: number;
   consignacoes: number;
 };
+
+export type PeriodGrain = "dezena" | "quinzena";
+
+export type ComparativoTipo = "total" | "vendasTrocas" | "consignacoes" | "compras";
+
+function contaComparativo(tipo: NegociacaoDeal["tipo"], metric: ComparativoTipo): boolean {
+  if (metric === "total") return true;
+  if (metric === "vendasTrocas") return tipo === "Venda" || tipo === "Troca";
+  if (metric === "consignacoes") return tipo === "Consignação";
+  return tipo === "Compra";
+}
+
+export type VendedorPeriodRow = {
+  vendedor: string;
+  total: number;
+} & Record<string, number | string>;
+
+/**
+ * Barras de vendedores no recorte já filtrado.
+ * Dezena ativa no filtro usa a dezena; caso contrário, a quinzena.
+ */
+export function comparisonGrain(filters: NegociacoesFilters): PeriodGrain {
+  if (filters.dezena && filters.dezena !== "all") return "dezena";
+  return "quinzena";
+}
+
+export function periodFiltersOpen(filters: NegociacoesFilters): boolean {
+  return (!filters.dezena || filters.dezena === "all") && filters.period === "all";
+}
+
+/** Uma linha por vendedor; cada chave de período guarda a quantidade do tipo escolhido. */
+export function buildVendedorPeriodBars(
+  deals: NegociacaoDeal[],
+  grain: PeriodGrain,
+  metric: ComparativoTipo = "vendasTrocas"
+): { rows: VendedorPeriodRow[]; periods: { key: string; label: string }[] } {
+  const labelOf = grain === "dezena" ? formatDezenaLabel : formatPeriodLabel;
+  const keyOf = (deal: NegociacaoDeal) =>
+    grain === "dezena" ? isoToDezenaKey(deal.dataEntrada) : deal.periodKey;
+
+  const periodKeys = new Set<string>();
+  const bySeller = new Map<string, VendedorPeriodRow>();
+
+  for (const deal of deals) {
+    const vendedor = deal.vendedor.trim();
+    if (!vendedor || !contaComparativo(deal.tipo, metric)) continue;
+    const key = keyOf(deal);
+    periodKeys.add(key);
+    const row = bySeller.get(vendedor) ?? { vendedor, total: 0 };
+    const current = typeof row[key] === "number" ? row[key] : 0;
+    row[key] = current + 1;
+    row.total += 1;
+    bySeller.set(vendedor, row);
+  }
+
+  const periods = [...periodKeys]
+    .sort((a, b) => a.localeCompare(b))
+    .map((key) => ({ key, label: labelOf(key) }));
+
+  const rows = [...bySeller.values()]
+    .map((row) => {
+      for (const period of periods) {
+        if (typeof row[period.key] !== "number") row[period.key] = 0;
+      }
+      return row;
+    })
+    .sort((a, b) => b.total - a.total || a.vendedor.localeCompare(b.vendedor, "pt-BR"));
+
+  return { rows, periods };
+}
 
 export function buildPeriodSeries(deals: NegociacaoDeal[]): PeriodNegociacaoPoint[] {
   const map = new Map<string, PeriodNegociacaoPoint>();

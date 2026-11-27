@@ -56,7 +56,8 @@ const DOORS: {
     to: "/negociacoes",
     label: "Negociações",
     line: "Loja",
-    summary: "Vendas, trocas, compras e consignações, com lançamentos e resultado por vendedor.",
+    summary:
+      "Vendas, trocas, compras e consignações, com lançamentos, resultado por vendedor e comparativo por dezena ou quinzena.",
   },
   {
     to: "/perfil",
