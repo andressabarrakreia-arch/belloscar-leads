@@ -44,6 +44,21 @@ export function currentMonthRange(date = new Date()): { from: string; to: string
   return monthRange(currentMonthKey(date));
 }
 
+/**
+ * Mês de trabalho: calendário atual se existir na base; senão o mês mais recente com dados.
+ * `availableMonths` deve vir ordenado do mais recente para o mais antigo (YYYY-MM).
+ */
+export function workingMonthRange(
+  availableMonths: string[],
+  date = new Date()
+): { from: string; to: string } {
+  const current = currentMonthKey(date);
+  if (availableMonths.includes(current)) return monthRange(current);
+  const latest = availableMonths[0];
+  if (latest) return monthRange(latest);
+  return currentMonthRange(date);
+}
+
 /** Hoje no calendário local, YYYY-MM-DD. */
 export function isoToday(date = new Date()): string {
   const y = date.getFullYear();
@@ -86,14 +101,24 @@ export function previousMonthSameSpan(date = new Date()): { month: string; from:
   return { month, from: `${month}-01`, to: `${month}-${String(capped).padStart(2, "0")}` };
 }
 
+const MONTHS_SHORT = [
+  "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+  "Jul", "Ago", "Set", "Out", "Nov", "Dez",
+];
+
 export function formatPeriodLabel(periodKey: string): string {
   const match = periodKey.match(/^(\d{4})-(\d{2})-Q([12])$/);
   if (!match) return periodKey;
-  const months = [
-    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
-    "Jul", "Ago", "Set", "Out", "Nov", "Dez",
-  ];
-  const monthName = months[Number(match[2]) - 1] || match[2];
+  const monthName = MONTHS_SHORT[Number(match[2]) - 1] || match[2];
   const half = match[3] === "1" ? "1–15" : "16–fim";
   return `${monthName}/${match[1]} (${half})`;
+}
+
+/** Rótulo pt-BR de uma dezena YYYY-MM-D1|D2|D3. */
+export function formatDezenaLabel(dezenaKey: string): string {
+  const match = dezenaKey.match(/^(\d{4})-(\d{2})-D([123])$/);
+  if (!match) return dezenaKey;
+  const monthName = MONTHS_SHORT[Number(match[2]) - 1] || match[2];
+  const span = match[3] === "1" ? "1–10" : match[3] === "2" ? "11–20" : "21–fim";
+  return `${monthName}/${match[1]} (${span})`;
 }

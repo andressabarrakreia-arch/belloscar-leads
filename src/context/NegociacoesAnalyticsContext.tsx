@@ -18,6 +18,7 @@ export function defaultNegociacoesFilters(): NegociacoesFilters {
   return {
     month: currentMonthKey(),
     period: "all",
+    dezena: "all",
     vendedor: "all",
     tipo: "all",
     status: "all",

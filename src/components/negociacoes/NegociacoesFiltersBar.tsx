@@ -1,12 +1,13 @@
 import { ClearFiltersButton, filterActiveClass } from "../ClearFiltersButton";
 import { FiltersPanel } from "../FiltersPanel";
 import { defaultNegociacoesFilters } from "../../context/NegociacoesAnalyticsContext";
-import { currentMonthKey } from "../../lib/dates";
+import { currentMonthKey, formatDezenaLabel } from "../../lib/dates";
 import type { NegociacoesFilters } from "../../lib/negociacoes/types";
 
 type Options = {
   months: string[];
   periods: string[];
+  dezenas: string[];
   vendedores: string[];
   tipos: string[];
   statuses: string[];
@@ -28,9 +29,13 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
   const months = options.months.includes(monthPadrao)
     ? options.months
     : [monthPadrao, ...options.months];
+  const dezena = filters.dezena || "all";
+  const dezenas =
+    filters.month === "all" ? options.dezenas : options.dezenas.filter((key) => key.startsWith(`${filters.month}-`));
   const active =
     filters.month !== monthPadrao ||
     filters.period !== "all" ||
+    dezena !== "all" ||
     filters.vendedor !== "all" ||
     filters.tipo !== "all" ||
     filters.status !== "all" ||
@@ -44,7 +49,12 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
           <select
             className={filterActiveClass(filters.month !== monthPadrao)}
             value={filters.month}
-            onChange={(e) => set("month", e.target.value)}
+            onChange={(e) => {
+              const month = e.target.value;
+              const nextDezena =
+                dezena !== "all" && month !== "all" && !dezena.startsWith(`${month}-`) ? "all" : dezena;
+              onChange({ ...filters, month, dezena: nextDezena });
+            }}
           >
             <option value="all">Todos</option>
             {months.map((m) => (
@@ -65,6 +75,21 @@ export function NegociacoesFiltersBar({ options, filters, onChange }: Props) {
             {options.periods.map((p) => (
               <option key={p} value={p}>
                 {p}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Dezena
+          <select
+            className={filterActiveClass(dezena !== "all")}
+            value={dezena}
+            onChange={(e) => set("dezena", e.target.value)}
+          >
+            <option value="all">Todas</option>
+            {dezenas.map((key) => (
+              <option key={key} value={key}>
+                {formatDezenaLabel(key)}
               </option>
             ))}
           </select>

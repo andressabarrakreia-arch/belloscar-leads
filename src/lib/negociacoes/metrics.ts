@@ -1,4 +1,5 @@
 import { formatPeriodLabel } from "../dates";
+import { isoToDezenaKey } from "../scheduling/dates";
 import { linesToDeals } from "./deals";
 import type {
   AvaliacaoConvRow,
@@ -21,6 +22,9 @@ export function filterDeals(
   return deals.filter((d) => {
     if (filters.month !== "all" && d.monthKey !== filters.month) return false;
     if (filters.period !== "all" && d.periodKey !== filters.period) return false;
+    if (filters.dezena && filters.dezena !== "all" && isoToDezenaKey(d.dataEntrada) !== filters.dezena) {
+      return false;
+    }
     if (filters.vendedor !== "all" && d.vendedor !== filters.vendedor) return false;
     if (filters.tipo !== "all" && d.tipo !== filters.tipo) return false;
     if (filters.status !== "all" && d.status !== filters.status) return false;
@@ -32,13 +36,14 @@ export function filterDeals(
 export function getNegociacoesFilterOptions(deals: NegociacaoDeal[]) {
   const months = [...new Set(deals.map((d) => d.monthKey))].sort().reverse();
   const periods = [...new Set(deals.map((d) => d.periodKey))].sort().reverse();
+  const dezenas = [...new Set(deals.map((d) => isoToDezenaKey(d.dataEntrada)))].sort().reverse();
   const vendedores = [...new Set(deals.map((d) => d.vendedor))].sort((a, b) =>
     a.localeCompare(b, "pt-BR")
   );
   const tipos = [...new Set(deals.map((d) => d.tipo))].sort();
   const statuses = [...new Set(deals.map((d) => d.status))].sort();
   const tiposVenda = [...new Set(deals.map((d) => d.tipoVenda))].sort();
-  return { months, periods, vendedores, tipos, statuses, tiposVenda };
+  return { months, periods, dezenas, vendedores, tipos, statuses, tiposVenda };
 }
 
 function canalTipoVenda(tipoVenda: string): { showroom: boolean; atacado: boolean } {

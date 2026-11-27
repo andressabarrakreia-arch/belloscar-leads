@@ -66,3 +66,14 @@ export function isoToPeriodKey(iso: string): string {
   const q = day <= 15 ? "Q1" : "Q2";
   return `${y}-${m}-${q}`;
 }
+
+/** Dezena do calendário: D1 = 1–10, D2 = 11–20, D3 = 21–fim. */
+export function isoToDezenaKey(iso: string): string {
+  const d = parseFlexibleDate(iso);
+  if (!d) return `${iso.slice(0, 7)}-D1`;
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = d.getDate();
+  const dz = day <= 10 ? "D1" : day <= 20 ? "D2" : "D3";
+  return `${y}-${m}-${dz}`;
+}

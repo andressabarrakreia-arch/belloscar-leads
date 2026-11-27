@@ -17,6 +17,7 @@ export function ShowPeriodFilter({ period, onChange }: Props) {
   const closed = currentMonthRange();
   const today = isoToday();
   const week = { from: isoDaysAgo(6), to: today };
+  const dezena = { from: isoDaysAgo(9), to: today };
   const fortnight = { from: isoDaysAgo(14), to: today };
 
   const is = (a: ShowPeriod) => a.from === period.from && a.to === period.to;
@@ -36,6 +37,14 @@ export function ShowPeriodFilter({ period, onChange }: Props) {
         </button>
         <button type="button" className={is(week) ? "is-active" : undefined} onClick={() => onChange(week)}>
           7 dias
+        </button>
+        <button
+          type="button"
+          className={is(dezena) ? "is-active" : undefined}
+          onClick={() => onChange(dezena)}
+          title="Últimos 10 dias"
+        >
+          Dezena
         </button>
         <button
           type="button"

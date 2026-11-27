@@ -1,6 +1,10 @@
 import { ClearFiltersButton, filterActiveClass } from "../ClearFiltersButton";
 import { FiltersPanel } from "../FiltersPanel";
-import { currentMonthKey, currentMonthRange, monthRange } from "../../lib/dates";
+import {
+  currentMonthKey,
+  monthRange,
+  workingMonthRange,
+} from "../../lib/dates";
 import type { SchedulingFilters, TipoProposta } from "../../lib/scheduling/types";
 
 type Options = {
@@ -71,12 +75,16 @@ export function SchedulingFiltersBar({
   const selectedMonth = closedMonthFromFilters(filters);
   const today = isoToday();
   const weekStart = isoDaysAgo(6);
+  const dezenaStart = isoDaysAgo(9);
   const fortnightStart = isoDaysAgo(14);
-  const padrao = currentMonthRange();
-  const monthPadrao = currentMonthKey();
-  const monthChoices = monthOptions.includes(monthPadrao)
+  const padrao = workingMonthRange(monthOptions);
+  const monthPadrao = padrao.from.slice(0, 7);
+  const calendarMonth = currentMonthKey();
+  const monthChoices = monthOptions.includes(calendarMonth)
     ? monthOptions
-    : [monthPadrao, ...monthOptions];
+    : monthOptions.length > 0
+      ? monthOptions
+      : [calendarMonth, ...monthOptions];
 
   const active = Boolean(
     filters.from !== padrao.from ||
@@ -94,8 +102,13 @@ export function SchedulingFiltersBar({
       <div className="filters__presets" role="group" aria-label="Atalhos de período">
         <button
           type="button"
-          className="btn secondary"
+          className={`btn secondary${selectedMonth === monthPadrao ? " is-active" : ""}`}
           onClick={() => onChange({ ...filters, from: padrao.from, to: padrao.to })}
+          title={
+            monthPadrao === calendarMonth
+              ? "Mês calendário atual"
+              : `Sem dados em ${calendarMonth}; usa o último mês da base (${monthPadrao})`
+          }
         >
           Mês atual
         </button>
@@ -105,6 +118,14 @@ export function SchedulingFiltersBar({
           onClick={() => onChange({ ...filters, from: weekStart, to: today })}
         >
           Últimos 7 dias
+        </button>
+        <button
+          type="button"
+          className={`btn secondary${filters.from === dezenaStart && filters.to === today ? " is-active" : ""}`}
+          onClick={() => onChange({ ...filters, from: dezenaStart, to: today })}
+          title="Últimos 10 dias"
+        >
+          Dezena
         </button>
         <button
           type="button"
@@ -231,7 +252,7 @@ export function SchedulingFiltersBar({
           onChange={(e) => onChange({ ...filters, q: e.target.value || undefined })}
         />
       </label>
-      <ClearFiltersButton onClick={() => onChange(currentMonthRange())} />
+      <ClearFiltersButton onClick={() => onChange(workingMonthRange(monthOptions))} />
     </div>
     </FiltersPanel>
   );

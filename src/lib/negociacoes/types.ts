@@ -81,6 +81,8 @@ export type NegociacoesDataset = {
 export type NegociacoesFilters = {
   month: string;
   period: string;
+  /** YYYY-MM-D1|D2|D3, ou "all". Ausente equivale a todas. */
+  dezena?: string;
   vendedor: string;
   tipo: string;
   status: string;

@@ -5,6 +5,7 @@ import {
   buildVendedorRows,
   filterAvaliacoes,
 } from "./negociacoes/metrics";
+import { formatDezenaLabel } from "./dates";
 import type { AvaliacaoConvRow, NegociacaoDeal, NegociacoesFilters } from "./negociacoes/types";
 import {
   buildCanalKpis,
@@ -134,6 +135,7 @@ export function negociacoesFilterHint(filters: NegociacoesFilters): string | und
   const parts: string[] = [];
   if (filters.month !== "all") parts.push(filters.month);
   if (filters.period !== "all") parts.push(filters.period);
+  if (filters.dezena && filters.dezena !== "all") parts.push(formatDezenaLabel(filters.dezena));
   if (filters.vendedor !== "all") parts.push(filters.vendedor);
   if (filters.tipo !== "all") parts.push(filters.tipo);
   if (filters.status !== "all") parts.push(filters.status);
