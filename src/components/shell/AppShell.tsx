@@ -110,7 +110,7 @@ export function AppShell({ mode }: Props) {
     <aside className="shell-sidebar" aria-label="Navegação principal">
       <div className="shell-brand">
         <Link to="/" className="shell-brand-link" onClick={() => setMobileOpen(false)}>
-          <MetriCarLogo className="shell-brand-logo" force="dark" />
+          <MetriCarLogo className="shell-brand-logo" force="light" />
           <div className="shell-brand-text">
             <span className="shell-brand-name">
               Bellos<span>Car</span>

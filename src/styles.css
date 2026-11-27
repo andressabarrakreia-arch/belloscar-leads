@@ -4129,6 +4129,10 @@ html[data-theme="dark"] .metricar-logo {
   );
 }
 
+html[data-theme="dark"] .shell-brand .metricar-logo {
+  background: transparent;
+}
+
 html[data-theme="dark"] .indice-abertura-marca {
   background: transparent;
 }
@@ -5893,9 +5897,10 @@ html[data-theme="dark"] .indice-abertura-giro {
 }
 
 .shell-brand {
-  margin-bottom: 22px;
-  padding: 4px 6px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin: -6px -10px 18px;
+  padding: 14px 12px 15px;
+  background: #fff;
+  border-radius: 14px;
 }
 
 .shell-brand-link {
@@ -5906,9 +5911,9 @@ html[data-theme="dark"] .indice-abertura-giro {
 }
 
 .shell-brand-logo {
-  height: 42px;
+  height: 64px;
   width: auto;
-  max-width: 78px;
+  max-width: 104px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -5926,7 +5931,7 @@ html[data-theme="dark"] .indice-abertura-giro {
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.1;
-  color: #fff;
+  color: #1f2126;
 }
 
 .shell-brand-name span {
@@ -5934,11 +5939,11 @@ html[data-theme="dark"] .indice-abertura-giro {
 }
 
 .shell-brand-tag {
-  font-size: 0.68rem;
+  font-size: 0.58rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: var(--shell-sidebar-muted);
+  color: #5c5e66;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
